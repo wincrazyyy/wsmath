@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { WhatsAppButton } from "./whatsapp-button"; // ⬅️ reuse component
 
 const LINKS = [
   { href: "#about", label: "About" },
-  { href: "#testimonials", label: "Testimonials" }, // was #projects
+  { href: "#testimonials", label: "Testimonials" },
 ];
 
 export function Nav() {
@@ -14,7 +15,7 @@ export function Nav() {
   const [active, setActive] = useState<string>("");
 
   useEffect(() => {
-    const ids = ["about", "testimonials"] as const; // updated for scrollspy
+    const ids = ["about", "testimonials"] as const;
     const els = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
@@ -50,6 +51,7 @@ export function Nav() {
     <div className="sticky top-0 z-40 w-full border-b border-neutral-200/70 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <nav className="container mx-auto max-w-5xl px-4">
         <div className="flex h-16 items-center justify-between">
+          {/* Brand */}
           <Link href="/" className="flex items-center gap-2" aria-label="WSMath Home">
             <Image src="/icon.svg" alt="" width={24} height={24} className="h-6 w-6" />
             <span className="font-semibold tracking-tight">
@@ -59,24 +61,15 @@ export function Nav() {
             </span>
           </Link>
 
-          {/* Desktop */}
+          {/* Desktop nav */}
           <div className="hidden items-center gap-6 md:flex">
             {LINKS.map(({ href, label }) => (
               <a key={href} href={href} className={linkClass(href)}>
                 {label}
               </a>
             ))}
-            {/* Keep a WhatsApp CTA in nav */}
-            <button
-              type="button"
-              aria-label="Chat on WhatsApp"
-              className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-violet-400/40"
-            >
-              <span className="relative h-6 w-6 overflow-hidden rounded-full bg-white ring-1 ring-neutral-200">
-                <Image src="/whatsapp.svg" alt="" fill className="object-cover scale-[1.12]" />
-              </span>
-              WhatsApp
-            </button>
+            {/* WhatsApp button */}
+            <WhatsAppButton width={160} height={44} imgClassName="h-10 w-auto" />
           </div>
 
           {/* Mobile open */}
@@ -133,15 +126,11 @@ export function Nav() {
                 {label}
               </a>
             ))}
-            <button
-              type="button"
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-4 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-violet-400/40"
-            >
-              <span className="relative h-6 w-6 overflow-hidden rounded-full bg-white ring-1 ring-neutral-200">
-                <Image src="/whatsapp.svg" alt="" fill className="object-cover scale-[1.12]" />
-              </span>
-              WhatsApp
-            </button>
+
+            {/* Reusable PNG button in drawer */}
+            <div onClick={() => setOpen(false)}>
+              <WhatsAppButton width={160} height={44} imgClassName="h-10 w-auto" priority={false} />
+            </div>
           </div>
         </div>
       </div>

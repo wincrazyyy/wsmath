@@ -1,4 +1,6 @@
+// app/_components/whatsapp-cta.tsx
 import Image from "next/image";
+import { WhatsAppButton } from "./whatsapp-button";
 
 export function WhatsAppCta() {
   return (
@@ -24,17 +26,9 @@ export function WhatsAppCta() {
             </li>
           </ul>
 
-          <div className="mt-6">
-            <button
-              type="button"
-              aria-label="Chat on WhatsApp"
-              className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-5 py-3 text-sm font-medium text-white shadow-md transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-violet-400/40 active:scale-[0.99]"
-            >
-              <span className="relative h-10 w-10 overflow-hidden rounded-full bg-white ring-1 ring-neutral-200">
-                <Image src="/whatsapp.svg" alt="" aria-hidden fill className="object-cover scale-[1.12]" />
-              </span>
-              Chat on WhatsApp
-            </button>
+          {/* WhatsApp button */}
+          <div className="mt-5">
+            <WhatsAppButton width={220} height={56} imgClassName="h-14 w-auto" />
           </div>
 
           <p className="mt-2 text-xs text-neutral-500">

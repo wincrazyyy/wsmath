@@ -1,4 +1,6 @@
+// app/_components/hero.tsx
 import Image from "next/image";
+import { WhatsAppButton } from "./whatsapp-button";
 
 export function Hero() {
   return (
@@ -9,9 +11,22 @@ export function Hero() {
         <div className="absolute -top-32 left-1/2 h-[48rem] w-[48rem] -translate-x-1/2 rounded-full bg-gradient-to-tr from-indigo-500/20 via-violet-500/20 to-sky-400/20 blur-3xl [mask-image:radial-gradient(ellipse_at_center,black,transparent_55%)]" />
       </div>
 
-      <div className="relative flex flex-col gap-10 px-8 py-16 sm:px-12 md:px-16 md:py-24 lg:flex-row lg:items-center lg:justify-between">
-        {/* text */}
-        <div>
+      {/* Content */}
+      <div className="relative grid grid-cols-1 place-items-center gap-10 px-8 py-16 sm:px-12 md:px-16 md:py-24 lg:grid-cols-2 lg:items-center">
+        {/* Image (smaller on md, no crop) */}
+        <div className="relative order-1 w-full aspect-[4/3] overflow-hidden rounded-2xl mx-auto sm:max-w-[560px] md:max-w-[520px] lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-[5/4]">
+          <Image
+            src="/hero.png"
+            alt="WSMath hero"
+            fill
+            priority
+            className="object-contain lg:object-cover object-top"
+            sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
+          />
+        </div>
+
+        {/* Text */}
+        <div className="order-2 max-w-xl text-center lg:order-1 lg:text-left">
           <h1 className="text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
               Winson Siu
@@ -21,45 +36,11 @@ export function Hero() {
             Professional Online Math Tutor
           </p>
           <p className="mt-2 text-sm text-neutral-600 md:text-base">
-            專業 IBDP & A-Level 數學科考試專家
+            專業 IBDP &amp; A-Level 數學科考試專家
           </p>
 
-          {/* WhatsApp button */}
-          <div className="mt-6">
-            <button
-              type="button"
-              aria-label="Chat on WhatsApp"
-              className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-5 py-3 text-sm font-medium text-white shadow-md transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-violet-400/40 active:scale-[0.99]"
-            >
-              <span className="relative h-10 w-10 overflow-hidden rounded-full bg-white ring-1 ring-neutral-200">
-                <Image
-                  src="/whatsapp.svg"
-                  alt="Whatsapp logo"
-                  aria-hidden="true"
-                  fill
-                  className="object-cover scale-[1.01]"
-                  priority
-                />
-              </span>
-              Chat on WhatsApp
-            </button>
-          </div>
-        </div>
-
-        {/* big icon with gradient ring + glow */}
-        <div className="relative shrink-0">
-          <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-tr from-indigo-500/20 via-violet-500/25 to-sky-400/20 blur-2xl" />
-          <div className="rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 p-[2px] shadow-xl">
-            <div className="rounded-[14px] bg-white p-4">
-              <Image
-                src="/icon.svg"
-                alt="WSMath logo"
-                width={200}
-                height={200}
-                priority
-                className="h-24 w-24 md:h-40 md:w-40"
-              />
-            </div>
+          <div className="mt-5">
+            <WhatsAppButton width={220} height={56} imgClassName="h-14 w-auto" />
           </div>
         </div>
       </div>

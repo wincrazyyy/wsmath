@@ -1,9 +1,11 @@
+// app/_components/floating-cta.tsx
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
+import { WhatsAppButton } from "./whatsapp-button";
 
 export function FloatingCta() {
   const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 240);
     onScroll();
@@ -17,16 +19,13 @@ export function FloatingCta() {
         visible ? "opacity-100" : "opacity-0"
       }`}
     >
-      <button
-        type="button"
-        aria-label="Chat on WhatsApp"
-        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-4 py-3 text-sm font-medium text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-violet-400/40"
-      >
-        <span className="relative h-5 w-5 overflow-hidden rounded-full bg-white ring-1 ring-neutral-200">
-          <Image src="/whatsapp.svg" alt="" aria-hidden fill className="object-contain" />
-        </span>
-        Chat on WhatsApp
-      </button>
+      {/* WhatsApp button */}
+      <WhatsAppButton
+        width={200}
+        height={52}
+        imgClassName="h-12 w-auto drop-shadow-lg"
+        priority={false}
+      />
     </div>
   );
 }

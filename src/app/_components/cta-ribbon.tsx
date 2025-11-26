@@ -1,4 +1,5 @@
-import Image from "next/image";
+// app/_components/cta-ribbon.tsx
+import { WhatsAppButton } from "./whatsapp-button";
 
 export function CtaRibbon() {
   return (
@@ -11,17 +12,10 @@ export function CtaRibbon() {
         <p className="mt-2 text-sm text-neutral-600">
           Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL.
         </p>
+
+        {/* WhatsApp button */}
         <div className="mt-5">
-          <button
-            type="button"
-            aria-label="Chat on WhatsApp"
-            className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-5 py-3 text-sm font-medium text-white shadow-md transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-violet-400/40 active:scale-[0.99]"
-          >
-            <span className="relative h-6 w-6 overflow-hidden rounded-full bg-white ring-1 ring-neutral-200">
-              <Image src="/whatsapp.svg" alt="" aria-hidden fill className="object-contain" />
-            </span>
-            Chat on WhatsApp
-          </button>
+          <WhatsAppButton width={220} height={56} imgClassName="h-14 w-auto" />
         </div>
       </div>
     </section>

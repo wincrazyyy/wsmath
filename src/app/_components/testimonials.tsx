@@ -11,7 +11,11 @@ export type Testimonial = {
 export function Testimonials({ items }: { items: Testimonial[] }) {
   return (
     <>
-      <h2 className="text-xl font-semibold">Testimonials</h2>
+      <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-neutral-900">
+        Testimonials
+      </h2>
+      <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
+
       <ul className="mt-6 grid gap-6 sm:grid-cols-2">
         {items.map((t) => (
           <li
