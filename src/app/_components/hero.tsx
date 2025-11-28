@@ -13,7 +13,7 @@ export function Hero() {
 
       {/* Content */}
       <div className="relative grid grid-cols-1 place-items-center gap-10 px-8 py-16 sm:px-12 md:px-16 md:py-24 lg:grid-cols-2 lg:items-center">
-        {/* Image (smaller on md, no crop) */}
+        {/* Image */}
         <div className="relative order-1 w-full aspect-[4/3] overflow-hidden rounded-2xl mx-auto sm:max-w-[560px] md:max-w-[520px] lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-[5/4]">
           <Image
             src="/hero.png"

@@ -23,12 +23,18 @@ export function CoursesCovered({
 }: CoursesCoveredProps) {
   return (
     <div className={`mt-8 ${className}`}>
-      <h3 className="text-sm font-semibold text-neutral-900">{title}</h3>
+      <div className="flex items-center gap-3">
+        <h3 className="text-[0.95rem] font-semibold text-neutral-900 md:text-base">
+          {title}
+        </h3>
+        <div className="h-px w-10 rounded-full bg-neutral-200" />
+      </div>
+
       <div className="mt-3 flex flex-wrap gap-2">
         {items.map((c) => {
           const isIB = c.startsWith("IBDP");
+
           return isIB ? (
-            // Highlighted IB chip: gradient ring
             <span
               key={c}
               className="inline-flex rounded-md bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 p-[1px]"
@@ -39,7 +45,6 @@ export function CoursesCovered({
               </span>
             </span>
           ) : (
-            // Default chip
             <span
               key={c}
               className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-2.5 py-1 text-xs text-neutral-700"
