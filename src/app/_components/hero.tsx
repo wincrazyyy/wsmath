@@ -27,7 +27,7 @@ export function Hero() {
 
         {/* Text */}
         <div className="order-2 max-w-xl text-center lg:order-1 lg:text-left">
-          <h1 className="text-5xl font-extrabold leading-none tracking-tight md:text-7xl">
+          <h1 className="text-5xl font-extrabold leading-none tracking-tight md:text-6xl">
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
               Winson Siu
             </span>
