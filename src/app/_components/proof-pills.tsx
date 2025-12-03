@@ -1,80 +1,93 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-const PILLS = [
-  "50%+ IBDP Level 7 track record",
-  "100% A* in A-Level Math & Further Math",
-  "17,000+ teaching hours",
-  "200+ one-to-one students",
-];
-
-const SLOT_OFFSET = 40;
+import type React from "react";
 
 export function ProofPills() {
-  const [centerIndex, setCenterIndex] = useState(0);
-
-  useEffect(() => {
-    if (PILLS.length <= 1) return;
-
-    const id = setInterval(() => {
-      setCenterIndex((prev) => (prev + 1) % PILLS.length);
-    }, 3200);
-
-    return () => clearInterval(id);
-  }, []);
-
-  const getPosition = (index: number) => {
-    const n = PILLS.length;
-    const offset = (index - centerIndex + n) % n;
-
-    if (offset === 0) return 0;
-    if (offset === 1) return 1;
-    if (offset === n - 1) return -1;
-
-    return offset < n / 2 ? 2 : -2;
-  };
+  const pills = [
+    "50%+ IBDP Level 7",
+    "100% A* in A-Level Math & FM",
+    "17,000+ teaching hours",
+    "200+ one-to-one students",
+  ];
 
   return (
-    <div className="mt-4 w-full">
-      {/* 3 Rows; Middle big, 2 small */}
-      <div className="relative h-[120px] overflow-hidden md:h-[130px]">
-        {PILLS.map((text, index) => {
-          const pos = getPosition(index);
-          const isCenter = pos === 0;
-          const isVisible = Math.abs(pos) <= 1;
+    <div className="mt-8 flex flex-wrap gap-3">
+      {pills.map((t, i) => (
+        <span
+          key={t}
+          className="proof-pill inline-flex rounded-full bg-gradient-to-r from-indigo-500/70 via-violet-500/70 to-sky-500/70 p-[1px]"
+          style={
+            {
+              "--delay": `${i * 0.12}s`,
+              "--floatDuration": `${4.5 + i * 0.6}s`,
+            } as React.CSSProperties
+          }
+        >
+          <span className="inner-pill inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[0.8rem] font-semibold text-neutral-800 shadow-sm md:text-sm">
+            <span className="h-1 w-1 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+            {t}
+          </span>
+        </span>
+      ))}
 
-          const translate = pos * SLOT_OFFSET;
+      <style jsx>{`
+        .proof-pill {
+          opacity: 0;
+          transform: translateY(20px) scale(0.94);
+          animation:
+            pillEntrance 0.7s var(--delay, 0s) cubic-bezier(0.22, 0.8, 0.35, 1)
+              forwards,
+            pillFloat var(--floatDuration, 5s)
+              calc(0.7s + var(--delay, 0s)) ease-in-out infinite;
+        }
 
-          return (
-            <div
-              key={text}
-              className={[
-                "absolute left-0 right-0 px-1 transition-all duration-500 ease-out",
-                isVisible ? "opacity-100" : "opacity-0 pointer-events-none",
-                isCenter ? "z-10" : "z-0",
-              ].join(" ")}
-              style={{
-                top: "50%",
-                transform: `translateY(-50%) translateY(${translate}px)`,
-              }}
-            >
-              {/* Pill content */}
-              {isCenter ? (
-                <div className="inline-flex w-full rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 p-[1.5px] shadow-md">
-                  <span className="flex w-full items-center justify-between rounded-full bg-white px-5 py-3 text-sm font-semibold text-neutral-900 md:px-6 md:py-4 md:text-base">
-                    {text}
-                  </span>
-                </div>
-              ) : (
-                <span className="flex w-full items-center justify-between rounded-full border border-neutral-200 bg-white px-4 py-1.5 text-[11px] font-medium text-neutral-600 opacity-80 shadow-sm md:text-xs">
-                  {text}
-                </span>
-              )}
-            </div>
-          );
-        })}
-      </div>
+        .inner-pill {
+          transition:
+            transform 180ms ease-out,
+            box-shadow 180ms ease-out,
+            background-color 180ms ease-out;
+        }
+
+        .proof-pill:hover .inner-pill {
+          transform: translateY(-2px) scale(1.02);
+          box-shadow:
+            0 10px 25px rgba(15, 23, 42, 0.12),
+            0 0 0 1px rgba(148, 163, 184, 0.35);
+        }
+
+        @keyframes pillEntrance {
+          0% {
+            opacity: 0;
+            transform: translateY(20px) scale(0.94);
+          }
+          60% {
+            opacity: 1;
+            transform: translateY(-6px) scale(1.04);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        @keyframes pillFloat {
+          0% {
+            transform: translateY(0);
+          }
+          25% {
+            transform: translateY(-6px);
+          }
+          50% {
+            transform: translateY(-2px);
+          }
+          75% {
+            transform: translateY(-6px);
+          }
+          100% {
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 }

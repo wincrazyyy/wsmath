@@ -89,7 +89,7 @@ export default function Home() {
           <ProofPills />
         </section>
 
-        <section id="about" className="container mx-auto max-w-5xl px-4 py-16">
+        <section id="about" className="container mx-auto max-w-5xl px-4 py-4">
           <About />
           <CtaRibbon />
         </section>
