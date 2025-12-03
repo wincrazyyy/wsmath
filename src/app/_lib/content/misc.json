@@ -1,0 +1,17 @@
+{
+  "whatsappCta": {
+    "heading": "Start your IBDP Math coaching",
+    "subheading": "Premium 1-to-1 Zoom lessons with iPad + Apple Pencil + GoodNotes. Outcome-driven plans.",
+    "bullets": [
+      "50%+ Level 7 track record",
+      "17,000+ hours • 200+ students",
+      "AAHL / AASL / AIHL / AISL"
+    ],
+    "note": "Fast replies. Share course (AAHL/AISL/etc.) and target score to get started.",
+    "logoSrc": "/icon.svg"
+  },
+  "whatsapp": {
+    "phoneNumber": "85293199914",
+    "prefillText": "Hi Winson Siu, I'm interested in your Math tutoring service!"
+  }
+}

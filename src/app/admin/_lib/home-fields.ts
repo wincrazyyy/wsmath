@@ -1,4 +1,4 @@
-// app/admin/home-fields.ts
+// app/admin/_lib/home-fields.ts
 import type { FieldConfig } from "./fields";
 
 export const HERO_FIELDS: FieldConfig[] = [

@@ -1,5 +1,6 @@
 // app/_components/whatsapp-button.tsx
 import Image from "next/image";
+import miscContent from "@/app/_lib/content/misc.json";
 
 type WhatsAppButtonProps = {
   width?: number;
@@ -10,9 +11,11 @@ type WhatsAppButtonProps = {
   imgClassName?: string;
   ariaLabel?: string;
   priority?: boolean;
-  /** Override the target link if needed */
+  /** Optional override – if omitted, uses misc.json WhatsApp settings */
   href?: string;
 };
+
+const { whatsapp } = miscContent;
 
 export function WhatsAppButton({
   width = 160,
@@ -21,11 +24,18 @@ export function WhatsAppButton({
   imgClassName = "h-10 w-auto",
   ariaLabel = "Chat on WhatsApp",
   priority = true,
-  href = "https://wa.me/85293199914?text=Hi%20Winson%20Siu,%20I'm%20interested%20in%20your%20Math%20tutoring%20service!",
+  href,
 }: WhatsAppButtonProps) {
+  // Default wa.me link from misc.json
+  const defaultHref = `https://wa.me/${whatsapp.phoneNumber}?text=${encodeURIComponent(
+    whatsapp.prefillText
+  )}`;
+
+  const finalHref = href ?? defaultHref;
+
   return (
     <a
-      href={href}
+      href={finalHref}
       target="_blank"
       rel="noreferrer"
       aria-label={ariaLabel}

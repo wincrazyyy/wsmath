@@ -1,4 +1,4 @@
-// app/admin/about-fields.ts
+// app/admin/_lib/about-fields.ts
 import type { FieldConfig } from "./fields";
 
 export const ABOUT_SECTION_FIELDS: FieldConfig[] = [{

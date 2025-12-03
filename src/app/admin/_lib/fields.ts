@@ -1,4 +1,4 @@
-// app/admin/fields.ts
+// app/admin/_lib/fields.ts
 export type FieldType = "string" | "textarea" | "string[]";
 
 export type FieldConfig = {

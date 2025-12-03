@@ -1,4 +1,4 @@
-// app/admin/json-path.ts
+// app/admin/_lib/json-path.ts
 
 function parsePath(path: string): Array<string | number> {
   if (!path) return [];

@@ -1,4 +1,4 @@
-// app/admin/testimonials-fields.ts
+// app/admin/_lib/testimonials-fields.ts
 import type { FieldConfig } from "./fields";
 
 function testimonialFields(basePath: string, labelPrefix: string): FieldConfig[] {

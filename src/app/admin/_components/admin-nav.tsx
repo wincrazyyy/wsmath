@@ -7,14 +7,14 @@ const LINKS = [
   { href: "/admin/home", label: "Home content" },
   { href: "/admin/about", label: "About section" },
   { href: "/admin/testimonials", label: "Testimonials" },
+  { href: "/admin/misc", label: "Misc items" },
 ];
 
 export function AdminNav() {
   const pathname = usePathname();
 
   const isActive = (href: string) =>
-    pathname === href ||
-    (href === "/admin/home" && pathname === "/admin");
+    pathname === href || (href === "/admin/home" && pathname === "/admin");
 
   return (
     <header className="border-b border-neutral-200 bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70">
@@ -28,7 +28,7 @@ export function AdminNav() {
         </Link>
 
         {/* Nav links */}
-        <nav className="flex items-center gap-2 text-xs font-medium">
+        <nav className="flex flex-wrap items-center gap-2 text-xs font-medium">
           {LINKS.map((link) => (
             <Link
               key={link.href}
