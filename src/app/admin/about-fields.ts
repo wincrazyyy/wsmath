@@ -1,8 +1,7 @@
 // app/admin/about-fields.ts
 import type { FieldConfig } from "./fields";
 
-export const ABOUT_FIELDS: FieldConfig[] = [
-  {
+export const ABOUT_SECTION_FIELDS: FieldConfig[] = [{
     path: "lead",
     label: "About lead paragraph",
     description: "Main intro text under the About heading.",
@@ -44,4 +43,24 @@ export const ABOUT_FIELDS: FieldConfig[] = [
     description: "One course per line. Feeds the CoursesCovered component.",
     type: "string[]",
   },
+];
+
+export const CTA_RIBBON_FIELDS: FieldConfig[] = [
+  {
+    path: "ctaRibbon.heading",
+    label: "CTA ribbon heading",
+    description: "Big line in the coloured strip under About.",
+    type: "string",
+  },
+  {
+    path: "ctaRibbon.subheading",
+    label: "CTA ribbon subheading",
+    description: "Smaller line under the CTA heading.",
+    type: "string",
+  },
+];
+
+export const ABOUT_FIELDS: FieldConfig[] = [
+  ...ABOUT_SECTION_FIELDS,
+  ...CTA_RIBBON_FIELDS,
 ];

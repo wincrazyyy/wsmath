@@ -1,6 +1,5 @@
 {
-  "lead": "I’m Winson Siu (WSMath) — a premium 1-to-1 IBDP / A-Level / IGCSE math tutor. I specialise in IBDP Math (AAHL / AASL / AIHL / AISL) with a proven, exam-focused approach delivered entirely online.",
-
+  "lead": "I’m Winson Siu (WSMath) — a premium 1-to-1 IBDP / A-Level / IGCSE math tutor...",
   "imageSrc": "/about-hero.png",
   "eyebrow": "Winson Siu • 專業教育家",
 
@@ -31,5 +30,10 @@
     "A-Level Math",
     "A-Level Further Math",
     "IGCSE 0580 / 0607"
-  ]
+  ],
+
+  "ctaRibbon": {
+    "heading": "Limited 1:1 slots — start boosting IBDP results now",
+    "subheading": "Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL."
+  }
 }
