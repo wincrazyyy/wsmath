@@ -1,0 +1,35 @@
+{
+  "lead": "I’m Winson Siu (WSMath) — a premium 1-to-1 IBDP / A-Level / IGCSE math tutor. I specialise in IBDP Math (AAHL / AASL / AIHL / AISL) with a proven, exam-focused approach delivered entirely online.",
+
+  "imageSrc": "/about-hero.png",
+  "eyebrow": "Winson Siu • 專業教育家",
+
+  "whatYouGet": [
+    "Exam-technique playbooks and targeted drills for final-paper performance.",
+    "Weekly study plans with measurable goals and accountability.",
+    "Calculator mastery (e.g., Casio fx-CG50) and past-paper optimisation."
+  ],
+
+  "howITeach": [
+    "Live Zoom lessons with iPad + Apple Pencil + GoodNotes for instant feedback.",
+    "Clear, step-by-step worked solutions and post-lesson homework.",
+    "English or Cantonese delivery; professional, results-first approach."
+  ],
+
+  "stats": [
+    "50%+ IBDP Level 7 track record",
+    "17,000+ teaching hours",
+    "200+ one-to-one students",
+    "A-Level Math & FM: A* pathway"
+  ],
+
+  "courses": [
+    "IBDP AAHL",
+    "IBDP AASL",
+    "IBDP AIHL",
+    "IBDP AISL",
+    "A-Level Math",
+    "A-Level Further Math",
+    "IGCSE 0580 / 0607"
+  ]
+}
