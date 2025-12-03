@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react";
 import testimonialsContent from "@/app/_lib/content/testimonials.json";
-import { TESTIMONIALS_FIELDS } from "../testimonials-fields";
-import type { FieldConfig } from "../fields";
-import { getByPath, setByPath } from "../json-path";
+import { TESTIMONIALS_FIELDS } from "../_lib/testimonials-fields";
+import type { FieldConfig } from "../_lib/fields";
+import { getByPath, setByPath } from "../_lib/json-path";
 
 type TestimonialsContent = typeof testimonialsContent;
 type SectionKey = "featured" | "carousel";

@@ -1,6 +1,6 @@
 import homeContent from "@/app/_lib/content/home.json";
-import { HOME_FIELDS } from "../home-fields";
-import { JsonEditor } from "../json-editor";
+import { HOME_FIELDS } from "../_lib/home-fields";
+import { JsonEditor } from "../_components/json-editor";
 
 type HomeContent = typeof homeContent;
 

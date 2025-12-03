@@ -1,6 +1,6 @@
 import aboutContent from "@/app/_lib/content/about.json";
-import { ABOUT_FIELDS } from "../about-fields";
-import { JsonEditor } from "../json-editor";
+import { ABOUT_FIELDS } from "../_lib/about-fields";
+import { JsonEditor } from "../_components/json-editor";
 
 type AboutContent = typeof aboutContent;
 

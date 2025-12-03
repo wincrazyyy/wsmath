@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { FieldConfig } from "./fields";
-import { getByPath, setByPath } from "./json-path";
+import type { FieldConfig } from "../_lib/fields";
+import { getByPath, setByPath } from "../_lib/json-path";
 
 type JsonEditorProps<T extends object> = {
   title: string;
