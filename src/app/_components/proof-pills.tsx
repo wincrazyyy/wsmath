@@ -1,14 +1,10 @@
 "use client";
 
 import type React from "react";
+import homeContent from "@/app/_lib/content/home.json";
 
 export function ProofPills() {
-  const pills = [
-    "50%+ IBDP Level 7",
-    "100% A* in A-Level Math & FM",
-    "17,000+ teaching hours",
-    "200+ one-to-one students",
-  ];
+  const pills = homeContent.proofPills as string[];
 
   return (
     <div className="mt-8 flex flex-wrap gap-3">

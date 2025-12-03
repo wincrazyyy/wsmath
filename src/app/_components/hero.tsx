@@ -1,6 +1,9 @@
 // app/_components/hero.tsx
 import Image from "next/image";
+import homeContent from "@/app/_lib/content/home.json";
 import { WhatsAppButton } from "./whatsapp-button";
+
+const hero = homeContent.hero;
 
 export function Hero() {
   return (
@@ -14,13 +17,13 @@ export function Hero() {
       {/* Content */}
       <div className="relative grid grid-cols-1 place-items-center gap-10 px-8 py-16 sm:px-12 md:px-16 md:py-24 lg:grid-cols-2 lg:items-center">
         {/* Image */}
-        <div className="relative order-1 w-full aspect-[4/3] overflow-hidden rounded-2xl mx-auto sm:max-w-[560px] md:max-w-[520px] lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-[5/4]">
+        <div className="relative order-1 mx-auto w-full aspect-[4/3] overflow-hidden rounded-2xl sm:max-w-[560px] md:max-w-[520px] lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-[5/4]">
           <Image
-            src="/hero.png"
+            src={hero.imageSrc}
             alt="WSMath hero"
             fill
             priority
-            className="object-contain lg:object-cover object-top"
+            className="object-contain object-top lg:object-cover"
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />
         </div>
@@ -29,14 +32,14 @@ export function Hero() {
         <div className="order-2 max-w-xl text-center lg:order-1 lg:text-left">
           <h1 className="text-5xl font-extrabold leading-none tracking-tight md:text-6xl">
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
-              Winson Siu
+              {hero.title}
             </span>
           </h1>
           <p className="mt-4 text-lg text-neutral-700 md:text-2xl">
-            Professional Online Math Tutor
+            {hero.subtitle}
           </p>
           <p className="mt-2 text-sm text-neutral-600 md:text-base">
-            專業 IBDP &amp; A-Level 數學科考試專家
+            {hero.tagline}
           </p>
 
           <div className="mt-5">
