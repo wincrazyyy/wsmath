@@ -140,8 +140,8 @@ export default function AdminDashboardPage() {
               Admin dashboard
             </h1>
             <p className="mt-2 text-sm text-neutral-600">
-              Edit homepage, About, testimonials, and misc content. When
-              you're ready, publish all changes in one go.
+              Edit homepage, About, testimonials, and misc content. When you&apos;re ready,
+              publish all changes in one go.
             </p>
           </div>
 
