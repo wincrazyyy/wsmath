@@ -15,6 +15,11 @@ type JsonEditorProps<T extends object> = {
   jsonFileHint?: string;
 };
 
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string");
+}
+
 export function JsonEditor<T extends object>({
   title,
   description,
@@ -33,7 +38,7 @@ export function JsonEditor<T extends object>({
       const arr = rawValue
         .split("\n")
         .map((line) => line.trim())
-        .filter(Boolean);
+        .filter((line) => line.length > 0);
       setByPath(next, field.path, arr);
     }
 
@@ -41,36 +46,39 @@ export function JsonEditor<T extends object>({
   };
 
   const renderFieldInput = (field: FieldConfig) => {
-    const value = getByPath(data, field.path);
+    const raw = getByPath(data, field.path);
 
     if (field.type === "string") {
+      const value = typeof raw === "string" ? raw : "";
       return (
         <input
           type="text"
           className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-          value={value ?? ""}
+          value={value}
           onChange={(e) => handleChange(field, e.target.value)}
         />
       );
     }
 
     if (field.type === "textarea") {
+      const value = typeof raw === "string" ? raw : "";
       return (
         <textarea
           className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           rows={4}
-          value={value ?? ""}
+          value={value}
           onChange={(e) => handleChange(field, e.target.value)}
         />
       );
     }
 
     // string[]
+    const arr = toStringArray(raw);
     return (
       <textarea
         className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
         rows={5}
-        value={(value as string[] | undefined)?.join("\n") ?? ""}
+        value={arr.join("\n")}
         onChange={(e) => handleChange(field, e.target.value)}
       />
     );
