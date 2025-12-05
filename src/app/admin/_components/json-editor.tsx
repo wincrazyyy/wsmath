@@ -47,7 +47,7 @@ export function JsonEditor<T extends object>({
       return (
         <input
           type="text"
-          className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+          className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           value={value ?? ""}
           onChange={(e) => handleChange(field, e.target.value)}
         />
@@ -57,7 +57,7 @@ export function JsonEditor<T extends object>({
     if (field.type === "textarea") {
       return (
         <textarea
-          className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+          className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           rows={4}
           value={value ?? ""}
           onChange={(e) => handleChange(field, e.target.value)}
@@ -65,10 +65,10 @@ export function JsonEditor<T extends object>({
       );
     }
 
-    // string[] – one item per line
+    // string[]
     return (
       <textarea
-        className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+        className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
         rows={5}
         value={(value as string[] | undefined)?.join("\n") ?? ""}
         onChange={(e) => handleChange(field, e.target.value)}
@@ -99,12 +99,12 @@ export function JsonEditor<T extends object>({
                     {field.label}
                   </h2>
                   {field.description && (
-                    <p className="mt-1 text-xs text-neutral-500">
+                    <p className="mt-1 text-xs text-neutral-600">
                       {field.description}
                     </p>
                   )}
                 </div>
-                <code className="rounded bg-neutral-100 px-2 py-1 text-[11px] text-neutral-500">
+                <code className="rounded bg-neutral-100 px-2 py-1 text-[11px] text-neutral-600">
                   {field.path}
                 </code>
               </div>
@@ -127,7 +127,7 @@ export function JsonEditor<T extends object>({
               </p>
             )}
           </div>
-          <pre className="mt-3 max-h-80 overflow-auto bg-neutral-900 p-3 text-xs text-neutral-100">
+          <pre className="mt-3 max-h-80 overflow-auto bg-neutral-900 p-3 text-[0.75rem] leading-relaxed text-neutral-50">
             {JSON.stringify(data, null, 2)}
           </pre>
         </div>
