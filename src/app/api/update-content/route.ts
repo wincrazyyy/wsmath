@@ -1,28 +1,58 @@
+// src/app/api/update-content/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
-function toBase64(str: string) {
-  return Buffer.from(str, "utf-8").toString("base64");
+function toBase64(str: string): string {
+  // UTF-8 safe base64 encoding (works in Edge/Workers)
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(str);
+  let binary = "";
+  for (let i = 0; i < bytes.length; i += 1) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  // btoa is available in the runtime
+  // eslint-disable-next-line no-undef
+  return btoa(binary);
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { slug, content } = body;
+    const { slug, content } = body as { slug?: string; content?: unknown };
 
-    if (!slug || !content) {
-      return NextResponse.json({ error: "Missing slug or content" }, { status: 400 });
+    if (!slug || typeof slug !== "string") {
+      return NextResponse.json(
+        { error: "Missing or invalid 'slug'" },
+        { status: 400 }
+      );
     }
 
-    const owner = process.env.GITHUB_REPO_OWNER!;
-    const repo = process.env.GITHUB_REPO_NAME!;
-    const token = process.env.GITHUB_TOKEN!;
-    const basePath = process.env.CONTENT_BASE_PATH || "app/_lib/content";
+    if (content === undefined) {
+      return NextResponse.json(
+        { error: "Missing 'content'" },
+        { status: 400 }
+      );
+    }
 
-    const path = `${basePath}/${slug}.json`;
+    const owner = process.env.GITHUB_REPO_OWNER;
+    const repo = process.env.GITHUB_REPO_NAME;
+    const token = process.env.GITHUB_TOKEN;
+    const basePath =
+      process.env.CONTENT_BASE_PATH ?? "app/_lib/content";
 
-    // Fetch existing file to get sha
+    if (!owner || !repo || !token) {
+      return NextResponse.json(
+        { error: "Server misconfigured: missing GitHub env vars" },
+        { status: 500 }
+      );
+    }
+
+    const path = `${basePath.replace(/\/$/, "")}/${slug}.json`;
+
+    // 1) Get existing file to retrieve SHA
     const existingResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+      `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
+        path
+      )}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -34,20 +64,35 @@ export async function POST(req: NextRequest) {
     if (!existingResp.ok) {
       const text = await existingResp.text();
       return NextResponse.json(
-        { error: "Failed to fetch existing file", detail: text },
+        {
+          error: "Failed to fetch existing file from GitHub",
+          detail: text,
+        },
         { status: 500 }
       );
     }
 
-    const existing = await existingResp.json();
+    const existing = (await existingResp.json()) as { sha?: string };
     const sha = existing.sha;
 
-    const newContent = JSON.stringify(content, null, 2);
-    const encodedContent = toBase64(newContent);
+    if (!sha) {
+      return NextResponse.json(
+        {
+          error: "No SHA found for existing file",
+        },
+        { status: 500 }
+      );
+    }
 
-    // PUT update
+    // 2) Prepare new content
+    const newContentString = JSON.stringify(content, null, 2);
+    const newContentBase64 = toBase64(newContentString);
+
+    // 3) Update file via GitHub Contents API
     const putResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+      `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
+        path
+      )}`,
       {
         method: "PUT",
         headers: {
@@ -55,8 +100,8 @@ export async function POST(req: NextRequest) {
           Accept: "application/vnd.github+json",
         },
         body: JSON.stringify({
-          message: `Update ${slug}.json via WSMath Admin`,
-          content: encodedContent,
+          message: `Update ${slug}.json via WSMath admin`,
+          content: newContentBase64,
           sha,
         }),
       }
@@ -65,15 +110,17 @@ export async function POST(req: NextRequest) {
     if (!putResp.ok) {
       const text = await putResp.text();
       return NextResponse.json(
-        { error: "Failed to update file", detail: text },
+        { error: "Failed to update file in GitHub", detail: text },
         { status: 500 }
       );
     }
 
-    return NextResponse.json({ success: true });
-  } catch (err: any) {
+    return NextResponse.json({ success: true }, { status: 200 });
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(
-      { error: "Server error", detail: err.message },
+      { error: "Server error", detail: message },
       { status: 500 }
     );
   }
