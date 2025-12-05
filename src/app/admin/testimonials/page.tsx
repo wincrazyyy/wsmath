@@ -39,6 +39,11 @@ function groupFieldsBySection(
     }));
 }
 
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string");
+}
+
 export default function TestimonialsAdminPage() {
   const [data, setData] = useState<TestimonialsContent>(testimonialsContent);
   const [activeSection, setActiveSection] = useState<SectionKey>("featured");
@@ -53,7 +58,8 @@ export default function TestimonialsAdminPage() {
     []
   );
 
-  const currentGroups = activeSection === "featured" ? featuredGroups : carouselGroups;
+  const currentGroups =
+    activeSection === "featured" ? featuredGroups : carouselGroups;
 
   const handleChange = (field: FieldConfig, rawValue: string) => {
     const next = structuredClone(data) as TestimonialsContent;
@@ -72,36 +78,39 @@ export default function TestimonialsAdminPage() {
   };
 
   const renderFieldInput = (field: FieldConfig) => {
-    const value = getByPath(data, field.path);
+    const raw = getByPath(data, field.path);
 
     if (field.type === "string") {
+      const value = typeof raw === "string" ? raw : "";
       return (
         <input
           type="text"
           className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-          value={value ?? ""}
+          value={value}
           onChange={(e) => handleChange(field, e.target.value)}
         />
       );
     }
 
     if (field.type === "textarea") {
+      const value = typeof raw === "string" ? raw : "";
       return (
         <textarea
           className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           rows={4}
-          value={value ?? ""}
+          value={value}
           onChange={(e) => handleChange(field, e.target.value)}
         />
       );
     }
 
     // string[] – not used here, but kept for completeness
+    const arr = toStringArray(raw);
     return (
       <textarea
         className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
         rows={5}
-        value={(value as string[] | undefined)?.join("\n") ?? ""}
+        value={arr.join("\n")}
         onChange={(e) => handleChange(field, e.target.value)}
       />
     );
@@ -117,7 +126,8 @@ export default function TestimonialsAdminPage() {
           Testimonials
         </h1>
         <p className="mt-2 text-sm text-neutral-600">
-          Edit featured testimonials (top of the page) and carousel testimonials (scrolling strip).
+          Edit featured testimonials (top of the page) and carousel testimonials
+          (scrolling strip).
         </p>
 
         {/* Section tabs */}
@@ -187,7 +197,8 @@ export default function TestimonialsAdminPage() {
                 {sectionLabel} #{activeIndex + 1}
               </h2>
               <p className="mt-1 text-xs text-neutral-500">
-                Fill in name, result, and quote. Leave all fields blank to “disable” this slot.
+                Fill in name, result, and quote. Leave all fields blank to
+                “disable” this slot.
               </p>
             </div>
           </div>
@@ -221,10 +232,13 @@ export default function TestimonialsAdminPage() {
         {/* JSON preview */}
         <div className="mt-10 rounded-xl border border-dashed border-neutral-300 bg-white p-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-neutral-900">JSON preview</h2>
+            <h2 className="text-sm font-semibold text-neutral-900">
+              JSON preview
+            </h2>
             <p className="text-[11px] text-neutral-500">
               Copy into{" "}
-              <code>app/_lib/content/testimonials.json</code> or hook this to an API later.
+              <code>app/_lib/content/testimonials.json</code> or hook this to an
+              API later.
             </p>
           </div>
           <pre className="mt-3 max-h-80 overflow-auto bg-neutral-900 p-3 text-xs text-neutral-100">
