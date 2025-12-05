@@ -104,7 +104,6 @@ export default function TestimonialsAdminPage() {
       );
     }
 
-    // string[] – not used here, but kept for completeness
     const arr = toStringArray(raw);
     return (
       <textarea
