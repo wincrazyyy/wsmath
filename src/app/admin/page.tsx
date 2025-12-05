@@ -1,83 +1,196 @@
-import Link from "next/link";
+// src/app/admin/page.tsx
+"use client";
 
-export default function AdminIndexPage() {
+import { useState } from "react";
+
+import homeContent from "@/app/_lib/content/home.json";
+import aboutContent from "@/app/_lib/content/about.json";
+import testimonialsContent from "@/app/_lib/content/testimonials.json";
+import miscContent from "@/app/_lib/content/misc.json";
+
+import { HOME_FIELDS } from "./_lib/home-fields";
+import { ABOUT_FIELDS } from "./_lib/about-fields";
+import { MISC_FIELDS } from "./_lib/misc-fields";
+
+import { JsonEditor } from "./_components/json-editor";
+import { TestimonialsEditor } from "./_components/testimonials-editor";
+
+type HomeContent = typeof homeContent;
+type AboutContent = typeof aboutContent;
+type TestimonialsContent = typeof testimonialsContent;
+type MiscContent = typeof miscContent;
+
+type TabKey = "home" | "about" | "testimonials" | "misc";
+
+const TABS: { key: TabKey; label: string }[] = [
+  { key: "home", label: "Home" },
+  { key: "about", label: "About" },
+  { key: "testimonials", label: "Testimonials" },
+  { key: "misc", label: "Misc" },
+];
+
+export default function AdminDashboardPage() {
+  const [activeTab, setActiveTab] = useState<TabKey>("home");
+
+  const [homeData, setHomeData] = useState<HomeContent>(homeContent);
+  const [aboutData, setAboutData] = useState<AboutContent>(aboutContent);
+  const [testimonialsData, setTestimonialsData] =
+    useState<TestimonialsContent>(testimonialsContent);
+  const [miscData, setMiscData] =
+    useState<MiscContent>(miscContent);
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  const handleSaveAll = async () => {
+    setIsSaving(true);
+    setSaveStatus("idle");
+    setSaveError(null);
+
+    try {
+      const resp = await fetch("/api/update-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          updates: [
+            { slug: "home", content: homeData },
+            { slug: "about", content: aboutData },
+            { slug: "testimonials", content: testimonialsData },
+            { slug: "misc", content: miscData },
+          ],
+        }),
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => "");
+        console.error("Save all failed:", text);
+        setSaveStatus("error");
+        setSaveError(text || "Failed to save all changes.");
+      } else {
+        setSaveStatus("success");
+      }
+    } catch (err) {
+      console.error("Save all error:", err);
+      setSaveStatus("error");
+      setSaveError("Network or server error while saving.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const renderActiveEditor = () => {
+    if (activeTab === "home") {
+      return (
+        <JsonEditor<HomeContent>
+          title="Homepage content"
+          description="Edit hero and proof-pills for the homepage."
+          data={homeData}
+          fields={HOME_FIELDS}
+          jsonFileHint="src/app/_lib/content/home.json"
+          onChangeData={setHomeData}
+        />
+      );
+    }
+
+    if (activeTab === "about") {
+      return (
+        <JsonEditor<AboutContent>
+          title="About section content"
+          description="Edit the About copy, bullets, stats, and courses."
+          data={aboutData}
+          fields={ABOUT_FIELDS}
+          jsonFileHint="src/app/_lib/content/about.json"
+          onChangeData={setAboutData}
+        />
+      );
+    }
+
+    if (activeTab === "testimonials") {
+      return (
+        <TestimonialsEditor
+          data={testimonialsData}
+          onChangeData={setTestimonialsData}
+        />
+      );
+    }
+
+    // misc
+    return (
+      <JsonEditor<MiscContent>
+        title="Misc items"
+        description="Edit WhatsApp CTA copy and other small global settings."
+        data={miscData}
+        fields={MISC_FIELDS}
+        jsonFileHint="src/app/_lib/content/misc.json"
+        onChangeData={setMiscData}
+      />
+    );
+  };
+
   return (
-    <main className="mx-auto max-w-5xl px-4">
-      <h1 className="mt-2 text-2xl font-bold tracking-tight text-neutral-900">
-        Admin dashboard
-      </h1>
-      <p className="mt-2 text-sm text-neutral-600">
-        Choose a section to edit your site copy. Changes are reflected in the JSON preview for each page.
-      </p>
-
-      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {/* Home */}
-        <Link
-          href="/admin/home"
-          className="group flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md"
-        >
+    <main className="min-h-screen bg-neutral-50">
+      <div className="mx-auto max-w-5xl px-4 py-8">
+        {/* Header + Save all */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-sm font-semibold text-neutral-900">Home content</h2>
-            <p className="mt-1 text-xs text-neutral-600">
-              Edit hero name, subtitle, tagline, and proof pills.
+            <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+              Admin dashboard
+            </h1>
+            <p className="mt-2 text-sm text-neutral-600">
+              Edit homepage, About, testimonials, and misc content. When
+              you're ready, publish all changes in one go.
             </p>
           </div>
-          <span className="mt-3 inline-flex items-center text-[11px] font-medium text-violet-600">
-            Open editor
-            <span className="ml-1 text-xs">↗</span>
-          </span>
-        </Link>
 
-        {/* About */}
-        <Link
-          href="/admin/about"
-          className="group flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md"
-        >
-          <div>
-            <h2 className="text-sm font-semibold text-neutral-900">About section</h2>
-            <p className="mt-1 text-xs text-neutral-600">
-              Edit About lead, bullets, image, stats, and courses.
-            </p>
+          <div className="flex flex-col items-end gap-2">
+            <button
+              type="button"
+              onClick={handleSaveAll}
+              disabled={isSaving}
+              className="inline-flex items-center rounded-md bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-neutral-400"
+            >
+              {isSaving ? "Saving all…" : "Save all changes"}
+            </button>
+            {saveStatus === "success" && (
+              <p className="text-[11px] text-emerald-600">
+                Saved. Cloudflare will redeploy with all updates in a
+                single commit.
+              </p>
+            )}
+            {saveStatus === "error" && (
+              <p className="text-[11px] text-red-600">
+                {saveError || "Failed to save changes."}
+              </p>
+            )}
           </div>
-          <span className="mt-3 inline-flex items-center text-[11px] font-medium text-violet-600">
-            Open editor
-            <span className="ml-1 text-xs">↗</span>
-          </span>
-        </Link>
+        </div>
 
-        {/* Testimonials */}
-        <Link
-          href="/admin/testimonials"
-          className="group flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md"
-        >
-          <div>
-            <h2 className="text-sm font-semibold text-neutral-900">Testimonials</h2>
-            <p className="mt-1 text-xs text-neutral-600">
-              Manage featured and carousel testimonials.
-            </p>
-          </div>
-          <span className="mt-3 inline-flex items-center text-[11px] font-medium text-violet-600">
-            Open editor
-            <span className="ml-1 text-xs">↗</span>
-          </span>
-        </Link>
+        {/* Top nav tabs */}
+        <div className="mt-8 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+          {TABS.map((tab) => {
+            const isActive = tab.key === activeTab;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTab(tab.key)}
+                className={`rounded-full px-4 py-1.5 transition ${
+                  isActive
+                    ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+                    : "text-neutral-600 hover:bg-neutral-50"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
 
-        {/* Misc */}
-        <Link
-          href="/admin/misc"
-          className="group flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-4 text-sm shadow-sm transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md"
-        >
-          <div>
-            <h2 className="text-sm font-semibold text-neutral-900">Misc items</h2>
-            <p className="mt-1 text-xs text-neutral-600">
-              Edit WhatsApp CTA text and other small global content.
-            </p>
-          </div>
-          <span className="mt-3 inline-flex items-center text-[11px] font-medium text-violet-600">
-            Open editor
-            <span className="ml-1 text-xs">↗</span>
-          </span>
-        </Link>
+        {/* Active editor */}
+        <div className="mt-6">{renderActiveEditor()}</div>
       </div>
     </main>
   );
