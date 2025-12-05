@@ -1,16 +1,17 @@
-// src/app/api/update-content/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
+// Required by next-on-pages: run this route on the Edge runtime
+export const runtime = "edge";
+
 function toBase64(str: string): string {
-  // UTF-8 safe base64 encoding (works in Edge/Workers)
+  // UTF-8 safe base64 encoding for Edge (no Node Buffer)
   const encoder = new TextEncoder();
   const bytes = encoder.encode(str);
   let binary = "";
   for (let i = 0; i < bytes.length; i += 1) {
     binary += String.fromCharCode(bytes[i]);
   }
-  // btoa is available in the runtime
-  // eslint-disable-next-line no-undef
+  // btoa is available in Edge/Workers
   return btoa(binary);
 }
 
@@ -48,7 +49,7 @@ export async function POST(req: NextRequest) {
 
     const path = `${basePath.replace(/\/$/, "")}/${slug}.json`;
 
-    // 1) Get existing file to retrieve SHA
+    // 1) Fetch existing file to get its SHA
     const existingResp = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(
         path
@@ -77,9 +78,7 @@ export async function POST(req: NextRequest) {
 
     if (!sha) {
       return NextResponse.json(
-        {
-          error: "No SHA found for existing file",
-        },
+        { error: "No SHA found for existing file" },
         { status: 500 }
       );
     }
