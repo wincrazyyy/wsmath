@@ -45,9 +45,17 @@ function toStringArray(value: unknown): string[] {
 }
 
 export default function TestimonialsAdminPage() {
-  const [data, setData] = useState<TestimonialsContent>(testimonialsContent);
-  const [activeSection, setActiveSection] = useState<SectionKey>("featured");
+  const [data, setData] =
+    useState<TestimonialsContent>(testimonialsContent);
+  const [activeSection, setActiveSection] =
+    useState<SectionKey>("featured");
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const featuredGroups = useMemo(
     () => groupFieldsBySection(TESTIMONIALS_FIELDS, "featured"),
@@ -75,6 +83,11 @@ export default function TestimonialsAdminPage() {
     }
 
     setData(next);
+
+    if (saveStatus !== "idle") {
+      setSaveStatus("idle");
+      setSaveError(null);
+    }
   };
 
   const renderFieldInput = (field: FieldConfig) => {
@@ -116,18 +129,82 @@ export default function TestimonialsAdminPage() {
   };
 
   const sectionLabel =
-    activeSection === "featured" ? "Featured testimonial" : "Carousel testimonial";
+    activeSection === "featured"
+      ? "Featured testimonial"
+      : "Carousel testimonial";
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    setSaveStatus("idle");
+    setSaveError(null);
+
+    try {
+      const resp = await fetch("/api/update-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: "testimonials",
+          content: data,
+        }),
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => "");
+        console.error("Save failed:", text);
+        setSaveStatus("error");
+        setSaveError(text || "Failed to save changes.");
+      } else {
+        setSaveStatus("success");
+      }
+    } catch (err) {
+      console.error("Save error:", err);
+      setSaveStatus("error");
+      setSaveError("Network or server error while saving.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-neutral-50">
       <div className="mx-auto max-w-4xl px-4 py-10">
-        <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
-          Testimonials
-        </h1>
-        <p className="mt-2 text-sm text-neutral-600">
-          Edit featured testimonials (top of the page) and carousel testimonials
-          (scrolling strip).
-        </p>
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+              Testimonials
+            </h1>
+            <p className="mt-2 text-sm text-neutral-600">
+              Edit featured testimonials (top of the page) and carousel
+              testimonials (scrolling strip).
+            </p>
+          </div>
+
+          <div className="flex flex-col items-end gap-2">
+            <p className="text-[11px] text-neutral-500">
+              Editing:{" "}
+              <code>app/_lib/content/testimonials.json</code>
+            </p>
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={isSaving}
+              className="inline-flex items-center rounded-md bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-neutral-400"
+            >
+              {isSaving ? "Saving…" : "Save changes"}
+            </button>
+            {saveStatus === "success" && (
+              <p className="text-[11px] text-emerald-600">
+                Saved. Cloudflare will redeploy with the new testimonials
+                shortly.
+              </p>
+            )}
+            {saveStatus === "error" && (
+              <p className="text-[11px] text-red-600">
+                {saveError || "Failed to save changes."}
+              </p>
+            )}
+          </div>
+        </div>
 
         {/* Section tabs */}
         <div className="mt-6 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
@@ -164,7 +241,9 @@ export default function TestimonialsAdminPage() {
         {/* Slot selector */}
         <div className="mt-6">
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-            {activeSection === "featured" ? "Featured slots" : "Carousel slots"}
+            {activeSection === "featured"
+              ? "Featured slots"
+              : "Carousel slots"}
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             {currentGroups.map(({ index }) => {
@@ -235,9 +314,9 @@ export default function TestimonialsAdminPage() {
               JSON preview
             </h2>
             <p className="text-[11px] text-neutral-500">
-              Copy into{" "}
-              <code>app/_lib/content/testimonials.json</code> or hook this to an
-              API later.
+              Live edits are saved to{" "}
+              <code>app/_lib/content/testimonials.json</code> via{" "}
+              <code>/api/update-content</code>.
             </p>
           </div>
           <pre className="mt-3 max-h-80 overflow-auto bg-neutral-900 p-3 text-xs text-neutral-100">

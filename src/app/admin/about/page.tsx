@@ -12,6 +12,7 @@ export default function AboutAdminPage() {
       initialData={aboutContent}
       fields={ABOUT_FIELDS}
       jsonFileHint="app/_lib/content/about.json"
+      slug="about"
     />
   );
 }

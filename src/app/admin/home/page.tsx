@@ -12,6 +12,7 @@ export default function HomeAdminPage() {
       initialData={homeContent}
       fields={HOME_FIELDS}
       jsonFileHint="app/_lib/content/home.json"
+      slug="home"
     />
   );
 }

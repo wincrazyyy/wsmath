@@ -1,4 +1,3 @@
-// app/admin/misc/page.tsx
 import miscContent from "@/app/_lib/content/misc.json";
 import { MISC_FIELDS } from "../_lib/misc-fields";
 import { JsonEditor } from "../_components/json-editor";
@@ -13,6 +12,7 @@ export default function MiscAdminPage() {
       initialData={miscContent}
       fields={MISC_FIELDS}
       jsonFileHint="app/_lib/content/misc.json"
+      slug="misc"
     />
   );
 }

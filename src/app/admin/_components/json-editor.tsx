@@ -13,6 +13,12 @@ type JsonEditorProps<T extends object> = {
   fields: FieldConfig[];
   /** Shown above the JSON preview for guidance */
   jsonFileHint?: string;
+  /**
+   * Optional slug used for saving via /api/update-content.
+   * If not provided, we'll try to derive it from jsonFileHint
+   * (e.g. "app/_lib/content/about.json" => "about").
+   */
+  slug?: string;
 };
 
 function toStringArray(value: unknown): string[] {
@@ -26,8 +32,23 @@ export function JsonEditor<T extends object>({
   initialData,
   fields,
   jsonFileHint = "",
+  slug,
 }: JsonEditorProps<T>) {
   const [data, setData] = useState<T>(initialData);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  // Resolve slug: prefer explicit prop, otherwise derive from jsonFileHint
+  const resolvedSlug = (() => {
+    if (slug) return slug;
+    if (!jsonFileHint) return "";
+    const parts = jsonFileHint.split("/");
+    const last = parts[parts.length - 1] || "";
+    return last.replace(/\.json$/i, "");
+  })();
 
   const handleChange = (field: FieldConfig, rawValue: string) => {
     const next = structuredClone(data) as T;
@@ -43,6 +64,11 @@ export function JsonEditor<T extends object>({
     }
 
     setData(next);
+    // Reset save status when user edits again
+    if (saveStatus !== "idle") {
+      setSaveStatus("idle");
+      setSaveError(null);
+    }
   };
 
   const renderFieldInput = (field: FieldConfig) => {
@@ -84,15 +110,85 @@ export function JsonEditor<T extends object>({
     );
   };
 
+  const handleSave = async () => {
+    if (!resolvedSlug) {
+      setSaveStatus("error");
+      setSaveError(
+        "No slug resolved. Provide a `slug` prop or a valid `jsonFileHint` like app/_lib/content/about.json."
+      );
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveStatus("idle");
+    setSaveError(null);
+
+    try {
+      const resp = await fetch("/api/update-content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug: resolvedSlug,
+          content: data,
+        }),
+      });
+
+      if (!resp.ok) {
+        const text = await resp.text().catch(() => "");
+        console.error("Save failed:", text);
+        setSaveStatus("error");
+        setSaveError(text || "Failed to save changes.");
+      } else {
+        setSaveStatus("success");
+      }
+    } catch (err) {
+      console.error("Save error:", err);
+      setSaveStatus("error");
+      setSaveError("Network or server error while saving.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-neutral-50">
       <div className="mx-auto max-w-4xl px-4 py-10">
-        <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
-          {title}
-        </h1>
-        {description && (
-          <p className="mt-2 text-sm text-neutral-600">{description}</p>
-        )}
+        <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+              {title}
+            </h1>
+            {description && (
+              <p className="mt-2 text-sm text-neutral-600">{description}</p>
+            )}
+          </div>
+
+          <div className="flex flex-col items-end gap-2">
+            {jsonFileHint && (
+              <p className="text-[11px] text-neutral-500">
+                Editing: <code>{jsonFileHint}</code>
+              </p>
+            )}
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={isSaving || !resolvedSlug}
+              className="inline-flex items-center rounded-md bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-neutral-400"
+            >
+              {isSaving ? "Saving…" : "Save changes"}
+            </button>
+            {saveStatus === "success" && (
+              <p className="text-[11px] text-emerald-600">
+                Saved. Cloudflare will redeploy with the new content shortly.
+              </p>
+            )}
+            {saveStatus === "error" && (
+              <p className="text-[11px] text-red-600">
+                {saveError || "Failed to save changes."}
+              </p>
+            )}
+          </div>
+        </div>
 
         {/* Fields */}
         <div className="mt-8 grid gap-6">
@@ -130,8 +226,8 @@ export function JsonEditor<T extends object>({
             </h2>
             {jsonFileHint && (
               <p className="text-[11px] text-neutral-500">
-                Copy into <code>{jsonFileHint}</code> or hook this to an API
-                later.
+                Live edits are saved to <code>{jsonFileHint}</code> via
+                <code> /api/update-content</code>.
               </p>
             )}
           </div>
