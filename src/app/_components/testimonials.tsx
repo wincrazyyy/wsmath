@@ -4,6 +4,7 @@
 import Image from "next/image";
 import testimonialsContent from "@/app/_lib/content/testimonials.json";
 import { TestimonialCarousel } from "./testimonial-carousel";
+import { StudentVoicesVideo } from "./student-voices-video";
 
 type TestimonialsContent = typeof testimonialsContent;
 
@@ -19,6 +20,9 @@ export function Testimonials() {
         Testimonials
       </h2>
       <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
+
+      {/* Student voices video just under the section heading */}
+      <StudentVoicesVideo />
 
       {/* Featured grid */}
       {featured.length > 0 && (
@@ -46,17 +50,11 @@ export function Testimonials() {
 
               {t.quote && (
                 <p className="mt-4 text-neutral-700">
-                  <span
-                    aria-hidden
-                    className="mr-1 text-xl text-neutral-400"
-                  >
+                  <span aria-hidden className="mr-1 text-xl text-neutral-400">
                     “
                   </span>
                   {t.quote}
-                  <span
-                    aria-hidden
-                    className="ml-1 text-xl text-neutral-400"
-                  >
+                  <span aria-hidden className="ml-1 text-xl text-neutral-400">
                     ”
                   </span>
                 </p>

@@ -1,3 +1,4 @@
+// app/page.tsx (or wherever your main Home is)
 import { SmoothScroll } from "./_components/smooth-scroll";
 import { BackgroundGlow } from "./_components/background-glow";
 import { Nav } from "./_components/nav";
@@ -34,7 +35,11 @@ export default function Home() {
           id="testimonials"
           className="container mx-auto max-w-5xl px-4 pb-16"
         >
-          <Testimonials />
+
+          {/* Spacing before text testimonials */}
+          <div className="mt-8">
+            <Testimonials />
+          </div>
         </section>
 
         <section className="container mx-auto max-w-5xl px-4 pb-20">
