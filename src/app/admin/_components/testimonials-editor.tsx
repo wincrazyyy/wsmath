@@ -8,7 +8,7 @@ import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 
 type TestimonialsContent = typeof testimonialsContent;
-type SectionKey = "featured" | "carousel";
+type SubTab = "video" | "featured" | "carousel";
 
 type IndexFieldGroup = {
   index: number; // 0-based index
@@ -17,7 +17,7 @@ type IndexFieldGroup = {
 
 function groupFieldsBySection(
   fields: FieldConfig[],
-  section: SectionKey
+  section: "featured" | "carousel"
 ): IndexFieldGroup[] {
   const filtered = fields.filter((f) => f.path.startsWith(`${section}[`));
 
@@ -54,7 +54,7 @@ export function TestimonialsEditor({
   data,
   onChangeData,
 }: TestimonialsEditorProps) {
-  const [activeSection, setActiveSection] = useState<SectionKey>("featured");
+  const [activeTab, setActiveTab] = useState<SubTab>("video");
   const [activeIndex, setActiveIndex] = useState<number>(0);
 
   const videoFields = useMemo(
@@ -72,7 +72,7 @@ export function TestimonialsEditor({
   );
 
   const currentGroups =
-    activeSection === "featured" ? featuredGroups : carouselGroups;
+    activeTab === "featured" ? featuredGroups : carouselGroups;
 
   const handleChange = (field: FieldConfig, rawValue: string) => {
     const next = structuredClone(data) as TestimonialsContent;
@@ -95,13 +95,14 @@ export function TestimonialsEditor({
 
     if (field.type === "string") {
       const value = typeof raw === "string" ? raw : "";
-      return
+      return (
         <input
           type="text"
           className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           value={value}
           onChange={(e) => handleChange(field, e.target.value)}
-        />;
+        />
+      );
     }
 
     if (field.type === "textarea") {
@@ -128,7 +129,7 @@ export function TestimonialsEditor({
   };
 
   const sectionLabel =
-    activeSection === "featured"
+    activeTab === "featured"
       ? "Featured testimonial"
       : "Carousel testimonial";
 
@@ -138,58 +139,31 @@ export function TestimonialsEditor({
         Testimonials
       </h2>
       <p className="mt-1 text-sm text-neutral-600">
-        Edit the student voices video, featured testimonials (top of the page),
-        and carousel testimonials (scrolling strip).
+        Configure the student voices video, featured testimonials (top of the
+        page), and carousel testimonials (scrolling strip).
       </p>
 
-      {/* Student voices video config */}
-      <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h3 className="text-sm font-semibold text-neutral-900">
-              Student voices video
-            </h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Controls the heading, description, and media paths for the video
-              shown under the Testimonials section.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          {videoFields.map((field) => (
-            <section key={field.path} className="md:col-span-1">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <h4 className="text-xs font-semibold text-neutral-900">
-                    {field.label}
-                  </h4>
-                  {field.description && (
-                    <p className="mt-1 text-[11px] text-neutral-500">
-                      {field.description}
-                    </p>
-                  )}
-                </div>
-                <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
-                  {field.path}
-                </code>
-              </div>
-              <div className="mt-2">{renderFieldInput(field)}</div>
-            </section>
-          ))}
-        </div>
-      </div>
-
-      {/* Section tabs */}
-      <div className="mt-8 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+      {/* Sub-tabs inside testimonials */}
+      <div className="mt-6 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+        <button
+          type="button"
+          onClick={() => setActiveTab("video")}
+          className={`rounded-full px-4 py-1.5 transition ${
+            activeTab === "video"
+              ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+              : "text-neutral-600 hover:bg-neutral-50"
+          }`}
+        >
+          Student voices video
+        </button>
         <button
           type="button"
           onClick={() => {
-            setActiveSection("featured");
+            setActiveTab("featured");
             setActiveIndex(0);
           }}
           className={`rounded-full px-4 py-1.5 transition ${
-            activeSection === "featured"
+            activeTab === "featured"
               ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
               : "text-neutral-600 hover:bg-neutral-50"
           }`}
@@ -199,11 +173,11 @@ export function TestimonialsEditor({
         <button
           type="button"
           onClick={() => {
-            setActiveSection("carousel");
+            setActiveTab("carousel");
             setActiveIndex(0);
           }}
           className={`rounded-full px-4 py-1.5 transition ${
-            activeSection === "carousel"
+            activeTab === "carousel"
               ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
               : "text-neutral-600 hover:bg-neutral-50"
           }`}
@@ -212,54 +186,24 @@ export function TestimonialsEditor({
         </button>
       </div>
 
-      {/* Slot selector */}
-      <div className="mt-6">
-        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
-          {activeSection === "featured"
-            ? "Featured slots"
-            : "Carousel slots"}
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {currentGroups.map(({ index }) => {
-            const isActive = index === activeIndex;
-            const label = index + 1;
-            return (
-              <button
-                key={`${activeSection}-${index}`}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                className={`flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg border text-xs font-medium transition ${
-                  isActive
-                    ? "border-violet-500 bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
-                    : "border-neutral-200 bg-white text-neutral-700 hover:border-violet-300 hover:bg-violet-50"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Active editor */}
-      <div className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h3 className="text-sm font-semibold text-neutral-900">
-              {sectionLabel} #{activeIndex + 1}
-            </h3>
-            <p className="mt-1 text-xs text-neutral-500">
-              Fill in name, result, and quote. Leave all fields blank to
-              “disable” this slot.
-            </p>
+      {/* When Video tab is active */}
+      {activeTab === "video" && (
+        <div className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900">
+                Student voices video
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Controls the heading, description, and media paths for the video
+                shown under the Testimonials section.
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div className="mt-5 grid gap-4">
-          {currentGroups
-            .find((g) => g.index === activeIndex)
-            ?.fields.map((field) => (
-              <section key={field.path}>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {videoFields.map((field) => (
+              <section key={field.path} className="md:col-span-1">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h4 className="text-xs font-semibold text-neutral-900">
@@ -278,8 +222,83 @@ export function TestimonialsEditor({
                 <div className="mt-2">{renderFieldInput(field)}</div>
               </section>
             ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* When Featured / Carousel tab is active */}
+      {activeTab !== "video" && (
+        <>
+          {/* Slot selector */}
+          <div className="mt-6">
+            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+              {activeTab === "featured"
+                ? "Featured slots"
+                : "Carousel slots"}
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {currentGroups.map(({ index }) => {
+                const isActive = index === activeIndex;
+                const label = index + 1;
+                return (
+                  <button
+                    key={`${activeTab}-${index}`}
+                    type="button"
+                    onClick={() => setActiveIndex(index)}
+                    className={`flex h-9 min-w-[2.25rem] items-center justify-center rounded-lg border text-xs font-medium transition ${
+                      isActive
+                        ? "border-violet-500 bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+                        : "border-neutral-200 bg-white text-neutral-700 hover:border-violet-300 hover:bg-violet-50"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Active editor for that slot */}
+          <div className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-semibold text-neutral-900">
+                  {sectionLabel} #{activeIndex + 1}
+                </h3>
+                <p className="mt-1 text-xs text-neutral-500">
+                  Fill in name, result, and quote. Leave all fields blank to
+                  “disable” this slot.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-4">
+              {currentGroups
+                .find((g) => g.index === activeIndex)
+                ?.fields.map((field) => (
+                  <section key={field.path}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <h4 className="text-xs font-semibold text-neutral-900">
+                          {field.label}
+                        </h4>
+                        {field.description && (
+                          <p className="mt-1 text-[11px] text-neutral-500">
+                            {field.description}
+                          </p>
+                        )}
+                      </div>
+                      <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
+                        {field.path}
+                      </code>
+                    </div>
+                    <div className="mt-2">{renderFieldInput(field)}</div>
+                  </section>
+                ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* JSON preview */}
       <div className="mt-10 rounded-xl border border-dashed border-neutral-300 bg-white p-4">
