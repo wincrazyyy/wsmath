@@ -2,6 +2,12 @@
 import type { FieldConfig } from "./fields";
 
 export const ABOUT_SECTION_FIELDS: FieldConfig[] = [{
+    path: "title",
+    label: "About title",
+    description: "Main heading for the About section.",
+    type: "string",
+  },
+  {
     path: "lead",
     label: "About lead paragraph",
     description: "Main intro text under the About heading.",
@@ -20,15 +26,27 @@ export const ABOUT_SECTION_FIELDS: FieldConfig[] = [{
     type: "string",
   },
   {
-    path: "whatYouGet",
-    label: "What you get (bullets)",
-    description: "One benefit per line. Appears in the left card above the image.",
+    path: "area1.title",
+    label: "Left area title",
+    description: "Title for the left card above the image.",
+    type: "string",
+  },
+  {
+    path: "area1.items",
+    label: "Left area (bullets)",
+    description: "One bullet point per line. Appears in the left card above the image.",
     type: "string[]",
   },
   {
-    path: "howITeach",
-    label: "How I teach (bullets)",
-    description: "One teaching point per line. Appears in the right card above the image.",
+    path: "area2.title",
+    label: "Right area title",
+    description: "Title for the right card above the image.",
+    type: "string",
+  },
+  {
+    path: "area2.items",
+    label: "Right area (bullets)",
+    description: "One bullet point per line. Appears in the right card above the image.",
     type: "string[]",
   },
   {

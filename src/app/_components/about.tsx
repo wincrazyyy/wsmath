@@ -9,7 +9,7 @@ export function About() {
   return (
     <>
       <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-neutral-900">
-        About
+        {about.title}
       </h2>
       <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
 
@@ -24,9 +24,9 @@ export function About() {
         <div className="grid gap-4 p-4 md:p-0 md:absolute md:inset-x-6 md:top-4 md:z-10 md:grid-cols-2">
           <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
             <div className="h-0.5 w-10 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
-            <h3 className="mt-3 text-sm font-semibold text-neutral-900">What you get</h3>
+            <h3 className="mt-3 text-sm font-semibold text-neutral-900">{about.area1.title}</h3>
             <ul className="mt-3 space-y-2 text-sm text-neutral-700">
-              {about.whatYouGet.map((item) => (
+              {about.area1.items.map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="mt-2 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
                   {item}
@@ -37,9 +37,9 @@ export function About() {
 
           <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
             <div className="h-0.5 w-10 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
-            <h3 className="mt-3 text-sm font-semibold text-neutral-900">How I teach</h3>
+            <h3 className="mt-3 text-sm font-semibold text-neutral-900">{about.area2.title}</h3>
             <ul className="mt-3 space-y-2 text-sm text-neutral-700">
-              {about.howITeach.map((item) => (
+              {about.area2.items.map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="mt-2 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
                   {item}

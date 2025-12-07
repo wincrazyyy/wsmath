@@ -17,7 +17,7 @@ export function Testimonials() {
   return (
     <>
       <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-neutral-900">
-        Testimonials
+        {testimonialsContent.title}
       </h2>
       <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
 

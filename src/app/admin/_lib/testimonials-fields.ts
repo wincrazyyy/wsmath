@@ -1,6 +1,15 @@
 // app/admin/_lib/testimonials-fields.ts
 import type { FieldConfig } from "./fields";
 
+const TESTIMONIALS_TITLE_FIELD: FieldConfig[] = [
+  {
+    path: "title",
+    label: "Testimonials title",
+    description: "Main heading for the Testimonials section.",
+    type: "string",
+  },
+];
+
 function testimonialFields(basePath: string, labelPrefix: string): FieldConfig[] {
   return [
     {
@@ -78,6 +87,7 @@ const CAROUSEL_TESTIMONIAL_FIELDS: FieldConfig[] = [
 ];
 
 export const TESTIMONIALS_FIELDS: FieldConfig[] = [
+  ...TESTIMONIALS_TITLE_FIELD,
   ...VIDEO_FIELDS,
   ...FEATURED_TESTIMONIAL_FIELDS,
   ...CAROUSEL_TESTIMONIAL_FIELDS,
