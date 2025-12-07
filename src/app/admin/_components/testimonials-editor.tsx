@@ -54,9 +54,13 @@ export function TestimonialsEditor({
   data,
   onChangeData,
 }: TestimonialsEditorProps) {
-  const [activeSection, setActiveSection] =
-    useState<SectionKey>("featured");
+  const [activeSection, setActiveSection] = useState<SectionKey>("featured");
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const videoFields = useMemo(
+    () => TESTIMONIALS_FIELDS.filter((f) => f.path.startsWith("video.")),
+    []
+  );
 
   const featuredGroups = useMemo(
     () => groupFieldsBySection(TESTIMONIALS_FIELDS, "featured"),
@@ -91,14 +95,13 @@ export function TestimonialsEditor({
 
     if (field.type === "string") {
       const value = typeof raw === "string" ? raw : "";
-      return (
+      return
         <input
           type="text"
           className="mt-1 w-full rounded-md border border-neutral-300 px-3 py-2 text-sm focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           value={value}
           onChange={(e) => handleChange(field, e.target.value)}
-        />
-      );
+        />;
     }
 
     if (field.type === "textarea") {
@@ -135,12 +138,50 @@ export function TestimonialsEditor({
         Testimonials
       </h2>
       <p className="mt-1 text-sm text-neutral-600">
-        Edit featured testimonials (top of the page) and carousel
-        testimonials (scrolling strip).
+        Edit the student voices video, featured testimonials (top of the page),
+        and carousel testimonials (scrolling strip).
       </p>
 
+      {/* Student voices video config */}
+      <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <h3 className="text-sm font-semibold text-neutral-900">
+              Student voices video
+            </h3>
+            <p className="mt-1 text-xs text-neutral-500">
+              Controls the heading, description, and media paths for the video
+              shown under the Testimonials section.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          {videoFields.map((field) => (
+            <section key={field.path} className="md:col-span-1">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-xs font-semibold text-neutral-900">
+                    {field.label}
+                  </h4>
+                  {field.description && (
+                    <p className="mt-1 text-[11px] text-neutral-500">
+                      {field.description}
+                    </p>
+                  )}
+                </div>
+                <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
+                  {field.path}
+                </code>
+              </div>
+              <div className="mt-2">{renderFieldInput(field)}</div>
+            </section>
+          ))}
+        </div>
+      </div>
+
       {/* Section tabs */}
-      <div className="mt-6 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+      <div className="mt-8 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
         <button
           type="button"
           onClick={() => {
