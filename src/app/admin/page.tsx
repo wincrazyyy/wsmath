@@ -8,11 +8,9 @@ import aboutContent from "@/app/_lib/content/about.json";
 import testimonialsContent from "@/app/_lib/content/testimonials.json";
 import miscContent from "@/app/_lib/content/misc.json";
 
-import { HOME_FIELDS } from "./_lib/home-fields";
-import { ABOUT_FIELDS } from "./_lib/about-fields";
-import { MISC_FIELDS } from "./_lib/misc-fields";
-
-import { JsonEditor } from "./_components/json-editor";
+import { HomeEditor } from "./_components/home-editor";
+import { AboutEditor } from "./_components/about-editor";
+import { MiscEditor } from "./_components/misc-editor";
 import { TestimonialsEditor } from "./_components/testimonials-editor";
 
 type HomeContent = typeof homeContent;
@@ -36,13 +34,12 @@ export default function AdminDashboardPage() {
   const [aboutData, setAboutData] = useState<AboutContent>(aboutContent);
   const [testimonialsData, setTestimonialsData] =
     useState<TestimonialsContent>(testimonialsContent);
-  const [miscData, setMiscData] =
-    useState<MiscContent>(miscContent);
+  const [miscData, setMiscData] = useState<MiscContent>(miscContent);
 
   const [isSaving, setIsSaving] = useState(false);
-  const [saveStatus, setSaveStatus] = useState<
-    "idle" | "success" | "error"
-  >("idle");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">(
+    "idle",
+  );
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const handleSaveAll = async () => {
@@ -84,12 +81,8 @@ export default function AdminDashboardPage() {
   const renderActiveEditor = () => {
     if (activeTab === "home") {
       return (
-        <JsonEditor<HomeContent>
-          title="Homepage content"
-          description="Edit hero and proof-pills for the homepage."
+        <HomeEditor<HomeContent>
           data={homeData}
-          fields={HOME_FIELDS}
-          jsonFileHint="src/app/_lib/content/home.json"
           onChangeData={setHomeData}
         />
       );
@@ -97,12 +90,8 @@ export default function AdminDashboardPage() {
 
     if (activeTab === "about") {
       return (
-        <JsonEditor<AboutContent>
-          title="About section content"
-          description="Edit the About copy, bullets, stats, and courses."
+        <AboutEditor<AboutContent>
           data={aboutData}
-          fields={ABOUT_FIELDS}
-          jsonFileHint="src/app/_lib/content/about.json"
           onChangeData={setAboutData}
         />
       );
@@ -119,12 +108,8 @@ export default function AdminDashboardPage() {
 
     // misc
     return (
-      <JsonEditor<MiscContent>
-        title="Misc items"
-        description="Edit WhatsApp CTA copy and other small global settings."
+      <MiscEditor<MiscContent>
         data={miscData}
-        fields={MISC_FIELDS}
-        jsonFileHint="src/app/_lib/content/misc.json"
         onChangeData={setMiscData}
       />
     );
@@ -140,8 +125,8 @@ export default function AdminDashboardPage() {
               Admin dashboard
             </h1>
             <p className="mt-2 text-sm text-neutral-600">
-              Edit homepage, About, testimonials, and misc content. When you&apos;re ready,
-              publish all changes in one go.
+              Edit homepage, About, testimonials, and misc content. When
+              you&apos;re ready, publish all changes in one go.
             </p>
           </div>
 
@@ -156,8 +141,8 @@ export default function AdminDashboardPage() {
             </button>
             {saveStatus === "success" && (
               <p className="text-[11px] text-emerald-600">
-                Saved. Cloudflare will redeploy with all updates in a
-                single commit.
+                Saved. Cloudflare will redeploy with all updates in a single
+                commit.
               </p>
             )}
             {saveStatus === "error" && (
