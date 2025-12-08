@@ -1,12 +1,13 @@
-// app/page.tsx (or wherever your main Home is)
+// app/page.tsx
 import { SmoothScroll } from "./_components/smooth-scroll";
 import { BackgroundGlow } from "./_components/background-glow";
 import { Nav } from "./_components/nav";
 import { Hero } from "./_components/hero";
 import { ProofPills } from "./_components/proof-pills";
 import { About } from "./_components/about";
-import { Testimonials } from "./_components/testimonials";
 import { CtaRibbon } from "./_components/cta-ribbon";
+import { PackagesSection } from "./_components/packages-section";
+import { Testimonials } from "./_components/testimonials";
 import { WhatsAppCta } from "./_components/whatsapp-cta";
 import { SiteFooter } from "./_components/footer";
 import { FloatingCta } from "./_components/floating-cta";
@@ -31,15 +32,19 @@ export default function Home() {
           <CtaRibbon />
         </section>
 
+        {/* New packages section */}
+        <section
+          id="packages"
+          className="container mx-auto max-w-5xl px-4 pb-6"
+        >
+          <PackagesSection />
+        </section>
+
         <section
           id="testimonials"
           className="container mx-auto max-w-5xl px-4 pb-16"
         >
-
-          {/* Spacing before text testimonials */}
-          <div className="mt-8">
-            <Testimonials />
-          </div>
+          <Testimonials />
         </section>
 
         <section className="container mx-auto max-w-5xl px-4 pb-20">
