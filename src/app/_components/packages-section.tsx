@@ -120,10 +120,10 @@ export function PackagesSection() {
       <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight text-neutral-900 md:text-3xl">
-            {data.heading}
+            {data.title}
           </h2>
           <p className="mt-2 max-w-xl text-sm text-neutral-600 md:text-base">
-            {data.subheading}
+            {data.subtitle}
           </p>
         </div>
         {data.topBadge && (

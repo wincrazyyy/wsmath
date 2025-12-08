@@ -28,8 +28,8 @@ export function PackagesEditor<T extends object>({
     () =>
       PACKAGES_FIELDS.filter(
         (f) =>
-          f.path === "heading" ||
-          f.path === "subheading" ||
+          f.path === "title" ||
+          f.path === "subtitle" ||
           f.path === "topBadge" ||
           f.path.startsWith("comparison.")
       ),

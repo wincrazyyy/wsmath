@@ -4,14 +4,14 @@ import type { FieldConfig } from "./fields";
 // Top heading + intro
 export const PACKAGES_SECTION_FIELDS: FieldConfig[] = [
   {
-    path: "heading",
-    label: "Section heading",
-    description: 'Main title, e.g. “Course options & pricing”.',
+    path: "title",
+    label: "Packages title",
+    description: 'Main heading of the packages section.',
     type: "string",
   },
   {
-    path: "subheading",
-    label: "Section subheading",
+    path: "subtitle",
+    label: "Packages subtitle",
     description: "Short paragraph under the heading.",
     type: "textarea",
   },
