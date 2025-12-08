@@ -4,14 +4,12 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { WhatsAppButton } from "./whatsapp-button";
 
-// Pricing constants for easy comparison
 const PRIVATE_RATE = 1500; // HKD per hour
 const GROUP_PRICE = 16800; // HKD upfront
 const GROUP_LESSONS = 32;
 const EFFECTIVE_GROUP_RATE = GROUP_PRICE / GROUP_LESSONS; // 525
 const PRIVATE_32_HOURS = PRIVATE_RATE * GROUP_LESSONS; // 48,000
 
-// Tip: export your leaflet PDF as separate PNG/JPG pages into /public/leaflets
 const GROUP_LEAFLET_PAGES = [
   "/leaflets/group-leaflet-page-1.jpg",
   "/leaflets/group-leaflet-page-2.jpg",
@@ -22,58 +20,63 @@ const GROUP_LEAFLET_PAGES = [
   "/leaflets/group-leaflet-page-7.jpg",
 ];
 
-function GroupLeafletViewer() {
+const AUTO_ADVANCE_SECONDS = 5;
+
+export function GroupLeafletViewer() {
   const [index, setIndex] = useState(0);
   const pageCount = GROUP_LEAFLET_PAGES.length;
 
   useEffect(() => {
     if (pageCount <= 1) return;
 
-    const id = setInterval(() => {
+    const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % pageCount);
-    }, 6000);
+    }, AUTO_ADVANCE_SECONDS * 1000);
 
-    return () => clearInterval(id);
+    return () => clearInterval(timer);
   }, [pageCount]);
 
-  if (pageCount === 0) {
-    return (
-      <div className="flex h-40 items-center justify-center rounded-xl border border-dashed border-neutral-300 bg-neutral-50 text-xs text-neutral-500">
-        Upload leaflet pages to <code>/public/leaflets</code> to preview them here.
-      </div>
-    );
-  }
+  if (pageCount === 0) return null;
+
+  const currentSrc = GROUP_LEAFLET_PAGES[index];
 
   return (
-    <div className="mt-4 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-900/90">
-      {/* A4-ish aspect ratio, with a max height so it doesn't dominate */}
-      <div className="relative mx-auto w-full max-w-[420px] max-h-[520px]">
-        <div className="relative aspect-[210/297] w-full">
-          <Image
-            src={GROUP_LEAFLET_PAGES[index]}
-            alt={`Group course leaflet page ${index + 1}`}
-            fill
-            className="object-contain bg-white"
-            sizes="(min-width: 768px) 420px, 90vw"
-          />
+    <div className="mt-4 rounded-xl border border-neutral-200 bg-neutral-900/90">
+      {/* A4-ish area */}
+      <div className="flex justify-center p-3">
+        <div className="relative w-full max-w-[420px]">
+          {/* A4 ratio: 210 x 297 */}
+          <div className="relative w-full aspect-[210/297] rounded-lg bg-white shadow-md">
+            <Image
+              src={currentSrc}
+              alt={`Course leaflet page ${index + 1}`}
+              fill
+              className="object-contain"
+              sizes="420px"
+            />
+          </div>
         </div>
       </div>
 
+      {/* Page indicators – kept OUTSIDE the A4 aspect box and not clipped */}
       {pageCount > 1 && (
-        <div className="flex items-center justify-center gap-1.5 py-2">
-          {GROUP_LEAFLET_PAGES.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setIndex(i)}
-              className={`h-1.5 w-4 rounded-full transition ${
-                i === index
-                  ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500"
-                  : "bg-neutral-500/40 hover:bg-neutral-400/70"
-              }`}
-              aria-label={`Go to page ${i + 1}`}
-            />
-          ))}
+        <div className="flex items-center justify-center gap-1.5 pb-3">
+          {GROUP_LEAFLET_PAGES.map((_, i) => {
+            const isActive = i === index;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setIndex(i)}
+                className={`h-1.5 rounded-full transition ${
+                  isActive
+                    ? "w-6 bg-sky-400"
+                    : "w-2 bg-neutral-600/60 hover:bg-neutral-400"
+                }`}
+                aria-label={`Go to page ${i + 1}`}
+              />
+            );
+          })}
         </div>
       )}
     </div>
