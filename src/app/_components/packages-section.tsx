@@ -31,7 +31,7 @@ function GroupLeafletViewer() {
 
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % pageCount);
-    }, 6000); // 6 seconds per page
+    }, 6000);
 
     return () => clearInterval(id);
   }, [pageCount]);
@@ -46,17 +46,19 @@ function GroupLeafletViewer() {
 
   return (
     <div className="mt-4 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-900/90">
-      <div className="relative aspect-[3/4] w-full sm:aspect-video">
-        <Image
-          src={GROUP_LEAFLET_PAGES[index]}
-          alt={`Group course leaflet page ${index + 1}`}
-          fill
-          className="object-contain bg-white"
-          sizes="(min-width: 768px) 480px, 100vw"
-        />
+      {/* A4-ish aspect ratio, with a max height so it doesn't dominate */}
+      <div className="relative mx-auto w-full max-w-[420px] max-h-[520px]">
+        <div className="relative aspect-[210/297] w-full">
+          <Image
+            src={GROUP_LEAFLET_PAGES[index]}
+            alt={`Group course leaflet page ${index + 1}`}
+            fill
+            className="object-contain bg-white"
+            sizes="(min-width: 768px) 420px, 90vw"
+          />
+        </div>
       </div>
 
-      {/* Simple page indicators */}
       {pageCount > 1 && (
         <div className="flex items-center justify-center gap-1.5 py-2">
           {GROUP_LEAFLET_PAGES.map((_, i) => (
