@@ -1,47 +1,39 @@
+// app/_components/packages-section.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { WhatsAppButton } from "./whatsapp-button";
+import packagesContent from "@/app/_lib/content/packages.json";
 
-// ===== Pricing constants =====
-const PRIVATE_RATE = 1500; // HKD per hour (1-to-1)
-const GROUP_PRICE = 16800; // HKD upfront for full group programme
-const GROUP_LESSONS = 32;
+function toNumber(value: unknown, fallback = 0): number {
+  const n = typeof value === "string" ? Number(value) : Number.NaN;
+  return Number.isFinite(n) ? n : fallback;
+}
 
-// Derived pricing
-const PRIVATE_32_HOURS = PRIVATE_RATE * GROUP_LESSONS; // 48,000
-const GROUP_RATE_PER_LESSON = Math.round(GROUP_PRICE / GROUP_LESSONS); // ~525
+// ===== Group leaflet viewer driven by JSON =====
+const LEAFLET = packagesContent.group.leaflet ?? {
+  label: "Course leaflet preview",
+  pages: [] as string[],
+  autoAdvanceSeconds: "5",
+};
 
-const EIGHT_LESSON_BLOCK_HOURS = 8;
-const EIGHT_LESSON_BLOCK_COST = PRIVATE_RATE * EIGHT_LESSON_BLOCK_HOURS; // 12,000
-
-// ===== Group leaflet viewer constants =====
-const GROUP_LEAFLET_PAGES = [
-  "/leaflets/group-leaflet-page-1.jpg",
-  "/leaflets/group-leaflet-page-2.jpg",
-  "/leaflets/group-leaflet-page-3.jpg",
-  "/leaflets/group-leaflet-page-4.jpg",
-  "/leaflets/group-leaflet-page-5.jpg",
-  "/leaflets/group-leaflet-page-6.jpg",
-  "/leaflets/group-leaflet-page-7.jpg",
-];
-
-const AUTO_ADVANCE_SECONDS = 5;
+const GROUP_LEAFLET_PAGES = LEAFLET.pages ?? [];
 
 export function GroupLeafletViewer() {
   const [index, setIndex] = useState(0);
   const pageCount = GROUP_LEAFLET_PAGES.length;
+  const autoSeconds = toNumber(LEAFLET.autoAdvanceSeconds, 5);
 
   useEffect(() => {
     if (pageCount <= 1) return;
 
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % pageCount);
-    }, AUTO_ADVANCE_SECONDS * 1000);
+    }, autoSeconds * 1000);
 
     return () => clearInterval(timer);
-  }, [pageCount]);
+  }, [pageCount, autoSeconds]);
 
   if (pageCount === 0) return null;
 
@@ -52,7 +44,7 @@ export function GroupLeafletViewer() {
       <div className="flex items-center justify-between gap-2 text-[11px] text-neutral-300">
         <span className="inline-flex items-center gap-1">
           <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
-          Course leaflet preview
+          {LEAFLET.label || "Course leaflet preview"}
         </span>
         <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-[10px] text-neutral-200">
           Page {index + 1} / {pageCount}
@@ -100,7 +92,25 @@ export function GroupLeafletViewer() {
   );
 }
 
+// ===== Main section driven by packages.json =====
 export function PackagesSection() {
+  const data = packagesContent;
+
+  const privateCfg = data.private;
+  const groupCfg = data.group;
+
+  const privateRate = toNumber(privateCfg.hourlyRate);
+  const groupPrice = toNumber(groupCfg.price);
+  const groupLessons = Math.max(1, toNumber(groupCfg.lessons, 32));
+  const intensiveLessons = Math.max(
+    1,
+    toNumber(privateCfg.intensive.lessons, 8)
+  );
+
+  const private32Hours = privateRate * groupLessons;
+  const groupRatePerLesson = Math.round(groupPrice / groupLessons);
+  const eightLessonBlockCost = privateRate * intensiveLessons;
+
   return (
     <section
       id="packages"
@@ -110,26 +120,20 @@ export function PackagesSection() {
       <div className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end">
         <div>
           <h2 className="text-2xl font-extrabold tracking-tight text-neutral-900 md:text-3xl">
-            Course options &amp; pricing
+            {data.heading}
           </h2>
           <p className="mt-2 max-w-xl text-sm text-neutral-600 md:text-base">
-            Choose between{" "}
-            <span className="font-medium text-neutral-900">
-              fully personalised 1-to-1 coaching
-            </span>{" "}
-            or a{" "}
-            <span className="font-medium text-neutral-900">
-              high-value structured group programme
-            </span>{" "}
-            that builds a rock-solid foundation for IBDP exams.
+            {data.subheading}
           </p>
         </div>
-        <div className="hidden md:block">
-          <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-neutral-50">
-            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-            IB / A-Level specialist since 2017
-          </span>
-        </div>
+        {data.topBadge && (
+          <div className="hidden md:block">
+            <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-neutral-50">
+              <span className="h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              {data.topBadge}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="mt-3 h-1 w-20 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
@@ -139,12 +143,12 @@ export function PackagesSection() {
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
-              Standard 1-to-1 rate
+              {data.comparison.privateLabel}
             </p>
             <p className="mt-1 text-sm text-neutral-800">
               HKD{" "}
               <span className="text-lg font-semibold text-neutral-900">
-                {PRIVATE_RATE.toLocaleString()}
+                {privateRate.toLocaleString()}
               </span>{" "}
               <span className="text-xs text-neutral-500">/ hour</span>
             </p>
@@ -154,17 +158,17 @@ export function PackagesSection() {
 
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
-              Group course investment
+              {data.comparison.groupLabel}
             </p>
             <p className="mt-1 text-sm text-neutral-800">
               HKD{" "}
               <span className="text-lg font-semibold text-neutral-900">
-                {GROUP_PRICE.toLocaleString()}
+                {groupPrice.toLocaleString()}
               </span>{" "}
               <span className="inline-flex items-center gap-1 text-xs text-neutral-500">
                 / full programme
                 <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[11px] font-medium text-sky-700">
-                  ~HKD {GROUP_RATE_PER_LESSON.toLocaleString()} / lesson
+                  ~HKD {groupRatePerLesson.toLocaleString()} / lesson
                 </span>
               </span>
             </p>
@@ -173,17 +177,19 @@ export function PackagesSection() {
           <div className="hidden h-10 w-px bg-neutral-200 md:block" />
 
           <div className="rounded-xl bg-white px-3 py-2 text-xs text-neutral-800 shadow-sm md:text-sm">
-            <p className="font-semibold text-neutral-900">Value comparison</p>
+            <p className="font-semibold text-neutral-900">
+              {data.comparison.title}
+            </p>
             <p className="mt-1">
-              32 hours 1-to-1 ≈{" "}
+              {data.comparison.privateLinePrefix}{" "}
               <span className="font-semibold">
-                HKD {PRIVATE_32_HOURS.toLocaleString()}
+                HKD {private32Hours.toLocaleString()}
               </span>{" "}
               vs{" "}
               <span className="font-semibold text-sky-700">
-                HKD {GROUP_PRICE.toLocaleString()}
+                HKD {groupPrice.toLocaleString()}
               </span>{" "}
-              for 32 structured group sessions.
+              {data.comparison.groupLineSuffix}
             </p>
           </div>
         </div>
@@ -194,14 +200,16 @@ export function PackagesSection() {
         {/* 1-to-1 premium card */}
         <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md ring-1 ring-transparent transition hover:-translate-y-1 hover:shadow-lg hover:ring-neutral-200">
           <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
-            Premium 1-to-1
+            {privateCfg.label}
           </div>
 
           {/* PRICE */}
           <div className="mt-4">
-            <p className="text-xs text-neutral-500">Typical rate</p>
+            <p className="text-xs text-neutral-500">
+              {privateCfg.rateLabel}
+            </p>
             <p className="text-2xl font-semibold tracking-tight text-neutral-900">
-              HKD {PRIVATE_RATE.toLocaleString()}
+              HKD {privateRate.toLocaleString()}
               <span className="ml-1 text-xs font-normal text-neutral-500">
                 / hour
               </span>
@@ -209,89 +217,41 @@ export function PackagesSection() {
           </div>
 
           <h3 className="mt-3 text-lg font-semibold tracking-tight text-neutral-900 md:text-xl">
-            Private online coaching
+            {privateCfg.title}
           </h3>
           <p className="mt-1 text-sm text-neutral-600">
-            For students who want maximum customisation, tight accountability,
-            and fast score improvements.
+            {privateCfg.description}
           </p>
 
           <ul className="mt-4 space-y-2 text-sm text-neutral-700">
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              Deep dive into school tests, IA preparation, and mock exams.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              Fully personalised by-topic drills and homework, adjusted weekly.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              Weekly performance tracking with targeted correction of weak topics.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              Ideal if you’re pushing for{" "}
-              <span className="font-semibold">Level 6–7 / A*</span> and want
-              strict pacing.
-            </li>
+            {(privateCfg.points ?? []).map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+                {item}
+              </li>
+            ))}
           </ul>
 
           {/* 8-lesson intensive block */}
           <div className="mt-7 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-700">
-              8-lesson intensive
+              {privateCfg.intensive.label}
             </p>
             <p className="mt-1 text-sm text-neutral-700">
-              Around{" "}
+              {privateCfg.intensive.bodyPrefix}{" "}
               <span className="font-semibold">
-                HKD {EIGHT_LESSON_BLOCK_COST.toLocaleString()}
+                HKD {eightLessonBlockCost.toLocaleString()}
               </span>{" "}
-              for an 8-lesson block (8 × 60 mins).
+              for an {intensiveLessons}-lesson block (8 × 60 mins).
             </p>
 
             <ul className="mt-3 space-y-1.5 text-sm text-neutral-800">
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Priority online correspondence.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Unlimited tailor-made past-paper practice with step-by-step
-                solutions.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                8 online lessons of 60 minutes with custom time allocation.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Detailed summary by topic and{" "}
-                <span className="font-semibold">school mock exam prediction</span>.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                IBDP Math IA topic setup &amp; guidance until completion.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Expected{" "}
-                <span className="font-semibold">
-                  2 grades improvement or better
-                </span>{" "}
-                (e.g. from 5 to 7 in IBDP or from B to A* in A-Level) with full
-                commitment.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                GoodNotes 6 one-time payment sponsorship.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Referral rebate of up to{" "}
-                <span className="font-semibold">HKD 3,000</span> per student
-                referred.
-              </li>
+              {(privateCfg.intensive.points ?? []).map((item) => (
+                <li key={item} className="flex items-start gap-2">
+                  <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -302,10 +262,11 @@ export function PackagesSection() {
               imgClassName="h-14 w-auto"
               ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
             />
-            <p className="mt-2 text-[11px] text-neutral-500">
-              Mention “1-to-1 8-lesson package” and your current grade / target
-              score.
-            </p>
+            {privateCfg.buttonNote && (
+              <p className="mt-2 text-[11px] text-neutral-500">
+                {privateCfg.buttonNote}
+              </p>
+            )}
           </div>
         </article>
 
@@ -313,46 +274,42 @@ export function PackagesSection() {
         <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md ring-2 ring-sky-100 transition hover:-translate-y-1 hover:shadow-lg">
           <div className="flex items-center justify-between gap-2">
             <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-3 py-1 text-[11px] font-medium text-white">
-              High-value group
+              {groupCfg.label}
             </div>
-            <span className="rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-sky-700">
-              Most popular
-            </span>
+            {groupCfg.tag && (
+              <span className="rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-sky-700">
+                {groupCfg.tag}
+              </span>
+            )}
           </div>
 
           {/* PRICE */}
           <div className="mt-4">
-            <p className="text-xs text-neutral-500">Full programme</p>
+            <p className="text-xs text-neutral-500">
+              {groupCfg.programmeLabel}
+            </p>
             <p className="text-2xl font-semibold tracking-tight text-neutral-900">
-              HKD {GROUP_PRICE.toLocaleString()}
+              HKD {groupPrice.toLocaleString()}
               <span className="ml-1 text-xs font-normal text-neutral-500">
-                (~HKD {GROUP_RATE_PER_LESSON.toLocaleString()} / lesson)
+                (~HKD {groupRatePerLesson.toLocaleString()} / lesson)
               </span>
             </p>
           </div>
 
           <h3 className="mt-3 text-lg font-semibold tracking-tight text-neutral-900 md:text-xl">
-            32-lesson Zoom group course
+            {groupCfg.title}
           </h3>
           <p className="mt-1 text-sm text-neutral-600">
-            Structured syllabus for IBMYP / IGCSE students bridging into IBDP
-            AASL / AISL, with full notes and exam-style practice.
+            {groupCfg.description}
           </p>
 
           <ul className="mt-4 space-y-2 text-sm text-neutral-700">
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              Approx. 32 live Zoom lessons + high-quality teaching videos.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              By-topic notes, GoodNotes materials, and curated past-paper sets.
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-              Designed so motivated students can rely on group only and still
-              reach strong exam results.
-            </li>
+            {(groupCfg.points ?? []).map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+                {item}
+              </li>
+            ))}
           </ul>
 
           <div className="mt-5">

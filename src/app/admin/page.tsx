@@ -7,22 +7,26 @@ import homeContent from "@/app/_lib/content/home.json";
 import aboutContent from "@/app/_lib/content/about.json";
 import testimonialsContent from "@/app/_lib/content/testimonials.json";
 import miscContent from "@/app/_lib/content/misc.json";
+import packagesContent from "@/app/_lib/content/packages.json";
 
 import { HomeEditor } from "./_components/home-editor";
 import { AboutEditor } from "./_components/about-editor";
 import { MiscEditor } from "./_components/misc-editor";
 import { TestimonialsEditor } from "./_components/testimonials-editor";
+import { PackagesEditor } from "./_components/packages-editor";
 
 type HomeContent = typeof homeContent;
 type AboutContent = typeof aboutContent;
 type TestimonialsContent = typeof testimonialsContent;
 type MiscContent = typeof miscContent;
+type PackagesContent = typeof packagesContent;
 
-type TabKey = "home" | "about" | "testimonials" | "misc";
+type TabKey = "home" | "about" | "testimonials" | "packages" | "misc";
 
 const TABS: { key: TabKey; label: string }[] = [
   { key: "home", label: "Home" },
   { key: "about", label: "About" },
+  { key: "packages", label: "Packages" },
   { key: "testimonials", label: "Testimonials" },
   { key: "misc", label: "Misc" },
 ];
@@ -34,6 +38,8 @@ export default function AdminDashboardPage() {
   const [aboutData, setAboutData] = useState<AboutContent>(aboutContent);
   const [testimonialsData, setTestimonialsData] =
     useState<TestimonialsContent>(testimonialsContent);
+  const [packagesData, setPackagesData] =
+    useState<PackagesContent>(packagesContent);
   const [miscData, setMiscData] = useState<MiscContent>(miscContent);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -56,6 +62,7 @@ export default function AdminDashboardPage() {
             { slug: "home", content: homeData },
             { slug: "about", content: aboutData },
             { slug: "testimonials", content: testimonialsData },
+            { slug: "packages", content: packagesData },
             { slug: "misc", content: miscData },
           ],
         }),
@@ -106,6 +113,15 @@ export default function AdminDashboardPage() {
       );
     }
 
+    if (activeTab === "packages") {
+      return (
+        <PackagesEditor<PackagesContent>
+          data={packagesData}
+          onChangeData={setPackagesData}
+        />
+      );
+    }
+
     // misc
     return (
       <MiscEditor<MiscContent>
@@ -125,8 +141,8 @@ export default function AdminDashboardPage() {
               Admin dashboard
             </h1>
             <p className="mt-2 text-sm text-neutral-600">
-              Edit homepage, About, testimonials, and misc content. When
-              you&apos;re ready, publish all changes in one go.
+              Edit homepage, About, testimonials, packages, and misc content.
+              When you&apos;re ready, publish all changes in one go.
             </p>
           </div>
 
