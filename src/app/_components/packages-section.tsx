@@ -84,146 +84,168 @@ export function GroupLeafletViewer() {
 }
 
 export function PackagesSection() {
+  // simple math for comparison
+  const oneToOneHourly = 1500;
+  const groupTotal = 16800;
+  const lessons = 32;
+  const oneToOneTotal = oneToOneHourly * lessons; // 48,000
+  const groupPerLesson = Math.round(groupTotal / lessons); // 525
+
   return (
-    <section className="mt-10 rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm sm:p-8">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <section
+      id="packages"
+      className="container mx-auto max-w-5xl px-4 pb-16 pt-4"
+    >
+      <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-neutral-900">
+        Course options
+      </h2>
+      <div className="mt-2 h-1 w-16 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500" />
+
+      <p className="mt-4 text-sm text-neutral-600 md:text-base">
+        Choose between fully personalised 1-to-1 coaching, or a high-value
+        structured group course that covers the full syllabus with notes, drills
+        and past-paper training.
+      </p>
+
+      {/* Pricing comparison strip */}
+      <div className="mt-5 grid gap-3 rounded-2xl border border-dashed border-neutral-300 bg-neutral-50 p-4 text-xs text-neutral-700 md:grid-cols-3 md:text-sm">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">
-            Course options
+          <p className="font-semibold text-neutral-900">1-to-1 coaching</p>
+          <p className="mt-1">
+            HKD <span className="font-semibold">{oneToOneHourly.toLocaleString()}</span>{" "}
+            / hour
           </p>
-          <h2 className="mt-1 text-xl font-extrabold tracking-tight text-neutral-900 sm:text-2xl">
-            Two ways to work with WSMath
-          </h2>
-          <p className="mt-2 text-sm text-neutral-600 sm:text-base">
-            Choose between fully tailored 1:1 coaching, or a structured high-value group
-            programme that covers the same core IBDP syllabus at a fraction of the cost.
+        </div>
+        <div>
+          <p className="font-semibold text-neutral-900">Group course</p>
+          <p className="mt-1">
+            HKD{" "}
+            <span className="font-semibold">
+              {groupTotal.toLocaleString()}
+            </span>{" "}
+            full programme
+            <span className="ml-1 text-[11px] text-emerald-700 md:text-xs">
+              (~HKD {groupPerLesson.toLocaleString()} / lesson)
+            </span>
+          </p>
+        </div>
+        <div className="md:text-right">
+          <p className="font-semibold text-neutral-900">Value comparison</p>
+          <p className="mt-1">
+            32 hours 1-to-1 ≈{" "}
+            <span className="font-semibold">
+              HKD {oneToOneTotal.toLocaleString()}
+            </span>{" "}
+            vs{" "}
+            <span className="font-semibold text-emerald-700">
+              HKD {groupTotal.toLocaleString()}
+            </span>{" "}
+            for 32 group sessions.
           </p>
         </div>
       </div>
 
+      {/* Two packages */}
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        {/* 1:1 Premium Package */}
-        <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-gradient-to-b from-neutral-50 to-white p-6 shadow-sm">
-          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-tr from-indigo-500/10 via-violet-500/10 to-sky-400/10 blur-2xl" />
-          <div className="relative">
-            <span className="inline-flex items-center rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-3 py-1 text-[11px] font-semibold text-white shadow-sm">
-              Premium 1:1 Coaching
-            </span>
-
-            <div className="mt-4 flex items-baseline gap-2">
-              <p className="text-2xl font-bold tracking-tight text-neutral-900">
-                HKD {PRIVATE_RATE.toLocaleString()}
-              </p>
-              <p className="text-xs font-medium text-neutral-500">per hour</p>
-            </div>
-            <p className="mt-1 text-xs text-neutral-500">
-              Ideal for Level 7 / A* targets, entrance exams and students needing bespoke pacing.
-            </p>
-
-            <ul className="mt-4 space-y-2 text-sm text-neutral-700">
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Fully customised lesson plans based on school tests, mock exams, and target
-                universities.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Real-time correction on iPad + GoodNotes, with recordings and annotated solutions.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Exam-technique drills, mock-paper marking, and strategy for Paper 1 / 2 / 3.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Priority support for urgent test prep or predicted-grade upgrades.
-              </li>
-            </ul>
-
-            <p className="mt-4 text-xs text-neutral-500">
-              32 hours of 1:1 coaching at this level would be{" "}
-              <span className="font-semibold text-neutral-900">
-                HKD {PRIVATE_32_HOURS.toLocaleString()}
-              </span>
-              , fully tailored around one student.
-            </p>
-
-            <div className="mt-4">
-              <WhatsAppButton
-                width={220}
-                height={56}
-                imgClassName="h-12 w-auto"
-                ariaLabel="Enquire about 1:1 premium coaching on WhatsApp"
-              />
-            </div>
+        {/* 1-to-1 premium card */}
+        <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
+            Premium 1-to-1
           </div>
-        </div>
 
-        {/* Group Course Package */}
-        <div className="relative overflow-hidden rounded-2xl border border-indigo-100 bg-gradient-to-b from-indigo-50/80 via-violet-50/80 to-sky-50/80 p-6 shadow-sm">
-          <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-tr from-indigo-500/15 via-violet-500/15 to-sky-400/15 blur-2xl" />
-          <div className="relative">
-            <span className="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-indigo-700 shadow-sm ring-1 ring-indigo-100">
-              Zoom Group Course
-            </span>
+          <h3 className="mt-4 text-lg font-semibold tracking-tight text-neutral-900">
+            Private online coaching
+          </h3>
+          <p className="mt-1 text-sm text-neutral-600">
+            For students who want maximum customisation, tight accountability,
+            and fast score improvements.
+          </p>
 
-            <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <p className="text-2xl font-bold tracking-tight text-neutral-900">
-                HKD {GROUP_PRICE.toLocaleString()}
-              </p>
-              <p className="text-xs font-medium text-neutral-500">
-                full programme • 32 lessons
-              </p>
-            </div>
-            <p className="mt-1 text-xs text-neutral-500">
-              Effective rate ~{" "}
-              <span className="font-semibold text-neutral-900">
-                HKD {Math.round(EFFECTIVE_GROUP_RATE).toLocaleString()}
-              </span>{" "}
-              per live Zoom lesson, plus notes and practice sets.
+          <div className="mt-4">
+            <p className="text-sm text-neutral-500">From</p>
+            <p className="text-2xl font-semibold tracking-tight text-neutral-900">
+              HKD {oneToOneHourly.toLocaleString()}
+              <span className="ml-1 text-xs font-normal text-neutral-500">
+                / hour
+              </span>
             </p>
+          </div>
 
-            <ul className="mt-4 space-y-2 text-sm text-neutral-800">
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                ~32 live small-group Zoom lessons, covering all key IBDP AASL / AISL topics.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Structured leaflet-style notes that explain the concepts clearly — students
-                revise from PDF before/after class.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                By-topic past-paper packs with model solutions, aligned to the IBDP exam style.
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                Ideal for students who want WSMath methods at{" "}
-                <span className="font-semibold">~⅓ of the 1:1 hourly rate</span>.
-              </li>
-            </ul>
+          <ul className="mt-4 space-y-2 text-sm text-neutral-700">
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              Deep dive into your school tests, IA preparation, and mock exams.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              Fully personalised by-topic drills and homework, adjusted weekly.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              Ideal if you’re pushing for{" "}
+              <span className="font-semibold">Level 6–7 / A*</span> and want
+              strict pacing.
+            </li>
+          </ul>
 
-            {/* Leaflet viewer */}
+          <div className="mt-auto pt-5">
+            <WhatsAppButton
+              width={220}
+              height={56}
+              imgClassName="h-14 w-auto"
+              ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
+            />
+            <p className="mt-2 text-[11px] text-neutral-500">
+              Mention “1-to-1 package” and your current grade / target score.
+            </p>
+          </div>
+        </article>
+
+        {/* Group course card */}
+        <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-3 py-1 text-[11px] font-medium text-white">
+            High-value group
+          </div>
+
+          <h3 className="mt-4 text-lg font-semibold tracking-tight text-neutral-900">
+            32-lesson Zoom group course
+          </h3>
+          <p className="mt-1 text-sm text-neutral-600">
+            Structured syllabus for IBMYP / IGCSE students bridging into IBDP
+            AASL / AISL, with full notes and exam-style practice.
+          </p>
+
+          <div className="mt-4">
+            <p className="text-sm text-neutral-500">Full programme</p>
+            <p className="text-2xl font-semibold tracking-tight text-neutral-900">
+              HKD {groupTotal.toLocaleString()}
+              <span className="ml-1 text-xs font-normal text-neutral-500">
+                (~HKD {groupPerLesson.toLocaleString()} / lesson)
+              </span>
+            </p>
+          </div>
+
+          <ul className="mt-4 space-y-2 text-sm text-neutral-700">
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              Approx. 32 live Zoom lessons + high-quality teaching videos.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              By-topic notes, GoodNotes materials, and curated past-paper sets.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              Designed so motivated students can rely on group only and still
+              reach strong exam results.
+            </li>
+          </ul>
+
+          {/* Leaflet viewer fills the bottom part */}
+          <div className="mt-5">
             <GroupLeafletViewer />
           </div>
-        </div>
-      </div>
-
-      {/* Comparison strip */}
-      <div className="mt-6 rounded-2xl border border-dashed border-neutral-200 bg-neutral-50 px-4 py-3 text-xs text-neutral-700 sm:text-sm">
-        <p>
-          For the same 32-lesson framework,{" "}
-          <span className="font-semibold">
-            1:1 = HKD {PRIVATE_32_HOURS.toLocaleString()}
-          </span>{" "}
-          vs{" "}
-          <span className="font-semibold">
-            Group = HKD {GROUP_PRICE.toLocaleString()}
-          </span>
-          . The group course gives you Winson&apos;s methods, notes, and by-topic practice at
-          roughly <span className="font-semibold">35% of the 1:1 hourly cost</span>.
-        </p>
+        </article>
       </div>
     </section>
   );
