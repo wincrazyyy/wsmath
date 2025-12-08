@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { WhatsAppButton } from "./whatsapp-button"; // ⬅️ reuse component
+import { WhatsAppButton } from "./whatsapp-button";
 
 const LINKS = [
   { href: "#about", label: "About" },
+  { href: "#packages", label: "Packages" },
   { href: "#testimonials", label: "Testimonials" },
 ];
 
@@ -15,7 +16,7 @@ export function Nav() {
   const [active, setActive] = useState<string>("");
 
   useEffect(() => {
-    const ids = ["about", "testimonials"] as const;
+    const ids = ["about", "packages", "testimonials"] as const;
     const els = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
@@ -45,7 +46,9 @@ export function Nav() {
   }, [open]);
 
   const linkClass = (href: string) =>
-    `transition ${active === href ? "text-neutral-900 font-medium" : "text-neutral-600"} hover:text-neutral-900`;
+    `transition ${
+      active === href ? "text-neutral-900 font-medium" : "text-neutral-600"
+    } hover:text-neutral-900`;
 
   return (
     <div className="sticky top-0 z-40 w-full border-b border-neutral-200/70 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
@@ -82,7 +85,12 @@ export function Nav() {
             aria-expanded={open}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <path
+                d="M4 7h16M4 12h16M4 17h16"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
           </button>
         </div>
@@ -99,7 +107,11 @@ export function Nav() {
         <div className="absolute inset-0 bg-black/25" onClick={() => setOpen(false)} />
         <div className="absolute inset-x-0 top-0 rounded-b-2xl border-b border-neutral-200 bg-white p-4 shadow-lg">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
+            <Link
+              href="/"
+              className="flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
               <Image src="/icon.svg" alt="" width={20} height={20} className="h-5 w-5" />
               <span className="font-semibold">WSMath</span>
             </Link>
@@ -110,7 +122,12 @@ export function Nav() {
               aria-label="Close menu"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <path
+                  d="M6 6l12 12M18 6L6 18"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
               </svg>
             </button>
           </div>
@@ -127,9 +144,13 @@ export function Nav() {
               </a>
             ))}
 
-            {/* Reusable PNG button in drawer */}
             <div onClick={() => setOpen(false)}>
-              <WhatsAppButton width={160} height={44} imgClassName="h-10 w-auto" priority={false} />
+              <WhatsAppButton
+                width={160}
+                height={44}
+                imgClassName="h-10 w-auto"
+                priority={false}
+              />
             </div>
           </div>
         </div>
