@@ -4,12 +4,19 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { WhatsAppButton } from "./whatsapp-button";
 
-const PRIVATE_RATE = 1500; // HKD per hour
-const GROUP_PRICE = 16800; // HKD upfront
+// ===== Pricing constants =====
+const PRIVATE_RATE = 1500; // HKD per hour (1-to-1)
+const GROUP_PRICE = 16800; // HKD upfront for full group programme
 const GROUP_LESSONS = 32;
-const EFFECTIVE_GROUP_RATE = GROUP_PRICE / GROUP_LESSONS; // 525
-const PRIVATE_32_HOURS = PRIVATE_RATE * GROUP_LESSONS; // 48,000
 
+// Derived pricing
+const PRIVATE_32_HOURS = PRIVATE_RATE * GROUP_LESSONS; // 48,000
+const GROUP_RATE_PER_LESSON = Math.round(GROUP_PRICE / GROUP_LESSONS); // ~525
+
+const EIGHT_LESSON_BLOCK_HOURS = 8;
+const EIGHT_LESSON_BLOCK_COST = PRIVATE_RATE * EIGHT_LESSON_BLOCK_HOURS; // 12,000
+
+// ===== Group leaflet viewer constants =====
 const GROUP_LEAFLET_PAGES = [
   "/leaflets/group-leaflet-page-1.jpg",
   "/leaflets/group-leaflet-page-2.jpg",
@@ -94,14 +101,6 @@ export function GroupLeafletViewer() {
 }
 
 export function PackagesSection() {
-  // Use the top-level constants everywhere
-  const oneToOneHourly = PRIVATE_RATE;
-  const groupTotal = GROUP_PRICE;
-  const lessons = GROUP_LESSONS;
-  const oneToOneTotal = PRIVATE_32_HOURS;
-  const groupPerLesson = Math.round(EFFECTIVE_GROUP_RATE);
-  const eightLessonCost = PRIVATE_RATE * 8;
-
   return (
     <section
       id="packages"
@@ -127,7 +126,7 @@ export function PackagesSection() {
         </div>
         <div className="hidden md:block">
           <span className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-3 py-1 text-xs font-medium text-neutral-50">
-            <span className="h-2 w-2 rounded-full bg-sky-400" />
+            <span className="h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
             IB / A-Level specialist since 2017
           </span>
         </div>
@@ -145,7 +144,7 @@ export function PackagesSection() {
             <p className="mt-1 text-sm text-neutral-800">
               HKD{" "}
               <span className="text-lg font-semibold text-neutral-900">
-                {oneToOneHourly.toLocaleString()}
+                {PRIVATE_RATE.toLocaleString()}
               </span>{" "}
               <span className="text-xs text-neutral-500">/ hour</span>
             </p>
@@ -160,12 +159,12 @@ export function PackagesSection() {
             <p className="mt-1 text-sm text-neutral-800">
               HKD{" "}
               <span className="text-lg font-semibold text-neutral-900">
-                {groupTotal.toLocaleString()}
+                {GROUP_PRICE.toLocaleString()}
               </span>{" "}
               <span className="inline-flex items-center gap-1 text-xs text-neutral-500">
                 / full programme
                 <span className="rounded-full bg-sky-100 px-2 py-0.5 text-[11px] font-medium text-sky-700">
-                  ~HKD {groupPerLesson.toLocaleString()} / lesson
+                  ~HKD {GROUP_RATE_PER_LESSON.toLocaleString()} / lesson
                 </span>
               </span>
             </p>
@@ -178,11 +177,11 @@ export function PackagesSection() {
             <p className="mt-1">
               32 hours 1-to-1 ≈{" "}
               <span className="font-semibold">
-                HKD {oneToOneTotal.toLocaleString()}
+                HKD {PRIVATE_32_HOURS.toLocaleString()}
               </span>{" "}
               vs{" "}
               <span className="font-semibold text-sky-700">
-                HKD {groupTotal.toLocaleString()}
+                HKD {GROUP_PRICE.toLocaleString()}
               </span>{" "}
               for 32 structured group sessions.
             </p>
@@ -198,11 +197,11 @@ export function PackagesSection() {
             Premium 1-to-1
           </div>
 
-          {/* PRICE MOVED UP */}
+          {/* PRICE */}
           <div className="mt-4">
             <p className="text-xs text-neutral-500">Typical rate</p>
             <p className="text-2xl font-semibold tracking-tight text-neutral-900">
-              HKD {oneToOneHourly.toLocaleString()}
+              HKD {PRIVATE_RATE.toLocaleString()}
               <span className="ml-1 text-xs font-normal text-neutral-500">
                 / hour
               </span>
@@ -228,21 +227,25 @@ export function PackagesSection() {
             </li>
             <li className="flex items-start gap-2">
               <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+              Weekly performance tracking with targeted correction of weak topics.
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
               Ideal if you’re pushing for{" "}
               <span className="font-semibold">Level 6–7 / A*</span> and want
               strict pacing.
             </li>
           </ul>
 
-          {/* 8-lesson intensive block – larger font */}
-          <div className="mt-5 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5">
+          {/* 8-lesson intensive block */}
+          <div className="mt-7 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5">
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-700">
               8-lesson intensive
             </p>
             <p className="mt-1 text-sm text-neutral-700">
               Around{" "}
               <span className="font-semibold">
-                HKD {eightLessonCost.toLocaleString()}
+                HKD {EIGHT_LESSON_BLOCK_COST.toLocaleString()}
               </span>{" "}
               for an 8-lesson block (8 × 60 mins).
             </p>
@@ -317,13 +320,13 @@ export function PackagesSection() {
             </span>
           </div>
 
-          {/* PRICE MOVED UP */}
+          {/* PRICE */}
           <div className="mt-4">
             <p className="text-xs text-neutral-500">Full programme</p>
             <p className="text-2xl font-semibold tracking-tight text-neutral-900">
-              HKD {groupTotal.toLocaleString()}
+              HKD {GROUP_PRICE.toLocaleString()}
               <span className="ml-1 text-xs font-normal text-neutral-500">
-                (~HKD {groupPerLesson.toLocaleString()} / lesson)
+                (~HKD {GROUP_RATE_PER_LESSON.toLocaleString()} / lesson)
               </span>
             </p>
           </div>

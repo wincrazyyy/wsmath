@@ -3,8 +3,17 @@
 
 import testimonialsContent from "@/app/_lib/content/testimonials.json";
 
+type VideoContent = {
+  eyebrow: string;
+  heading: string;
+  subheading: string;
+  src: string;
+  poster: string;
+};
+
+
 export function StudentVoicesVideo() {
-  const video = (testimonialsContent as any).video;
+  const video: VideoContent = (testimonialsContent as { video: VideoContent }).video;
 
   return (
     <section className="mt-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
