@@ -1,4 +1,3 @@
-// app/admin/_components/about-editor.tsx
 "use client";
 
 import { useState } from "react";
@@ -43,7 +42,7 @@ export function AboutEditor<T extends object>({
     fields = ABOUT_STATS_COURSES_FIELDS;
     panelTitle = "About – stats & courses";
     panelDescription =
-      "Edit the stats pills and the list of courses covered by WSMath.";
+      "Edit the stats pills, raw course list, and the grouped IB / A-Level / IGCSE course cards.";
   } else if (activeTab === "cta") {
     fields = ABOUT_CTA_FIELDS;
     panelTitle = "About – CTA ribbon";
@@ -110,8 +109,8 @@ export function AboutEditor<T extends object>({
     <div className="mt-6">
       <h2 className="text-lg font-semibold text-neutral-900">About</h2>
       <p className="mt-1 text-sm text-neutral-600">
-        Edit the About header, hero image band, stats, courses, and CTA ribbon
-        in separate tabs.
+        Edit the About header, hero image band, stats, grouped courses, and CTA
+        ribbon in separate tabs.
       </p>
 
       {/* Sub-tabs inside About editor */}

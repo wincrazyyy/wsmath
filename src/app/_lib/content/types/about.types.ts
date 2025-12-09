@@ -1,4 +1,3 @@
-// app/_lib/content/types/about.types.ts
 import type { SectionHeaderRightAccent } from "@/app/_components/ui/section/section-header";
 
 export type AboutHeaderConfig = {
@@ -21,9 +20,26 @@ export type AboutHeroConfig = {
   area2: AboutHeroArea;
 };
 
+export type CourseGroupKey = "ib" | "alevel" | "igcse";
+
+export type CoursesSectionGroupConfig = {
+  key: CourseGroupKey;
+  title: string;
+  caption?: string;
+  emphasize?: boolean;
+};
+
+export type CoursesSectionConfig = {
+  title: string;
+  strapline: string;
+  intro: string;
+  groups: CoursesSectionGroupConfig[];
+};
+
 export type AboutConfig = {
   header: AboutHeaderConfig;
   hero: AboutHeroConfig;
   stats: string[];
   courses: string[];
+  coursesSection?: CoursesSectionConfig;
 };

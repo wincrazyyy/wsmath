@@ -75,6 +75,30 @@
     "IGCSE Edexcel (4PM1) Math"
   ],
 
+  "coursesSection": {
+    "title": "Courses covered",
+    "strapline": "IBDP · A-LEVEL · IGCSE",
+    "intro": "Full syllabus coverage from pre-IB / IGCSE all the way to IBDP final exams.",
+    "groups": [
+      {
+        "key": "ib",
+        "title": "IB programmes",
+        "caption": "IBDP · IBMYP",
+        "emphasize": true
+      },
+      {
+        "key": "alevel",
+        "title": "A-Level programmes",
+        "caption": "Edexcel · CAIE · AQA · OCR"
+      },
+      {
+        "key": "igcse",
+        "title": "IGCSE programmes",
+        "caption": "Cambridge · Edexcel"
+      }
+    ]
+  },
+
   "ctaRibbon": {
     "heading": "Limited 1:1 slots — start boosting IBDP results now",
     "subheading": "Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL."
