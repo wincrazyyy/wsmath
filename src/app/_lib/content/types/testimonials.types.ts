@@ -1,5 +1,11 @@
 // app/_lib/content/types/testimonials.types.ts
 
+export type TestimonialsHeaderConfig = {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+};
+
 export type Testimonial = {
   name: string;
   role?: string;

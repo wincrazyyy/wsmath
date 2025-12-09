@@ -31,7 +31,6 @@ export default function Home() {
           <CtaRibbon />
         </section>
 
-        {/* New packages section */}
         <section
           id="packages"
           className="container mx-auto max-w-5xl px-4 pb-6"

@@ -1,4 +1,3 @@
-// app/_components/sections/testimonials/testimonials.tsx
 "use client";
 
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
@@ -7,7 +6,7 @@ import type {
   Testimonial,
 } from "@/app/_lib/content/types/testimonials.types";
 
-import { SectionHeader } from "../../ui/section/section-header";
+import { TestimonialsHeader } from "./testimonials-header";
 import { StudentVoicesVideo } from "./student-voices-video";
 import { FeaturedTestimonialsGrid } from "./featured-testimonials-grid";
 import { TestimonialCarousel } from "./testimonial-carousel";
@@ -15,34 +14,32 @@ import { TestimonialsCta } from "./testimonials-cta";
 
 export function Testimonials() {
   const data = testimonialsContent as TestimonialsConfig;
+  const {
+    eyebrow,
+    title,
+    subtitle,
+    featured = [],
+    carousel = [],
+  } = data;
 
-  const featured: Testimonial[] = data.featured ?? [];
-  const carousel: Testimonial[] = data.carousel ?? [];
+  const header = { eyebrow, title, subtitle };
 
   return (
     <>
-      <SectionHeader
-        align="center"
-        eyebrow={data.eyebrow}
-        title={data.title}
-        subtitle={data.subtitle}
-      />
+      <TestimonialsHeader header={header} />
 
       <StudentVoicesVideo />
 
-      {/* Featured grid */}
       {featured.length > 0 && (
-        <FeaturedTestimonialsGrid items={featured} />
+        <FeaturedTestimonialsGrid items={featured as Testimonial[]} />
       )}
 
-      {/* Carousel below featured */}
       {carousel.length > 0 && (
         <div className="mt-10">
-          <TestimonialCarousel items={carousel} />
+          <TestimonialCarousel items={carousel as Testimonial[]} />
         </div>
       )}
 
-      {/* CTA at the bottom */}
       <div className="container my-16 max-w-5xl">
         <TestimonialsCta />
       </div>
