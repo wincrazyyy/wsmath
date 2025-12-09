@@ -2,13 +2,13 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import testimonialsContent from "@/app/_lib/content/testimonials.json";
+import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
 import { TESTIMONIALS_FIELDS } from "../_lib/testimonials-fields";
 import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 
 type TestimonialsContent = typeof testimonialsContent;
-type SubTab = "video" | "featured" | "carousel";
+type SubTab = "video" | "featured" | "carousel" | "cta";
 
 type IndexFieldGroup = {
   index: number; // 0-based index
@@ -62,6 +62,14 @@ export function TestimonialsEditor({
     []
   );
 
+  const ctaFields = useMemo(
+    () =>
+      TESTIMONIALS_FIELDS.filter((f) =>
+        f.path.startsWith("testimonialsCta.")
+      ),
+    []
+  );
+
   const featuredGroups = useMemo(
     () => groupFieldsBySection(TESTIMONIALS_FIELDS, "featured"),
     []
@@ -70,9 +78,6 @@ export function TestimonialsEditor({
     () => groupFieldsBySection(TESTIMONIALS_FIELDS, "carousel"),
     []
   );
-
-  const currentGroups =
-    activeTab === "featured" ? featuredGroups : carouselGroups;
 
   const handleChange = (field: FieldConfig, rawValue: string) => {
     const next = structuredClone(data) as TestimonialsContent;
@@ -128,10 +133,14 @@ export function TestimonialsEditor({
     );
   };
 
+  const isSlotsTab = activeTab === "featured" || activeTab === "carousel";
+
   const sectionLabel =
     activeTab === "featured"
       ? "Featured testimonial"
-      : "Carousel testimonial";
+      : activeTab === "carousel"
+      ? "Carousel testimonial"
+      : "";
 
   return (
     <div className="mt-6">
@@ -140,7 +149,8 @@ export function TestimonialsEditor({
       </h2>
       <p className="mt-1 text-sm text-neutral-600">
         Configure the student voices video, featured testimonials (top of the
-        page), and carousel testimonials (scrolling strip).
+        page), carousel testimonials (scrolling strip), and the Testimonials CTA box
+        under the testimonials.
       </p>
 
       {/* Sub-tabs inside testimonials */}
@@ -184,9 +194,20 @@ export function TestimonialsEditor({
         >
           Carousel (scrolling strip)
         </button>
+        <button
+          type="button"
+          onClick={() => setActiveTab("cta")}
+          className={`rounded-full px-4 py-1.5 transition ${
+            activeTab === "cta"
+              ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+              : "text-neutral-600 hover:bg-neutral-50"
+          }`}
+        >
+          Testimonials CTA box
+        </button>
       </div>
 
-      {/* When Video tab is active */}
+      {/* Video tab */}
       {activeTab === "video" && (
         <div className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
@@ -226,8 +247,48 @@ export function TestimonialsEditor({
         </div>
       )}
 
-      {/* When Featured / Carousel tab is active */}
-      {activeTab !== "video" && (
+      {/* CTA tab */}
+      {activeTab === "cta" && (
+        <div className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900">
+                Testimonials CTA box
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Controls the heading, bullets, note, and logo for the CTA box
+                displayed under the testimonials section.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {ctaFields.map((field) => (
+              <section key={field.path} className="md:col-span-1">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h4 className="text-xs font-semibold text-neutral-900">
+                      {field.label}
+                    </h4>
+                    {field.description && (
+                      <p className="mt-1 text-[11px] text-neutral-500">
+                        {field.description}
+                      </p>
+                    )}
+                  </div>
+                  <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
+                    {field.path}
+                  </code>
+                </div>
+                <div className="mt-2">{renderFieldInput(field)}</div>
+              </section>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Featured / Carousel tabs (slots) */}
+      {isSlotsTab && (
         <>
           {/* Slot selector */}
           <div className="mt-6">
@@ -237,7 +298,10 @@ export function TestimonialsEditor({
                 : "Carousel slots"}
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
-              {currentGroups.map(({ index }) => {
+              {(activeTab === "featured"
+                ? featuredGroups
+                : carouselGroups
+              ).map(({ index }) => {
                 const isActive = index === activeIndex;
                 const label = index + 1;
                 return (
@@ -273,7 +337,10 @@ export function TestimonialsEditor({
             </div>
 
             <div className="mt-5 grid gap-4">
-              {currentGroups
+              {(activeTab === "featured"
+                ? featuredGroups
+                : carouselGroups
+              )
                 .find((g) => g.index === activeIndex)
                 ?.fields.map((field) => (
                   <section key={field.path}>

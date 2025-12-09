@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import homeContent from "@/app/_lib/content/home.json";
+import homeContent from "@/app/_lib/content/json/home.json";
 
 export function ProofPills() {
   const pills = homeContent.proofPills as string[];

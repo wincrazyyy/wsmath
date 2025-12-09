@@ -1,7 +1,7 @@
 // app/_components/hero.tsx
 import Image from "next/image";
-import homeContent from "@/app/_lib/content/home.json";
-import { WhatsAppButton } from "./whatsapp-button";
+import homeContent from "@/app/_lib/content/json/home.json";
+import { WhatsAppButton } from "../../ui/whatsapp-button";
 
 const hero = homeContent.hero;
 

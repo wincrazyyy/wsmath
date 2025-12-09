@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { WhatsAppButton } from "./whatsapp-button";
+import { WhatsAppButton } from "../ui/whatsapp-button";
 
 const LINKS = [
   { href: "#about", label: "About" },

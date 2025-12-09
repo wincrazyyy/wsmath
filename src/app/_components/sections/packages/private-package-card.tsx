@@ -1,5 +1,5 @@
 import type { PrivateConfig } from "@/app/_lib/content/packages.types";
-import { WhatsAppButton } from "./whatsapp-button";
+import { WhatsAppButton } from "../../ui/whatsapp-button";
 
 interface PrivatePackageCardProps {
   config: PrivateConfig;

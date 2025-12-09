@@ -39,6 +39,20 @@ function testimonialFields(basePath: string, labelPrefix: string): FieldConfig[]
   ];
 }
 
+const FEATURED_TESTIMONIAL_FIELDS: FieldConfig[] = [
+  ...testimonialFields("featured[0]", "Featured #1"),
+  ...testimonialFields("featured[1]", "Featured #2"),
+  ...testimonialFields("featured[2]", "Featured #3"),
+  ...testimonialFields("featured[3]", "Featured #4"),
+];
+
+const CAROUSEL_TESTIMONIAL_FIELDS: FieldConfig[] = [
+  ...testimonialFields("carousel[0]", "Carousel #1"),
+  ...testimonialFields("carousel[1]", "Carousel #2"),
+  ...testimonialFields("carousel[2]", "Carousel #3"),
+  ...testimonialFields("carousel[3]", "Carousel #4"),
+];
+
 const VIDEO_FIELDS: FieldConfig[] = [
   {
     path: "video.eyebrow",
@@ -72,23 +86,44 @@ const VIDEO_FIELDS: FieldConfig[] = [
   },
 ];
 
-const FEATURED_TESTIMONIAL_FIELDS: FieldConfig[] = [
-  ...testimonialFields("featured[0]", "Featured #1"),
-  ...testimonialFields("featured[1]", "Featured #2"),
-  ...testimonialFields("featured[2]", "Featured #3"),
-  ...testimonialFields("featured[3]", "Featured #4"),
+export const TESTIMONIALS_CTA_FIELDS: FieldConfig[] = [
+  {
+    path: "testimonialsCta.heading",
+    label: "Testimonials CTA – Heading",
+    description: "Big title in the WhatsApp CTA box.",
+    type: "string",
+  },
+  {
+    path: "testimonialsCta.subheading",
+    label: "Testimonials CTA – Subheading",
+    description: "Short description under the heading.",
+    type: "string",
+  },
+  {
+    path: "testimonialsCta.bullets",
+    label: "Testimonials CTA – Bullet points",
+    description: "One benefit per line. Shown as bullet points above the button.",
+    type: "string[]",
+  },
+  {
+    path: "testimonialsCta.note",
+    label: "Testimonials CTA – Small note",
+    description: "Tiny note under the button (e.g. response / what to send).",
+    type: "string",
+  },
+  {
+    path: "testimonialsCta.logoSrc",
+    label: "Testimonials CTA – Logo image path",
+    description: "Path to the logo image in /public (e.g. /icon.svg).",
+    type: "string",
+  },
 ];
 
-const CAROUSEL_TESTIMONIAL_FIELDS: FieldConfig[] = [
-  ...testimonialFields("carousel[0]", "Carousel #1"),
-  ...testimonialFields("carousel[1]", "Carousel #2"),
-  ...testimonialFields("carousel[2]", "Carousel #3"),
-  ...testimonialFields("carousel[3]", "Carousel #4"),
-];
 
 export const TESTIMONIALS_FIELDS: FieldConfig[] = [
   ...TESTIMONIALS_TITLE_FIELD,
   ...VIDEO_FIELDS,
   ...FEATURED_TESTIMONIAL_FIELDS,
   ...CAROUSEL_TESTIMONIAL_FIELDS,
+  ...TESTIMONIALS_CTA_FIELDS,
 ];

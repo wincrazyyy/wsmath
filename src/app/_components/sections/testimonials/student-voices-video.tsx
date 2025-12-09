@@ -1,7 +1,7 @@
 // app/_components/student-voices-video.tsx
 "use client";
 
-import testimonialsContent from "@/app/_lib/content/testimonials.json";
+import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
 
 type VideoContent = {
   eyebrow: string;

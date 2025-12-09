@@ -2,9 +2,10 @@
 "use client";
 
 import Image from "next/image";
-import testimonialsContent from "@/app/_lib/content/testimonials.json";
+import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
 import { TestimonialCarousel } from "./testimonial-carousel";
 import { StudentVoicesVideo } from "./student-voices-video";
+import { TestimonialsCta } from "./testimonials-cta";
 
 type TestimonialsContent = typeof testimonialsContent;
 
@@ -70,6 +71,11 @@ export function Testimonials() {
           <TestimonialCarousel items={carousel} />
         </div>
       )}
+
+      {/* CTA at the bottom */}
+      <div className="container my-16 max-w-5xl">
+        <TestimonialsCta />
+      </div>
     </>
   );
 }

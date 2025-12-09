@@ -1,4 +1,4 @@
-import packagesContent from "./packages.json";
+import packagesContent from "./json/packages.json";
 
 export type PackagesData = typeof packagesContent;
 export type PrivateConfig = PackagesData["private"];

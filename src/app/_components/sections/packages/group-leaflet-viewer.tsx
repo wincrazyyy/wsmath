@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import packagesContent from "@/app/_lib/content/packages.json";
+import packagesContent from "@/app/_lib/content/json/packages.json";
 
 const LEAFLET = packagesContent.group.leaflet ?? {
   label: "Course leaflet preview",

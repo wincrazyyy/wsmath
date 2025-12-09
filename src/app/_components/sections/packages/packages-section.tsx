@@ -1,6 +1,6 @@
 "use client";
 
-import packagesContent from "@/app/_lib/content/packages.json";
+import packagesContent from "@/app/_lib/content/json/packages.json";
 import type {
   PrivateConfig,
   GroupConfig,

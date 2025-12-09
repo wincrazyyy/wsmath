@@ -3,11 +3,11 @@
 
 import { useState } from "react";
 
-import homeContent from "@/app/_lib/content/home.json";
-import aboutContent from "@/app/_lib/content/about.json";
-import testimonialsContent from "@/app/_lib/content/testimonials.json";
-import miscContent from "@/app/_lib/content/misc.json";
-import packagesContent from "@/app/_lib/content/packages.json";
+import homeContent from "@/app/_lib/content/json/home.json";
+import aboutContent from "@/app/_lib/content/json/about.json";
+import packagesContent from "@/app/_lib/content/json/packages.json";
+import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
+import miscContent from "@/app/_lib/content/json/misc.json";
 
 import { HomeEditor } from "./_components/home-editor";
 import { AboutEditor } from "./_components/about-editor";
@@ -17,9 +17,9 @@ import { PackagesEditor } from "./_components/packages-editor";
 
 type HomeContent = typeof homeContent;
 type AboutContent = typeof aboutContent;
+type PackagesContent = typeof packagesContent;
 type TestimonialsContent = typeof testimonialsContent;
 type MiscContent = typeof miscContent;
-type PackagesContent = typeof packagesContent;
 
 type TabKey = "home" | "about" | "testimonials" | "packages" | "misc";
 

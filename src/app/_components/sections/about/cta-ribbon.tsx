@@ -1,6 +1,6 @@
 // app/_components/cta-ribbon.tsx
-import { WhatsAppButton } from "./whatsapp-button";
-import aboutContent from "@/app/_lib/content/about.json";
+import { WhatsAppButton } from "../../ui/whatsapp-button";
+import aboutContent from "@/app/_lib/content/json/about.json";
 
 export function CtaRibbon() {
   const { ctaRibbon } = aboutContent;

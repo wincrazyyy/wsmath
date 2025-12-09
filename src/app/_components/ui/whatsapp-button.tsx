@@ -1,6 +1,6 @@
 // app/_components/whatsapp-button.tsx
 import Image from "next/image";
-import miscContent from "@/app/_lib/content/misc.json";
+import miscContent from "@/app/_lib/content/json/misc.json";
 
 type WhatsAppButtonProps = {
   width?: number;

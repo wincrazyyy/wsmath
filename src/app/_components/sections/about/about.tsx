@@ -1,6 +1,6 @@
 // app/_components/about.tsx
 import Image from "next/image";
-import aboutContent from "@/app/_lib/content/about.json";
+import aboutContent from "@/app/_lib/content/json/about.json";
 import { CoursesCovered } from "./courses-covered";
 
 export function About() {
