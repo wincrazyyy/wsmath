@@ -1,4 +1,4 @@
-import { SectionHeader } from "../../ui/section/section-header";
+import { SectionHeader } from "@/app/_components/ui/section/section-header";
 import type { TestimonialsHeaderConfig } from "@/app/_lib/content/types/testimonials.types";
 
 type TestimonialsHeaderProps = {

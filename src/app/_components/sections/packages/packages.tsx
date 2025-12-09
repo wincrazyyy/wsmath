@@ -1,15 +1,14 @@
-// app/_components/sections/packages/packages.tsx
 "use client";
 
 import packagesContent from "@/app/_lib/content/json/packages.json";
 import type {
+  PackagesConfig,
   PrivateConfig,
   GroupConfig,
   ComparisonConfig,
-  PackagesConfig,
 } from "@/app/_lib/content/types/packages.types";
 
-import { SectionHeader } from "../../ui/section/section-header";
+import { PackagesHeader } from "./packages-header";
 import { PricingComparisonStrip } from "./pricing-comparison-strip";
 import { PrivatePackageCard } from "./private-package-card";
 import { GroupPackageCard } from "./group-package-card";
@@ -21,11 +20,12 @@ function toNumber(value: unknown, fallback = 0): number {
 
 export function Packages() {
   const data = packagesContent as PackagesConfig;
+  const { header, comparison, private: privateConfig, group: groupConfig } =
+    data;
 
-  const header = data.header;
-  const privateCfg: PrivateConfig = data.private;
-  const groupCfg: GroupConfig = data.group;
-  const comparisonCfg: ComparisonConfig = data.comparison;
+  const privateCfg: PrivateConfig = privateConfig;
+  const groupCfg: GroupConfig = groupConfig;
+  const comparisonCfg: ComparisonConfig = comparison;
 
   const privateRate = toNumber(privateCfg.hourlyRate);
   const groupPrice = toNumber(groupCfg.price);
@@ -44,14 +44,7 @@ export function Packages() {
       id="packages"
       className="container mx-auto max-w-5xl px-4 pb-4 pt-6"
     >
-      <SectionHeader
-        eyebrow={header.eyebrow}
-        title={header.title}
-        subtitle={header.subtitle}
-        align="left"
-        chips={header.chips}
-        rightAccent={header.rightAccent}
-      />
+      <PackagesHeader header={header} />
 
       <PricingComparisonStrip
         comparison={comparisonCfg}

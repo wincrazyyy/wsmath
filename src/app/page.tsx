@@ -1,15 +1,15 @@
 // app/page.tsx
-import { SmoothScroll } from "./_components/ui/smooth-scroll";
-import { BackgroundGlow } from "./_components/layout/background-glow";
-import { Nav } from "./_components/layout/nav";
-import { Hero } from "./_components/sections/home/hero";
-import { ProofPills } from "./_components/sections/home/proof-pills";
-import { About } from "./_components/sections/about/about";
-import { CtaRibbon } from "./_components/sections/about/cta-ribbon";
-import { Packages } from "./_components/sections/packages/packages";
-import { Testimonials } from "./_components/sections/testimonials/testimonials";
-import { SiteFooter } from "./_components/layout/footer";
-import { FloatingCta } from "./_components/ui/floating-cta";
+import { SmoothScroll } from "@/app/_components/ui/smooth-scroll";
+import { BackgroundGlow } from "@/app/_components/layout/background-glow";
+import { Nav } from "@/app/_components/layout/nav";
+import { Hero } from "@/app/_components/sections/home/hero";
+import { ProofPills } from "@/app/_components/sections/home/proof-pills";
+import { About } from "@/app/_components/sections/about/about";
+import { CtaRibbon } from "@/app/_components/sections/about/cta-ribbon";
+import { Packages } from "@/app/_components/sections/packages/packages";
+import { Testimonials } from "@/app/_components/sections/testimonials/testimonials";
+import { SiteFooter } from "@/app/_components/layout/footer";
+import { FloatingCta } from "@/app/_components/ui/floating-cta";
 
 export default function Home() {
   return (
