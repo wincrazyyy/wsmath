@@ -1,26 +1,92 @@
-// app/admin/_lib/packages-fields.ts
 import type { FieldConfig } from "./fields";
 
-// Top heading + intro
-export const PACKAGES_SECTION_FIELDS: FieldConfig[] = [
+// Header (SectionHeader)
+export const PACKAGES_HEADER_FIELDS: FieldConfig[] = [
   {
-    path: "title",
-    label: "Packages title",
-    description: 'Main heading of the packages section.',
+    path: "header.eyebrow",
+    label: "Header – eyebrow",
+    description:
+      'Small label above the title, e.g. “COACHING PACKAGES”. Leave blank to hide.',
     type: "string",
   },
   {
-    path: "subtitle",
-    label: "Packages subtitle",
+    path: "header.title",
+    label: "Header – title",
+    description: "Main heading of the packages section.",
+    type: "string",
+  },
+  {
+    path: "header.subtitle",
+    label: "Header – subtitle",
     description: "Short paragraph under the heading.",
     type: "textarea",
   },
   {
-    path: "topBadge",
-    label: "Top badge text",
+    path: "header.chips",
+    label: "Header – proof pills",
     description:
-      'Small pill on the right, e.g. “IB / A-Level specialist since 2017”.',
+      "One selling point per line. These show as small animated badges under the heading.",
+    type: "string[]",
+  },
+
+  // Right accent card
+  {
+    path: "header.rightAccent.heading",
+    label: "Right card – heading",
+    description:
+      'Title of the right-side accent box, e.g. “Results snapshot”.',
     type: "string",
+  },
+  {
+    path: "header.rightAccent.badge",
+    label: "Right card – badge",
+    description: 'Small badge above the main stat, e.g. “Since 2017”.',
+    type: "string",
+  },
+  {
+    path: "header.rightAccent.mainValue",
+    label: "Right card – main value",
+    description: 'Big stat number, e.g. “250+”.',
+    type: "string",
+  },
+  {
+    path: "header.rightAccent.mainLabel",
+    label: "Right card – main label",
+    description:
+      'Text under the main value, e.g. “students coached 1-on-1”.',
+    type: "string",
+  },
+  {
+    path: "header.rightAccent.mainSize",
+    label: "Right card – main size",
+    description: 'Visual size of the main stat. Use “sm” or “lg”.',
+    type: "string",
+  },
+
+  // Right accent columns (you can tweak these labels; they match your JSON)
+  {
+    path: "header.rightAccent.columns[0].title",
+    label: "Right card – column 1 title",
+    description: 'E.g. “IBDP HL 7 rate”.',
+    type: "string",
+  },
+  {
+    path: "header.rightAccent.columns[0].items",
+    label: "Right card – column 1 items",
+    description: "One line per stat under column 1.",
+    type: "string[]",
+  },
+  {
+    path: "header.rightAccent.columns[1].title",
+    label: "Right card – column 2 title",
+    description: 'E.g. “IGCSE A / A*”.',
+    type: "string",
+  },
+  {
+    path: "header.rightAccent.columns[1].items",
+    label: "Right card – column 2 items",
+    description: "One line per stat under column 2.",
+    type: "string[]",
   },
 ];
 
@@ -209,7 +275,7 @@ export const PACKAGES_GROUP_FIELDS: FieldConfig[] = [
 ];
 
 export const PACKAGES_FIELDS: FieldConfig[] = [
-  ...PACKAGES_SECTION_FIELDS,
+  ...PACKAGES_HEADER_FIELDS,
   ...PACKAGES_COMPARISON_FIELDS,
   ...PACKAGES_PRIVATE_FIELDS,
   ...PACKAGES_GROUP_FIELDS,

@@ -1,3 +1,4 @@
+// app/_components/sections/about/courses-covered.tsx
 type CoursesCoveredProps = {
   items?: readonly string[];
   title?: string;

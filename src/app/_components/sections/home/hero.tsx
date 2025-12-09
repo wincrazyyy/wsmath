@@ -1,4 +1,4 @@
-// app/_components/hero.tsx
+// app/_components/sections/home/hero.tsx
 import Image from "next/image";
 import homeContent from "@/app/_lib/content/json/home.json";
 import { WhatsAppButton } from "../../ui/whatsapp-button";

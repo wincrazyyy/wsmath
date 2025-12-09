@@ -1,9 +1,10 @@
-// app/_components/testimonials-cta.tsx
+// app/_components/sections/testimonials/testimonials-cta.tsx
 import Image from "next/image";
-import data from "@/app/_lib/content/json/testimonials.json";
+import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
+import type { TestimonialsConfig } from "@/app/_lib/content/types/testimonials.types";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
 
-const { testimonialsCta } = data;
+const { testimonialsCta } = testimonialsContent as TestimonialsConfig;
 
 export function TestimonialsCta() {
   return (
@@ -30,7 +31,11 @@ export function TestimonialsCta() {
           )}
 
           <div className="mt-5">
-            <WhatsAppButton width={220} height={56} imgClassName="h-14 w-auto" />
+            <WhatsAppButton
+              width={220}
+              height={56}
+              imgClassName="h-14 w-auto"
+            />
           </div>
 
           {testimonialsCta.note && (
@@ -40,7 +45,7 @@ export function TestimonialsCta() {
           )}
         </div>
 
-        {/* Right: clean image only, shorter, cropped from top */}
+        {/* Right: visual */}
         <div className="relative shrink-0 w-full max-w-xs md:max-w-sm lg:max-w-md">
           <div className="relative aspect-[8/5] overflow-hidden rounded-2xl">
             <Image

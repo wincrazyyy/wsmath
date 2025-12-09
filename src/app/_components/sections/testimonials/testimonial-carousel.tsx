@@ -1,7 +1,8 @@
+// app/_components/sections/testimonials/testimonial-carousel.tsx
 "use client";
 
 import Image from "next/image";
-import type { Testimonial } from "./testimonials";
+import type { Testimonial } from "@/app/_lib/content/types/testimonials.types";
 
 export function TestimonialCarousel({
   items,
@@ -81,7 +82,13 @@ function Avatar({ name, src }: { name: string; src?: string }) {
   if (src) {
     return (
       <div className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-neutral-200">
-        <Image src={src} alt={`${name} avatar`} fill className="object-cover" sizes="40px" />
+        <Image
+          src={src}
+          alt={`${name} avatar`}
+          fill
+          className="object-cover"
+          sizes="40px"
+        />
       </div>
     );
   }

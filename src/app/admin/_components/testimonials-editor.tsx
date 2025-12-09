@@ -3,12 +3,15 @@
 
 import { useMemo, useState } from "react";
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
-import { TESTIMONIALS_FIELDS } from "../_lib/testimonials-fields";
+import {
+  TESTIMONIALS_FIELDS,
+  TESTIMONIALS_HEADER_FIELDS,
+} from "../_lib/testimonials-fields";
 import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 
 type TestimonialsContent = typeof testimonialsContent;
-type SubTab = "video" | "featured" | "carousel" | "cta";
+type SubTab = "header" | "video" | "featured" | "carousel" | "cta";
 
 type IndexFieldGroup = {
   index: number; // 0-based index
@@ -54,8 +57,10 @@ export function TestimonialsEditor({
   data,
   onChangeData,
 }: TestimonialsEditorProps) {
-  const [activeTab, setActiveTab] = useState<SubTab>("video");
+  const [activeTab, setActiveTab] = useState<SubTab>("header");
   const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  const headerFields = TESTIMONIALS_HEADER_FIELDS;
 
   const videoFields = useMemo(
     () => TESTIMONIALS_FIELDS.filter((f) => f.path.startsWith("video.")),
@@ -133,6 +138,31 @@ export function TestimonialsEditor({
     );
   };
 
+  const renderFieldGrid = (fields: FieldConfig[]) => (
+    <div className="mt-4 grid gap-4 md:grid-cols-2">
+      {fields.map((field) => (
+        <section key={field.path} className="md:col-span-1">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h4 className="text-xs font-semibold text-neutral-900">
+                {field.label}
+              </h4>
+              {field.description && (
+                <p className="mt-1 text-[11px] text-neutral-500">
+                  {field.description}
+                </p>
+              )}
+            </div>
+            <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
+              {field.path}
+            </code>
+          </div>
+          <div className="mt-2">{renderFieldInput(field)}</div>
+        </section>
+      ))}
+    </div>
+  );
+
   const isSlotsTab = activeTab === "featured" || activeTab === "carousel";
 
   const sectionLabel =
@@ -148,13 +178,23 @@ export function TestimonialsEditor({
         Testimonials
       </h2>
       <p className="mt-1 text-sm text-neutral-600">
-        Configure the student voices video, featured testimonials (top of the
-        page), carousel testimonials (scrolling strip), and the Testimonials CTA box
-        under the testimonials.
+        Edit the testimonials header, student voices video, featured
+        testimonials, carousel strip, and the WhatsApp CTA box.
       </p>
 
-      {/* Sub-tabs inside testimonials */}
+      {/* Sub-tabs inside testimonials (match About/Packages naming) */}
       <div className="mt-6 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+        <button
+          type="button"
+          onClick={() => setActiveTab("header")}
+          className={`rounded-full px-4 py-1.5 transition ${
+            activeTab === "header"
+              ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+              : "text-neutral-600 hover:bg-neutral-50"
+          }`}
+        >
+          Section header
+        </button>
         <button
           type="button"
           onClick={() => setActiveTab("video")}
@@ -207,6 +247,31 @@ export function TestimonialsEditor({
         </button>
       </div>
 
+      {/* HEADER tab – like About/Packages header panels */}
+      {activeTab === "header" && (
+        <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900">
+                Testimonials – section header
+              </h3>
+              <p className="mt-1 text-xs text-neutral-500">
+                Edit the eyebrow, title, and subtitle for the Testimonials
+                section heading.
+              </p>
+            </div>
+            <p className="text-[11px] text-neutral-400">
+              Backed by{" "}
+              <code className="rounded bg-neutral-100 px-1 py-0.5">
+                src/app/_lib/content/json/testimonials.json
+              </code>
+            </p>
+          </div>
+
+          {renderFieldGrid(headerFields)}
+        </div>
+      )}
+
       {/* Video tab */}
       {activeTab === "video" && (
         <div className="mt-8 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
@@ -216,34 +281,13 @@ export function TestimonialsEditor({
                 Student voices video
               </h3>
               <p className="mt-1 text-xs text-neutral-500">
-                Controls the heading, description, and media paths for the video
-                shown under the Testimonials section.
+                Controls the heading, description, and media paths for the
+                video shown under the Testimonials section.
               </p>
             </div>
           </div>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {videoFields.map((field) => (
-              <section key={field.path} className="md:col-span-1">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <h4 className="text-xs font-semibold text-neutral-900">
-                      {field.label}
-                    </h4>
-                    {field.description && (
-                      <p className="mt-1 text-[11px] text-neutral-500">
-                        {field.description}
-                      </p>
-                    )}
-                  </div>
-                  <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
-                    {field.path}
-                  </code>
-                </div>
-                <div className="mt-2">{renderFieldInput(field)}</div>
-              </section>
-            ))}
-          </div>
+          {renderFieldGrid(videoFields)}
         </div>
       )}
 
@@ -262,28 +306,7 @@ export function TestimonialsEditor({
             </div>
           </div>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {ctaFields.map((field) => (
-              <section key={field.path} className="md:col-span-1">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <h4 className="text-xs font-semibold text-neutral-900">
-                      {field.label}
-                    </h4>
-                    {field.description && (
-                      <p className="mt-1 text-[11px] text-neutral-500">
-                        {field.description}
-                      </p>
-                    )}
-                  </div>
-                  <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
-                    {field.path}
-                  </code>
-                </div>
-                <div className="mt-2">{renderFieldInput(field)}</div>
-              </section>
-            ))}
-          </div>
+          {renderFieldGrid(ctaFields)}
         </div>
       )}
 
@@ -359,7 +382,9 @@ export function TestimonialsEditor({
                         {field.path}
                       </code>
                     </div>
-                    <div className="mt-2">{renderFieldInput(field)}</div>
+                    <div className="mt-2">
+                      {renderFieldInput(field)}
+                    </div>
                   </section>
                 ))}
             </div>

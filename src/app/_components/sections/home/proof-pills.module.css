@@ -1,0 +1,56 @@
+/* app/_components/sections/home/proof-pills.module.css */
+.proofPill {
+  opacity: 0;
+  transform: translateY(20px) scale(0.94);
+  animation:
+    pillEntrance 0.7s var(--delay, 0s) cubic-bezier(0.22, 0.8, 0.35, 1) forwards,
+    pillFloat var(--floatDuration, 5s)
+      calc(0.7s + var(--delay, 0s)) ease-in-out infinite;
+}
+
+.innerPill {
+  transition:
+    transform 180ms ease-out,
+    box-shadow 180ms ease-out,
+    background-color 180ms ease-out;
+}
+
+.proofPill:hover .innerPill {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.12),
+    0 0 0 1px rgba(148, 163, 184, 0.35);
+}
+
+@keyframes pillEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.94);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pillFloat {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-6px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  75% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

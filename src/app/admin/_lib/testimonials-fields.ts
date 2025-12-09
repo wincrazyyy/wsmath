@@ -1,16 +1,32 @@
 // app/admin/_lib/testimonials-fields.ts
 import type { FieldConfig } from "./fields";
 
-const TESTIMONIALS_TITLE_FIELD: FieldConfig[] = [
+export const TESTIMONIALS_HEADER_FIELDS: FieldConfig[] = [
+  {
+    path: "eyebrow",
+    label: "Testimonials eyebrow",
+    description:
+      'Small label above the section heading (e.g. “STUDENT VOICES”).',
+    type: "string",
+  },
   {
     path: "title",
     label: "Testimonials title",
     description: "Main heading for the Testimonials section.",
     type: "string",
   },
+  {
+    path: "subtitle",
+    label: "Testimonials subtitle",
+    description: "Short description under the heading.",
+    type: "textarea",
+  },
 ];
 
-function testimonialFields(basePath: string, labelPrefix: string): FieldConfig[] {
+function testimonialFields(
+  basePath: string,
+  labelPrefix: string
+): FieldConfig[] {
   return [
     {
       path: `${basePath}.name`,
@@ -21,7 +37,8 @@ function testimonialFields(basePath: string, labelPrefix: string): FieldConfig[]
     {
       path: `${basePath}.role`,
       label: `${labelPrefix} – Role / result`,
-      description: "Short line under the name, e.g. “IBDP AAHL — Level 7”.",
+      description:
+        "Short line under the name, e.g. “IBDP AAHL — Level 7”.",
       type: "string",
     },
     {
@@ -33,7 +50,8 @@ function testimonialFields(basePath: string, labelPrefix: string): FieldConfig[]
     {
       path: `${basePath}.avatarSrc`,
       label: `${labelPrefix} – Avatar image path`,
-      description: "Optional avatar image in /public/avatars (e.g. /avatars/yuki.jpg).",
+      description:
+        "Optional avatar image in /public/avatars (e.g. /avatars/yuki.jpg).",
       type: "string",
     },
   ];
@@ -75,13 +93,15 @@ const VIDEO_FIELDS: FieldConfig[] = [
   {
     path: "video.src",
     label: "Student voices – Video src",
-    description: "Path to the mp4 file in /public (e.g. /video/student-voices.mp4).",
+    description:
+      "Path to the mp4 file in /public (e.g. /video/student-voices.mp4).",
     type: "string",
   },
   {
     path: "video.poster",
     label: "Student voices – Poster image",
-    description: "Optional poster image for the video (e.g. /video/student-voices-poster.jpg).",
+    description:
+      "Optional poster image for the video (e.g. /video/student-voices-poster.jpg).",
     type: "string",
   },
 ];
@@ -102,7 +122,8 @@ export const TESTIMONIALS_CTA_FIELDS: FieldConfig[] = [
   {
     path: "testimonialsCta.bullets",
     label: "Testimonials CTA – Bullet points",
-    description: "One benefit per line. Shown as bullet points above the button.",
+    description:
+      "One benefit per line. Shown as bullet points above the button.",
     type: "string[]",
   },
   {
@@ -114,14 +135,14 @@ export const TESTIMONIALS_CTA_FIELDS: FieldConfig[] = [
   {
     path: "testimonialsCta.logoSrc",
     label: "Testimonials CTA – Logo image path",
-    description: "Path to the logo image in /public (e.g. /icon.svg).",
+    description:
+      "Path to the logo image in /public (e.g. /icon.svg).",
     type: "string",
   },
 ];
 
-
 export const TESTIMONIALS_FIELDS: FieldConfig[] = [
-  ...TESTIMONIALS_TITLE_FIELD,
+  ...TESTIMONIALS_HEADER_FIELDS,
   ...VIDEO_FIELDS,
   ...FEATURED_TESTIMONIAL_FIELDS,
   ...CAROUSEL_TESTIMONIAL_FIELDS,

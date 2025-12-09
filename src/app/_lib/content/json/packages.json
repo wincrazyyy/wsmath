@@ -1,7 +1,32 @@
 {
-  "title": "Course options & pricing",
-  "subtitle": "Choose between fully personalised 1-to-1 coaching or a high-value structured group programme that builds a rock-solid foundation for IBDP exams.",
-  "topBadge": "IB / A-Level specialist since 2017",
+  "header": {
+    "eyebrow": "COACHING PACKAGES",
+    "title": "Choose the path that fits your goal",
+    "subtitle": "From high-leverage small group classes to fully tailored 1-to-1 coaching.",
+    "chips": [
+      "🚀 Rapid score improvement · Level 7 / A* focus 🎯",
+      "📚 By-topic mastery · Past paper precision 🧠",
+      "💼 Premium 1-to-1 mentorship · Personalised strategy 🔍",
+      "🌏 Hong Kong excellence · Teach worldwide online 💻"
+    ],
+    "rightAccent": {
+      "heading": "Results snapshot",
+      "badge": "Since 2017",
+      "mainValue": "250+",
+      "mainLabel": "students coached 1-on-1",
+      "mainSize": "sm",
+      "columns": [
+        {
+          "title": "IBDP HL 7 rate",
+          "items": ["50%+"]
+        },
+        {
+          "title": "IGCSE A / A*",
+          "items": ["70%+"]
+        }
+      ]
+    }
+  },
 
   "comparison": {
     "privateLabel": "Standard 1-to-1 rate",

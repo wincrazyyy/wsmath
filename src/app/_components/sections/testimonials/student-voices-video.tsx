@@ -1,22 +1,15 @@
-// app/_components/student-voices-video.tsx
+// app/_components/sections/testimonials/student-voices-video.tsx
 "use client";
 
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
-
-type VideoContent = {
-  eyebrow: string;
-  heading: string;
-  subheading: string;
-  src: string;
-  poster: string;
-};
-
+import type { TestimonialsConfig } from "@/app/_lib/content/types/testimonials.types";
 
 export function StudentVoicesVideo() {
-  const video: VideoContent = (testimonialsContent as { video: VideoContent }).video;
+  const data = testimonialsContent as TestimonialsConfig;
+  const video = data.video;
 
   return (
-    <section className="mt-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
+    <section className="mt-8 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">

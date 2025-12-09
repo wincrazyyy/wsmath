@@ -1,4 +1,4 @@
-import type { ComparisonConfig } from "@/app/_lib/content/packages.types";
+import type { ComparisonConfig } from "@/app/_lib/content/types/packages.types";
 
 interface PricingComparisonStripProps {
   comparison: ComparisonConfig;

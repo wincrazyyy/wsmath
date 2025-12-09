@@ -1,4 +1,4 @@
-import type { GroupConfig } from "@/app/_lib/content/packages.types";
+import type { GroupConfig } from "@/app/_lib/content/types/packages.types";
 import { GroupLeafletViewer } from "./group-leaflet-viewer";
 
 interface GroupPackageCardProps {
