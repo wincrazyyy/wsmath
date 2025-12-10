@@ -23,6 +23,7 @@ export function Hero() {
             alt="WSMath hero"
             fill
             priority
+            quality={100}
             className="object-contain object-top lg:object-cover"
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />

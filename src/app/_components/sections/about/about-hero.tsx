@@ -52,6 +52,7 @@ export function AboutHero({ hero }: AboutHeroProps) {
           alt="Tutor pointing upward"
           fill
           priority
+          quality={100}
           className="object-cover"
           sizes="(min-width: 1024px) 960px, 100vw"
         />
