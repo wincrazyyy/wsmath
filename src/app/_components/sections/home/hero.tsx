@@ -19,11 +19,10 @@ export function Hero() {
         {/* Image */}
         <div className="relative order-1 mx-auto w-full aspect-[4/3] overflow-hidden rounded-2xl sm:max-w-[560px] md:max-w-[520px] lg:order-2 lg:mx-0 lg:max-w-none lg:aspect-[5/4]">
           <Image
-            src={hero.imageSrc}
+            src="/hero.png"
             alt="WSMath hero"
             fill
             priority
-            quality={100}
             className="object-contain object-top lg:object-cover"
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />

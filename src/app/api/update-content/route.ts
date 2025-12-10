@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       Accept: "application/vnd.github+json",
     };
 
-    // 1) Get current HEAD commit for the branch
+    // Get current HEAD commit for the branch
     const refResp = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
       { headers }
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
     };
     const currentCommitSha = refJson.object.sha;
 
-    // 2) Get the commit to find its tree
+    // Get the commit to find its tree
     const commitResp = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/git/commits/${currentCommitSha}`,
       { headers }
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     };
     const baseTreeSha = commitJson.tree.sha;
 
-    // 3) Build tree entries for each updated file (GitHub will create blobs)
+    // Build tree entries for each updated file (GitHub will create blobs)
     const treeEntries = body.updates.map(({ slug, content }) => {
       const path = `${basePath.replace(/\/$/, "")}/${slug}.json`;
       const fileContent = JSON.stringify(content, null, 2);
@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    // 4) Create a new tree
+    // Create a new tree
     const treeResp = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/git/trees`,
       {
@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     const treeJson = (await treeResp.json()) as { sha: string };
     const newTreeSha = treeJson.sha;
 
-    // 5) Create a new commit pointing to that tree
+    // Create a new commit pointing to that tree
     const commitMessage =
       body.updates.length === 1
         ? `Update ${body.updates[0]!.slug}.json via WSMath admin`
@@ -142,7 +142,7 @@ export async function POST(req: NextRequest) {
     const newCommitJson = (await newCommitResp.json()) as { sha: string };
     const newCommitSha = newCommitJson.sha;
 
-    // 6) Move the branch ref to point to the new commit
+    // Move the branch ref to point to the new commit
     const updateRefResp = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
       {
