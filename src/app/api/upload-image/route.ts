@@ -14,6 +14,22 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary);
 }
 
+// Simple PNG signature check: 89 50 4E 47 0D 0A 1A 0A
+function isPngBytes(buffer: ArrayBuffer): boolean {
+  const bytes = new Uint8Array(buffer);
+  if (bytes.length < 8) return false;
+  return (
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47 &&
+    bytes[4] === 0x0d &&
+    bytes[5] === 0x0a &&
+    bytes[6] === 0x1a &&
+    bytes[7] === 0x0a
+  );
+}
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -32,6 +48,30 @@ export async function POST(req: NextRequest) {
     if (targetPath.includes("..")) {
       return NextResponse.json(
         { error: "Invalid targetPath" },
+        { status: 400 },
+      );
+    }
+
+    // Enforce PNG-only uploads
+    const contentType = file.type;
+
+    if (contentType !== "image/png") {
+      return NextResponse.json(
+        {
+          error: "Invalid file type",
+          detail: `Only PNG images are allowed (got ${contentType || "unknown"}).`,
+        },
+        { status: 400 },
+      );
+    }
+
+    // Enforce .png extension on the target path as well
+    if (!targetPath.toLowerCase().endsWith(".png")) {
+      return NextResponse.json(
+        {
+          error: "Invalid targetPath",
+          detail: "Target path must end with .png when uploading PNG images.",
+        },
         { status: 400 },
       );
     }
@@ -56,8 +96,21 @@ export async function POST(req: NextRequest) {
 
     const apiBase = `https://api.github.com/repos/${owner}/${repo}`;
 
-    // Compute base64 of the file
+    // Read file into memory
     const arrayBuffer = await file.arrayBuffer();
+
+    // Double-check file *content* really is PNG
+    if (!isPngBytes(arrayBuffer)) {
+      return NextResponse.json(
+        {
+          error: "Invalid image content",
+          detail: "Uploaded file is not a valid PNG image.",
+        },
+        { status: 400 },
+      );
+    }
+
+    // Compute base64 of the file
     const base64 = arrayBufferToBase64(arrayBuffer);
 
     // Check if file already exists to get its sha (required for update)

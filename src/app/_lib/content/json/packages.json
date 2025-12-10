@@ -81,14 +81,16 @@
     ],
     "leaflet": {
       "label": "Course leaflet preview",
+      "pagesDir": "/leaflets",
+      "pagesFormat": "group-leaflet-page-",
       "pages": [
-        "/leaflets/group-leaflet-page-1.jpg",
-        "/leaflets/group-leaflet-page-2.jpg",
-        "/leaflets/group-leaflet-page-3.jpg",
-        "/leaflets/group-leaflet-page-4.jpg",
-        "/leaflets/group-leaflet-page-5.jpg",
-        "/leaflets/group-leaflet-page-6.jpg",
-        "/leaflets/group-leaflet-page-7.jpg"
+        "/leaflets/group-leaflet-page-1.png",
+        "/leaflets/group-leaflet-page-2.png",
+        "/leaflets/group-leaflet-page-3.png",
+        "/leaflets/group-leaflet-page-4.png",
+        "/leaflets/group-leaflet-page-5.png",
+        "/leaflets/group-leaflet-page-6.png",
+        "/leaflets/group-leaflet-page-7.png"
       ],
       "autoAdvanceSeconds": "5"
     }

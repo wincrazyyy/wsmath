@@ -48,7 +48,7 @@ export function AboutHero({ hero }: AboutHeroProps) {
       {/* Horizontal image */}
       <div className="relative aspect-[16/9] w-full md:aspect-[21/9]">
         <Image
-          src="/about-hero.png"
+          src={hero.imageSrc}
           alt="Tutor pointing upward"
           fill
           priority

@@ -1,11 +1,7 @@
 // app/admin/_lib/image-upload-targets.ts
 export type ImageUploadTarget = {
-  /** Path inside the repo, e.g. "public/hero.png" */
-  targetPath: string;
-  /** Public path used by <Image>, e.g. "/hero.png" */
-  publicPath: string;
-  /** Optional note to show in the UI */
   note?: string;
+  mode?: "single" | "multi";
 };
 
 /**
@@ -16,18 +12,16 @@ export type ImageUploadTarget = {
  */
 export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
   "home.hero.imageSrc": {
-    targetPath: "public/hero.png",
-    publicPath: "/hero.png",
-    note: "Used on the homepage hero. Upload a square-ish image.",
+    note: "Used on the homepage hero. Upload a square-ish PNG image with transparent background.",
   },
   "about.hero.imageSrc": {
-    targetPath: "public/about-hero.png",
-    publicPath: "/about-hero.png",
-    note: "Used on the About section hero. Upload a horizontal image.",
+    note: "Used on the About section hero. Upload a horizontal PNG image with transparent background.",
+  },
+  "packages.group.leaflet.pages": {
+    note: "Upload multiple images for the group package leaflet pages. Upload all leaflet pages in PNG format.",
+    mode: "multi",
   },
   "testimonials.testimonialsCta.logoSrc": {
-    targetPath: "public/cta-image.png",
-    publicPath: "/cta-image.png",
-    note: "Used in the Testimonials CTA section. Upload a square-ish image.",
+    note: "Used in the Testimonials CTA section. Upload a square-ish PNG image with transparent background.",
   },
 };
