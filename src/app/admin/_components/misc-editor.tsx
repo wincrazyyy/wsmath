@@ -20,7 +20,8 @@ export function MiscEditor<T extends object>({
       description="Edit WhatsApp CTA copy and other small global settings."
       data={data}
       fields={MISC_FIELDS as FieldConfig[]}
-      jsonFileHint="src/app/_lib/content/misc.json"
+      jsonFileHint="src/app/_lib/content/json/misc.json"
+      slug="misc"
       onChangeData={onChangeData}
     />
   );

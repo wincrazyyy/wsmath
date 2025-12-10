@@ -9,23 +9,25 @@ export type ImageUploadTarget = {
 };
 
 /**
- * Map JSON field paths to image targets.
+ * Map JSON field paths (optionally prefixed by slug) to image targets.
+ *
+ * Convention:
+ *   - "home.hero.imageSrc"   → home.json, path hero.imageSrc
  */
 export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
-  // Home hero image
-  "hero.imageSrc": {
+  "home.hero.imageSrc": {
     targetPath: "public/hero.png",
     publicPath: "/hero.png",
-    note: "Used on the homepage hero. Upload a 1:1 or 4:5 square-ish image.",
+    note: "Used on the homepage hero. Upload a square-ish image.",
   },
-
-  // Examples you can add later:
-  // "heroMobile.imageSrc": {
-  //   targetPath: "public/hero-mobile.png",
-  //   publicPath: "/hero-mobile.png",
-  // },
-  // "about.hero.imageSrc": {
-  //   targetPath: "public/about-hero.png",
-  //   publicPath: "/about-hero.png",
-  // },
+  "about.hero.imageSrc": {
+    targetPath: "public/about-hero.png",
+    publicPath: "/about-hero.png",
+    note: "Used on the About section hero. Upload a horizontal image.",
+  },
+  "testimonials.testimonialsCta.logoSrc": {
+    targetPath: "public/cta-image.png",
+    publicPath: "/cta-image.png",
+    note: "Used in the Testimonials CTA section. Upload a square-ish image.",
+  },
 };

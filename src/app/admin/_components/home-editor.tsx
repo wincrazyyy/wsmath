@@ -20,7 +20,8 @@ export function HomeEditor<T extends object>({
       description="Edit hero and proof-pills for the homepage."
       data={data}
       fields={HOME_FIELDS as FieldConfig[]}
-      jsonFileHint="src/app/_lib/content/home.json"
+      jsonFileHint="src/app/_lib/content/json/home.json"
+      slug="home"
       onChangeData={onChangeData}
     />
   );

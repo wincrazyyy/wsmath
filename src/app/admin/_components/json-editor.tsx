@@ -1,3 +1,4 @@
+// app/admin/_components/json-editor.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,15 +9,31 @@ import {
   type ImageUploadTarget,
 } from "../_lib/image-upload-targets";
 
+type JsonEditorTabConfig = {
+  key: string;
+  label: string;
+  fields: FieldConfig[];
+  panelTitle?: string;
+  panelDescription?: string;
+};
+
 type JsonEditorProps<T extends object> = {
   title: string;
   description?: string;
   /** Current JSON value (controlled by parent) */
   data: T;
-  /** Field definitions (paths + labels) */
+  /** Fallback field list (used when tabs are not provided) */
   fields: FieldConfig[];
+  /** Optional tabbed layout */
+  enableTabs?: boolean;
+  tabs?: JsonEditorTabConfig[];
   /** Shown above the JSON preview for guidance */
   jsonFileHint?: string;
+  /**
+   * Optional slug to disambiguate image upload targets
+   * (e.g. "home.hero.imageSrc" vs "about.hero.imageSrc")
+   */
+  slug?: string;
   /** Called whenever any field changes */
   onChangeData: (next: T) => void;
 };
@@ -146,7 +163,7 @@ function ImageUploadInput<T extends object>({
       {/* Status */}
       {status === "success" && (
         <p className="text-[11px] text-emerald-600">
-          Image uploaded. A new commit was created and the path is fixed to{" "}
+          Image uploaded. Path fixed to{" "}
           <code>{target.publicPath}</code>.
         </p>
       )}
@@ -166,9 +183,18 @@ export function JsonEditor<T extends object>({
   description,
   data,
   fields,
+  enableTabs,
+  tabs,
   jsonFileHint = "",
+  slug,
   onChangeData,
 }: JsonEditorProps<T>) {
+  const hasTabs = !!enableTabs && !!tabs && tabs.length > 0;
+
+  const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
+    hasTabs ? tabs![0].key : undefined,
+  );
+
   const handleChange = (field: FieldConfig, rawValue: string) => {
     const next = structuredClone(data) as T;
 
@@ -186,7 +212,10 @@ export function JsonEditor<T extends object>({
   };
 
   const renderFieldInput = (field: FieldConfig) => {
-    const uploadTarget = IMAGE_UPLOAD_TARGETS[field.path as string];
+    // 🔑 slug-aware image target key
+    const keyWithSlug = slug ? `${slug}.${field.path}` : field.path;
+    const uploadTarget: ImageUploadTarget | undefined =
+      IMAGE_UPLOAD_TARGETS[keyWithSlug] ?? IMAGE_UPLOAD_TARGETS[field.path];
 
     // Special case: image-backed field – only allow upload, no free text
     if (uploadTarget) {
@@ -238,8 +267,22 @@ export function JsonEditor<T extends object>({
     );
   };
 
+  // Decide which fields + panel copy to show
+  let visibleFields: FieldConfig[] = fields;
+  let panelTitle = title;
+  let panelDescription = description ?? "";
+
+  if (hasTabs) {
+    const active =
+      tabs!.find((t) => t.key === activeTabKey) ?? tabs![0];
+    visibleFields = active.fields;
+    panelTitle = active.panelTitle ?? panelTitle;
+    panelDescription = active.panelDescription ?? panelDescription;
+  }
+
   return (
     <div className="mt-6">
+      {/* Top-level heading */}
       <h2 className="text-lg font-semibold tracking-tight text-neutral-900">
         {title}
       </h2>
@@ -247,33 +290,106 @@ export function JsonEditor<T extends object>({
         <p className="mt-1 text-sm text-neutral-600">{description}</p>
       )}
 
-      {/* Fields */}
-      <div className="mt-6 grid gap-6">
-        {fields.map((field) => (
-          <section
-            key={field.path}
-            className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h3 className="text-sm font-semibold text-neutral-900">
-                  {field.label}
-                </h3>
-                {field.description && (
-                  <p className="mt-1 text-xs text-neutral-600">
-                    {field.description}
-                  </p>
-                )}
-              </div>
-              <code className="rounded bg-neutral-100 px-2 py-1 text-[11px] text-neutral-600">
-                {field.path}
-              </code>
-            </div>
+      {/* Optional sub-tabs */}
+      {hasTabs && (
+        <div className="mt-6 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+          {tabs!.map((tab) => {
+            const isActive = tab.key === activeTabKey;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setActiveTabKey(tab.key)}
+                className={`rounded-full px-4 py-1.5 transition ${
+                  isActive
+                    ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+                    : "text-neutral-600 hover:bg-neutral-50"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
-            <div className="mt-3">{renderFieldInput(field)}</div>
-          </section>
-        ))}
-      </div>
+      {/* Fields section */}
+      {hasTabs ? (
+        // Tabbed layout: single panel + 2-column grid
+        <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold text-neutral-900">
+                {panelTitle}
+              </h3>
+              {panelDescription && (
+                <p className="mt-1 text-xs text-neutral-500">
+                  {panelDescription}
+                </p>
+              )}
+            </div>
+            {jsonFileHint && (
+              <p className="text-[11px] text-neutral-400">
+                Backed by{" "}
+                <code className="rounded bg-neutral-100 px-1 py-0.5">
+                  {jsonFileHint}
+                </code>
+              </p>
+            )}
+          </div>
+
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            {visibleFields.map((field) => (
+              <section key={field.path} className="md:col-span-1">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <h4 className="text-xs font-semibold text-neutral-900">
+                      {field.label}
+                    </h4>
+                    {field.description && (
+                      <p className="mt-1 text-[11px] text-neutral-500">
+                        {field.description}
+                      </p>
+                    )}
+                  </div>
+                  <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
+                    {field.path}
+                  </code>
+                </div>
+                <div className="mt-2">{renderFieldInput(field)}</div>
+              </section>
+            ))}
+          </div>
+        </div>
+      ) : (
+        // Non-tabbed layout: one card per field (old JsonEditor style)
+        <div className="mt-6 grid gap-6">
+          {fields.map((field) => (
+            <section
+              key={field.path}
+              className="rounded-xl border border-neutral-200 bg-white p-4 shadow-sm"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-sm font-semibold text-neutral-900">
+                    {field.label}
+                  </h3>
+                  {field.description && (
+                    <p className="mt-1 text-xs text-neutral-600">
+                      {field.description}
+                    </p>
+                  )}
+                </div>
+                <code className="rounded bg-neutral-100 px-2 py-1 text-[11px] text-neutral-600">
+                  {field.path}
+                </code>
+              </div>
+
+              <div className="mt-3">{renderFieldInput(field)}</div>
+            </section>
+          ))}
+        </div>
+      )}
 
       {/* JSON preview */}
       <div className="mt-8 rounded-xl border border-dashed border-neutral-300 bg-white p-4">
@@ -281,7 +397,7 @@ export function JsonEditor<T extends object>({
           <h3 className="text-sm font-semibold text-neutral-900">
             JSON preview
           </h3>
-          {jsonFileHint && (
+          {jsonFileHint && !hasTabs && (
             <p className="text-[11px] text-neutral-500">
               Backed by <code>{jsonFileHint}</code>
             </p>
