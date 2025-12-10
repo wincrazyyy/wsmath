@@ -73,9 +73,21 @@ function LeafletInlineViewer({
         </div>
       </div>
 
-      {/* A4-ish area */}
+      {/* A4-ish area – CLICKABLE to open fullscreen */}
       <div className="mt-3 flex justify-center">
-        <div className="relative w-full max-w-[420px]">
+        <div
+          className="relative w-full max-w-[420px] cursor-zoom-in"
+          onClick={onOpenFullscreen}
+          role="button"
+          tabIndex={0}
+          aria-label="Open course leaflet in fullscreen"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onOpenFullscreen();
+            }
+          }}
+        >
           <div className="relative w-full aspect-[210/297] overflow-hidden rounded-xl bg-neutral-900 shadow-lg ring-1 ring-neutral-800">
             <Image
               src={currentSrc}
