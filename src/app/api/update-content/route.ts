@@ -20,7 +20,7 @@ type BatchPayload = {
   images?: ImageUpdate[];
 };
 
-// ---------- helpers for PNG validation ----------
+// ---------- helpers for PNG validation & base64 ----------
 
 function base64ToUint8Array(base64: string): Uint8Array {
   // atob is available in edge runtimes
@@ -48,6 +48,88 @@ function isPngBytes(bytes: Uint8Array): boolean {
   );
 }
 
+// Create a text blob (for JSON files)
+async function createTextBlob(
+  apiBase: string,
+  headers: Record<string, string>,
+  content: string,
+): Promise<string> {
+  const resp = await fetch(`${apiBase}/git/blobs`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content,
+      encoding: "utf-8",
+    }),
+  });
+
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to create JSON blob: ${text}`);
+  }
+
+  const json = (await resp.json()) as { sha: string };
+  return json.sha;
+}
+
+// Create a PNG blob from base64
+async function createPngBlob(
+  apiBase: string,
+  headers: Record<string, string>,
+  targetPath: string,
+  contentBase64: string,
+): Promise<string> {
+  if (targetPath.includes("..")) {
+    throw new Error(`Invalid targetPath: ${targetPath}`);
+  }
+
+  if (!targetPath.startsWith("public/")) {
+    throw new Error(
+      `Image targetPath must start with "public/". Got: ${targetPath}`,
+    );
+  }
+
+  if (!targetPath.toLowerCase().endsWith(".png")) {
+    throw new Error(
+      `Target path must end with .png (got ${targetPath}).`,
+    );
+  }
+
+  let bytes: Uint8Array;
+  try {
+    bytes = base64ToUint8Array(contentBase64);
+  } catch {
+    throw new Error("contentBase64 is not valid base64.");
+  }
+
+  if (!isPngBytes(bytes)) {
+    throw new Error("Uploaded file is not a valid PNG image.");
+  }
+
+  const resp = await fetch(`${apiBase}/git/blobs`, {
+    method: "POST",
+    headers: {
+      ...headers,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content: contentBase64,
+      encoding: "base64",
+    }),
+  });
+
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`Failed to create image blob: ${text}`);
+  }
+
+  const json = (await resp.json()) as { sha: string };
+  return json.sha;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as BatchPayload;
@@ -62,8 +144,9 @@ export async function POST(req: NextRequest) {
     const owner = process.env.GITHUB_REPO_OWNER;
     const repo = process.env.GITHUB_REPO_NAME;
     const token = process.env.GITHUB_TOKEN;
+    // Default to the actual JSON folder by default
     const basePath =
-      process.env.CONTENT_BASE_PATH ?? "src/app/_lib/content";
+      process.env.CONTENT_BASE_PATH ?? "src/app/_lib/content/json";
     const branch = process.env.GITHUB_BRANCH ?? "main";
 
     if (!owner || !repo || !token) {
@@ -73,14 +156,14 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const headers = {
+    const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
     };
 
     const apiBase = `https://api.github.com/repos/${owner}/${repo}`;
 
-    // Get current HEAD commit for the branch
+    // 1) Get current HEAD commit for the branch
     const refResp = await fetch(
       `${apiBase}/git/refs/heads/${branch}`,
       { headers },
@@ -97,7 +180,7 @@ export async function POST(req: NextRequest) {
     };
     const currentCommitSha = refJson.object.sha;
 
-    // Get the commit to find its tree
+    // 2) Get the commit to find its tree
     const commitResp = await fetch(
       `${apiBase}/git/commits/${currentCommitSha}`,
       { headers },
@@ -114,19 +197,27 @@ export async function POST(req: NextRequest) {
     };
     const baseTreeSha = commitJson.tree.sha;
 
-    // Build tree entries for each updated JSON file (GitHub will create blobs)
-    const jsonTreeEntries = body.updates.map(({ slug, content }) => {
+    // 3) Build tree entries for updated JSON files (via blobs)
+    const jsonTreeEntries: {
+      path: string;
+      mode: "100644";
+      type: "blob";
+      sha: string;
+    }[] = [];
+
+    for (const { slug, content } of body.updates) {
       const path = `${basePath.replace(/\/$/, "")}/${slug}.json`;
       const fileContent = JSON.stringify(content, null, 2);
-      return {
+      const sha = await createTextBlob(apiBase, headers, fileContent);
+      jsonTreeEntries.push({
         path,
         mode: "100644",
         type: "blob",
-        content: fileContent,
-      };
-    });
+        sha,
+      });
+    }
 
-    // Build tree entries for images (via blobs)
+    // 4) Build tree entries for images (via blobs)
     const imageTreeEntries: {
       path: string;
       mode: "100644";
@@ -138,100 +229,32 @@ export async function POST(req: NextRequest) {
       for (const img of body.images) {
         const { targetPath, contentBase64 } = img;
 
-        if (typeof targetPath !== "string" || typeof contentBase64 !== "string") {
-          return NextResponse.json(
-            { error: "Invalid image payload (targetPath/contentBase64)" },
-            { status: 400 },
-          );
-        }
-
-        // Basic safety guard – no directory traversal
-        if (targetPath.includes("..")) {
-          return NextResponse.json(
-            { error: `Invalid targetPath: ${targetPath}` },
-            { status: 400 },
-          );
-        }
-
-        // Must be inside public/
-        if (!targetPath.startsWith("public/")) {
+        if (!targetPath || !contentBase64) {
           return NextResponse.json(
             {
-              error: "Invalid targetPath",
-              detail: `Image targetPath must start with "public/". Got: ${targetPath}`,
+              error: "Invalid image payload (targetPath/contentBase64)",
             },
             { status: 400 },
           );
         }
 
-        // Enforce .png extension
-        if (!targetPath.toLowerCase().endsWith(".png")) {
-          return NextResponse.json(
-            {
-              error: "Invalid targetPath",
-              detail: `Target path must end with .png (got ${targetPath}).`,
-            },
-            { status: 400 },
-          );
-        }
-
-        // Validate PNG signature from content
-        let bytes: Uint8Array;
-        try {
-          bytes = base64ToUint8Array(contentBase64);
-        } catch {
-          return NextResponse.json(
-            {
-              error: "Invalid image content",
-              detail: "contentBase64 is not valid base64.",
-            },
-            { status: 400 },
-          );
-        }
-
-        if (!isPngBytes(bytes)) {
-          return NextResponse.json(
-            {
-              error: "Invalid image content",
-              detail: "Uploaded file is not a valid PNG image.",
-            },
-            { status: 400 },
-          );
-        }
-
-        // Create a blob for this image
-        const blobResp = await fetch(`${apiBase}/git/blobs`, {
-          method: "POST",
-          headers: {
-            ...headers,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            content: contentBase64,
-            encoding: "base64",
-          }),
-        });
-
-        if (!blobResp.ok) {
-          const text = await blobResp.text();
-          return NextResponse.json(
-            { error: "Failed to create image blob", detail: text },
-            { status: 500 },
-          );
-        }
-
-        const blobJson = (await blobResp.json()) as { sha: string };
+        const sha = await createPngBlob(
+          apiBase,
+          headers,
+          targetPath,
+          contentBase64,
+        );
 
         imageTreeEntries.push({
           path: targetPath,
           mode: "100644",
           type: "blob",
-          sha: blobJson.sha,
+          sha,
         });
       }
     }
 
-    // Create a new tree including JSON & image entries
+    // 5) Create a new tree including JSON & image entries
     const treeResp = await fetch(
       `${apiBase}/git/trees`,
       {
@@ -242,10 +265,7 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           base_tree: baseTreeSha,
-          tree: [
-            ...jsonTreeEntries,
-            ...imageTreeEntries,
-          ],
+          tree: [...jsonTreeEntries, ...imageTreeEntries],
         }),
       },
     );
@@ -259,7 +279,8 @@ export async function POST(req: NextRequest) {
     const treeJson = (await treeResp.json()) as { sha: string };
     const newTreeSha = treeJson.sha;
 
-    const hasMultiple = body.updates.length + (body.images?.length ?? 0) > 1;
+    const hasMultiple =
+      body.updates.length + (body.images?.length ?? 0) > 1;
 
     const commitMessage =
       hasMultiple
@@ -268,7 +289,7 @@ export async function POST(req: NextRequest) {
           ? `Update ${body.updates[0]!.slug}.json via WSMath admin`
           : `Update assets via WSMath admin`;
 
-    // Create a new commit pointing to that tree
+    // 6) Create a new commit pointing to that tree
     const newCommitResp = await fetch(
       `${apiBase}/git/commits`,
       {
@@ -294,7 +315,7 @@ export async function POST(req: NextRequest) {
     const newCommitJson = (await newCommitResp.json()) as { sha: string };
     const newCommitSha = newCommitJson.sha;
 
-    // Move the branch ref to point to the new commit
+    // 7) Move the branch ref to point to the new commit
     const updateRefResp = await fetch(
       `${apiBase}/git/refs/heads/${branch}`,
       {
