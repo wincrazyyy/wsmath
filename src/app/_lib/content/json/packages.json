@@ -18,16 +18,19 @@
       "columns": [
         {
           "title": "IBDP HL 7 rate",
-          "items": ["50%+"]
+          "items": [
+            "50%+"
+          ]
         },
         {
           "title": "IGCSE A / A*",
-          "items": ["70%+"]
+          "items": [
+            "70%+"
+          ]
         }
       ]
     }
   },
-
   "comparison": {
     "privateLabel": "Standard 1-to-1 rate",
     "groupLabel": "Group course investment",
@@ -35,7 +38,6 @@
     "privateLinePrefix": "32 hours 1-to-1 ≈",
     "groupLineSuffix": "for 32 structured group sessions."
   },
-
   "private": {
     "label": "Premium 1-to-1",
     "rateLabel": "Typical rate",
@@ -65,7 +67,6 @@
     },
     "buttonNote": "Mention “1-to-1 8-lesson package” and your current grade / target score."
   },
-
   "group": {
     "label": "High-value group",
     "tag": "Most popular",
@@ -86,7 +87,11 @@
       "pages": [
         "/leaflets/group-leaflet-page-1.png",
         "/leaflets/group-leaflet-page-2.png",
-        "/leaflets/group-leaflet-page-3.png"
+        "/leaflets/group-leaflet-page-3.png",
+        "/leaflets/group-leaflet-page-4.png",
+        "/leaflets/group-leaflet-page-5.png",
+        "/leaflets/group-leaflet-page-6.png",
+        "/leaflets/group-leaflet-page-7.png"
       ],
       "autoAdvanceSeconds": "5"
     }

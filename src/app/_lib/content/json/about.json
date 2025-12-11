@@ -17,16 +17,24 @@
       "columns": [
         {
           "title": "IBDP Math",
-          "items": ["AAHL", "AIHL", "AASL", "AISL"]
+          "items": [
+            "AAHL",
+            "AIHL",
+            "AASL",
+            "AISL"
+          ]
         },
         {
           "title": "Other programmes",
-          "items": ["A-Level", "IGCSE", "IBMYP"]
+          "items": [
+            "A-Level",
+            "IGCSE",
+            "IBMYP"
+          ]
         }
       ]
     }
   },
-
   "hero": {
     "imageSrc": "/about-hero.png",
     "eyebrow": "Winson Siu • 專業教育家",
@@ -47,14 +55,12 @@
       ]
     }
   },
-
   "stats": [
     "50%+ IBDP Level 7 track record",
-    "13,000+ teaching hours",
+    "18,000+ teaching hours",
     "250+ one-to-one students",
     "A-Level Math & FM: A* pathway"
   ],
-
   "courses": [
     "IBDP AAHL",
     "IBDP AASL",
@@ -74,7 +80,6 @@
     "IGCSE Cambridge (0580) Math",
     "IGCSE Edexcel (4PM1) Math"
   ],
-
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-LEVEL · IGCSE",
@@ -98,7 +103,6 @@
       }
     ]
   },
-
   "ctaRibbon": {
     "heading": "Limited 1:1 slots — start boosting IBDP results now",
     "subheading": "Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL."
