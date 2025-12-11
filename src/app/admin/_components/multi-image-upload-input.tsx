@@ -1,7 +1,7 @@
 // app/admin/_components/json-editor-image-multi.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 import type { ImageUploadTarget } from "../_lib/image-upload-targets";
@@ -10,7 +10,10 @@ import {
   normalizeDirPublic,
   getBasePath,
 } from "../_lib/json-editor-helpers";
-import { queueImageUploads } from "../_lib/pending-image-uploads";
+import {
+  queueImageUploads,
+  getQueuedPreviewsForDir,
+} from "../_lib/pending-image-uploads";
 
 type MultiImageUploadInputProps<T extends object> = {
   field: FieldConfig;
@@ -28,7 +31,6 @@ export function MultiImageUploadInput<T extends object>({
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
-  const [previewUrls, setPreviewUrls] = useState<string[] | null>(null);
 
   const rawPages = getByPath(data, field.path);
   const currentPages = toStringArray(rawPages);
@@ -45,15 +47,6 @@ export function MultiImageUploadInput<T extends object>({
       ? pagesFormatValue.trim()
       : "";
 
-  // Clean up object URLs on unmount or when new previews are set
-  useEffect(() => {
-    return () => {
-      if (previewUrls && previewUrls.length > 0) {
-        previewUrls.forEach((url) => URL.revokeObjectURL(url));
-      }
-    };
-  }, [previewUrls]);
-
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -64,7 +57,8 @@ export function MultiImageUploadInput<T extends object>({
     const invalid = selectedFiles.filter((file) => {
       const name = file.name.toLowerCase();
       const type = file.type;
-      const looksLikePng = type === "image/png" || name.endsWith(".png");
+      const looksLikePng =
+        type === "image/png" || name.endsWith(".png");
       return !looksLikePng;
     });
 
@@ -100,6 +94,7 @@ export function MultiImageUploadInput<T extends object>({
         file: File;
       }[] = [];
 
+      // Preserve selection order; filenames follow pagesFormat if provided
       for (let i = 0; i < selectedFiles.length; i++) {
         const file = selectedFiles[i];
 
@@ -119,25 +114,13 @@ export function MultiImageUploadInput<T extends object>({
         queuedEntries.push({ repoPath, publicPath, file });
       }
 
-      // 1) Update JSON state with new public paths (so Save will persist them)
+      // 1) Update JSON state
       const next = structuredClone(data) as T;
       setByPath(next, field.path, uploadedPublicPaths);
       onChangeData(next);
 
-      // 2) Queue all image uploads for Save-all
+      // 2) Queue image uploads (creates preview URLs in the shared module)
       queueImageUploads(queuedEntries);
-
-      // 3) Local previews from the selected files
-      const newPreviewUrls = selectedFiles.map((file) =>
-        URL.createObjectURL(file),
-      );
-      // Revoke previous previews if any
-      setPreviewUrls((prev) => {
-        if (prev && prev.length > 0) {
-          prev.forEach((url) => URL.revokeObjectURL(url));
-        }
-        return newPreviewUrls;
-      });
 
       setStatus("success");
     } catch (err) {
@@ -152,11 +135,13 @@ export function MultiImageUploadInput<T extends object>({
     }
   };
 
-  // What to show in the grid:
-  // - if user just selected files this session -> previewUrls
-  // - else -> whatever is in currentPages
+  // Thumbnails to show:
+  // - if there are queued previews for this folder, show those
+  // - otherwise, show whatever JSON currently has in pages[]
+  const queuedThumbs =
+    dirPublic ? getQueuedPreviewsForDir(dirPublic) : [];
   const thumbnails =
-    previewUrls && previewUrls.length > 0 ? previewUrls : currentPages;
+    queuedThumbs.length > 0 ? queuedThumbs : currentPages;
 
   return (
     <div className="space-y-3">

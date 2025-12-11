@@ -1,12 +1,15 @@
 // app/admin/_components/json-editor-image-single.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 import type { ImageUploadTarget } from "../_lib/image-upload-targets";
 import { buildRepoPathFromPublic } from "../_lib/json-editor-helpers";
-import { queueImageUpload } from "../_lib/pending-image-uploads";
+import {
+  queueImageUpload,
+  getPreviewUrlForPublicPath,
+} from "../_lib/pending-image-uploads";
 
 type ImageUploadInputProps<T extends object> = {
   field: FieldConfig;
@@ -24,24 +27,17 @@ export function ImageUploadInput<T extends object>({
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const raw = getByPath(data, field.path);
   const publicPath =
     typeof raw === "string" && raw.trim().length > 0 ? raw.trim() : "";
   const repoPath = publicPath ? buildRepoPathFromPublic(publicPath) : "";
 
-  // What we actually show in the admin preview
-  const previewSrc = previewUrl || publicPath || "/placeholder.png";
-
-  // Clean up object URL when component unmounts or preview changes
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
+  // Prefer queued preview (if user picked a new file), otherwise existing asset
+  const queuedPreview = publicPath
+    ? getPreviewUrlForPublicPath(publicPath)
+    : null;
+  const previewSrc = queuedPreview || publicPath || "/placeholder.png";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -50,7 +46,8 @@ export function ImageUploadInput<T extends object>({
     // Frontend validation: PNG only
     const name = file.name.toLowerCase();
     const type = file.type;
-    const looksLikePng = type === "image/png" || name.endsWith(".png");
+    const looksLikePng =
+      type === "image/png" || name.endsWith(".png");
 
     if (!looksLikePng) {
       setStatus("error");
@@ -73,24 +70,16 @@ export function ImageUploadInput<T extends object>({
     setError(null);
 
     try {
-      // 1) Update local JSON state (keeps the public path as-is)
+      // 1) Update JSON state (even if the value stays the same string)
       const next = structuredClone(data) as T;
       setByPath(next, field.path, publicPath);
       onChangeData(next);
 
-      // 2) Queue image for save-all (no immediate GitHub write)
+      // 2) Queue image for save-all (this creates the previewUrl internally)
       queueImageUpload({
         repoPath,
         publicPath,
         file,
-      });
-
-      // 3) Local live preview using object URL
-      const objectUrl = URL.createObjectURL(file);
-      // Revoke previous preview URL if any
-      setPreviewUrl((prev) => {
-        if (prev) URL.revokeObjectURL(prev);
-        return objectUrl;
       });
 
       setStatus("success");

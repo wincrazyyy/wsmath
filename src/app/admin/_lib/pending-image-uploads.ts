@@ -1,44 +1,87 @@
-"use client";
+// src/app/admin/_lib/pending-image-uploads.ts
 
 export type QueuedImageUpload = {
-  /** Path in the repo, e.g. "public/hero.png" */
-  repoPath: string;
-  /** Public URL, e.g. "/hero.png" */
-  publicPath: string;
-  /** The actual file selected in the browser */
+  repoPath: string;   // e.g. "public/hero.png"
+  publicPath: string; // e.g. "/hero.png"
   file: File;
+  previewUrl?: string; // object URL for client-side preview
 };
 
-let queue: QueuedImageUpload[] = [];
+const queue: QueuedImageUpload[] = [];
 
-/**
- * Add or replace a single queued image upload.
- * If another entry with the same repoPath exists, it is replaced.
- */
-export function queueImageUpload(entry: QueuedImageUpload) {
-  queue = queue.filter((item) => item.repoPath !== entry.repoPath);
-  queue.push(entry);
-}
-
-/**
- * Add or replace multiple image uploads.
- */
-export function queueImageUploads(entries: QueuedImageUpload[]) {
-  for (const entry of entries) {
-    queueImageUpload(entry);
+// Internal helper to revoke an existing preview URL if any
+function revokePreview(q: QueuedImageUpload) {
+  if (q.previewUrl) {
+    URL.revokeObjectURL(q.previewUrl);
+    q.previewUrl = undefined;
   }
 }
 
-/**
- * Get a snapshot of all queued uploads.
- */
+export function queueImageUpload(entry: {
+  repoPath: string;
+  publicPath: string;
+  file: File;
+}) {
+  // Remove any existing entry for the same repoPath so we don't stack duplicates
+  const existingIndex = queue.findIndex(
+    (q) => q.repoPath === entry.repoPath,
+  );
+  if (existingIndex !== -1) {
+    revokePreview(queue[existingIndex]!);
+    queue.splice(existingIndex, 1);
+  }
+
+  const previewUrl = URL.createObjectURL(entry.file);
+
+  queue.push({
+    repoPath: entry.repoPath,
+    publicPath: entry.publicPath,
+    file: entry.file,
+    previewUrl,
+  });
+}
+
+export function queueImageUploads(
+  entries: { repoPath: string; publicPath: string; file: File }[],
+) {
+  entries.forEach(queueImageUpload);
+}
+
 export function getQueuedImageUploads(): QueuedImageUpload[] {
+  // return a shallow copy so callers can't mutate internal state
   return [...queue];
 }
 
-/**
- * Clear the queue after a successful save.
- */
 export function clearQueuedImageUploads() {
-  queue = [];
+  for (const q of queue) {
+    revokePreview(q);
+  }
+  queue.length = 0;
+}
+
+/**
+ * Get preview URL for a specific public path, if it has been queued.
+ * e.g. "/hero.png"
+ */
+export function getPreviewUrlForPublicPath(
+  publicPath: string,
+): string | null {
+  const item = queue.find((q) => q.publicPath === publicPath);
+  return item?.previewUrl ?? null;
+}
+
+/**
+ * Get preview URLs for all queued images inside a given public folder.
+ * e.g. dirPublic = "/leaflets" → returns previews for "/leaflets/....png"
+ */
+export function getQueuedPreviewsForDir(
+  dirPublic: string,
+): string[] {
+  const prefix = dirPublic.endsWith("/")
+    ? dirPublic
+    : `${dirPublic}/`;
+
+  return queue
+    .filter((q) => q.previewUrl && q.publicPath.startsWith(prefix))
+    .map((q) => q.previewUrl!) ;
 }
