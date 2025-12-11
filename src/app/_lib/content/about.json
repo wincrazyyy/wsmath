@@ -1,0 +1,110 @@
+{
+  "header": {
+    "eyebrow": "ABOUT WSMATH",
+    "title": "Professional online math coaching",
+    "subtitle": "High-end, exam-focused tutoring for IBDP, A-Level and IGCSE students around the world.",
+    "chips": [
+      "🧠 1-to-1 coaching · Zoom live lessons 💻",
+      "📚 By-topic past papers · Exam strategy 🎯",
+      "🚀 Based in Hong Kong · Teach worldwide 🌏"
+    ],
+    "rightAccent": {
+      "heading": "Who I teach",
+      "badge": "IBDP · A-Level · IGCSE",
+      "mainValue": "Year 10–13",
+      "mainLabel": "students worldwide",
+      "mainSize": "sm",
+      "columns": [
+        {
+          "title": "IBDP Math",
+          "items": [
+            "AAHL",
+            "AIHL",
+            "AASL",
+            "AISL"
+          ]
+        },
+        {
+          "title": "Other programmes",
+          "items": [
+            "A-Level",
+            "IGCSE",
+            "IBMYP"
+          ]
+        }
+      ]
+    }
+  },
+  "hero": {
+    "imageSrc": "/about-hero.png",
+    "eyebrow": "Winson Siu • 專業教育家",
+    "area1": {
+      "title": "What you get",
+      "items": [
+        "Exam-technique playbooks and targeted drills for final-paper performance.",
+        "Weekly study plans with measurable goals and accountability.",
+        "Calculator mastery (e.g., Casio fx-CG50) and past-paper optimisation."
+      ]
+    },
+    "area2": {
+      "title": "How I teach",
+      "items": [
+        "Live Zoom lessons with iPad + Apple Pencil + GoodNotes for instant feedback.",
+        "Clear, step-by-step worked solutions and post-lesson homework.",
+        "English or Cantonese delivery; professional, results-first approach."
+      ]
+    }
+  },
+  "stats": [
+    "50%+ IBDP Level 7 track record",
+    "18,000+ teaching hours",
+    "250+ one-to-one students",
+    "A-Level Math & FM: A* pathway"
+  ],
+  "courses": [
+    "IBDP AAHL",
+    "IBDP AASL",
+    "IBDP AIHL",
+    "IBDP AISL",
+    "IBMYP Math",
+    "A-Level Edexcel (IAL YFM01) Further Math",
+    "A-Level Cambridge (CAIE 9231) Further Math",
+    "A-Level AQA (7367) Further Math",
+    "A-Level Edexcel (IAL YMA01, AL 9MA0) Math",
+    "A-Level Cambridge (CAIE 9709) Math",
+    "A-Level AQA (7357) Math",
+    "A-Level OCR (H240) Math",
+    "IGCSE Cambridge (0606) Additional Math",
+    "IGCSE Edexcel (4PM0) Further Math",
+    "IGCSE Cambridge (0607) International Math",
+    "IGCSE Cambridge (0580) Math",
+    "IGCSE Edexcel (4PM1) Math"
+  ],
+  "coursesSection": {
+    "title": "Courses covered",
+    "strapline": "IBDP · A-LEVEL · IGCSE",
+    "intro": "Full syllabus coverage from pre-IB / IGCSE all the way to IBDP final exams.",
+    "groups": [
+      {
+        "key": "ib",
+        "title": "IB programmes",
+        "caption": "IBDP · IBMYP",
+        "emphasize": true
+      },
+      {
+        "key": "alevel",
+        "title": "A-Level programmes",
+        "caption": "Edexcel · CAIE · AQA · OCR"
+      },
+      {
+        "key": "igcse",
+        "title": "IGCSE programmes",
+        "caption": "Cambridge · Edexcel"
+      }
+    ]
+  },
+  "ctaRibbon": {
+    "heading": "Limited 1:1 slots — start boosting IBDP results now",
+    "subheading": "Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL."
+  }
+}

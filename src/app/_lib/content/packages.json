@@ -1,0 +1,99 @@
+{
+  "header": {
+    "eyebrow": "COACHING PACKAGES",
+    "title": "Choose the path that fits your goal",
+    "subtitle": "From high-leverage small group classes to fully tailored 1-to-1 coaching.",
+    "chips": [
+      "🚀 Rapid score improvement · Level 7 / A* focus 🎯",
+      "📚 By-topic mastery · Past paper precision 🧠",
+      "💼 Premium 1-to-1 mentorship · Personalised strategy 🔍",
+      "🌏 Hong Kong excellence · Teach worldwide online 💻"
+    ],
+    "rightAccent": {
+      "heading": "Results snapshot",
+      "badge": "Since 2017",
+      "mainValue": "250+",
+      "mainLabel": "students coached 1-on-1",
+      "mainSize": "sm",
+      "columns": [
+        {
+          "title": "IBDP HL 7 rate",
+          "items": [
+            "50%+"
+          ]
+        },
+        {
+          "title": "IGCSE A / A*",
+          "items": [
+            "70%+"
+          ]
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "privateLabel": "Standard 1-to-1 rate",
+    "groupLabel": "Group course investment",
+    "title": "Value comparison",
+    "privateLinePrefix": "32 hours 1-to-1 ≈",
+    "groupLineSuffix": "for 32 structured group sessions."
+  },
+  "private": {
+    "label": "Premium 1-to-1",
+    "rateLabel": "Typical rate",
+    "hourlyRate": "1500",
+    "title": "Private online coaching",
+    "description": "For students who want maximum customisation, tight accountability, and fast score improvements.",
+    "points": [
+      "Deep dive into school tests, IA preparation, and mock exams.",
+      "Fully personalised by-topic drills and homework, adjusted weekly.",
+      "Weekly performance tracking with targeted correction of weak topics.",
+      "Ideal if you’re pushing for Level 6–7 / A* and want strict pacing."
+    ],
+    "intensive": {
+      "label": "8-lesson intensive",
+      "lessons": "8",
+      "bodyPrefix": "Around",
+      "points": [
+        "Priority online correspondence.",
+        "Unlimited tailor-made past-paper practice with step-by-step solutions.",
+        "8 online lessons of 60 minutes with custom time allocation.",
+        "Detailed summary by topic and school mock exam prediction.",
+        "IBDP Math IA topic setup & guidance until completion.",
+        "Expected 2 grades improvement or better (e.g. from 5 to 7 in IBDP or from B to A* in A-Level) with full commitment.",
+        "GoodNotes 6 one-time payment sponsorship.",
+        "Referral rebate of up to HKD 3,000 per student referred."
+      ]
+    },
+    "buttonNote": "Mention “1-to-1 8-lesson package” and your current grade / target score."
+  },
+  "group": {
+    "label": "High-value group",
+    "tag": "Most popular",
+    "programmeLabel": "Full programme",
+    "title": "32-lesson Zoom group course",
+    "description": "Structured syllabus for IBMYP / IGCSE students bridging into IBDP AASL / AISL, with full notes and exam-style practice.",
+    "price": "16800",
+    "lessons": "32",
+    "points": [
+      "Approx. 32 live Zoom lessons + high-quality teaching videos.",
+      "By-topic notes, GoodNotes materials, and curated past-paper sets.",
+      "Designed so motivated students can rely on group only and still reach strong exam results."
+    ],
+    "leaflet": {
+      "label": "Course leaflet preview",
+      "pagesDir": "/leaflets",
+      "pagesFormat": "group-leaflet-page-",
+      "pages": [
+        "/leaflets/group-leaflet-page-1.png",
+        "/leaflets/group-leaflet-page-2.png",
+        "/leaflets/group-leaflet-page-3.png",
+        "/leaflets/group-leaflet-page-4.png",
+        "/leaflets/group-leaflet-page-5.png",
+        "/leaflets/group-leaflet-page-6.png",
+        "/leaflets/group-leaflet-page-7.png"
+      ],
+      "autoAdvanceSeconds": "5"
+    }
+  }
+}
