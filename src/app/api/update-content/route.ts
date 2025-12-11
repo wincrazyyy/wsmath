@@ -145,8 +145,16 @@ export async function POST(req: NextRequest) {
     const repo = process.env.GITHUB_REPO_NAME;
     const token = process.env.GITHUB_TOKEN;
     // Default to the actual JSON folder by default
-    const basePath =
-      process.env.CONTENT_BASE_PATH ?? "src/app/_lib/content/json";
+    const rawBasePath =
+      process.env.CONTENT_BASE_PATH ?? "src/app/_lib/content";
+
+    // Ensure we always write JSON into a "json" subfolder
+    const basePathRoot = rawBasePath.replace(/\/$/, ""); // strip trailing slash
+
+    const jsonBasePath = basePathRoot.endsWith("/json")
+      ? basePathRoot
+      : `${basePathRoot}/json`;
+  
     const branch = process.env.GITHUB_BRANCH ?? "main";
 
     if (!owner || !repo || !token) {
@@ -206,7 +214,7 @@ export async function POST(req: NextRequest) {
     }[] = [];
 
     for (const { slug, content } of body.updates) {
-      const path = `${basePath.replace(/\/$/, "")}/${slug}.json`;
+      const path = `${jsonBasePath.replace(/\/$/, "")}/${slug}.json`;
       const fileContent = JSON.stringify(content, null, 2);
       const sha = await createTextBlob(apiBase, headers, fileContent);
       jsonTreeEntries.push({
