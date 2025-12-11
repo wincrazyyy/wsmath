@@ -64,6 +64,35 @@ export default function AdminDashboardPage() {
   );
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // Track whether *any* JSON fields have been edited since last successful save
+  const [hasJsonChanges, setHasJsonChanges] = useState(false);
+
+  // Wrap the setters so we can mark JSON as dirty whenever an editor changes data
+  const handleHomeChange = (next: HomeContent) => {
+    setHomeData(next);
+    setHasJsonChanges(true);
+  };
+
+  const handleAboutChange = (next: AboutContent) => {
+    setAboutData(next);
+    setHasJsonChanges(true);
+  };
+
+  const handleTestimonialsChange = (next: TestimonialsContent) => {
+    setTestimonialsData(next);
+    setHasJsonChanges(true);
+  };
+
+  const handlePackagesChange = (next: PackagesContent) => {
+    setPackagesData(next);
+    setHasJsonChanges(true);
+  };
+
+  const handleMiscChange = (next: MiscContent) => {
+    setMiscData(next);
+    setHasJsonChanges(true);
+  };
+
   const handleSaveAll = async () => {
     setIsSaving(true);
     setSaveStatus("idle");
@@ -88,8 +117,8 @@ export default function AdminDashboardPage() {
           const arrayBuffer = await item.file.arrayBuffer();
           const contentBase64 = arrayBufferToBase64(arrayBuffer);
           return {
-            targetPath: item.repoPath,   // e.g. "public/hero.png"
-            contentBase64,               // PNG content (no data URI prefix)
+            targetPath: item.repoPath, // e.g. "public/hero.png"
+            contentBase64, // PNG content (no data URI prefix)
           };
         }),
       );
@@ -122,8 +151,9 @@ export default function AdminDashboardPage() {
       } else {
         setSaveStatus("success");
         setSaveError(null);
-        // 5) Clear queue only on success
+        // 5) Clear queue + reset JSON dirty flag only on success
         clearQueuedImageUploads();
+        setHasJsonChanges(false);
       }
     } catch (err) {
       console.error("Save all error:", err);
@@ -139,7 +169,7 @@ export default function AdminDashboardPage() {
       return (
         <HomeEditor<HomeContent>
           data={homeData}
-          onChangeData={setHomeData}
+          onChangeData={handleHomeChange}
         />
       );
     }
@@ -148,7 +178,7 @@ export default function AdminDashboardPage() {
       return (
         <AboutEditor<AboutContent>
           data={aboutData}
-          onChangeData={setAboutData}
+          onChangeData={handleAboutChange}
         />
       );
     }
@@ -157,7 +187,7 @@ export default function AdminDashboardPage() {
       return (
         <TestimonialsEditor
           data={testimonialsData}
-          onChangeData={setTestimonialsData}
+          onChangeData={handleTestimonialsChange}
         />
       );
     }
@@ -166,7 +196,7 @@ export default function AdminDashboardPage() {
       return (
         <PackagesEditor<PackagesContent>
           data={packagesData}
-          onChangeData={setPackagesData}
+          onChangeData={handlePackagesChange}
         />
       );
     }
@@ -175,10 +205,14 @@ export default function AdminDashboardPage() {
     return (
       <MiscEditor<MiscContent>
         data={miscData}
-        onChangeData={setMiscData}
+        onChangeData={handleMiscChange}
       />
     );
   };
+
+  // Any queued images also count as unsaved changes
+  const hasQueuedImages = getQueuedImageUploads().length > 0;
+  const hasUnsavedChanges = hasJsonChanges || hasQueuedImages;
 
   return (
     <main className="min-h-screen bg-neutral-50">
@@ -203,8 +237,19 @@ export default function AdminDashboardPage() {
               className="inline-flex items-center rounded-md bg-violet-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-violet-700 disabled:cursor-not-allowed disabled:bg-neutral-400"
             >
               {isSaving ? "Saving all…" : "Save all changes"}
+              {hasUnsavedChanges && !isSaving && (
+                <span className="ml-2 h-2 w-2 rounded-full bg-amber-400" />
+              )}
             </button>
-            {saveStatus === "success" && (
+
+            {hasUnsavedChanges && !isSaving && (
+              <p className="text-[11px] text-amber-600">
+                You have unsaved changes (content or images). Remember to click{" "}
+                <span className="font-semibold">&quot;Save all changes&quot;</span>.
+              </p>
+            )}
+
+            {saveStatus === "success" && !hasUnsavedChanges && (
               <p className="text-[11px] text-emerald-600">
                 Saved. Cloudflare will redeploy with all updates in a single
                 commit.

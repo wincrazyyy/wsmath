@@ -1,7 +1,7 @@
 // app/admin/_components/json-editor-image-multi.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 import type { ImageUploadTarget } from "../_lib/image-upload-targets";
@@ -25,8 +25,10 @@ export function MultiImageUploadInput<T extends object>({
   data,
   onChangeData,
 }: MultiImageUploadInputProps<T>) {
-  const [status, setStatus] = useState<"idle" | "queued" | "error">("idle");
+  const [isUploading, setIsUploading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [previewUrls, setPreviewUrls] = useState<string[] | null>(null);
 
   const rawPages = getByPath(data, field.path);
   const currentPages = toStringArray(rawPages);
@@ -43,6 +45,15 @@ export function MultiImageUploadInput<T extends object>({
       ? pagesFormatValue.trim()
       : "";
 
+  // Clean up object URLs on unmount or when new previews are set
+  useEffect(() => {
+    return () => {
+      if (previewUrls && previewUrls.length > 0) {
+        previewUrls.forEach((url) => URL.revokeObjectURL(url));
+      }
+    };
+  }, [previewUrls]);
+
   const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
@@ -53,8 +64,7 @@ export function MultiImageUploadInput<T extends object>({
     const invalid = selectedFiles.filter((file) => {
       const name = file.name.toLowerCase();
       const type = file.type;
-      const looksLikePng =
-        type === "image/png" || name.endsWith(".png");
+      const looksLikePng = type === "image/png" || name.endsWith(".png");
       return !looksLikePng;
     });
 
@@ -78,48 +88,82 @@ export function MultiImageUploadInput<T extends object>({
       return;
     }
 
-    // Build queued uploads + public paths
-    const uploadedPublicPaths: string[] = [];
-    const queuedEntries = selectedFiles.map((file, i) => {
-      let fileName: string;
-      if (baseFormat) {
-        // e.g. "group-leaflet-page-" + 1 + ".png"
-        fileName = `${baseFormat}${i + 1}.png`;
-      } else {
-        // fallback: use original filename
-        fileName = file.name;
+    setIsUploading(true);
+    setStatus("idle");
+    setError(null);
+
+    try {
+      const uploadedPublicPaths: string[] = [];
+      const queuedEntries: {
+        repoPath: string;
+        publicPath: string;
+        file: File;
+      }[] = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+
+        let fileName: string;
+        if (baseFormat) {
+          // e.g. "group-leaflet-page-" + 1 + ".png"
+          fileName = `${baseFormat}${i + 1}.png`;
+        } else {
+          // fallback: use original filename
+          fileName = file.name;
+        }
+
+        const repoPath = `${dirRepo}/${fileName}`;
+        const publicPath = `${dirPublic}/${fileName}`;
+
+        uploadedPublicPaths.push(publicPath);
+        queuedEntries.push({ repoPath, publicPath, file });
       }
 
-      const repoPath = `${dirRepo}/${fileName}`;
-      const publicPath = `${dirPublic}/${fileName}`;
-      uploadedPublicPaths.push(publicPath);
+      // 1) Update JSON state with new public paths (so Save will persist them)
+      const next = structuredClone(data) as T;
+      setByPath(next, field.path, uploadedPublicPaths);
+      onChangeData(next);
 
-      return {
-        repoPath,
-        publicPath,
-        file,
-      };
-    });
+      // 2) Queue all image uploads for Save-all
+      queueImageUploads(queuedEntries);
 
-    // Queue all uploads (no network yet)
-    queueImageUploads(queuedEntries);
+      // 3) Local previews from the selected files
+      const newPreviewUrls = selectedFiles.map((file) =>
+        URL.createObjectURL(file),
+      );
+      // Revoke previous previews if any
+      setPreviewUrls((prev) => {
+        if (prev && prev.length > 0) {
+          prev.forEach((url) => URL.revokeObjectURL(url));
+        }
+        return newPreviewUrls;
+      });
 
-    // Overwrite JSON pages array with new paths
-    const next = structuredClone(data) as T;
-    setByPath(next, field.path, uploadedPublicPaths);
-    onChangeData(next);
-
-    setStatus("queued");
-    setError(null);
-    e.target.value = "";
+      setStatus("success");
+    } catch (err) {
+      console.error("Multi image upload error:", err);
+      setStatus("error");
+      setError(
+        err instanceof Error ? err.message : "Unknown upload error.",
+      );
+    } finally {
+      setIsUploading(false);
+      e.target.value = "";
+    }
   };
+
+  // What to show in the grid:
+  // - if user just selected files this session -> previewUrls
+  // - else -> whatever is in currentPages
+  const thumbnails =
+    previewUrls && previewUrls.length > 0 ? previewUrls : currentPages;
 
   return (
     <div className="space-y-3">
       {/* Preview grid */}
-      {currentPages.length > 0 && (
+      {thumbnails.length > 0 && (
         <div className="grid grid-cols-4 gap-2">
-          {currentPages.map((src, idx) => (
+          {thumbnails.map((src, idx) => (
             <div
               key={`${src}-${idx}`}
               className="relative h-16 w-full overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100"
@@ -163,11 +207,11 @@ export function MultiImageUploadInput<T extends object>({
           </p>
         )}
         <p className="mt-1 text-[11px] text-neutral-500">
-          Uploading will overwrite the list at{" "}
+          On save, this will overwrite the list at{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
             {field.path}
-          </code>{" "}
-          when you click <strong>Save</strong>.
+          </code>
+          .
         </p>
       </div>
 
@@ -179,14 +223,16 @@ export function MultiImageUploadInput<T extends object>({
           multiple
           className="hidden"
           onChange={handleFilesChange}
+          disabled={isUploading}
         />
-        {status === "queued" ? "Re-upload & replace pages" : "Upload & replace pages"}
+        {isUploading ? "Preparing pages…" : "Choose pages (PNG)"}
       </label>
 
       {/* Status */}
-      {status === "queued" && (
+      {status === "success" && (
         <p className="text-[11px] text-emerald-600">
-          Pages queued. Changes will be committed when you click Save.
+          Pages queued. Remember to click &quot;Save all changes&quot; to
+          commit.
         </p>
       )}
       {status === "error" && (

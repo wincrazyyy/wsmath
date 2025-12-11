@@ -1,7 +1,7 @@
 // app/admin/_components/json-editor-image-single.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 import type { ImageUploadTarget } from "../_lib/image-upload-targets";
@@ -21,15 +21,27 @@ export function ImageUploadInput<T extends object>({
   data,
   onChangeData,
 }: ImageUploadInputProps<T>) {
-  const [status, setStatus] = useState<"idle" | "queued" | "error">("idle");
+  const [isUploading, setIsUploading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const raw = getByPath(data, field.path);
   const publicPath =
     typeof raw === "string" && raw.trim().length > 0 ? raw.trim() : "";
   const repoPath = publicPath ? buildRepoPathFromPublic(publicPath) : "";
 
-  const previewSrc = publicPath || "/placeholder.png"; // simple fallback
+  // What we actually show in the admin preview
+  const previewSrc = previewUrl || publicPath || "/placeholder.png";
+
+  // Clean up object URL when component unmounts or preview changes
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,8 +50,7 @@ export function ImageUploadInput<T extends object>({
     // Frontend validation: PNG only
     const name = file.name.toLowerCase();
     const type = file.type;
-    const looksLikePng =
-      type === "image/png" || name.endsWith(".png");
+    const looksLikePng = type === "image/png" || name.endsWith(".png");
 
     if (!looksLikePng) {
       setStatus("error");
@@ -57,21 +68,42 @@ export function ImageUploadInput<T extends object>({
       return;
     }
 
-    // Queue the upload (no network call yet)
-    queueImageUpload({
-      repoPath,
-      publicPath,
-      file,
-    });
-
-    // Keep JSON path as-is (it already holds the public path)
-    const next = structuredClone(data) as T;
-    setByPath(next, field.path, publicPath);
-    onChangeData(next);
-
-    setStatus("queued");
+    setIsUploading(true);
+    setStatus("idle");
     setError(null);
-    e.target.value = "";
+
+    try {
+      // 1) Update local JSON state (keeps the public path as-is)
+      const next = structuredClone(data) as T;
+      setByPath(next, field.path, publicPath);
+      onChangeData(next);
+
+      // 2) Queue image for save-all (no immediate GitHub write)
+      queueImageUpload({
+        repoPath,
+        publicPath,
+        file,
+      });
+
+      // 3) Local live preview using object URL
+      const objectUrl = URL.createObjectURL(file);
+      // Revoke previous preview URL if any
+      setPreviewUrl((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return objectUrl;
+      });
+
+      setStatus("success");
+    } catch (err) {
+      console.error("Image upload queue error:", err);
+      setStatus("error");
+      setError(
+        err instanceof Error ? err.message : "Unknown upload error.",
+      );
+    } finally {
+      setIsUploading(false);
+      e.target.value = "";
+    }
   };
 
   return (
@@ -105,11 +137,11 @@ export function ImageUploadInput<T extends object>({
             </p>
           )}
           <p className="mt-1 text-[11px] text-neutral-500">
-            Selected file will be uploaded to{" "}
+            On save, this will overwrite file at{" "}
             <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
               {repoPath || "N/A"}
             </code>{" "}
-            when you click <strong>Save</strong>.
+            in the repo.
           </p>
         </div>
       </div>
@@ -121,14 +153,16 @@ export function ImageUploadInput<T extends object>({
           accept="image/png"
           className="hidden"
           onChange={handleFileChange}
+          disabled={isUploading}
         />
-        {"Select PNG & queue upload"}
+        {isUploading ? "Preparing image…" : "Choose image (PNG)"}
       </label>
 
       {/* Status */}
-      {status === "queued" && (
+      {status === "success" && (
         <p className="text-[11px] text-emerald-600">
-          Image queued. Changes will be committed when you click Save.
+          Image queued. Remember to click &quot;Save all changes&quot; to
+          commit.
         </p>
       )}
       {status === "error" && (
