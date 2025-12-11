@@ -1,3 +1,4 @@
+// src/app/_components/sections/testimonials/testimonials.tsx
 "use client";
 
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
@@ -11,6 +12,7 @@ import { StudentVoicesVideo } from "./student-voices-video";
 import { FeaturedTestimonialsGrid } from "./featured-testimonials-grid";
 import { TestimonialCarousel } from "./testimonial-carousel";
 import { TestimonialsCta } from "./testimonials-cta";
+import { GradeImprovementsSection } from "./grade-improvements-section";
 
 export function Testimonials() {
   const data = testimonialsContent as TestimonialsConfig;
@@ -35,12 +37,16 @@ export function Testimonials() {
       )}
 
       {carousel.length > 0 && (
-        <div className="mt-10">
+        <div className="mt-8">
           <TestimonialCarousel items={carousel as Testimonial[]} />
         </div>
       )}
 
-      <div className="container my-16 max-w-5xl">
+      <div className="container mt-8 max-w-5xl space-y-10">
+        <GradeImprovementsSection />
+      </div>
+
+      <div className="container my-16 max-w-5xl space-y-10">
         <TestimonialsCta />
       </div>
     </>
