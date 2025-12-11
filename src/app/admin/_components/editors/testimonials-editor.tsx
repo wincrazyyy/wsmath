@@ -1,11 +1,11 @@
 // app/admin/_components/testimonials-editor.tsx
 "use client";
 
-import type { FieldConfig } from "../_lib/fields";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import {
   TESTIMONIALS_FIELDS,
   TESTIMONIALS_HEADER_FIELDS,
-} from "../_lib/testimonials-fields";
+} from "@/app/admin/_lib/fields/testimonials-fields";
 import { JsonEditor } from "./json-editor";
 
 type SubTab = "header" | "video" | "featured" | "carousel" | "cta";

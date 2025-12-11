@@ -2,18 +2,18 @@
 "use client";
 
 import { useState } from "react";
-import type { FieldConfig } from "../_lib/fields";
-import { getByPath, setByPath } from "../_lib/json-path";
-import type { ImageUploadTarget } from "../_lib/image-upload-targets";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { getByPath, setByPath } from "@/app/admin/_lib/json-path";
+import type { ImageUploadTarget } from "@/app/admin/_lib/image-upload-targets";
 import {
   toStringArray,
   normalizeDirPublic,
   getBasePath,
-} from "../_lib/json-editor-helpers";
+} from "../../_lib/json-editor-helpers";
 import {
   queueImageUploads,
   getQueuedPreviewsForDir,
-} from "../_lib/pending-image-uploads";
+} from "../../_lib/pending-image-uploads";
 
 type MultiImageUploadInputProps<T extends object> = {
   field: FieldConfig;

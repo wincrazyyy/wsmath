@@ -2,13 +2,13 @@
 "use client";
 
 import { useState } from "react";
-import type { FieldConfig } from "../_lib/fields";
-import { getByPath, setByPath } from "../_lib/json-path";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { getByPath, setByPath } from "@/app/admin/_lib/json-path";
 import {
   IMAGE_UPLOAD_TARGETS,
   type ImageUploadTarget,
-} from "../_lib/image-upload-targets";
-import { toStringArray } from "../_lib/json-editor-helpers";
+} from "@/app/admin/_lib/image-upload-targets";
+import { toStringArray } from "@/app/admin/_lib/json-editor-helpers";
 import { ImageUploadInput } from "./image-upload-input"
 import { MultiImageUploadInput } from "./multi-image-upload-input";
 

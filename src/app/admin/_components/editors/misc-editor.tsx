@@ -1,8 +1,8 @@
 // app/admin/_components/misc-editor.tsx
 "use client";
 
-import type { FieldConfig } from "../_lib/fields";
-import { MISC_FIELDS } from "../_lib/misc-fields";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { MISC_FIELDS } from "@/app/admin/_lib/fields/misc-fields";
 import { JsonEditor } from "./json-editor";
 
 type MiscEditorProps<T extends object> = {

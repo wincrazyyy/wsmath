@@ -1,8 +1,8 @@
 // app/admin/_components/home-editor.tsx
 "use client";
 
-import type { FieldConfig } from "../_lib/fields";
-import { HOME_FIELDS } from "../_lib/home-fields";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { HOME_FIELDS } from "@/app/admin/_lib/fields/home-fields";
 import { JsonEditor } from "./json-editor";
 
 type HomeEditorProps<T extends object> = {

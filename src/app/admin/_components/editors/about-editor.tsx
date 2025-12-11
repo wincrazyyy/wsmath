@@ -1,14 +1,14 @@
 // app/admin/_components/about-editor.tsx
 "use client";
 
-import type { FieldConfig } from "../_lib/fields";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import {
   ABOUT_HEADER_FIELDS,
   ABOUT_HERO_FIELDS,
   ABOUT_STATS_COURSES_FIELDS,
   ABOUT_CTA_FIELDS,
   ABOUT_FIELDS,
-} from "../_lib/about-fields";
+} from "@/app/admin/_lib/fields/about-fields";
 import { JsonEditor } from "./json-editor";
 
 type SubTab = "header" | "hero" | "statsCourses" | "cta";

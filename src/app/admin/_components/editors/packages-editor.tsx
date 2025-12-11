@@ -1,8 +1,8 @@
 // app/admin/_components/packages-editor.tsx
 "use client";
 
-import type { FieldConfig } from "../_lib/fields";
-import { PACKAGES_FIELDS } from "../_lib/packages-fields";
+import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { PACKAGES_FIELDS } from "@/app/admin/_lib/fields/packages-fields";
 import { JsonEditor } from "./json-editor";
 
 type SubTab = "header" | "comparison" | "private" | "group";
