@@ -3,12 +3,50 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const runtime = "edge";
 
-type BatchPayload = {
-  updates: {
-    slug: string;        // "home" | "about" | "testimonials" | "misc"
-    content: unknown;    // the JSON blob for that file
-  }[];
+type ContentUpdate = {
+  slug: string;      // "home" | "about" | "testimonials" | "misc" | ...
+  content: unknown;  // the JSON blob for that file
 };
+
+type ImageUpdate = {
+  /** Path inside the repo, e.g. "public/hero.png" */
+  targetPath: string;
+  /** Base64-encoded PNG file content (no data URI prefix) */
+  contentBase64: string;
+};
+
+type BatchPayload = {
+  updates: ContentUpdate[];
+  images?: ImageUpdate[];
+};
+
+// ---------- helpers for PNG validation ----------
+
+function base64ToUint8Array(base64: string): Uint8Array {
+  // atob is available in edge runtimes
+  const binary = atob(base64);
+  const len = binary.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
+// Simple PNG signature check: 89 50 4E 47 0D 0A 1A 0A
+function isPngBytes(bytes: Uint8Array): boolean {
+  if (bytes.length < 8) return false;
+  return (
+    bytes[0] === 0x89 &&
+    bytes[1] === 0x50 &&
+    bytes[2] === 0x4e &&
+    bytes[3] === 0x47 &&
+    bytes[4] === 0x0d &&
+    bytes[5] === 0x0a &&
+    bytes[6] === 0x1a &&
+    bytes[7] === 0x0a
+  );
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,7 +55,7 @@ export async function POST(req: NextRequest) {
     if (!body.updates || body.updates.length === 0) {
       return NextResponse.json(
         { error: "No updates provided" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -31,7 +69,7 @@ export async function POST(req: NextRequest) {
     if (!owner || !repo || !token) {
       return NextResponse.json(
         { error: "Server misconfigured: missing GitHub env vars" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -40,16 +78,18 @@ export async function POST(req: NextRequest) {
       Accept: "application/vnd.github+json",
     };
 
+    const apiBase = `https://api.github.com/repos/${owner}/${repo}`;
+
     // Get current HEAD commit for the branch
     const refResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
-      { headers }
+      `${apiBase}/git/refs/heads/${branch}`,
+      { headers },
     );
     if (!refResp.ok) {
       const text = await refResp.text();
       return NextResponse.json(
         { error: "Failed to fetch branch ref", detail: text },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const refJson = (await refResp.json()) as {
@@ -59,14 +99,14 @@ export async function POST(req: NextRequest) {
 
     // Get the commit to find its tree
     const commitResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/commits/${currentCommitSha}`,
-      { headers }
+      `${apiBase}/git/commits/${currentCommitSha}`,
+      { headers },
     );
     if (!commitResp.ok) {
       const text = await commitResp.text();
       return NextResponse.json(
         { error: "Failed to fetch commit", detail: text },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const commitJson = (await commitResp.json()) as {
@@ -74,8 +114,8 @@ export async function POST(req: NextRequest) {
     };
     const baseTreeSha = commitJson.tree.sha;
 
-    // Build tree entries for each updated file (GitHub will create blobs)
-    const treeEntries = body.updates.map(({ slug, content }) => {
+    // Build tree entries for each updated JSON file (GitHub will create blobs)
+    const jsonTreeEntries = body.updates.map(({ slug, content }) => {
       const path = `${basePath.replace(/\/$/, "")}/${slug}.json`;
       const fileContent = JSON.stringify(content, null, 2);
       return {
@@ -86,9 +126,114 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    // Create a new tree
+    // Build tree entries for images (via blobs)
+    const imageTreeEntries: {
+      path: string;
+      mode: "100644";
+      type: "blob";
+      sha: string;
+    }[] = [];
+
+    if (body.images && body.images.length > 0) {
+      for (const img of body.images) {
+        const { targetPath, contentBase64 } = img;
+
+        if (typeof targetPath !== "string" || typeof contentBase64 !== "string") {
+          return NextResponse.json(
+            { error: "Invalid image payload (targetPath/contentBase64)" },
+            { status: 400 },
+          );
+        }
+
+        // Basic safety guard – no directory traversal
+        if (targetPath.includes("..")) {
+          return NextResponse.json(
+            { error: `Invalid targetPath: ${targetPath}` },
+            { status: 400 },
+          );
+        }
+
+        // Must be inside public/
+        if (!targetPath.startsWith("public/")) {
+          return NextResponse.json(
+            {
+              error: "Invalid targetPath",
+              detail: `Image targetPath must start with "public/". Got: ${targetPath}`,
+            },
+            { status: 400 },
+          );
+        }
+
+        // Enforce .png extension
+        if (!targetPath.toLowerCase().endsWith(".png")) {
+          return NextResponse.json(
+            {
+              error: "Invalid targetPath",
+              detail: `Target path must end with .png (got ${targetPath}).`,
+            },
+            { status: 400 },
+          );
+        }
+
+        // Validate PNG signature from content
+        let bytes: Uint8Array;
+        try {
+          bytes = base64ToUint8Array(contentBase64);
+        } catch {
+          return NextResponse.json(
+            {
+              error: "Invalid image content",
+              detail: "contentBase64 is not valid base64.",
+            },
+            { status: 400 },
+          );
+        }
+
+        if (!isPngBytes(bytes)) {
+          return NextResponse.json(
+            {
+              error: "Invalid image content",
+              detail: "Uploaded file is not a valid PNG image.",
+            },
+            { status: 400 },
+          );
+        }
+
+        // Create a blob for this image
+        const blobResp = await fetch(`${apiBase}/git/blobs`, {
+          method: "POST",
+          headers: {
+            ...headers,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            content: contentBase64,
+            encoding: "base64",
+          }),
+        });
+
+        if (!blobResp.ok) {
+          const text = await blobResp.text();
+          return NextResponse.json(
+            { error: "Failed to create image blob", detail: text },
+            { status: 500 },
+          );
+        }
+
+        const blobJson = (await blobResp.json()) as { sha: string };
+
+        imageTreeEntries.push({
+          path: targetPath,
+          mode: "100644",
+          type: "blob",
+          sha: blobJson.sha,
+        });
+      }
+    }
+
+    // Create a new tree including JSON & image entries
     const treeResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/trees`,
+      `${apiBase}/git/trees`,
       {
         method: "POST",
         headers: {
@@ -97,28 +242,35 @@ export async function POST(req: NextRequest) {
         },
         body: JSON.stringify({
           base_tree: baseTreeSha,
-          tree: treeEntries,
+          tree: [
+            ...jsonTreeEntries,
+            ...imageTreeEntries,
+          ],
         }),
-      }
+      },
     );
     if (!treeResp.ok) {
       const text = await treeResp.text();
       return NextResponse.json(
         { error: "Failed to create tree", detail: text },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const treeJson = (await treeResp.json()) as { sha: string };
     const newTreeSha = treeJson.sha;
 
-    // Create a new commit pointing to that tree
-    const commitMessage =
-      body.updates.length === 1
-        ? `Update ${body.updates[0]!.slug}.json via WSMath admin`
-        : `Batch update content via WSMath admin`;
+    const hasMultiple = body.updates.length + (body.images?.length ?? 0) > 1;
 
+    const commitMessage =
+      hasMultiple
+        ? `Batch update content via WSMath admin`
+        : body.updates.length === 1
+          ? `Update ${body.updates[0]!.slug}.json via WSMath admin`
+          : `Update assets via WSMath admin`;
+
+    // Create a new commit pointing to that tree
     const newCommitResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/commits`,
+      `${apiBase}/git/commits`,
       {
         method: "POST",
         headers: {
@@ -130,13 +282,13 @@ export async function POST(req: NextRequest) {
           tree: newTreeSha,
           parents: [currentCommitSha],
         }),
-      }
+      },
     );
     if (!newCommitResp.ok) {
       const text = await newCommitResp.text();
       return NextResponse.json(
         { error: "Failed to create commit", detail: text },
-        { status: 500 }
+        { status: 500 },
       );
     }
     const newCommitJson = (await newCommitResp.json()) as { sha: string };
@@ -144,7 +296,7 @@ export async function POST(req: NextRequest) {
 
     // Move the branch ref to point to the new commit
     const updateRefResp = await fetch(
-      `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`,
+      `${apiBase}/git/refs/heads/${branch}`,
       {
         method: "PATCH",
         headers: {
@@ -155,13 +307,13 @@ export async function POST(req: NextRequest) {
           sha: newCommitSha,
           force: false,
         }),
-      }
+      },
     );
     if (!updateRefResp.ok) {
       const text = await updateRefResp.text();
       return NextResponse.json(
         { error: "Failed to update branch ref", detail: text },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -171,7 +323,7 @@ export async function POST(req: NextRequest) {
       err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(
       { error: "Server error", detail: message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

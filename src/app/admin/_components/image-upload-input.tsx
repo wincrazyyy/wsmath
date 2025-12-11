@@ -6,6 +6,7 @@ import type { FieldConfig } from "../_lib/fields";
 import { getByPath, setByPath } from "../_lib/json-path";
 import type { ImageUploadTarget } from "../_lib/image-upload-targets";
 import { buildRepoPathFromPublic } from "../_lib/json-editor-helpers";
+import { queueImageUpload } from "../_lib/pending-image-uploads";
 
 type ImageUploadInputProps<T extends object> = {
   field: FieldConfig;
@@ -20,8 +21,7 @@ export function ImageUploadInput<T extends object>({
   data,
   onChangeData,
 }: ImageUploadInputProps<T>) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "queued" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const raw = getByPath(data, field.path);
@@ -31,9 +31,7 @@ export function ImageUploadInput<T extends object>({
 
   const previewSrc = publicPath || "/placeholder.png"; // simple fallback
 
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -59,43 +57,21 @@ export function ImageUploadInput<T extends object>({
       return;
     }
 
-    setIsUploading(true);
-    setStatus("idle");
+    // Queue the upload (no network call yet)
+    queueImageUpload({
+      repoPath,
+      publicPath,
+      file,
+    });
+
+    // Keep JSON path as-is (it already holds the public path)
+    const next = structuredClone(data) as T;
+    setByPath(next, field.path, publicPath);
+    onChangeData(next);
+
+    setStatus("queued");
     setError(null);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("targetPath", repoPath);
-
-      const resp = await fetch("/api/upload-image", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!resp.ok) {
-        const json = await resp.json().catch(() => null);
-        const msg =
-          json?.error || json?.detail || "Failed to upload image.";
-        throw new Error(msg);
-      }
-
-      // Keep JSON path as-is (it already holds the public path)
-      const next = structuredClone(data) as T;
-      setByPath(next, field.path, publicPath);
-      onChangeData(next);
-
-      setStatus("success");
-    } catch (err) {
-      console.error("Image upload error:", err);
-      setStatus("error");
-      setError(
-        err instanceof Error ? err.message : "Unknown upload error.",
-      );
-    } finally {
-      setIsUploading(false);
-      e.target.value = "";
-    }
+    e.target.value = "";
   };
 
   return (
@@ -129,11 +105,11 @@ export function ImageUploadInput<T extends object>({
             </p>
           )}
           <p className="mt-1 text-[11px] text-neutral-500">
-            Uploading will overwrite file at{" "}
+            Selected file will be uploaded to{" "}
             <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
               {repoPath || "N/A"}
             </code>{" "}
-            in the repo.
+            when you click <strong>Save</strong>.
           </p>
         </div>
       </div>
@@ -145,20 +121,19 @@ export function ImageUploadInput<T extends object>({
           accept="image/png"
           className="hidden"
           onChange={handleFileChange}
-          disabled={isUploading}
         />
-        {isUploading ? "Uploading…" : "Upload & replace image"}
+        {"Select PNG & queue upload"}
       </label>
 
       {/* Status */}
-      {status === "success" && (
+      {status === "queued" && (
         <p className="text-[11px] text-emerald-600">
-          Image uploaded successfully.
+          Image queued. Changes will be committed when you click Save.
         </p>
       )}
       {status === "error" && (
         <p className="text-[11px] text-red-600">
-          {error || "Failed to upload image."}
+          {error || "Failed to queue image."}
         </p>
       )}
     </div>

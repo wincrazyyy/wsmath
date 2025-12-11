@@ -15,6 +15,11 @@ import { MiscEditor } from "./_components/misc-editor";
 import { TestimonialsEditor } from "./_components/testimonials-editor";
 import { PackagesEditor } from "./_components/packages-editor";
 
+import {
+  getQueuedImageUploads,
+  clearQueuedImageUploads,
+} from "./_lib/pending-image-uploads";
+
 type HomeContent = typeof homeContent;
 type AboutContent = typeof aboutContent;
 type PackagesContent = typeof packagesContent;
@@ -30,6 +35,17 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: "testimonials", label: "Testimonials" },
   { key: "misc", label: "Misc" },
 ];
+
+// Helper: ArrayBuffer -> base64 (matches server expectation)
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = "";
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i] as number);
+  }
+  // btoa is available in browsers
+  return btoa(binary);
+}
 
 export default function AdminDashboardPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("home");
@@ -54,27 +70,60 @@ export default function AdminDashboardPage() {
     setSaveError(null);
 
     try {
+      // 1) Prepare JSON updates
+      const updates = [
+        { slug: "home", content: homeData },
+        { slug: "about", content: aboutData },
+        { slug: "testimonials", content: testimonialsData },
+        { slug: "packages", content: packagesData },
+        { slug: "misc", content: miscData },
+      ];
+
+      // 2) Read queued image uploads from memory
+      const queued = getQueuedImageUploads();
+
+      // 3) Convert each File -> base64
+      const images = await Promise.all(
+        queued.map(async (item) => {
+          const arrayBuffer = await item.file.arrayBuffer();
+          const contentBase64 = arrayBufferToBase64(arrayBuffer);
+          return {
+            targetPath: item.repoPath,   // e.g. "public/hero.png"
+            contentBase64,               // PNG content (no data URI prefix)
+          };
+        }),
+      );
+
+      // 4) Send everything in one atomic request
       const resp = await fetch("/api/update-content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          updates: [
-            { slug: "home", content: homeData },
-            { slug: "about", content: aboutData },
-            { slug: "testimonials", content: testimonialsData },
-            { slug: "packages", content: packagesData },
-            { slug: "misc", content: miscData },
-          ],
+          updates,
+          images,
         }),
       });
 
       if (!resp.ok) {
-        const text = await resp.text().catch(() => "");
-        console.error("Save all failed:", text);
+        // try to read JSON error first
+        let msg = "Failed to save all changes.";
+        try {
+          const json = await resp.json();
+          if (json?.error || json?.detail) {
+            msg = `${json.error || "Error"}: ${json.detail || ""}`;
+          }
+        } catch {
+          const text = await resp.text().catch(() => "");
+          if (text) msg = text;
+        }
+        console.error("Save all failed:", msg);
         setSaveStatus("error");
-        setSaveError(text || "Failed to save all changes.");
+        setSaveError(msg);
       } else {
         setSaveStatus("success");
+        setSaveError(null);
+        // 5) Clear queue only on success
+        clearQueuedImageUploads();
       }
     } catch (err) {
       console.error("Save all error:", err);

@@ -10,6 +10,7 @@ import {
   normalizeDirPublic,
   getBasePath,
 } from "../_lib/json-editor-helpers";
+import { queueImageUploads } from "../_lib/pending-image-uploads";
 
 type MultiImageUploadInputProps<T extends object> = {
   field: FieldConfig;
@@ -24,8 +25,7 @@ export function MultiImageUploadInput<T extends object>({
   data,
   onChangeData,
 }: MultiImageUploadInputProps<T>) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "queued" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const rawPages = getByPath(data, field.path);
@@ -43,9 +43,7 @@ export function MultiImageUploadInput<T extends object>({
       ? pagesFormatValue.trim()
       : "";
 
-  const handleFilesChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
@@ -80,63 +78,40 @@ export function MultiImageUploadInput<T extends object>({
       return;
     }
 
-    setIsUploading(true);
-    setStatus("idle");
-    setError(null);
-
-    try {
-      const uploadedPublicPaths: string[] = [];
-
-      // We preserve selection order; filenames follow pagesFormat if provided
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-
-        let fileName: string;
-        if (baseFormat) {
-          // e.g. "group-leaflet-page-" + 1 + ".png"
-          fileName = `${baseFormat}${i + 1}.png`;
-        } else {
-          // fallback: use original filename
-          fileName = file.name;
-        }
-
-        const repoPath = `${dirRepo}/${fileName}`;
-        const publicPath = `${dirPublic}/${fileName}`;
-
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("targetPath", repoPath);
-
-        const resp = await fetch("/api/upload-image", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!resp.ok) {
-          const json = await resp.json().catch(() => null);
-          const msg =
-            json?.error || json?.detail || "Failed to upload image.";
-          throw new Error(msg);
-        }
-
-        uploadedPublicPaths.push(publicPath);
+    // Build queued uploads + public paths
+    const uploadedPublicPaths: string[] = [];
+    const queuedEntries = selectedFiles.map((file, i) => {
+      let fileName: string;
+      if (baseFormat) {
+        // e.g. "group-leaflet-page-" + 1 + ".png"
+        fileName = `${baseFormat}${i + 1}.png`;
+      } else {
+        // fallback: use original filename
+        fileName = file.name;
       }
 
-      const next = structuredClone(data) as T;
-      setByPath(next, field.path, uploadedPublicPaths);
-      onChangeData(next);
+      const repoPath = `${dirRepo}/${fileName}`;
+      const publicPath = `${dirPublic}/${fileName}`;
+      uploadedPublicPaths.push(publicPath);
 
-      setStatus("success");
-    } catch (err) {
-      console.error("Multi image upload error:", err);
-      setStatus("error");
-      setError(
-        err instanceof Error ? err.message : "Unknown upload error.",
-      );
-    } finally {
-      setIsUploading(false);
-      e.target.value = "";
-    }
+      return {
+        repoPath,
+        publicPath,
+        file,
+      };
+    });
+
+    // Queue all uploads (no network yet)
+    queueImageUploads(queuedEntries);
+
+    // Overwrite JSON pages array with new paths
+    const next = structuredClone(data) as T;
+    setByPath(next, field.path, uploadedPublicPaths);
+    onChangeData(next);
+
+    setStatus("queued");
+    setError(null);
+    e.target.value = "";
   };
 
   return (
@@ -191,8 +166,8 @@ export function MultiImageUploadInput<T extends object>({
           Uploading will overwrite the list at{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
             {field.path}
-          </code>
-          .
+          </code>{" "}
+          when you click <strong>Save</strong>.
         </p>
       </div>
 
@@ -204,20 +179,19 @@ export function MultiImageUploadInput<T extends object>({
           multiple
           className="hidden"
           onChange={handleFilesChange}
-          disabled={isUploading}
         />
-        {isUploading ? "Uploading pages…" : "Upload & replace pages"}
+        {status === "queued" ? "Re-upload & replace pages" : "Upload & replace pages"}
       </label>
 
       {/* Status */}
-      {status === "success" && (
+      {status === "queued" && (
         <p className="text-[11px] text-emerald-600">
-          Pages uploaded and JSON updated.
+          Pages queued. Changes will be committed when you click Save.
         </p>
       )}
       {status === "error" && (
         <p className="text-[11px] text-red-600">
-          {error || "Failed to upload images."}
+          {error || "Failed to queue images."}
         </p>
       )}
     </div>
