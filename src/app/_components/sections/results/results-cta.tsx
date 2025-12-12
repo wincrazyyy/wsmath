@@ -1,27 +1,27 @@
-// app/_components/sections/testimonials/testimonials-cta.tsx
+// app/_components/sections/results/results-cta.tsx
 import Image from "next/image";
-import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
-import type { TestimonialsConfig } from "@/app/_lib/content/types/testimonials.types";
+import resultsContent from "@/app/_lib/content/json/results.json";
+import type { ResultsConfig } from "@/app/_lib/content/types/results.types";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
 
-const { testimonialsCta } = testimonialsContent as TestimonialsConfig;
+const { resultsCta } = resultsContent as ResultsConfig;
 
-export function TestimonialsCta() {
+export function ResultsCta() {
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
       <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
         {/* Left: text + button */}
         <div className="max-w-xl">
           <h2 className="text-2xl font-semibold tracking-tight">
-            {testimonialsCta.heading}
+            {resultsCta.heading}
           </h2>
           <p className="mt-2 text-neutral-600">
-            {testimonialsCta.subheading}
+            {resultsCta.subheading}
           </p>
 
-          {testimonialsCta.bullets?.length > 0 && (
+          {resultsCta.bullets?.length > 0 && (
             <ul className="mt-4 grid gap-2 text-sm text-neutral-700">
-              {testimonialsCta.bullets.map((bullet) => (
+              {resultsCta.bullets.map((bullet) => (
                 <li key={bullet} className="flex items-start gap-2">
                   <span className="mt-1 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
                   {bullet}
@@ -38,9 +38,9 @@ export function TestimonialsCta() {
             />
           </div>
 
-          {testimonialsCta.note && (
+          {resultsCta.note && (
             <p className="mt-2 text-xs text-neutral-500">
-              {testimonialsCta.note}
+              {resultsCta.note}
             </p>
           )}
         </div>
@@ -49,7 +49,7 @@ export function TestimonialsCta() {
         <div className="relative shrink-0 w-full max-w-xs md:max-w-sm lg:max-w-md">
           <div className="relative aspect-[8/5] overflow-hidden rounded-2xl">
             <Image
-              src={testimonialsCta.logoSrc}
+              src={resultsCta.logoSrc}
               alt="WSMath visual"
               fill
               priority

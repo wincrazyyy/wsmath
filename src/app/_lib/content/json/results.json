@@ -1,0 +1,45 @@
+{
+  "header": {
+    "eyebrow": "Proven Outcomes · Data-Driven Coaching",
+    "title": "Turning Mathematical Potential Into Top-Tier Achievement",
+    "subtitle": "A precision-engineered learning system built for ambitious students aiming for the highest performance bands across international exams.",
+    "chips": [
+      "🔬 Methodical skill-building · Zero-guesswork learning 🎯",
+      "🏆 Competitive exam mindset · Built for top performers 🚀",
+      "⏱️ Efficiency-first approach · Master more in less time ⚡",
+      "🧩 Clear logic training · Strengthen reasoning depth 🧠"
+    ],
+    "rightAccent": {
+      "heading": "Impact Overview",
+      "badge": "Across 8+ Years",
+      "mainValue": "250+",
+      "mainLabel": "high-commitment students trained",
+      "mainSize": "sm",
+      "columns": [
+        {
+          "title": "Long-term success rate",
+          "items": ["90%+ sustained grade growth"]
+        },
+        {
+          "title": "Top-band achievers",
+          "items": ["120+ students reached highest tier"]
+        },
+        {
+          "title": "Average improvement",
+          "items": ["+2 to +4 grade jump per student"]
+        }
+      ]
+    }
+  },
+  "resultsCta": {
+    "heading": "Start your IBDP Math coaching",
+    "subheading": "Premium 1-to-1 Zoom lessons with iPad + Apple Pencil + GoodNotes. Outcome-driven plans.",
+    "bullets": [
+      "50%+ Level 7 track record",
+      "18,000+ hours • 250+ students",
+      "AAHL / AASL / AIHL / AISL"
+    ],
+    "note": "Fast replies. Share course (AAHL/AISL/etc.) and target score to get started.",
+    "logoSrc": "/cta-image.png"
+  }
+}

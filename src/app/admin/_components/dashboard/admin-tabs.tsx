@@ -1,4 +1,4 @@
-// src/app/admin/_components/admin-tabs.tsx
+// src/app/admin/_components/dashboard/admin-tabs.tsx
 
 import type React from "react";
 import type { TabKey } from "@/app/admin/_lib/admin-tabs-config";

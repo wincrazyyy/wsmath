@@ -1,14 +1,11 @@
-// app/admin/_components/testimonials-editor.tsx
+// app/admin/_components/editors/testimonials-editor.tsx
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
-import {
-  TESTIMONIALS_FIELDS,
-  TESTIMONIALS_HEADER_FIELDS,
-} from "@/app/admin/_lib/fields/testimonials-fields";
+import { TESTIMONIALS_FIELDS } from "@/app/admin/_lib/fields/testimonials-fields";
 import { JsonEditor } from "./json-editor";
 
-type SubTab = "header" | "video" | "featured" | "carousel" | "cta";
+type SubTab = "header" | "video" | "featured" | "carousel";
 
 type TestimonialsEditorProps<T extends object> = {
   data: T;
@@ -19,7 +16,9 @@ export function TestimonialsEditor<T extends object>({
   data,
   onChangeData,
 }: TestimonialsEditorProps<T>) {
-  const headerFields: FieldConfig[] = TESTIMONIALS_HEADER_FIELDS;
+  const headerFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
+    f.path.startsWith("header."),
+  );
 
   const videoFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
     f.path.startsWith("video."),
@@ -31,10 +30,6 @@ export function TestimonialsEditor<T extends object>({
 
   const carouselFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
     f.path.startsWith("carousel["),
-  );
-
-  const ctaFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
-    f.path.startsWith("testimonialsCta."),
   );
 
   const tabs: {
@@ -76,14 +71,6 @@ export function TestimonialsEditor<T extends object>({
       panelDescription:
         "Edit the testimonials shown in the scrolling carousel strip.",
     },
-    {
-      key: "cta",
-      label: "Testimonials CTA box",
-      fields: ctaFields,
-      panelTitle: "Testimonials CTA box",
-      panelDescription:
-        "Controls the heading, bullets, note, and logo for the WhatsApp CTA box displayed under the testimonials section.",
-    },
   ];
 
   return (
@@ -91,7 +78,7 @@ export function TestimonialsEditor<T extends object>({
       title="Testimonials"
       description="Edit the testimonials header, student voices video, featured testimonials, carousel strip, and WhatsApp CTA box."
       data={data}
-      fields={[...headerFields, ...TESTIMONIALS_FIELDS]}
+      fields={TESTIMONIALS_FIELDS as FieldConfig[]}
       jsonFileHint="src/app/_lib/content/json/testimonials.json"
       onChangeData={onChangeData}
       slug="testimonials"

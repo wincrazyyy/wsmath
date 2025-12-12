@@ -1,4 +1,4 @@
-// app/admin/_components/about-editor.tsx
+// app/admin/_components/editors/about-editor.tsx
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
@@ -68,7 +68,7 @@ export function AboutEditor<T extends object>({
       title="About"
       description="Edit the About header, hero image band, stats, grouped courses, and CTA ribbon in separate tabs."
       data={data}
-      fields={ABOUT_FIELDS}
+      fields={ABOUT_FIELDS as FieldConfig[]}
       onChangeData={onChangeData}
       jsonFileHint="src/app/_lib/content/json/about.json"
       slug="about"

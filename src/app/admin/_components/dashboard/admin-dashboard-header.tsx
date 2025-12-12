@@ -1,4 +1,4 @@
-// src/app/admin/_components/admin-dashboard-header.tsx
+// src/app/admin/_components/dashboard/admin-dashboard-header.tsx
 
 type SaveStatus = "idle" | "success" | "error";
 

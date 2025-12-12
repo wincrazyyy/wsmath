@@ -1,4 +1,4 @@
-// app/admin/_components/misc-editor.tsx
+// app/admin/_components/editors/misc-editor.tsx
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";

@@ -1,4 +1,4 @@
-// app/admin/_components/json-editor-image-single.tsx
+// app/admin/_components/editors/json-editor-image-single.tsx
 "use client";
 
 import { useState } from "react";

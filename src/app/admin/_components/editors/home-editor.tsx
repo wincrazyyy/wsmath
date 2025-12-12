@@ -1,4 +1,4 @@
-// app/admin/_components/home-editor.tsx
+// app/admin/_components/editors/home-editor.tsx
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";

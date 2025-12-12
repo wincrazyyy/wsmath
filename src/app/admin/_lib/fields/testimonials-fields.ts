@@ -3,21 +3,21 @@ import type { FieldConfig } from "./fields";
 
 export const TESTIMONIALS_HEADER_FIELDS: FieldConfig[] = [
   {
-    path: "eyebrow",
-    label: "Testimonials eyebrow",
+    path: "header.eyebrow",
+    label: "Header eyebrow",
     description:
       'Small label above the section heading (e.g. “STUDENT VOICES”).',
     type: "string",
   },
   {
-    path: "title",
-    label: "Testimonials title",
+    path: "header.title",
+    label: "Header title",
     description: "Main heading for the Testimonials section.",
     type: "string",
   },
   {
-    path: "subtitle",
-    label: "Testimonials subtitle",
+    path: "header.subtitle",
+    label: "Header subtitle",
     description: "Short description under the heading.",
     type: "textarea",
   },

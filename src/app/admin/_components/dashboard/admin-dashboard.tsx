@@ -1,4 +1,4 @@
-// src/app/admin/_components/admin-dashboard.tsx
+// src/app/admin/_components/dashboard/admin-dashboard.tsx
 "use client";
 
 import { useState } from "react";
@@ -7,12 +7,14 @@ import homeContent from "@/app/_lib/content/json/home.json";
 import aboutContent from "@/app/_lib/content/json/about.json";
 import packagesContent from "@/app/_lib/content/json/packages.json";
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
+import resultsContent from "@/app/_lib/content/json/results.json";
 import miscContent from "@/app/_lib/content/json/misc.json";
 
 import { HomeEditor } from "../editors/home-editor";
 import { AboutEditor } from "../editors/about-editor";
 import { PackagesEditor } from "../editors/packages-editor";
 import { TestimonialsEditor } from "../editors/testimonials-editor";
+import { ResultsEditor } from "../editors/results-editor";
 import { MiscEditor } from "../editors/misc-editor";
 
 import {
@@ -28,6 +30,7 @@ type HomeContent = typeof homeContent;
 type AboutContent = typeof aboutContent;
 type PackagesContent = typeof packagesContent;
 type TestimonialsContent = typeof testimonialsContent;
+type ResultsContent = typeof resultsContent;
 type MiscContent = typeof miscContent;
 
 // Helper: ArrayBuffer -> base64 (matches server expectation)
@@ -46,10 +49,12 @@ export function AdminDashboard() {
 
   const [homeData, setHomeData] = useState<HomeContent>(homeContent);
   const [aboutData, setAboutData] = useState<AboutContent>(aboutContent);
-  const [testimonialsData, setTestimonialsData] =
-    useState<TestimonialsContent>(testimonialsContent);
   const [packagesData, setPackagesData] =
     useState<PackagesContent>(packagesContent);
+  const [testimonialsData, setTestimonialsData] =
+    useState<TestimonialsContent>(testimonialsContent);
+  const [resultsData, setResultsData] =
+    useState<ResultsContent>(resultsContent);
   const [miscData, setMiscData] = useState<MiscContent>(miscContent);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -72,13 +77,18 @@ export function AdminDashboard() {
     setHasJsonChanges(true);
   };
 
+  const handlePackagesChange = (next: PackagesContent) => {
+    setPackagesData(next);
+    setHasJsonChanges(true);
+  };
+
   const handleTestimonialsChange = (next: TestimonialsContent) => {
     setTestimonialsData(next);
     setHasJsonChanges(true);
   };
 
-  const handlePackagesChange = (next: PackagesContent) => {
-    setPackagesData(next);
+  const handleResultsChange = (next: ResultsContent) => {
+    setResultsData(next);
     setHasJsonChanges(true);
   };
 
@@ -97,8 +107,9 @@ export function AdminDashboard() {
       const updates = [
         { slug: "home", content: homeData },
         { slug: "about", content: aboutData },
-        { slug: "testimonials", content: testimonialsData },
         { slug: "packages", content: packagesData },
+        { slug: "testimonials", content: testimonialsData },
+        { slug: "results", content: resultsData },
         { slug: "misc", content: miscData },
       ];
 
@@ -175,6 +186,15 @@ export function AdminDashboard() {
       );
     }
 
+    if (activeTab === "packages") {
+      return (
+        <PackagesEditor<PackagesContent>
+          data={packagesData}
+          onChangeData={handlePackagesChange}
+        />
+      );
+    }
+
     if (activeTab === "testimonials") {
       return (
         <TestimonialsEditor
@@ -184,11 +204,11 @@ export function AdminDashboard() {
       );
     }
 
-    if (activeTab === "packages") {
+    if (activeTab === "results") {
       return (
-        <PackagesEditor<PackagesContent>
-          data={packagesData}
-          onChangeData={handlePackagesChange}
+        <ResultsEditor
+          data={resultsData}
+          onChangeData={handleResultsChange}
         />
       );
     }

@@ -30,9 +30,7 @@ export type TestimonialsCtaConfig = {
 };
 
 export type TestimonialsConfig = {
-  eyebrow: string;
-  title: string;
-  subtitle: string;
+  header: TestimonialsHeaderConfig;
   video: StudentVoicesVideoConfig;
   featured: Testimonial[];
   carousel: Testimonial[];

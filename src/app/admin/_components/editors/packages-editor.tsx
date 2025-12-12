@@ -1,4 +1,4 @@
-// app/admin/_components/packages-editor.tsx
+// app/admin/_components/editors/packages-editor.tsx
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
@@ -78,7 +78,7 @@ export function PackagesEditor<T extends object>({
       title="Course options & pricing"
       description="Edit the packages header, comparison strip, premium 1-to-1 package, and group course (including the leaflet preview) in separate tabs."
       data={data}
-      fields={PACKAGES_FIELDS as FieldConfig[]} // full list for non-tab fallback
+      fields={PACKAGES_FIELDS as FieldConfig[]}
       jsonFileHint="src/app/_lib/content/json/packages.json"
       onChangeData={onChangeData}
       slug="packages"

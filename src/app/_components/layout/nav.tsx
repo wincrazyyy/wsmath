@@ -9,6 +9,7 @@ const LINKS = [
   { href: "#about", label: "About" },
   { href: "#packages", label: "Packages" },
   { href: "#testimonials", label: "Testimonials" },
+  { href: "#results", label: "Results" },
 ];
 
 export function Nav() {

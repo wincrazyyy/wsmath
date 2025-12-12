@@ -1,7 +1,9 @@
 {
-  "eyebrow": "STUDENT VOICES",
-  "title": "What my students and parents say",
-  "subtitle": "Real results from IBDP, A-Level and IGCSE students worldwide.",
+  "header": {
+    "eyebrow": "STUDENT VOICES",
+    "title": "What my students and parents say",
+    "subtitle": "Real results from IBDP, A-Level and IGCSE students worldwide."
+  },
   "video": {
     "eyebrow": "Student voices",
     "heading": "Real students talking about their WSMath journey",
@@ -60,16 +62,5 @@
       "quote": "Winson helped me improve my math skills and gain confidence. His lessons are engaging and effective.",
       "avatarSrc": "/avatars/jonathan.jpg"
     }
-  ],
-  "testimonialsCta": {
-    "heading": "Start your IBDP Math coaching",
-    "subheading": "Premium 1-to-1 Zoom lessons with iPad + Apple Pencil + GoodNotes. Outcome-driven plans.",
-    "bullets": [
-      "50%+ Level 7 track record",
-      "18,000+ hours • 250+ students",
-      "AAHL / AASL / AIHL / AISL"
-    ],
-    "note": "Fast replies. Share course (AAHL/AISL/etc.) and target score to get started.",
-    "logoSrc": "/cta-image.png"
-  }
+  ]
 }

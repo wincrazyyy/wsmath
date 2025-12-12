@@ -1,3 +1,5 @@
+// src/app/admin/_components/ui/admin-header.tsx
+
 "use client";
 
 import Link from "next/link";
