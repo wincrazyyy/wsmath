@@ -7,65 +7,97 @@ import {
 } from "@/app/_lib/content/types/results.types";
 
 // -----------------------------------------------------------------------------
-// Text configuration (JSON-style objects)
+// Single JSON-style config object (easy to move to results.json later)
 // -----------------------------------------------------------------------------
 
-const GRADE_IMPROVEMENTS_TEXT = {
-  header: {
-    title: "Grade improvements",
-    description:
-      "How students move from school predictions to final exam results.",
+const GRADE_IMPROVEMENTS_CONFIG = {
+  text: {
+    header: {
+      title: "Grade improvements",
+      description:
+        "How students move from school predictions to final exam results.",
+    },
+    summaryCards: {
+      top: {
+        icon: "⭐",
+        labelPrefix: "Reached",
+      },
+      second: {
+        icon: "📘",
+        labelPrefix: "Reached",
+      },
+      bigJumps: {
+        icon: "🔥",
+        label: "Major jumps (≥3 grades)",
+      },
+      fastTrack: {
+        icon: "⚡",
+        label: "Fast-track (≈3 months)",
+      },
+    },
+    heatmapRows: [
+      {
+        key: "maintained",
+        label: "➖ Maintained",
+        description: "Predicted = Final",
+      },
+      {
+        key: "plus1",
+        label: "↗️ +1 grade",
+        description: "Small step up",
+      },
+      {
+        key: "plus2",
+        label: "⤴️ +2 grades",
+        description: "Solid improvement",
+      },
+      {
+        key: "plus3",
+        label: "📈 +3 grades",
+        description: "Big jump",
+      },
+      {
+        key: "plus4",
+        label: "🚀 4+ grades",
+        description: "Massive jumps",
+      },
+    ],
+    table: {
+      improvementColumnLabel: "Improvement",
+    },
+    footerNote: "👆 Hover on each cell to see the students.",
   },
-  summaryCards: {
-    top: {
-      icon: "⭐",
-      labelPrefix: "Reached",
+  scales: {
+    ib: {
+      type: "numeric",
+      // normalised scores 1..7
+      order: [1, 2, 3, 4, 5, 6, 7],
+      displayLabels: {
+        1: "grade 1",
+        2: "grade 2",
+        3: "grade 3",
+        4: "grade 4",
+        5: "grade 5",
+        6: "grade 6",
+        7: "grade 7",
+      },
     },
-    second: {
-      icon: "📘",
-      labelPrefix: "Reached",
-    },
-    bigJumps: {
-      icon: "🔥",
-      label: "Major jumps (≥3 grades)",
-    },
-    fastTrack: {
-      icon: "⚡",
-      label: "Fast-track (≈3 months)",
+    letters: {
+      type: "letters",
+      // F < E < D < C < B < A < A*
+      order: ["F", "E", "D", "C", "B", "A", "A*"],
+      displayLabels: {
+        1: "grade F",
+        2: "grade E",
+        3: "grade D",
+        4: "grade C",
+        5: "grade B",
+        6: "grade A",
+        7: "grade A*",
+      },
     },
   },
-  heatmapRows: [
-    {
-      key: "maintained",
-      label: "➖ Maintained",
-      description: "Predicted = Final",
-    },
-    {
-      key: "plus1",
-      label: "↗️ +1 grade",
-      description: "Small step up",
-    },
-    {
-      key: "plus2",
-      label: "⤴️ +2 grades",
-      description: "Solid improvement",
-    },
-    {
-      key: "plus3",
-      label: "📈 +3 grades",
-      description: "Big jump",
-    },
-    {
-      key: "plus4",
-      label: "🚀 4+ grades",
-      description: "Massive jumps",
-    },
-  ] as const,
-  table: {
-    improvementColumnLabel: "Improvement",
-  },
-  footerNote: "👆 Hover on each cell to see the students.",
-};
+} as const;
 
 type BucketKey = "maintained" | "plus1" | "plus2" | "plus3" | "plus4";
 
@@ -81,48 +113,9 @@ type HeatmapRow = {
   right: HeatmapCell;
 };
 
-// -----------------------------------------------------------------------------
-// Grade scale configuration (JSON-style)
-// -----------------------------------------------------------------------------
-
-const GRADE_SCALES: Record<
-  GradeScale,
-  {
-    type: "numeric" | "letters";
-    /** Ordered list for normalisation. Position (1-based) = score 1..7 */
-    order: (number | string)[];
-    /** Map from normalised score (1..7) to display label */
-    displayLabels: Record<number, string>;
-  }
-> = {
-  ib: {
-    type: "numeric",
-    order: [1, 2, 3, 4, 5, 6, 7],
-    displayLabels: {
-      1: "grade 1",
-      2: "grade 2",
-      3: "grade 3",
-      4: "grade 4",
-      5: "grade 5",
-      6: "grade 6",
-      7: "grade 7",
-    },
-  },
-  letters: {
-    type: "letters",
-    // F < E < D < C < B < A < A*
-    order: ["F", "E", "D", "C", "B", "A", "A*"],
-    displayLabels: {
-      1: "grade F",
-      2: "grade E",
-      3: "grade D",
-      4: "grade C",
-      5: "grade B",
-      6: "grade A",
-      7: "grade A*",
-    },
-  },
-} as const;
+// Convenience aliases
+const TEXT = GRADE_IMPROVEMENTS_CONFIG.text;
+const GRADE_SCALES = GRADE_IMPROVEMENTS_CONFIG.scales;
 
 // -----------------------------------------------------------------------------
 // Grade helpers
@@ -135,13 +128,16 @@ function normalizeGrade(grade: number | string, scale: GradeScale): number {
   if (config.type === "numeric") {
     // IB-style 1–7
     if (typeof grade === "number") {
-      return config.order.includes(grade) ? grade : 0;
+      return (config.order as readonly number[]).includes(grade) ? grade : 0;
     }
-    const n = Number(grade);
-    return Number.isFinite(n) && config.order.includes(n) ? n : 0;
-  }
 
-  // Letters: F < E < D < C < B < A < A*
+    const n = Number(grade);
+    return Number.isFinite(n) &&
+      (config.order as readonly number[]).includes(n)
+      ? n
+      : 0;
+  }
+  // Letter scale: F < E < D < C < B < A < A*
   if (typeof grade === "number") {
     // In case you accidentally pass numeric here, trust it's already 1..7
     return grade;
@@ -152,15 +148,20 @@ function normalizeGrade(grade: number | string, scale: GradeScale): number {
   const match = s.match(/[A-F]\*?/); // A, B, C, D, E, F, optionally with *
   const letter = match ? match[0] : s;
 
-  const idx = config.order.indexOf(letter);
+  const idx = config.order.indexOf(letter as (typeof config.order)[number]);
   return idx >= 0 ? idx + 1 : 0; // 1..7
 }
 
 // Map a normalised score (1–7) back to a display grade string based on scale.
 function formatDisplayGrade(score: number, scale: GradeScale): string {
   const config = GRADE_SCALES[scale];
-  return config.displayLabels[score] ?? `grade ${score}`;
+
+  const label =
+    (config.displayLabels as Record<number, string>)[score];
+
+  return label ?? `grade ${score}`;
 }
+
 
 function buildHeatmapRows(
   data: Student[],
@@ -206,7 +207,7 @@ function buildHeatmapRows(
       .join(", ");
 
   // Build rows from config so labels/descriptions live in one place
-  return GRADE_IMPROVEMENTS_TEXT.heatmapRows.map((rowCfg) => {
+  return TEXT.heatmapRows.map((rowCfg) => {
     const key = rowCfg.key as BucketKey;
     const bucket = buckets[key];
 
@@ -304,8 +305,7 @@ export function GradeImprovementsSection({
   const leftColumnLabel = `Final ${leftGradeLabel}`;
   const rightColumnLabel = `Final ${rightGradeLabel}`;
 
-  const { header, summaryCards, table, footerNote } =
-    GRADE_IMPROVEMENTS_TEXT;
+  const { header, summaryCards, table, footerNote } = TEXT;
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur">
