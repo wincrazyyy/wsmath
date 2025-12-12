@@ -31,6 +31,154 @@
       ]
     }
   },
+  "gradeImprovements": {
+    "resultGroups": [
+      {
+        "id": "ibdp",
+        "heading": "IBDP Mathematics",
+        "items": [
+          {
+            "id": "ib-hl",
+            "label": "HL",
+            "programLabel": "IBDP Math HL",
+            "subtitle": "AAHL / AIHL",
+            "studentsKey": "IBDP_HL",
+            "gradeScale": "ib"
+          },
+          {
+            "id": "ib-sl",
+            "label": "SL",
+            "programLabel": "IBDP Math SL",
+            "subtitle": "AASL / AISL",
+            "studentsKey": "IBDP_SL",
+            "gradeScale": "ib"
+          }
+        ]
+      },
+      {
+        "id": "alevel",
+        "heading": "A-Level Mathematics",
+        "items": [
+          {
+            "id": "alevel-fmath",
+            "label": "Further Math",
+            "programLabel": "A-Level Further Math",
+            "subtitle": "Edexcel (IAL YFM01) / Cambridge (CAIE 9231)",
+            "studentsKey": "AL_FM",
+            "gradeScale": "letters"
+          },
+          {
+            "id": "alevel-math",
+            "label": "Math",
+            "programLabel": "A-Level Math",
+            "subtitle": "Edexcel (IAL YMA01) / Cambridge (CAIE 9709) / OCR (H240)",
+            "studentsKey": "AL_M",
+            "gradeScale": "letters"
+          }
+        ]
+      },
+      {
+        "id": "igcse",
+        "heading": "IGCSE Mathematics",
+        "items": [
+          {
+            "id": "igcse-add",
+            "label": "Add Math",
+            "programLabel": "IGCSE Add Math",
+            "subtitle": "Cambridge (0606) / Further Math Edexcel (4PM0)",
+            "studentsKey": "IGCSE_AM",
+            "gradeScale": "letters"
+          },
+          {
+            "id": "igcse-math",
+            "label": "Math",
+            "programLabel": "IGCSE Math",
+            "subtitle": "Cambridge (0607, 0580) / Math Edexcel (4PM1)",
+            "studentsKey": "IGCSE_M",
+            "gradeScale": "letters"
+          }
+        ]
+      }
+    ],
+    "students": {
+      "IBDP_HL": [
+        { "name": "Marcus", "year": 2025, "from": 6, "to": 7 },
+        { "name": "Miriam", "year": 2025, "from": 6, "to": 7 },
+        { "name": "Sophia", "year": 2025, "from": 4, "to": 6 },
+        { "name": "Josephine", "year": 2025, "from": 4, "to": 6 },
+        { "name": "James", "year": 2024, "from": 1, "to": 7, "months": 24 },
+        { "name": "Jasmine", "year": 2023, "from": 1, "to": 6 },
+        { "name": "Joy", "year": 2022, "from": 5, "to": 7 },
+        { "name": "Ethan", "year": 2022, "from": 5, "to": 7 },
+        { "name": "Cici", "year": 2022, "from": 6, "to": 7 },
+        { "name": "Alice", "year": 2022, "from": 6, "to": 7 },
+        { "name": "Mary", "year": 2022, "from": 7, "to": 7 },
+        { "name": "Fiona", "year": 2022, "from": 3, "to": 6, "months": 3 },
+        { "name": "Janice", "year": 2021, "from": 5, "to": 7 },
+        { "name": "Hebe", "year": 2021, "from": 5, "to": 7 },
+        { "name": "Vera", "year": 2021, "from": 6, "to": 7 },
+        { "name": "Ivy", "year": 2021, "from": 6, "to": 7 },
+        { "name": "Taylor", "year": 2019, "from": 6, "to": 7 },
+        { "name": "Anthony", "year": 2019, "from": 5, "to": 6 },
+        { "name": "Mickey", "year": 2018, "from": 7, "to": 7 },
+        { "name": "Lucia", "year": 2018, "from": 3, "to": 6, "months": 3 },
+        { "name": "Evelyn", "year": 2018, "from": 5, "to": 6 }
+      ],
+      "IBDP_SL": [
+        { "name": "Jason", "year": 2025, "from": 6, "to": 7 },
+        { "name": "Michael", "year": 2025, "from": 6, "to": 7 },
+        { "name": "Gordon", "year": 2025, "from": 1, "to": 6 },
+        { "name": "Alvina", "year": 2025, "from": 4, "to": 6 },
+        { "name": "Sabrina", "year": 2025, "from": 5, "to": 6 },
+        { "name": "Kathy", "year": 2024, "from": 1, "to": 6 },
+        { "name": "Sharon", "year": 2023, "from": 3, "to": 7, "months": 1.5 },
+        { "name": "Cassie", "year": 2023, "from": 4, "to": 7 },
+        { "name": "Jasmine", "year": 2023, "from": 4, "to": 6 },
+        { "name": "Alexandra", "year": 2022, "from": 1, "to": 7 },
+        { "name": "Kitty", "year": 2020, "from": 1, "to": 7 },
+        { "name": "Chloe", "year": 2020, "from": 4, "to": 7 },
+        { "name": "Jenny", "year": 2020, "from": 4, "to": 7 },
+        { "name": "Rachel", "year": 2020, "from": 7, "to": 7 },
+        { "name": "David", "year": 2020, "from": 4, "to": 6 },
+        { "name": "Aidan", "year": 2019, "from": 4, "to": 6 }
+      ],
+      "AL_FM": [
+        { "name": "Bill Zhang", "year": 2024, "from": "F", "to": "A*" },
+        { "name": "Bill Ting", "year": 2021, "from": "F", "to": "A*" },
+        { "name": "Michelle", "year": 2021, "from": "F", "to": "A*" }
+      ],
+      "AL_M": [
+        { "name": "Quinto", "year": 2025, "from": "F", "to": "A*" },
+        { "name": "Coco", "year": 2024, "from": "F", "to": "A" },
+        { "name": "Ken", "year": 2024, "from": "F", "to": "A" },
+        { "name": "Bill Zhang", "year": 2023, "from": "F", "to": "A*" },
+        { "name": "Quintin", "year": 2023, "from": "F", "to": "A" },
+        { "name": "Bill Ting", "year": 2021, "from": "F", "to": "A*" },
+        { "name": "Michelle", "year": 2021, "from": "B", "to": "A*" },
+        { "name": "Jenny", "year": 2020, "from": "B", "to": "A*" }
+      ],
+      "IGCSE_AM": [
+        { "name": "Jacky", "year": 2022, "from": "B(6)", "to": "A(8)" },
+        { "name": "James", "year": 2022, "from": "B(6)", "to": "A(8)" },
+        { "name": "Emily", "year": 2018, "from": "B", "to": "A*", "months": 2 }
+      ],
+      "IGCSE_M": [
+        { "name": "Janis", "year": 2025, "from": "C", "to": "A*", "months": 3 },
+        { "name": "Nicole", "year": 2024, "from": "E(4)", "to": "A(8)" },
+        { "name": "Jewel", "year": 2024, "from": "E(4)", "to": "A(8)" },
+        { "name": "Cissie", "year": 2023, "from": "F", "to": "A", "months": 12 },
+        { "name": "Kelly", "year": 2023, "from": "F", "to": "A", "months": 12 },
+        { "name": "Evelyn", "year": 2023, "from": "C", "to": "A" },
+        { "name": "Gordon", "year": 2023, "from": "E(4)", "to": "A(8)" },
+        { "name": "Bill Zhang", "year": 2022, "from": "B", "to": "A*" },
+        { "name": "James", "year": 2022, "from": "B", "to": "A*" },
+        { "name": "Ken", "year": 2022, "from": "C", "to": "A" },
+        { "name": "Jacky", "year": 2021, "from": "B", "to": "A*" },
+        { "name": "Catherine", "year": 2021, "from": "B", "to": "A*" },
+        { "name": "Jessica", "year": 2019, "from": "C", "to": "A" }
+      ]
+    }
+  },
   "resultsCta": {
     "heading": "Start your IBDP Math coaching",
     "subheading": "Premium 1-to-1 Zoom lessons with iPad + Apple Pencil + GoodNotes. Outcome-driven plans.",

@@ -9,6 +9,42 @@ export type ResultsHeaderConfig = {
   rightAccent?: SectionHeaderRightAccent;
 };
 
+export type GradeScale = "ib" | "letters";
+
+export type ResultItemConfig = {
+  id: string;
+  label: string;
+  programLabel: string;
+  subtitle?: string;
+  studentsKey: string;
+  gradeScale: GradeScale;
+};
+
+export type ResultGroupConfig = {
+  id: string;
+  heading: string;
+  items: ResultItemConfig[];
+};
+
+export type StudentGrade = number | string;
+
+export type Student = {
+  name: string;
+  year: number;
+  from: StudentGrade;
+  to: StudentGrade;
+  months?: number;
+};
+
+export type StudentsMapConfig = {
+  [studentsKey: string]: Student[];
+};
+
+export type GradeImprovementsConfig = {
+  resultGroups: ResultGroupConfig[];
+  students: StudentsMapConfig;
+};
+
 export type ResultsCtaConfig = {
   heading: string;
   subheading: string;
@@ -19,5 +55,6 @@ export type ResultsCtaConfig = {
 
 export type ResultsConfig = {
   header: ResultsHeaderConfig;
+  gradeImprovements: GradeImprovementsConfig;
   resultsCta: ResultsCtaConfig;
 };

@@ -1,6 +1,10 @@
 // src/app/_components/sections/testimonials/grade-improvements-section.tsx
 
-type GradeScale = "ib" | "letters";
+import { 
+  ResultItemConfig,
+  GradeScale,
+  Student,
+ } from "@/app/_lib/content/types/results.types";
 
 type HeatmapCell = {
   count: number;
@@ -12,14 +16,6 @@ type HeatmapRow = {
   description?: string;
   left: HeatmapCell;
   right: HeatmapCell;
-};
-
-type Student = {
-  name: string;
-  year: number;
-  from: number | string;
-  to: number | string;
-  months?: number;
 };
 
 // ---------- Grade helpers ----------
@@ -183,19 +179,24 @@ function TooltipCell({ count, tooltip }: { count: number; tooltip?: string }) {
   );
 }
 
+// type GradeImprovementsSectionProps = {
+//   programLabel: string;
+//   subtitle: string;
+//   students: Student[];
+//   gradeScale: GradeScale; // "ib" | "letters"
+// };
+
 type GradeImprovementsSectionProps = {
-  programLabel: string;
-  subtitle: string;
+  resultItem: ResultItemConfig;
   students: Student[];
-  gradeScale: GradeScale; // "ib" | "letters"
 };
 
 export function GradeImprovementsSection({
-  programLabel,
-  subtitle,
-  students,
-  gradeScale,
+  resultItem,
+  students
 }: GradeImprovementsSectionProps) {
+  const { programLabel, subtitle, gradeScale } = resultItem;
+
   const isRightFinal = (g: Student["to"]) =>
     normalizeGrade(g, gradeScale) === 7; // 7 or A*
   const isLeftFinal = (g: Student["to"]) =>

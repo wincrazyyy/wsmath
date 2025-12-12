@@ -1,12 +1,15 @@
 // app/_components/sections/results/results-cta.tsx
 import Image from "next/image";
-import resultsContent from "@/app/_lib/content/json/results.json";
 import type { ResultsConfig } from "@/app/_lib/content/types/results.types";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
 
-const { resultsCta } = resultsContent as ResultsConfig;
+interface ResultsCtaProps {
+  data: ResultsConfig["resultsCta"];
+}
 
-export function ResultsCta() {
+export function ResultsCta( { data }: { data: ResultsConfig["resultsCta"] } ) {
+  const resultsCta = data;
+
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
       <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
