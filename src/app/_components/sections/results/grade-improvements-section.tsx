@@ -13,7 +13,8 @@ import {
 const GRADE_IMPROVEMENTS_TEXT = {
   header: {
     title: "Grade improvements",
-    description: "How students move from school predictions to final exam results.",
+    description:
+      "How students move from school predictions to final exam results.",
   },
   summaryCards: {
     top: {
@@ -81,36 +82,84 @@ type HeatmapRow = {
 };
 
 // -----------------------------------------------------------------------------
+// Grade scale configuration (JSON-style)
+// -----------------------------------------------------------------------------
+
+const GRADE_SCALES: Record<
+  GradeScale,
+  {
+    type: "numeric" | "letters";
+    /** Ordered list for normalisation. Position (1-based) = score 1..7 */
+    order: (number | string)[];
+    /** Map from normalised score (1..7) to display label */
+    displayLabels: Record<number, string>;
+  }
+> = {
+  ib: {
+    type: "numeric",
+    order: [1, 2, 3, 4, 5, 6, 7],
+    displayLabels: {
+      1: "grade 1",
+      2: "grade 2",
+      3: "grade 3",
+      4: "grade 4",
+      5: "grade 5",
+      6: "grade 6",
+      7: "grade 7",
+    },
+  },
+  letters: {
+    type: "letters",
+    // F < E < D < C < B < A < A*
+    order: ["F", "E", "D", "C", "B", "A", "A*"],
+    displayLabels: {
+      1: "grade F",
+      2: "grade E",
+      3: "grade D",
+      4: "grade C",
+      5: "grade B",
+      6: "grade A",
+      7: "grade A*",
+    },
+  },
+} as const;
+
+// -----------------------------------------------------------------------------
 // Grade helpers
 // -----------------------------------------------------------------------------
 
-const LETTER_ORDER = ["F", "E", "D", "C", "B", "A", "A*"] as const;
-
-// Normalise grade to a numeric scale so we can compute improvements.
+// Normalise grade to a numeric scale 1..7 so we can compute improvements.
 function normalizeGrade(grade: number | string, scale: GradeScale): number {
-  if (scale === "ib") {
-    if (typeof grade === "number") return grade;
+  const config = GRADE_SCALES[scale];
+
+  if (config.type === "numeric") {
+    // IB-style 1–7
+    if (typeof grade === "number") {
+      return config.order.includes(grade) ? grade : 0;
+    }
     const n = Number(grade);
-    return Number.isFinite(n) ? n : 0;
+    return Number.isFinite(n) && config.order.includes(n) ? n : 0;
   }
 
-  // Letter scale: F < E < D < C < B < A < A*
-  if (typeof grade === "number") return grade;
+  // Letters: F < E < D < C < B < A < A*
+  if (typeof grade === "number") {
+    // In case you accidentally pass numeric here, trust it's already 1..7
+    return grade;
+  }
 
   const s = String(grade).toUpperCase();
+  // Extract the letter part from things like "B(6)"
   const match = s.match(/[A-F]\*?/); // A, B, C, D, E, F, optionally with *
   const letter = match ? match[0] : s;
-  const idx = LETTER_ORDER.indexOf(letter as (typeof LETTER_ORDER)[number]);
+
+  const idx = config.order.indexOf(letter);
   return idx >= 0 ? idx + 1 : 0; // 1..7
 }
 
 // Map a normalised score (1–7) back to a display grade string based on scale.
 function formatDisplayGrade(score: number, scale: GradeScale): string {
-  if (scale === "ib") {
-    return `grade ${score}`;
-  }
-  const letter = LETTER_ORDER[score - 1];
-  return letter ? `grade ${letter}` : `grade ${score}`;
+  const config = GRADE_SCALES[scale];
+  return config.displayLabels[score] ?? `grade ${score}`;
 }
 
 function buildHeatmapRows(
@@ -333,9 +382,7 @@ export function GradeImprovementsSection({
               <tr
                 key={row.label}
                 className={`border-t border-slate-100 ${
-                  index === heatmapRows.length - 1
-                    ? "bg-indigo-50/40"
-                    : ""
+                  index === heatmapRows.length - 1 ? "bg-indigo-50/40" : ""
                 }`}
               >
                 <td className="px-3 py-2 align-top">
@@ -366,9 +413,7 @@ export function GradeImprovementsSection({
         </table>
       </div>
 
-      <p className="mt-3 text-[11px] text-slate-400">
-        {footerNote}
-      </p>
+      <p className="mt-3 text-[11px] text-slate-400">{footerNote}</p>
     </section>
   );
 }
