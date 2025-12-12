@@ -1,10 +1,72 @@
 // src/app/_components/sections/testimonials/grade-improvements-section.tsx
 
-import { 
+import {
   ResultItemConfig,
   GradeScale,
   Student,
- } from "@/app/_lib/content/types/results.types";
+} from "@/app/_lib/content/types/results.types";
+
+// -----------------------------------------------------------------------------
+// Text configuration (JSON-style objects)
+// -----------------------------------------------------------------------------
+
+const GRADE_IMPROVEMENTS_TEXT = {
+  header: {
+    title: "Grade improvements",
+    description: "How students move from school predictions to final exam results.",
+  },
+  summaryCards: {
+    top: {
+      icon: "⭐",
+      labelPrefix: "Reached",
+    },
+    second: {
+      icon: "📘",
+      labelPrefix: "Reached",
+    },
+    bigJumps: {
+      icon: "🔥",
+      label: "Major jumps (≥3 grades)",
+    },
+    fastTrack: {
+      icon: "⚡",
+      label: "Fast-track (≈3 months)",
+    },
+  },
+  heatmapRows: [
+    {
+      key: "maintained",
+      label: "➖ Maintained",
+      description: "Predicted = Final",
+    },
+    {
+      key: "plus1",
+      label: "↗️ +1 grade",
+      description: "Small step up",
+    },
+    {
+      key: "plus2",
+      label: "⤴️ +2 grades",
+      description: "Solid improvement",
+    },
+    {
+      key: "plus3",
+      label: "📈 +3 grades",
+      description: "Big jump",
+    },
+    {
+      key: "plus4",
+      label: "🚀 4+ grades",
+      description: "Massive jumps",
+    },
+  ] as const,
+  table: {
+    improvementColumnLabel: "Improvement",
+  },
+  footerNote: "👆 Hover on each cell to see the students.",
+};
+
+type BucketKey = "maintained" | "plus1" | "plus2" | "plus3" | "plus4";
 
 type HeatmapCell = {
   count: number;
@@ -18,7 +80,11 @@ type HeatmapRow = {
   right: HeatmapCell;
 };
 
-// ---------- Grade helpers ----------
+// -----------------------------------------------------------------------------
+// Grade helpers
+// -----------------------------------------------------------------------------
+
+const LETTER_ORDER = ["F", "E", "D", "C", "B", "A", "A*"] as const;
 
 // Normalise grade to a numeric scale so we can compute improvements.
 function normalizeGrade(grade: number | string, scale: GradeScale): number {
@@ -34,9 +100,17 @@ function normalizeGrade(grade: number | string, scale: GradeScale): number {
   const s = String(grade).toUpperCase();
   const match = s.match(/[A-F]\*?/); // A, B, C, D, E, F, optionally with *
   const letter = match ? match[0] : s;
-  const ORDER = ["F", "E", "D", "C", "B", "A", "A*"];
-  const idx = ORDER.indexOf(letter);
-  return idx >= 0 ? idx + 1 : 0;
+  const idx = LETTER_ORDER.indexOf(letter as (typeof LETTER_ORDER)[number]);
+  return idx >= 0 ? idx + 1 : 0; // 1..7
+}
+
+// Map a normalised score (1–7) back to a display grade string based on scale.
+function formatDisplayGrade(score: number, scale: GradeScale): string {
+  if (scale === "ib") {
+    return `grade ${score}`;
+  }
+  const letter = LETTER_ORDER[score - 1];
+  return letter ? `grade ${letter}` : `grade ${score}`;
 }
 
 function buildHeatmapRows(
@@ -45,9 +119,7 @@ function buildHeatmapRows(
   isLeftFinal: (g: Student["to"]) => boolean,
   isRightFinal: (g: Student["to"]) => boolean
 ): HeatmapRow[] {
-  const buckets: {
-    [key: string]: { left: Student[]; right: Student[] };
-  } = {
+  const buckets: Record<BucketKey, { left: Student[]; right: Student[] }> = {
     maintained: { left: [], right: [] },
     plus1: { left: [], right: [] },
     plus2: { left: [], right: [] },
@@ -61,7 +133,7 @@ function buildHeatmapRows(
 
     const diff = toScore - fromScore;
 
-    let key: keyof typeof buckets;
+    let key: BucketKey;
     if (diff <= 0) key = "maintained";
     else if (diff === 1) key = "plus1";
     else if (diff === 2) key = "plus2";
@@ -84,69 +156,29 @@ function buildHeatmapRows(
       )
       .join(", ");
 
-  return [
-    {
-      label: "➖ Maintained",
-      description: "Predicted = Final",
+  // Build rows from config so labels/descriptions live in one place
+  return GRADE_IMPROVEMENTS_TEXT.heatmapRows.map((rowCfg) => {
+    const key = rowCfg.key as BucketKey;
+    const bucket = buckets[key];
+
+    return {
+      label: rowCfg.label,
+      description: rowCfg.description,
       left: {
-        count: buckets.maintained.left.length,
-        tooltip: makeTooltip(buckets.maintained.left),
+        count: bucket.left.length,
+        tooltip: makeTooltip(bucket.left),
       },
       right: {
-        count: buckets.maintained.right.length,
-        tooltip: makeTooltip(buckets.maintained.right),
+        count: bucket.right.length,
+        tooltip: makeTooltip(bucket.right),
       },
-    },
-    {
-      label: "↗️ +1 grade",
-      description: "Small step up",
-      left: {
-        count: buckets.plus1.left.length,
-        tooltip: makeTooltip(buckets.plus1.left),
-      },
-      right: {
-        count: buckets.plus1.right.length,
-        tooltip: makeTooltip(buckets.plus1.right),
-      },
-    },
-    {
-      label: "⤴️ +2 grades",
-      description: "Solid improvement",
-      left: {
-        count: buckets.plus2.left.length,
-        tooltip: makeTooltip(buckets.plus2.left),
-      },
-      right: {
-        count: buckets.plus2.right.length,
-        tooltip: makeTooltip(buckets.plus2.right),
-      },
-    },
-    {
-      label: "📈 +3 grades",
-      description: "Big jump",
-      left: {
-        count: buckets.plus3.left.length,
-        tooltip: makeTooltip(buckets.plus3.left),
-      },
-      right: {
-        count: buckets.plus3.right.length,
-        tooltip: makeTooltip(buckets.plus3.right),
-      },
-    },
-    {
-      label: "🚀 4+ grades",
-      description: "Massive jumps",
-      left: {
-        count: buckets.plus4.left.length,
-        tooltip: makeTooltip(buckets.plus4.left),
-      },
-      right: {
-        count: buckets.plus4.right.length,
-        tooltip: makeTooltip(buckets.plus4.right),
-      },
-    },
-  ];
+    };
+  });
 }
+
+// -----------------------------------------------------------------------------
+// UI bits
+// -----------------------------------------------------------------------------
 
 function TooltipCell({ count, tooltip }: { count: number; tooltip?: string }) {
   return (
@@ -179,13 +211,6 @@ function TooltipCell({ count, tooltip }: { count: number; tooltip?: string }) {
   );
 }
 
-// type GradeImprovementsSectionProps = {
-//   programLabel: string;
-//   subtitle: string;
-//   students: Student[];
-//   gradeScale: GradeScale; // "ib" | "letters"
-// };
-
 type GradeImprovementsSectionProps = {
   resultItem: ResultItemConfig;
   students: Student[];
@@ -193,14 +218,16 @@ type GradeImprovementsSectionProps = {
 
 export function GradeImprovementsSection({
   resultItem,
-  students
+  students,
 }: GradeImprovementsSectionProps) {
   const { programLabel, subtitle, gradeScale } = resultItem;
 
+  // Treat score 7 as "top" and 6 as "second top" on the normalised scale,
+  // regardless of whether it's IB or letters.
   const isRightFinal = (g: Student["to"]) =>
-    normalizeGrade(g, gradeScale) === 7; // 7 or A*
+    normalizeGrade(g, gradeScale) === 7;
   const isLeftFinal = (g: Student["to"]) =>
-    normalizeGrade(g, gradeScale) === 6; // 6 or A
+    normalizeGrade(g, gradeScale) === 6;
 
   const heatmapRows = buildHeatmapRows(
     students,
@@ -214,8 +241,7 @@ export function GradeImprovementsSection({
 
   const bigJumps = students.filter((s) => {
     const diff =
-      normalizeGrade(s.to, gradeScale) -
-      normalizeGrade(s.from, gradeScale);
+      normalizeGrade(s.to, gradeScale) - normalizeGrade(s.from, gradeScale);
     return diff >= 3;
   }).length;
 
@@ -223,15 +249,14 @@ export function GradeImprovementsSection({
     (s) => typeof s.months === "number" && s.months <= 3
   ).length;
 
-  const leftGradeLabel =
-    gradeScale === "ib" ? "grade 6" : "grade A";
-  const rightGradeLabel =
-    gradeScale === "ib" ? "grade 7" : "grade A*";
+  const leftGradeLabel = formatDisplayGrade(6, gradeScale); // second top
+  const rightGradeLabel = formatDisplayGrade(7, gradeScale); // top
 
-  const leftColumnLabel =
-    gradeScale === "ib" ? "Final grade 6" : "Final grade A";
-  const rightColumnLabel =
-    gradeScale === "ib" ? "Final grade 7" : "Final grade A*";
+  const leftColumnLabel = `Final ${leftGradeLabel}`;
+  const rightColumnLabel = `Final ${rightGradeLabel}`;
+
+  const { header, summaryCards, table, footerNote } =
+    GRADE_IMPROVEMENTS_TEXT;
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur">
@@ -242,18 +267,18 @@ export function GradeImprovementsSection({
             {programLabel} · {subtitle}
           </p>
           <h2 className="mt-1 text-xl font-semibold text-slate-900">
-            Grade improvements
+            {header.title}
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            How students move from school predictions to final exam
-            results.
+            {header.description}
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
           <div className="rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
-              ⭐ Reached {rightGradeLabel}
+              {summaryCards.top.icon} {summaryCards.top.labelPrefix}{" "}
+              {rightGradeLabel}
             </div>
             <div className="text-lg font-semibold text-indigo-800">
               {totalTop}
@@ -261,7 +286,8 @@ export function GradeImprovementsSection({
           </div>
           <div className="rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
-              📘 Reached {leftGradeLabel}
+              {summaryCards.second.icon} {summaryCards.second.labelPrefix}{" "}
+              {leftGradeLabel}
             </div>
             <div className="text-lg font-semibold text-sky-800">
               {totalSecond}
@@ -269,7 +295,7 @@ export function GradeImprovementsSection({
           </div>
           <div className="rounded-xl bg-rose-50 ring-1 ring-rose-300 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
-              🔥 Major jumps (≥3 grades)
+              {summaryCards.bigJumps.icon} {summaryCards.bigJumps.label}
             </div>
             <div className="text-lg font-semibold text-rose-800">
               {bigJumps}
@@ -277,7 +303,7 @@ export function GradeImprovementsSection({
           </div>
           <div className="rounded-xl bg-amber-50 ring-1 ring-amber-300 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-amber-700 font-semibold">
-              ⚡ Fast-track (≈3 months)
+              {summaryCards.fastTrack.icon} {summaryCards.fastTrack.label}
             </div>
             <div className="text-lg font-semibold text-amber-800">
               {fastTrack}
@@ -292,7 +318,7 @@ export function GradeImprovementsSection({
           <thead className="bg-slate-50/80">
             <tr>
               <th className="w-40 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                Improvement
+                {table.improvementColumnLabel}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {leftColumnLabel}
@@ -341,7 +367,7 @@ export function GradeImprovementsSection({
       </div>
 
       <p className="mt-3 text-[11px] text-slate-400">
-        👆 Hover on each cell to see the students.
+        {footerNote}
       </p>
     </section>
   );
