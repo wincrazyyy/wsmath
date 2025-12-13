@@ -3,9 +3,10 @@
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { TESTIMONIALS_FIELDS } from "@/app/admin/_lib/fields/testimonials-fields";
-import { JsonEditor, JsonEditorTabConfig } from "./json-editor";
+import { JsonEditor } from "./json-editor";
 import {
   buildIndexedSubTabs,
+  JsonEditorTabConfig,
   type JsonEditorSubTabConfig,
 } from "@/app/admin/_lib/json-editor-helpers";
 
