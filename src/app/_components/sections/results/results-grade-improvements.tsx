@@ -69,17 +69,15 @@ export function ResultsGradeImprovements( { gradeImprovements }: ResultsGradeImp
       />
 
       {/* Grade improvements heatmap (own component/file) */}
-      <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur">
-        <GradeImprovementsSection
-          header={header}
-          summaryCards={summaryCards}
-          resultItem={activeItem}
-          students={students[activeItem.studentsKey]}
-          table={table}
-          scales={scales}
-          footerNote={footerNote}
-        />
-      </div>
+      <GradeImprovementsSection
+        header={header}
+        summaryCards={summaryCards}
+        resultItem={activeItem}
+        students={students[activeItem.studentsKey]}
+        table={table}
+        scales={scales}
+        footerNote={footerNote}
+      />
     </section>
   );
 }
