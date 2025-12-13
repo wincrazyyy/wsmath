@@ -5,9 +5,9 @@ import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { TESTIMONIALS_FIELDS } from "@/app/admin/_lib/fields/testimonials-fields";
 import { JsonEditor } from "./json-editor";
 import {
-  buildIndexedSubTabs,
   JsonEditorTabConfig,
-  type JsonEditorSubTabConfig,
+  JsonEditorSubTabConfig,
+  buildIndexedSubTabs,
 } from "@/app/admin/_lib/json-editor-helpers";
 
 type TestimonialsEditorProps<T extends object> = {
@@ -61,9 +61,7 @@ export function TestimonialsEditor<T extends object>({
     {
       key: "featured",
       label: "Featured testimonials",
-      // optional: flat fields view if you ever want it:
-      // fields: featuredSubTabs.flatMap((s) => s.fields),
-      fields: [], // not used when subTabs are present
+      fields: [],
       subTabs: featuredSubTabs,
       panelTitle: "Featured testimonials (top section)",
       panelDescription:

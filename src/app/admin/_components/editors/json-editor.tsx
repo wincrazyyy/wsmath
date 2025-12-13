@@ -193,7 +193,8 @@ export function JsonEditor<T extends object>({
 
       {/* Tabs + sub-tabs */}
       {hasTabs && (
-        <div className="mt-6 space-y-2">
+        <div className="mt-6 flex flex-col gap-3">
+
           {/* Parent tabs */}
           <div className="inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
             {tabs!.map((tab) => {
@@ -204,7 +205,7 @@ export function JsonEditor<T extends object>({
                   type="button"
                   onClick={() => {
                     setActiveTabKey(tab.key);
-                    if (tab.subTabs && tab.subTabs.length > 0) {
+                    if (tab.subTabs?.length) {
                       setActiveSubTabByParent((prev) => ({
                         ...prev,
                         [tab.key]: prev[tab.key] ?? tab.subTabs![0].key,
@@ -223,10 +224,9 @@ export function JsonEditor<T extends object>({
             })}
           </div>
 
-          {/* Sub-tabs for active parent */}
+          {/* Sub-tabs BELOW parent tabs */}
           {(() => {
-            const active =
-              tabs!.find((t) => t.key === activeTabKey) ?? tabs![0];
+            const active = tabs!.find((t) => t.key === activeTabKey) ?? tabs![0];
             const subTabs = active.subTabs ?? [];
             const activeSubKey =
               subTabs.length > 0
@@ -264,6 +264,7 @@ export function JsonEditor<T extends object>({
           })()}
         </div>
       )}
+
 
       {/* Fields section */}
       {hasTabs ? (
