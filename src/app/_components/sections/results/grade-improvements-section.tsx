@@ -18,86 +18,58 @@ const GRADE_IMPROVEMENTS_CONFIG = {
         "How students move from school predictions to final exam results.",
     },
     summaryCards: {
-      top: {
-        icon: "⭐",
-        labelPrefix: "Reached",
-      },
-      second: {
-        icon: "📘",
-        labelPrefix: "Reached",
-      },
-      bigJumps: {
-        icon: "🔥",
-        label: "Major jumps (≥3 grades)",
-      },
-      fastTrack: {
-        icon: "⚡",
-        label: "Fast-track (≈3 months)",
-      },
+      top: { icon: "⭐", labelPrefix: "Reached" },
+      second: { icon: "📘", labelPrefix: "Reached" },
+      bigJumps: { icon: "🔥", label: "Major jumps (≥3 grades)" },
+      fastTrack: { icon: "⚡", label: "Fast-track (≈3 months)" },
     },
     heatmapRows: [
-      {
-        key: "maintained",
-        label: "➖ Maintained",
-        description: "Predicted = Final",
-      },
-      {
-        key: "plus1",
-        label: "↗️ +1 grade",
-        description: "Small step up",
-      },
-      {
-        key: "plus2",
-        label: "⤴️ +2 grades",
-        description: "Solid improvement",
-      },
-      {
-        key: "plus3",
-        label: "📈 +3 grades",
-        description: "Big jump",
-      },
-      {
-        key: "plus4",
-        label: "🚀 4+ grades",
-        description: "Massive jumps",
-      },
+      { key: "maintained", label: "➖ Maintained", description: "Predicted = Final" },
+      { key: "plus1", label: "↗️ +1 grade", description: "Small step up" },
+      { key: "plus2", label: "⤴️ +2 grades", description: "Solid improvement" },
+      { key: "plus3", label: "📈 +3 grades", description: "Big jump" },
+      { key: "plus4", label: "🚀 4+ grades", description: "Massive jumps" },
     ],
     table: {
       improvementColumnLabel: "Improvement",
     },
     footerNote: "👆 Hover on each cell to see the students.",
   },
+
+  gradeDisplay: {
+    prefix: "grade ", // 👈 CHANGE THIS IN ONE PLACE ANYTIME
+  },
+
   scales: {
     ib: {
       type: "numeric",
-      // normalised scores 1..7
       order: [1, 2, 3, 4, 5, 6, 7],
-      displayLabels: {
-        1: "grade 1",
-        2: "grade 2",
-        3: "grade 3",
-        4: "grade 4",
-        5: "grade 5",
-        6: "grade 6",
-        7: "grade 7",
+      labels: {
+        1: "1",
+        2: "2",
+        3: "3",
+        4: "4",
+        5: "5",
+        6: "6",
+        7: "7",
       },
     },
     letters: {
       type: "letters",
-      // F < E < D < C < B < A < A*
       order: ["F", "E", "D", "C", "B", "A", "A*"],
-      displayLabels: {
-        1: "grade F",
-        2: "grade E",
-        3: "grade D",
-        4: "grade C",
-        5: "grade B",
-        6: "grade A",
-        7: "grade A*",
+      labels: {
+        1: "F",
+        2: "E",
+        3: "D",
+        4: "C",
+        5: "B",
+        6: "A",
+        7: "A*",
       },
     },
   },
 } as const;
+
 
 type BucketKey = "maintained" | "plus1" | "plus2" | "plus3" | "plus4";
 
@@ -154,12 +126,11 @@ function normalizeGrade(grade: number | string, scale: GradeScale): number {
 
 // Map a normalised score (1–7) back to a display grade string based on scale.
 function formatDisplayGrade(score: number, scale: GradeScale): string {
-  const config = GRADE_SCALES[scale];
+  const { labels } = GRADE_IMPROVEMENTS_CONFIG.scales[scale];
+  const prefix = GRADE_IMPROVEMENTS_CONFIG.gradeDisplay.prefix; // e.g. "grade "
 
-  const label =
-    (config.displayLabels as Record<number, string>)[score];
-
-  return label ?? `grade ${score}`;
+  const label = (labels as Record<number, string>)[score];
+  return prefix + (label ?? score);
 }
 
 
