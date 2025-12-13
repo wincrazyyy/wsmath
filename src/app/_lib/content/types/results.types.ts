@@ -9,6 +9,18 @@ export type ResultsHeaderConfig = {
   rightAccent?: SectionHeaderRightAccent;
 };
 
+export type GradeImprovementsHeaderConfig = {
+  title: string;
+  description?: string;
+};
+
+export type SummaryCardsConfig = {
+  top: string;
+  second: string;
+  bigJumps: string;
+  fastTrack: string;
+};
+
 export type ResultItemConfig = {
   id: string;
   label: string;
@@ -38,9 +50,35 @@ export type StudentsMapConfig = {
   [studentsKey: string]: Student[];
 };
 
+export type HeatmapCell = {
+  count: number;
+  tooltip?: string;
+};
+
+export type HeatmapKey = {
+  label: string;
+  description?: string;
+};
+
+export type HeatmapTableConfig = {
+  keyColumn: string;
+  leftColumn: string;
+  rightColumn: string;
+  heatmapKeys: HeatmapKey[];
+};
+
+export type ScalesMapConfig = {
+  [scaleKey: string]: string[];
+};
+
 export type GradeImprovementsConfig = {
+  header: GradeImprovementsHeaderConfig;
+  summaryCards: SummaryCardsConfig;
   resultGroups: ResultGroupConfig[];
   students: StudentsMapConfig;
+  table: HeatmapTableConfig;
+  scales: ScalesMapConfig;
+  footerNote?: string;
 };
 
 export type ResultsCtaConfig = {

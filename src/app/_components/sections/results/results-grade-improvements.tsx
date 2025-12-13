@@ -4,9 +4,7 @@
 import { useState } from "react";
 
 import { 
-  GradeImprovementsConfig, 
-  ResultGroupConfig, 
-  StudentsMapConfig 
+  GradeImprovementsConfig
 } from "@/app/_lib/content/types/results.types";
 
 import { ResultsGradeTabs } from "./results-grade-tabs";
@@ -17,8 +15,15 @@ interface ResultsGradeImprovementsProps {
 }
 
 export function ResultsGradeImprovements( { gradeImprovements }: ResultsGradeImprovementsProps ) {
-  const resultGroups = gradeImprovements.resultGroups as ResultGroupConfig[];
-  const students = gradeImprovements.students as StudentsMapConfig;
+  const {
+    header,
+    summaryCards,
+    resultGroups,
+    students,
+    table,
+    scales,
+    footerNote
+  } = gradeImprovements;
 
   type GroupId = (typeof resultGroups)[number]["id"];
   type SubTabId = (typeof resultGroups)[number]["items"][number]["id"];
@@ -50,19 +55,6 @@ export function ResultsGradeImprovements( { gradeImprovements }: ResultsGradeImp
 
   return (
     <section className="container mt-8 max-w-5xl space-y-8">
-      {/* Block header inside Results */}
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-lg font-semibold text-slate-900">
-            Grade improvements at a glance
-          </h2>
-          <p className="text-sm text-slate-500">
-            Explore how students from different programmes improved from
-            school predictions to final exam results.
-          </p>
-        </div>
-      </div>
-
       {/* Tabs (own component) */}
       <ResultsGradeTabs
         groups={resultGroups.map((g) => ({
@@ -79,8 +71,13 @@ export function ResultsGradeImprovements( { gradeImprovements }: ResultsGradeImp
       {/* Grade improvements heatmap (own component/file) */}
       <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur">
         <GradeImprovementsSection
+          header={header}
+          summaryCards={summaryCards}
           resultItem={activeItem}
           students={students[activeItem.studentsKey]}
+          table={table}
+          scales={scales}
+          footerNote={footerNote}
         />
       </div>
     </section>

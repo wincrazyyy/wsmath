@@ -11,27 +11,37 @@
     ],
     "rightAccent": {
       "heading": "Impact Overview",
-      "badge": "Across 8+ Years",
-      "mainValue": "250+",
-      "mainLabel": "high-commitment students trained",
+      "badge": "100% satisfaction",
+      "mainValue": "2+",
+      "mainLabel": "average grade grade jumps",
       "mainSize": "sm",
       "columns": [
         {
-          "title": "Long-term success rate",
-          "items": ["90%+ sustained grade growth"]
+          "title": "Consistent excellence",
+          "items": ["90%+ grade growth"]
         },
         {
-          "title": "Top-band achievers",
-          "items": ["120+ students reached highest tier"]
+          "title": "Top grade bands",
+          "items": ["Guarenteed highest score range"]
         },
         {
-          "title": "Average improvement",
-          "items": ["+2 to +4 grade jump per student"]
+          "title": "Rapid results",
+          "items": ["Quick improvements within 3 months"]
         }
       ]
     }
   },
   "gradeImprovements": {
+    "header": {
+      "title": "Grade improvements",
+      "description": "How students move from school predictions to final exam results."
+    },
+    "summaryCards": {
+      "top": "⭐ Final grade #",
+      "second": "📘 Final grade #",
+      "bigJumps": "🔥 Major jumps (≥3 grades)",
+      "fastTrack": "⚡ Fast-track (≈3 months)"
+    },
     "resultGroups": [
       {
         "id": "ibdp",
@@ -83,9 +93,9 @@
         "items": [
           {
             "id": "igcse-add",
-            "label": "Add Math",
-            "programLabel": "IGCSE Add Math",
-            "subtitle": "Cambridge (0606) / Further Math Edexcel (4PM0)",
+            "label": "Additional / Further Math",
+            "programLabel": "IGCSE Additional / Further Math",
+            "subtitle": "Cambridge (0606) / Edexcel (4PM0)",
             "studentsKey": "IGCSE_AM",
             "gradeScale": "igcse"
           },
@@ -93,7 +103,7 @@
             "id": "igcse-math",
             "label": "Math",
             "programLabel": "IGCSE Math",
-            "subtitle": "Cambridge (0607, 0580) / Math Edexcel (4PM1)",
+            "subtitle": "Cambridge (0607, 0580) / Edexcel (4PM1)",
             "studentsKey": "IGCSE_M",
             "gradeScale": "igcse"
           }
@@ -177,7 +187,40 @@
         { "name": "Catherine", "year": 2021, "from": "B", "to": "A*" },
         { "name": "Jessica", "year": 2019, "from": "C", "to": "A" }
       ]
-    }
+    },
+    "table": {
+      "keyColumn": "Improvement",
+      "leftColumn": "Final Grade #",
+      "rightColumn": "Final Grade #",
+      "heatmapKeys": [
+        {
+          "label": "➖ Maintained",
+          "description": "Predicted = Final"
+        },
+        {
+          "label": "↗️ +1 grade",
+          "description": "Small step up"
+        },
+        {
+          "label": "⤴️ +2 grades",
+          "description": "Solid improvement"
+        },
+        {
+          "label": "📈 +3 grades",
+          "description": "Big jump"
+        },
+        {
+          "label": "🚀 4+ grades",
+          "description": "Massive jumps"
+        }
+      ]
+    },
+    "scales": {
+      "ib": ["1", "2", "3", "4", "5", "6", "7"],
+      "al": ["F", "E", "D", "C", "B", "A", "A*"],
+      "igcse": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
+    },
+    "footerNote": "👆 Hover on each cell to see the students."
   },
   "resultsCta": {
     "heading": "Start your IBDP Math coaching",
