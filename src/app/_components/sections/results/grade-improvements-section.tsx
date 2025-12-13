@@ -15,7 +15,7 @@ import { TooltipCell } from "./tooltip-cell";
 
 // Map a display grade string to a normalised score based on scale (>0 if found).
 function normalizeGrade(grade: StudentGrade, syllabusScale: string[]): number {
-  grade = grade.toString();;
+  grade = grade.toString();
   for (let i = 0; i < syllabusScale.length; i++) {
     if (syllabusScale[i].includes(grade)) {
       return i + 1;
@@ -51,7 +51,7 @@ function buildHeatmapRows(
   table: HeatmapTableConfig,
   syllabusScale: string[],
   isLeftFinal: (g: Student["to"]) => boolean,
-  isRightFinal: (g: Student["to"]) => boolean,
+  isRightFinal: (g: Student["to"]) => boolean
 ): HeatmapRow[] {
   const buckets: { left: Student[]; right: Student[] }[] = [];
   const totalRows = table.heatmapKeys.length;
@@ -66,7 +66,7 @@ function buildHeatmapRows(
     const diff = toScore - fromScore;
     if (diff < 0) continue;
 
-    let rowNumber = diff >= totalRows ? totalRows - 1 : diff;
+    const rowNumber = diff >= totalRows ? totalRows - 1 : diff;
 
     if (isLeftFinal(s.to)) buckets[rowNumber].left.push(s);
     if (isRightFinal(s.to)) buckets[rowNumber].right.push(s);
@@ -113,22 +113,24 @@ interface GradeImprovementsSectionProps {
   footerNote?: string;
 }
 
-export function GradeImprovementsSection( {
+export function GradeImprovementsSection({
   header,
   summaryCards,
   resultItem,
   students,
   table,
   scales,
-  footerNote
-} : GradeImprovementsSectionProps) {
+  footerNote,
+}: GradeImprovementsSectionProps) {
   const { programLabel, subtitle, gradeScale } = resultItem;
   const syllabusScale = scales[gradeScale];
 
   const isRightFinal = (g: Student["to"]) =>
-    normalizeGrade(g, syllabusScale) === normalizeGrade(getTopGrade(syllabusScale), syllabusScale);
+    normalizeGrade(g, syllabusScale) ===
+    normalizeGrade(getTopGrade(syllabusScale), syllabusScale);
   const isLeftFinal = (g: Student["to"]) =>
-    normalizeGrade(g, syllabusScale) === normalizeGrade(getSecondGrade(syllabusScale), syllabusScale);
+    normalizeGrade(g, syllabusScale) ===
+    normalizeGrade(getSecondGrade(syllabusScale), syllabusScale);
 
   const heatmapRows = buildHeatmapRows(
     students,
@@ -143,7 +145,8 @@ export function GradeImprovementsSection( {
 
   const bigJumps = students.filter((s) => {
     const diff =
-      normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
+      normalizeGrade(s.to, syllabusScale) -
+      normalizeGrade(s.from, syllabusScale);
     return diff >= 3;
   }).length;
 
@@ -152,7 +155,7 @@ export function GradeImprovementsSection( {
   ).length;
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur">
+    <section className="space-y-5">
       {/* Header + summary */}
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
@@ -162,9 +165,7 @@ export function GradeImprovementsSection( {
           <h2 className="mt-1 text-xl font-semibold text-slate-900">
             {header.title}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            {header.description}
-          </p>
+          <p className="mt-1 text-sm text-slate-500">{header.description}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
@@ -179,7 +180,10 @@ export function GradeImprovementsSection( {
 
           <div className="flex flex-col justify-between rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
-              {hashToGrade(summaryCards.second, getSecondGrade(syllabusScale))}
+              {hashToGrade(
+                summaryCards.second,
+                getSecondGrade(syllabusScale)
+              )}
             </div>
             <div className="text-lg font-semibold text-sky-800">
               {totalSecond}
@@ -207,7 +211,7 @@ export function GradeImprovementsSection( {
       </div>
 
       {/* Heatmap grid */}
-      <div className="mt-5 rounded-xl border border-slate-100 overflow-visible">
+      <div className="mt-1 rounded-xl border border-slate-100 overflow-visible">
         <table className="w-full border-collapse text-sm">
           <thead className="bg-slate-50/80">
             <tr>
@@ -215,7 +219,10 @@ export function GradeImprovementsSection( {
                 {table.keyColumn}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {hashToGrade(table.leftColumn, getSecondGrade(syllabusScale))}
+                {hashToGrade(
+                  table.leftColumn,
+                  getSecondGrade(syllabusScale)
+                )}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {hashToGrade(table.rightColumn, getTopGrade(syllabusScale))}
@@ -258,7 +265,9 @@ export function GradeImprovementsSection( {
         </table>
       </div>
 
-      <p className="mt-3 text-[11px] text-slate-400">{footerNote}</p>
+      {footerNote && (
+        <p className="mt-1 text-[11px] text-slate-400">{footerNote}</p>
+      )}
     </section>
   );
 }
