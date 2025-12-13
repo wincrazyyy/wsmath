@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-
 import { GradeImprovementsConfig } from "@/app/_lib/content/types/results.types";
 
 import { ResultsGradeTabs } from "./results-grade-tabs";
@@ -54,31 +53,41 @@ export function ResultsGradeImprovements({
   }
 
   return (
-    <section className="container mt-8 max-w-5xl">
-      <div className="w-full rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur md:p-6 space-y-6">
-        {/* Tabs integrated into the same card as the table */}
-        <ResultsGradeTabs
-          groups={resultGroups.map((g) => ({
-            id: g.id,
-            heading: g.heading,
-            items: g.items.map((i) => ({ id: i.id, label: i.label })),
-          }))}
-          activeGroupId={activeGroupId}
-          activeSubId={activeSubId}
-          onChangeGroup={(id) => handleChangeGroup(id as GroupId)}
-          onChangeSub={(id) => handleChangeSub(id as SubTabId)}
-        />
+    <section className="container mt-10 max-w-5xl">
+      {/* soft gradient behind the card */}
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-x-0 -top-10 h-32 bg-gradient-to-r from-indigo-100/60 via-sky-100/40 to-transparent blur-2xl" />
 
-        {/* Grade improvements content (header + summary cards + heatmap table) */}
-        <GradeImprovementsSection
-          header={header}
-          summaryCards={summaryCards}
-          resultItem={activeItem}
-          students={students[activeItem.studentsKey]}
-          table={table}
-          scales={scales}
-          footerNote={footerNote}
-        />
+        {/* main card */}
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white/90 shadow-lg backdrop-blur">
+          {/* tabs header bar */}
+          <div className="border-b border-slate-100 bg-slate-50/70 px-4 pt-3 pb-2 md:px-6">
+            <ResultsGradeTabs
+              groups={resultGroups.map((g) => ({
+                id: g.id,
+                heading: g.heading,
+                items: g.items.map((i) => ({ id: i.id, label: i.label })),
+              }))}
+              activeGroupId={activeGroupId}
+              activeSubId={activeSubId}
+              onChangeGroup={(id) => handleChangeGroup(id as GroupId)}
+              onChangeSub={(id) => handleChangeSub(id as SubTabId)}
+            />
+          </div>
+
+          {/* card body: header + summary + table */}
+          <div className="px-4 py-5 md:px-6 md:py-6">
+            <GradeImprovementsSection
+              header={header}
+              summaryCards={summaryCards}
+              resultItem={activeItem}
+              students={students[activeItem.studentsKey]}
+              table={table}
+              scales={scales}
+              footerNote={footerNote}
+            />
+          </div>
+        </div>
       </div>
     </section>
   );
