@@ -61,24 +61,24 @@ export function getBasePath(fieldPath: string): string {
 }
 
 /**
- * Build numbered sub-tabs (1, 2, 3, ...) for array paths like:
- *   "featured[0].name", "featured[1].quote", ...
+ * Build numbered sub-tabs (1, 2, 3, ...) for pre-filtered array fields.
  *
- * @param allFields        Full list of FieldConfig entries
- * @param arrayKey         Base key, e.g. "featured" or "carousel"
- * @param panelTitlePrefix Prefix used as "X #1", "X #2"...
+ * @param scopedFields     Only the fields for featured[] or carousel[] 
+ * @param arrayKey         "featured" or "carousel"
+ * @param panelTitlePrefix "Featured testimonial" etc.
  * @param panelDescription Shared description for all sub-tabs
  */
 export function buildIndexedSubTabs(
-  allFields: FieldConfig[],
+  scopedFields: FieldConfig[],
   arrayKey: string,
   panelTitlePrefix: string,
   panelDescription: string,
 ): JsonEditorSubTabConfig[] {
   const byIndex: Record<number, FieldConfig[]> = {};
+
   const regex = new RegExp(`^${arrayKey}\\[(\\d+)\\]\\.`);
 
-  for (const field of allFields) {
+  for (const field of scopedFields) {
     const match = field.path.match(regex);
     if (!match) continue;
 

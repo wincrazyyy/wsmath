@@ -2,7 +2,13 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
-import { TESTIMONIALS_FIELDS } from "@/app/admin/_lib/fields/testimonials-fields";
+import {
+  TESTIMONIALS_HEADER_FIELDS,
+  TESTIMONIALS_VIDEO_FIELDS,
+  TESTIMONIALS_FEATURED_FIELDS,
+  TESTIMONIALS_CAROUSEL_FIELDS,
+  TESTIMONIALS_FIELDS
+} from "@/app/admin/_lib/fields/testimonials-fields";
 import { JsonEditor } from "./json-editor";
 import {
   JsonEditorTabConfig,
@@ -19,23 +25,15 @@ export function TestimonialsEditor<T extends object>({
   data,
   onChangeData,
 }: TestimonialsEditorProps<T>) {
-  const headerFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
-    f.path.startsWith("header."),
-  );
-
-  const videoFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
-    f.path.startsWith("video."),
-  );
-
   const featuredSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
-    TESTIMONIALS_FIELDS,
+    TESTIMONIALS_FEATURED_FIELDS,
     "featured",
     "Featured testimonial",
     "Edit this individual featured testimonial in the main grid.",
   );
 
   const carouselSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
-    TESTIMONIALS_FIELDS,
+    TESTIMONIALS_CAROUSEL_FIELDS,
     "carousel",
     "Carousel testimonial",
     "Edit this individual testimonial in the scrolling carousel strip.",
@@ -45,7 +43,7 @@ export function TestimonialsEditor<T extends object>({
     {
       key: "header",
       label: "Section header",
-      fields: headerFields,
+      fields: TESTIMONIALS_HEADER_FIELDS,
       panelTitle: "Testimonials – section header",
       panelDescription:
         "Edit the eyebrow, title, and subtitle for the Testimonials section heading.",
@@ -53,7 +51,7 @@ export function TestimonialsEditor<T extends object>({
     {
       key: "video",
       label: "Student voices video",
-      fields: videoFields,
+      fields: TESTIMONIALS_VIDEO_FIELDS,
       panelTitle: "Student voices video",
       panelDescription:
         "Controls the heading, description, and media paths for the video shown under the testimonials section.",

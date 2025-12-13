@@ -2,7 +2,13 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
-import { PACKAGES_FIELDS } from "@/app/admin/_lib/fields/packages-fields";
+import {
+  PACKAGES_HEADER_FIELDS,
+  PACKAGES_COMPARISON_FIELDS,
+  PACKAGES_PRIVATE_FIELDS,
+  PACKAGES_GROUP_FIELDS,
+  PACKAGES_FIELDS
+} from "@/app/admin/_lib/fields/packages-fields";
 import { JsonEditor } from "./json-editor";
 
 type SubTab = "header" | "comparison" | "private" | "group";
@@ -16,22 +22,6 @@ export function PackagesEditor<T extends object>({
   data,
   onChangeData,
 }: PackagesEditorProps<T>) {
-  const headerFields: FieldConfig[] = PACKAGES_FIELDS.filter((f) =>
-    f.path.startsWith("header."),
-  );
-
-  const comparisonFields: FieldConfig[] = PACKAGES_FIELDS.filter((f) =>
-    f.path.startsWith("comparison."),
-  );
-
-  const privateFields: FieldConfig[] = PACKAGES_FIELDS.filter((f) =>
-    f.path.startsWith("private."),
-  );
-
-  const groupFields: FieldConfig[] = PACKAGES_FIELDS.filter((f) =>
-    f.path.startsWith("group."),
-  );
-
   const tabs: {
     key: SubTab;
     label: string;
@@ -42,7 +32,7 @@ export function PackagesEditor<T extends object>({
     {
       key: "header",
       label: "Section header",
-      fields: headerFields,
+      fields: PACKAGES_HEADER_FIELDS,
       panelTitle: "Packages – section header",
       panelDescription:
         "Edit the eyebrow, title, subtitle, chips, and right-hand summary card for the packages section.",
@@ -50,7 +40,7 @@ export function PackagesEditor<T extends object>({
     {
       key: "comparison",
       label: "Comparison strip",
-      fields: comparisonFields,
+      fields: PACKAGES_COMPARISON_FIELDS,
       panelTitle: "Packages – comparison strip",
       panelDescription:
         "Edit the labels and copy for the pricing comparison strip between 1-to-1 and group.",
@@ -58,7 +48,7 @@ export function PackagesEditor<T extends object>({
     {
       key: "private",
       label: "Private package (1-to-1)",
-      fields: privateFields,
+      fields: PACKAGES_PRIVATE_FIELDS,
       panelTitle: "Packages – private 1-to-1 package",
       panelDescription:
         "Edit the private coaching card: badge, rate, description, bullet points, and the intensive 8-lesson block.",
@@ -66,7 +56,7 @@ export function PackagesEditor<T extends object>({
     {
       key: "group",
       label: "Group package & leaflet",
-      fields: groupFields,
+      fields: PACKAGES_GROUP_FIELDS,
       panelTitle: "Packages – group package & leaflet",
       panelDescription:
         "Edit the group course card and the leaflet preview (pages and auto-advance timing).",

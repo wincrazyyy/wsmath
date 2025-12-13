@@ -89,8 +89,8 @@ export const RESULTS_HEADER_FIELDS: FieldConfig[] = [
     type: "string[]",
   },
 ];
-export const RESULTS_GRADE_IMPROVEMENT_FIELDS: FieldConfig[] = [
-  // Header
+export const RESULTS_GRADE_IMPROVEMENT_HEADERS_FIELDS: FieldConfig[] = [
+  // Headers
   {
     path: "gradeImprovements.header.title",
     label: "Grade improvements – title",
@@ -132,6 +132,9 @@ export const RESULTS_GRADE_IMPROVEMENT_FIELDS: FieldConfig[] = [
       "Text for the ‘fast-track’ summary card (e.g. ⚡ Fast-track (≈3 months)).",
     type: "string",
   },
+];
+
+export const RESULTS_GRADE_IMPROVEMENT_DATA_FIELDS: FieldConfig[] = [
   {
     path: "gradeImprovements.resultGroups",
     label: "Programme groups & tabs",
@@ -146,6 +149,9 @@ export const RESULTS_GRADE_IMPROVEMENT_FIELDS: FieldConfig[] = [
       "JSON object mapping studentsKey → list of students with name, year, from, to, and optional months. You can add as many students as you like.",
     type: "json",
   },
+];
+
+export const RESULTS_GRADE_IMPROVEMENT_MISC_FIELDS: FieldConfig[] = [
   {
     path: "gradeImprovements.table",
     label: "Heatmap table configuration",
@@ -207,6 +213,8 @@ export const RESULTS_CTA_FIELDS: FieldConfig[] = [
 
 export const RESULTS_FIELDS: FieldConfig[] = [
   ...RESULTS_HEADER_FIELDS,
-  ...RESULTS_GRADE_IMPROVEMENT_FIELDS,
+  ...RESULTS_GRADE_IMPROVEMENT_HEADERS_FIELDS,
+  ...RESULTS_GRADE_IMPROVEMENT_DATA_FIELDS,
+  ...RESULTS_GRADE_IMPROVEMENT_MISC_FIELDS,
   ...RESULTS_CTA_FIELDS,
 ];

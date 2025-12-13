@@ -23,55 +23,7 @@ export const TESTIMONIALS_HEADER_FIELDS: FieldConfig[] = [
   },
 ];
 
-function testimonialFields(
-  basePath: string,
-  labelPrefix: string
-): FieldConfig[] {
-  return [
-    {
-      path: `${basePath}.name`,
-      label: `${labelPrefix} – Name`,
-      description: "Student or parent name (shown in bold).",
-      type: "string",
-    },
-    {
-      path: `${basePath}.role`,
-      label: `${labelPrefix} – Role / result`,
-      description:
-        "Short line under the name, e.g. “IBDP AAHL — Level 7”.",
-      type: "string",
-    },
-    {
-      path: `${basePath}.quote`,
-      label: `${labelPrefix} – Quote`,
-      description: "Full testimonial text.",
-      type: "textarea",
-    },
-    {
-      path: `${basePath}.avatarSrc`,
-      label: `${labelPrefix} – Avatar image path`,
-      description:
-        "Optional avatar image in /public/avatars (e.g. /avatars/yuki.jpg).",
-      type: "string",
-    },
-  ];
-}
-
-const FEATURED_TESTIMONIAL_FIELDS: FieldConfig[] = [
-  ...testimonialFields("featured[0]", "Featured #1"),
-  ...testimonialFields("featured[1]", "Featured #2"),
-  ...testimonialFields("featured[2]", "Featured #3"),
-  ...testimonialFields("featured[3]", "Featured #4"),
-];
-
-const CAROUSEL_TESTIMONIAL_FIELDS: FieldConfig[] = [
-  ...testimonialFields("carousel[0]", "Carousel #1"),
-  ...testimonialFields("carousel[1]", "Carousel #2"),
-  ...testimonialFields("carousel[2]", "Carousel #3"),
-  ...testimonialFields("carousel[3]", "Carousel #4"),
-];
-
-const VIDEO_FIELDS: FieldConfig[] = [
+export const TESTIMONIALS_VIDEO_FIELDS: FieldConfig[] = [
   {
     path: "video.eyebrow",
     label: "Student voices – Eyebrow label",
@@ -106,45 +58,57 @@ const VIDEO_FIELDS: FieldConfig[] = [
   },
 ];
 
-export const TESTIMONIALS_CTA_FIELDS: FieldConfig[] = [
-  {
-    path: "testimonialsCta.heading",
-    label: "Testimonials CTA – Heading",
-    description: "Big title in the WhatsApp CTA box.",
-    type: "string",
-  },
-  {
-    path: "testimonialsCta.subheading",
-    label: "Testimonials CTA – Subheading",
-    description: "Short description under the heading.",
-    type: "string",
-  },
-  {
-    path: "testimonialsCta.bullets",
-    label: "Testimonials CTA – Bullet points",
-    description:
-      "One benefit per line. Shown as bullet points above the button.",
-    type: "string[]",
-  },
-  {
-    path: "testimonialsCta.note",
-    label: "Testimonials CTA – Small note",
-    description: "Tiny note under the button (e.g. response / what to send).",
-    type: "string",
-  },
-  {
-    path: "testimonialsCta.logoSrc",
-    label: "Testimonials CTA – Logo image path",
-    description:
-      "Path to the logo image in /public (e.g. /icon.svg).",
-    type: "string",
-  },
+function testimonialFields(
+  basePath: string,
+  labelPrefix: string
+): FieldConfig[] {
+  return [
+    {
+      path: `${basePath}.name`,
+      label: `${labelPrefix} – Name`,
+      description: "Student or parent name (shown in bold).",
+      type: "string",
+    },
+    {
+      path: `${basePath}.role`,
+      label: `${labelPrefix} – Role / result`,
+      description:
+        "Short line under the name, e.g. “IBDP AAHL — Level 7”.",
+      type: "string",
+    },
+    {
+      path: `${basePath}.quote`,
+      label: `${labelPrefix} – Quote`,
+      description: "Full testimonial text.",
+      type: "textarea",
+    },
+    {
+      path: `${basePath}.avatarSrc`,
+      label: `${labelPrefix} – Avatar image path`,
+      description:
+        "Optional avatar image in /public/avatars (e.g. /avatars/yuki.jpg).",
+      type: "string",
+    },
+  ];
+}
+
+export const TESTIMONIALS_FEATURED_FIELDS: FieldConfig[] = [
+  ...testimonialFields("featured[0]", "Featured #1"),
+  ...testimonialFields("featured[1]", "Featured #2"),
+  ...testimonialFields("featured[2]", "Featured #3"),
+  ...testimonialFields("featured[3]", "Featured #4"),
+];
+
+export const TESTIMONIALS_CAROUSEL_FIELDS: FieldConfig[] = [
+  ...testimonialFields("carousel[0]", "Carousel #1"),
+  ...testimonialFields("carousel[1]", "Carousel #2"),
+  ...testimonialFields("carousel[2]", "Carousel #3"),
+  ...testimonialFields("carousel[3]", "Carousel #4"),
 ];
 
 export const TESTIMONIALS_FIELDS: FieldConfig[] = [
   ...TESTIMONIALS_HEADER_FIELDS,
-  ...VIDEO_FIELDS,
-  ...FEATURED_TESTIMONIAL_FIELDS,
-  ...CAROUSEL_TESTIMONIAL_FIELDS,
-  ...TESTIMONIALS_CTA_FIELDS,
+  ...TESTIMONIALS_VIDEO_FIELDS,
+  ...TESTIMONIALS_FEATURED_FIELDS,
+  ...TESTIMONIALS_CAROUSEL_FIELDS,
 ];
