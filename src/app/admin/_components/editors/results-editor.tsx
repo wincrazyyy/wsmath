@@ -5,7 +5,7 @@ import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { RESULTS_FIELDS } from "@/app/admin/_lib/fields/results-fields";
 import { JsonEditor } from "./json-editor";
 
-type SubTab = "header" | "cta";
+type SubTab = "header" | "grade" | "cta";
 
 type ResultsEditorProps<T extends object> = {
   data: T;
@@ -18,6 +18,10 @@ export function ResultsEditor<T extends object>({
 }: ResultsEditorProps<T>) {
   const headerFields: FieldConfig[] = RESULTS_FIELDS.filter((f) =>
     f.path.startsWith("header."),
+  );
+
+  const gradeImprovementsFields: FieldConfig[] = RESULTS_FIELDS.filter((f) =>
+    f.path.startsWith("gradeImprovements."),
   );
 
   const ctaFields: FieldConfig[] = RESULTS_FIELDS.filter((f) =>
@@ -38,6 +42,14 @@ export function ResultsEditor<T extends object>({
       panelTitle: "Results – section header",
       panelDescription:
         "Edit the eyebrow, title, and subtitle for the Results section heading.",
+    },
+    {
+      key: "grade",
+      label: "Grade improvements block",
+      fields: gradeImprovementsFields,
+      panelTitle: "Results – grade improvements",
+      panelDescription:
+        "Configure the tabs, grade scales, summary cards, and improvement heatmap for the grade improvements block.",
     },
     {
       key: "cta",

@@ -89,6 +89,87 @@ export const RESULTS_HEADER_FIELDS: FieldConfig[] = [
     type: "string[]",
   },
 ];
+export const RESULTS_GRADE_IMPROVEMENT_FIELDS: FieldConfig[] = [
+  // Header
+  {
+    path: "gradeImprovements.header.title",
+    label: "Grade improvements – title",
+    description: "Main heading shown above the grade improvements block.",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.header.description",
+    label: "Grade improvements – description",
+    description:
+      "Short intro sentence explaining what the grade improvements chart shows.",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.summaryCards.top",
+    label: "Summary card – top grade",
+    description:
+      "Text for the top-grade summary card. Use # as a placeholder for the grade (e.g. ⭐ Final grade #).",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.summaryCards.second",
+    label: "Summary card – second top grade",
+    description:
+      "Text for the second-top-grade summary card. Use # as a placeholder for the grade (e.g. ⭐ Final grade #).",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.summaryCards.bigJumps",
+    label: "Summary card – big jumps",
+    description:
+      "Text for the ‘major jumps’ summary card (e.g. 🔥 Major jumps (≥3 grades)).",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.summaryCards.fastTrack",
+    label: "Summary card – fast track",
+    description:
+      "Text for the ‘fast-track’ summary card (e.g. ⚡ Fast-track (≈3 months)).",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.resultGroups",
+    label: "Programme groups & tabs",
+    description:
+      "JSON array of result groups (e.g. IBDP / A-Level / IGCSE) and their items/tabs. You can add or remove groups and items as needed.",
+    type: "json",
+  },
+  {
+    path: "gradeImprovements.students",
+    label: "Students by programme",
+    description:
+      "JSON object mapping studentsKey → list of students with name, year, from, to, and optional months. You can add as many students as you like.",
+    type: "json",
+  },
+  {
+    path: "gradeImprovements.table",
+    label: "Heatmap table configuration",
+    description:
+      "JSON for the improvement table: key/left/right column labels and the list of heatmap rows (labels + descriptions). Rows can be added or removed.",
+    type: "json",
+  },
+  {
+    path: "gradeImprovements.scales",
+    label: "Grade scales",
+    description:
+      "JSON object defining grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels. You can add new scales or adjust existing ones.",
+    type: "json",
+  },
+  {
+    path: "gradeImprovements.footerNote",
+    label: "Footer note",
+    description:
+      "Small helper text under the table (e.g. ‘Hover on each cell to see the students.’).",
+    type: "string",
+  },
+];
+
+
 export const RESULTS_CTA_FIELDS: FieldConfig[] = [
   {
     path: "resultsCta.heading",
@@ -126,5 +207,6 @@ export const RESULTS_CTA_FIELDS: FieldConfig[] = [
 
 export const RESULTS_FIELDS: FieldConfig[] = [
   ...RESULTS_HEADER_FIELDS,
+  ...RESULTS_GRADE_IMPROVEMENT_FIELDS,
   ...RESULTS_CTA_FIELDS,
 ];

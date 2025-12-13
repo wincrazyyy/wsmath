@@ -8,23 +8,17 @@ import {
   IMAGE_UPLOAD_TARGETS,
   type ImageUploadTarget,
 } from "@/app/admin/_lib/image-upload-targets";
-import { toStringArray } from "@/app/admin/_lib/json-editor-helpers";
-import { ImageUploadInput } from "./image-upload-input"
+import { JsonEditorTabConfig, toStringArray } from "@/app/admin/_lib/json-editor-helpers";
+import { ImageUploadInput } from "./image-upload-input";
 import { MultiImageUploadInput } from "./multi-image-upload-input";
-
-export type JsonEditorTabConfig = {
-  key: string;
-  label: string;
-  fields: FieldConfig[];
-  panelTitle?: string;
-  panelDescription?: string;
-};
 
 export type JsonEditorProps<T extends object> = {
   title: string;
   description?: string;
   data: T;
-  fields: FieldConfig[];
+  /** Used when there are no tabs */
+  fields?: FieldConfig[];
+  /** For backwards compatibility – still required to turn tabs on */
   enableTabs?: boolean;
   tabs?: JsonEditorTabConfig[];
   jsonFileHint?: string;
@@ -36,7 +30,7 @@ export function JsonEditor<T extends object>({
   title,
   description,
   data,
-  fields,
+  fields = [],
   enableTabs,
   tabs,
   jsonFileHint = "",
@@ -45,9 +39,26 @@ export function JsonEditor<T extends object>({
 }: JsonEditorProps<T>) {
   const hasTabs = !!enableTabs && !!tabs && tabs.length > 0;
 
+  // ----- state for parent + sub-tabs -----
+
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
     hasTabs ? tabs![0].key : undefined,
   );
+
+  const [activeSubTabByParent, setActiveSubTabByParent] = useState<
+    Record<string, string | undefined>
+  >(() => {
+    if (!hasTabs) return {};
+    const initial: Record<string, string | undefined> = {};
+    for (const tab of tabs!) {
+      if (tab.subTabs && tab.subTabs.length > 0) {
+        initial[tab.key] = tab.subTabs[0].key;
+      }
+    }
+    return initial;
+  });
+
+  // ----- change helpers -----
 
   const handleChange = (field: FieldConfig, rawValue: string) => {
     const next = structuredClone(data) as T;
@@ -70,6 +81,7 @@ export function JsonEditor<T extends object>({
     const uploadTarget: ImageUploadTarget | undefined =
       IMAGE_UPLOAD_TARGETS[keyWithSlug] ?? IMAGE_UPLOAD_TARGETS[field.path];
 
+    // image upload integration
     if (uploadTarget) {
       if (uploadTarget.mode === "multi" && field.type === "string[]") {
         return (
@@ -82,7 +94,6 @@ export function JsonEditor<T extends object>({
         );
       }
 
-      // default: single-image mode
       return (
         <ImageUploadInput<T>
           field={field}
@@ -119,6 +130,7 @@ export function JsonEditor<T extends object>({
       );
     }
 
+    // string[]
     const arr = toStringArray(raw);
     return (
       <textarea
@@ -130,17 +142,43 @@ export function JsonEditor<T extends object>({
     );
   };
 
-  // Decide which fields + panel copy to show
+  // ----- select visible fields + panel copy -----
+
   let visibleFields: FieldConfig[] = fields;
   let panelTitle = title;
   let panelDescription = description ?? "";
 
   if (hasTabs) {
-    const active =
-      tabs!.find((t) => t.key === activeTabKey) ?? tabs![0];
-    visibleFields = active.fields;
-    panelTitle = active.panelTitle ?? panelTitle;
-    panelDescription = active.panelDescription ?? panelDescription;
+    const allTabs = tabs!;
+    const activeTab =
+      allTabs.find((t) => t.key === activeTabKey) ?? allTabs[0];
+
+    const subTabs = activeTab.subTabs ?? [];
+    const activeSubKey =
+      subTabs.length > 0
+        ? activeSubTabByParent[activeTab.key] ?? subTabs[0].key
+        : undefined;
+
+    const activeSubTab =
+      subTabs.length > 0
+        ? subTabs.find((s) => s.key === activeSubKey) ?? subTabs[0]
+        : undefined;
+
+    if (subTabs.length > 0 && activeSubTab) {
+      visibleFields = activeSubTab.fields;
+      panelTitle =
+        activeSubTab.panelTitle ??
+        activeTab.panelTitle ??
+        panelTitle;
+      panelDescription =
+        activeSubTab.panelDescription ??
+        activeTab.panelDescription ??
+        panelDescription;
+    } else {
+      visibleFields = activeTab.fields ?? [];
+      panelTitle = activeTab.panelTitle ?? panelTitle;
+      panelDescription = activeTab.panelDescription ?? panelDescription;
+    }
   }
 
   return (
@@ -153,26 +191,77 @@ export function JsonEditor<T extends object>({
         <p className="mt-1 text-sm text-neutral-600">{description}</p>
       )}
 
-      {/* Optional sub-tabs */}
+      {/* Tabs + sub-tabs */}
       {hasTabs && (
-        <div className="mt-6 inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
-          {tabs!.map((tab) => {
-            const isActive = tab.key === activeTabKey;
+        <div className="mt-6 space-y-2">
+          {/* Parent tabs */}
+          <div className="inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
+            {tabs!.map((tab) => {
+              const isActive = tab.key === activeTabKey;
+              return (
+                <button
+                  key={tab.key}
+                  type="button"
+                  onClick={() => {
+                    setActiveTabKey(tab.key);
+                    if (tab.subTabs && tab.subTabs.length > 0) {
+                      setActiveSubTabByParent((prev) => ({
+                        ...prev,
+                        [tab.key]: prev[tab.key] ?? tab.subTabs![0].key,
+                      }));
+                    }
+                  }}
+                  className={`rounded-full px-4 py-1.5 transition ${
+                    isActive
+                      ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
+                      : "text-neutral-600 hover:bg-neutral-50"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Sub-tabs for active parent */}
+          {(() => {
+            const active =
+              tabs!.find((t) => t.key === activeTabKey) ?? tabs![0];
+            const subTabs = active.subTabs ?? [];
+            const activeSubKey =
+              subTabs.length > 0
+                ? activeSubTabByParent[active.key] ?? subTabs[0].key
+                : undefined;
+
+            if (subTabs.length === 0) return null;
+
             return (
-              <button
-                key={tab.key}
-                type="button"
-                onClick={() => setActiveTabKey(tab.key)}
-                className={`rounded-full px-4 py-1.5 transition ${
-                  isActive
-                    ? "bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 text-white shadow-sm"
-                    : "text-neutral-600 hover:bg-neutral-50"
-                }`}
-              >
-                {tab.label}
-              </button>
+              <div className="inline-flex rounded-full border border-neutral-200 bg-neutral-50 p-1 text-[11px] font-medium">
+                {subTabs.map((sub) => {
+                  const isActive = sub.key === activeSubKey;
+                  return (
+                    <button
+                      key={sub.key}
+                      type="button"
+                      onClick={() =>
+                        setActiveSubTabByParent((prev) => ({
+                          ...prev,
+                          [active.key]: sub.key,
+                        }))
+                      }
+                      className={`rounded-full px-3 py-1 transition ${
+                        isActive
+                          ? "bg-neutral-900 text-white shadow-sm"
+                          : "text-neutral-600 hover:bg-white"
+                      }`}
+                    >
+                      {sub.label}
+                    </button>
+                  );
+                })}
+              </div>
             );
-          })}
+          })()}
         </div>
       )}
 

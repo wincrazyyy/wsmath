@@ -3,9 +3,11 @@
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { TESTIMONIALS_FIELDS } from "@/app/admin/_lib/fields/testimonials-fields";
-import { JsonEditor } from "./json-editor";
-
-type SubTab = "header" | "video" | "featured" | "carousel";
+import { JsonEditor, JsonEditorTabConfig } from "./json-editor";
+import {
+  buildIndexedSubTabs,
+  type JsonEditorSubTabConfig,
+} from "@/app/admin/_lib/json-editor-helpers";
 
 type TestimonialsEditorProps<T extends object> = {
   data: T;
@@ -24,21 +26,21 @@ export function TestimonialsEditor<T extends object>({
     f.path.startsWith("video."),
   );
 
-  const featuredFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
-    f.path.startsWith("featured["),
+  const featuredSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
+    TESTIMONIALS_FIELDS,
+    "featured",
+    "Featured testimonial",
+    "Edit this individual featured testimonial in the main grid.",
   );
 
-  const carouselFields: FieldConfig[] = TESTIMONIALS_FIELDS.filter((f) =>
-    f.path.startsWith("carousel["),
+  const carouselSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
+    TESTIMONIALS_FIELDS,
+    "carousel",
+    "Carousel testimonial",
+    "Edit this individual testimonial in the scrolling carousel strip.",
   );
 
-  const tabs: {
-    key: SubTab;
-    label: string;
-    fields: FieldConfig[];
-    panelTitle: string;
-    panelDescription: string;
-  }[] = [
+  const tabs: JsonEditorTabConfig[] = [
     {
       key: "header",
       label: "Section header",
@@ -58,25 +60,29 @@ export function TestimonialsEditor<T extends object>({
     {
       key: "featured",
       label: "Featured testimonials",
-      fields: featuredFields,
+      // optional: flat fields view if you ever want it:
+      // fields: featuredSubTabs.flatMap((s) => s.fields),
+      fields: [], // not used when subTabs are present
+      subTabs: featuredSubTabs,
       panelTitle: "Featured testimonials (top section)",
       panelDescription:
-        "Edit the highlighted testimonials that appear in the main grid.",
+        "Use the numbered tabs to edit each featured testimonial in the main grid.",
     },
     {
       key: "carousel",
       label: "Carousel strip",
-      fields: carouselFields,
+      fields: [],
+      subTabs: carouselSubTabs,
       panelTitle: "Carousel testimonials (scrolling strip)",
       panelDescription:
-        "Edit the testimonials shown in the scrolling carousel strip.",
+        "Use the numbered tabs to edit each testimonial in the scrolling carousel strip.",
     },
   ];
 
   return (
     <JsonEditor<T>
       title="Testimonials"
-      description="Edit the testimonials header, student voices video, featured testimonials, carousel strip, and WhatsApp CTA box."
+      description="Edit the testimonials header, student voices video, featured testimonials, and carousel strip."
       data={data}
       fields={TESTIMONIALS_FIELDS as FieldConfig[]}
       jsonFileHint="src/app/_lib/content/json/testimonials.json"
