@@ -65,7 +65,7 @@
             "programLabel": "A-Level Further Math",
             "subtitle": "Edexcel (IAL YFM01) / Cambridge (CAIE 9231)",
             "studentsKey": "AL_FM",
-            "gradeScale": "letters"
+            "gradeScale": "al"
           },
           {
             "id": "alevel-math",
@@ -73,7 +73,7 @@
             "programLabel": "A-Level Math",
             "subtitle": "Edexcel (IAL YMA01) / Cambridge (CAIE 9709) / OCR (H240)",
             "studentsKey": "AL_M",
-            "gradeScale": "letters"
+            "gradeScale": "al"
           }
         ]
       },
@@ -87,7 +87,7 @@
             "programLabel": "IGCSE Add Math",
             "subtitle": "Cambridge (0606) / Further Math Edexcel (4PM0)",
             "studentsKey": "IGCSE_AM",
-            "gradeScale": "letters"
+            "gradeScale": "igcse"
           },
           {
             "id": "igcse-math",
@@ -95,7 +95,7 @@
             "programLabel": "IGCSE Math",
             "subtitle": "Cambridge (0607, 0580) / Math Edexcel (4PM1)",
             "studentsKey": "IGCSE_M",
-            "gradeScale": "letters"
+            "gradeScale": "igcse"
           }
         ]
       }

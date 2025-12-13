@@ -9,15 +9,13 @@ export type ResultsHeaderConfig = {
   rightAccent?: SectionHeaderRightAccent;
 };
 
-export type GradeScale = "ib" | "letters";
-
 export type ResultItemConfig = {
   id: string;
   label: string;
   programLabel: string;
   subtitle?: string;
   studentsKey: string;
-  gradeScale: GradeScale;
+  gradeScale: string;
 };
 
 export type ResultGroupConfig = {

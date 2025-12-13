@@ -2,76 +2,59 @@
 
 import {
   ResultItemConfig,
-  GradeScale,
   Student,
+  StudentGrade,
 } from "@/app/_lib/content/types/results.types";
 
 // -----------------------------------------------------------------------------
 // Single JSON-style config object (easy to move to results.json later)
 // -----------------------------------------------------------------------------
 
-const GRADE_IMPROVEMENTS_CONFIG = {
-  text: {
-    header: {
-      title: "Grade improvements",
-      description:
-        "How students move from school predictions to final exam results.",
-    },
-    summaryCards: {
-      top: { icon: "⭐", labelPrefix: "Reached" },
-      second: { icon: "📘", labelPrefix: "Reached" },
-      bigJumps: { icon: "🔥", label: "Major jumps (≥3 grades)" },
-      fastTrack: { icon: "⚡", label: "Fast-track (≈3 months)" },
-    },
-    heatmapRows: [
-      { key: "maintained", label: "➖ Maintained", description: "Predicted = Final" },
-      { key: "plus1", label: "↗️ +1 grade", description: "Small step up" },
-      { key: "plus2", label: "⤴️ +2 grades", description: "Solid improvement" },
-      { key: "plus3", label: "📈 +3 grades", description: "Big jump" },
-      { key: "plus4", label: "🚀 4+ grades", description: "Massive jumps" },
-    ],
-    table: {
-      improvementColumnLabel: "Improvement",
-    },
-    footerNote: "👆 Hover on each cell to see the students.",
+const gradeImprovementsConfig = {
+  "header": {
+    "title": "Grade improvements",
+    "description": "How students move from school predictions to final exam results."
   },
-
-  gradeDisplay: {
-    prefix: "grade ", // 👈 CHANGE THIS IN ONE PLACE ANYTIME
+  "summaryCards": {
+    "top": "⭐ Final grade #",
+    "second": "📘 Final grade #",
+    "bigJumps": "🔥 Major jumps (≥3 grades)",
+    "fastTrack": "⚡ Fast-track (≈3 months)"
   },
-
-  scales: {
-    ib: {
-      type: "numeric",
-      order: [1, 2, 3, 4, 5, 6, 7],
-      labels: {
-        1: "1",
-        2: "2",
-        3: "3",
-        4: "4",
-        5: "5",
-        6: "6",
-        7: "7",
+  "footerNote": "👆 Hover on each cell to see the students.",
+  "table": {
+    "legendColumn": "Improvement",
+    "leftColumn": "Final Grade #",
+    "rightColumn": "Final Grade #",
+    "heatmapRows": [
+      {
+        "label": "➖ Maintained",
+        "description": "Predicted = Final"
       },
-    },
-    letters: {
-      type: "letters",
-      order: ["F", "E", "D", "C", "B", "A", "A*"],
-      labels: {
-        1: "F",
-        2: "E",
-        3: "D",
-        4: "C",
-        5: "B",
-        6: "A",
-        7: "A*",
+      {
+        "label": "↗️ +1 grade",
+        "description": "Small step up"
       },
-    },
+      {
+        "label": "⤴️ +2 grades",
+        "description": "Solid improvement"
+      },
+      {
+        "label": "📈 +3 grades",
+        "description": "Big jump"
+      },
+      {
+        "label": "🚀 4+ grades",
+        "description": "Massive jumps"
+      }
+    ]
   },
-} as const;
-
-
-type BucketKey = "maintained" | "plus1" | "plus2" | "plus3" | "plus4";
+  "scales": {
+    "ib": ["1", "2", "3", "4", "5", "6", "7"],
+    "al": ["F", "E", "D", "C", "B", "A", "A*"],
+    "igcse": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
+  }
+}
 
 type HeatmapCell = {
   count: number;
@@ -85,84 +68,64 @@ type HeatmapRow = {
   right: HeatmapCell;
 };
 
-// Convenience aliases
-const TEXT = GRADE_IMPROVEMENTS_CONFIG.text;
-const GRADE_SCALES = GRADE_IMPROVEMENTS_CONFIG.scales;
-
 // -----------------------------------------------------------------------------
 // Grade helpers
 // -----------------------------------------------------------------------------
 
-// Normalise grade to a numeric scale 1..7 so we can compute improvements.
-function normalizeGrade(grade: number | string, scale: GradeScale): number {
-  const config = GRADE_SCALES[scale];
-
-  if (config.type === "numeric") {
-    // IB-style 1–7
-    if (typeof grade === "number") {
-      return (config.order as readonly number[]).includes(grade) ? grade : 0;
+// Map a display grade string to a normalised score based on scale (>0 if found).
+function normalizeGrade(grade: StudentGrade, scale: string): number {
+  grade = grade.toString();
+  const syllabusScale = gradeImprovementsConfig.scales[scale as keyof typeof gradeImprovementsConfig.scales];
+  for (let i = 0; i < syllabusScale.length; i++) {
+    if (syllabusScale[i].includes(grade)) {
+      return i + 1;
     }
-
-    const n = Number(grade);
-    return Number.isFinite(n) &&
-      (config.order as readonly number[]).includes(n)
-      ? n
-      : 0;
   }
-  // Letter scale: F < E < D < C < B < A < A*
-  if (typeof grade === "number") {
-    // In case you accidentally pass numeric here, trust it's already 1..7
-    return grade;
-  }
-
-  const s = String(grade).toUpperCase();
-  // Extract the letter part from things like "B(6)"
-  const match = s.match(/[A-F]\*?/); // A, B, C, D, E, F, optionally with *
-  const letter = match ? match[0] : s;
-
-  const idx = config.order.indexOf(letter as (typeof config.order)[number]);
-  return idx >= 0 ? idx + 1 : 0; // 1..7
+  return 0; // grade not found
 }
 
-// Map a normalised score (1–7) back to a display grade string based on scale.
-function formatDisplayGrade(score: number, scale: GradeScale): string {
-  const { labels } = GRADE_IMPROVEMENTS_CONFIG.scales[scale];
-  const prefix = GRADE_IMPROVEMENTS_CONFIG.gradeDisplay.prefix; // e.g. "grade "
-
-  const label = (labels as Record<number, string>)[score];
-  return prefix + (label ?? score);
+// Get the top grade for a given scale
+function getTopGrade(scale: string): string {
+  const syllabusScale = gradeImprovementsConfig.scales[scale as keyof typeof gradeImprovementsConfig.scales];
+  return syllabusScale[syllabusScale.length - 1];
 }
 
+// Get the second top grade for a given scale
+function getSecondGrade(scale: string): string {
+  const syllabusScale = gradeImprovementsConfig.scales[scale as keyof typeof gradeImprovementsConfig.scales];
+  return syllabusScale[syllabusScale.length - 2];
+}
+
+
+// Replace "#" in text with the given grade
+function hashToGrade(text: string, grade: string): string {
+  return text.replace("#", grade);
+}
 
 function buildHeatmapRows(
   data: Student[],
-  scale: GradeScale,
+  scale: string,
   isLeftFinal: (g: Student["to"]) => boolean,
   isRightFinal: (g: Student["to"]) => boolean
 ): HeatmapRow[] {
-  const buckets: Record<BucketKey, { left: Student[]; right: Student[] }> = {
-    maintained: { left: [], right: [] },
-    plus1: { left: [], right: [] },
-    plus2: { left: [], right: [] },
-    plus3: { left: [], right: [] },
-    plus4: { left: [], right: [] },
-  };
+  const table = gradeImprovementsConfig.table;
+  const buckets: { left: Student[]; right: Student[] }[] = [];
+  const totalRows = table.heatmapRows.length;
+  for (let i = 0; i < totalRows; i++) {
+    buckets.push({ left: [], right: [] });
+  }
 
   for (const s of data) {
     const fromScore = normalizeGrade(s.from, scale);
     const toScore = normalizeGrade(s.to, scale);
 
     const diff = toScore - fromScore;
+    if (diff < 0) continue;
 
-    let key: BucketKey;
-    if (diff <= 0) key = "maintained";
-    else if (diff === 1) key = "plus1";
-    else if (diff === 2) key = "plus2";
-    else if (diff === 3) key = "plus3";
-    else key = "plus4";
+    let rowNumber = diff >= totalRows ? totalRows - 1 : diff;
 
-    if (isLeftFinal(s.to)) buckets[key].left.push(s);
-    if (isRightFinal(s.to)) buckets[key].right.push(s);
+    if (isLeftFinal(s.to)) buckets[rowNumber].left.push(s);
+    if (isRightFinal(s.to)) buckets[rowNumber].right.push(s);
   }
 
   const makeTooltip = (list: Student[]) =>
@@ -178,13 +141,12 @@ function buildHeatmapRows(
       .join(", ");
 
   // Build rows from config so labels/descriptions live in one place
-  return TEXT.heatmapRows.map((rowCfg) => {
-    const key = rowCfg.key as BucketKey;
-    const bucket = buckets[key];
+  return table.heatmapRows.map((row, index) => {
+    const bucket = buckets[index];
 
     return {
-      label: rowCfg.label,
-      description: rowCfg.description,
+      label: row.label,
+      description: row.description,
       left: {
         count: bucket.left.length,
         tooltip: makeTooltip(bucket.left),
@@ -243,12 +205,10 @@ export function GradeImprovementsSection({
 }: GradeImprovementsSectionProps) {
   const { programLabel, subtitle, gradeScale } = resultItem;
 
-  // Treat score 7 as "top" and 6 as "second top" on the normalised scale,
-  // regardless of whether it's IB or letters.
   const isRightFinal = (g: Student["to"]) =>
-    normalizeGrade(g, gradeScale) === 7;
+    normalizeGrade(g, gradeScale) === normalizeGrade(getTopGrade(gradeScale), gradeScale);
   const isLeftFinal = (g: Student["to"]) =>
-    normalizeGrade(g, gradeScale) === 6;
+    normalizeGrade(g, gradeScale) === normalizeGrade(getSecondGrade(gradeScale), gradeScale);
 
   const heatmapRows = buildHeatmapRows(
     students,
@@ -270,13 +230,7 @@ export function GradeImprovementsSection({
     (s) => typeof s.months === "number" && s.months <= 3
   ).length;
 
-  const leftGradeLabel = formatDisplayGrade(6, gradeScale); // second top
-  const rightGradeLabel = formatDisplayGrade(7, gradeScale); // top
-
-  const leftColumnLabel = `Final ${leftGradeLabel}`;
-  const rightColumnLabel = `Final ${rightGradeLabel}`;
-
-  const { header, summaryCards, table, footerNote } = TEXT;
+  const { header, summaryCards, footerNote, table } = gradeImprovementsConfig;
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur">
@@ -297,8 +251,7 @@ export function GradeImprovementsSection({
         <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
           <div className="rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
-              {summaryCards.top.icon} {summaryCards.top.labelPrefix}{" "}
-              {rightGradeLabel}
+              {hashToGrade(summaryCards.top, getTopGrade(gradeScale))}
             </div>
             <div className="text-lg font-semibold text-indigo-800">
               {totalTop}
@@ -306,8 +259,7 @@ export function GradeImprovementsSection({
           </div>
           <div className="rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
-              {summaryCards.second.icon} {summaryCards.second.labelPrefix}{" "}
-              {leftGradeLabel}
+              {hashToGrade(summaryCards.second, getSecondGrade(gradeScale))}
             </div>
             <div className="text-lg font-semibold text-sky-800">
               {totalSecond}
@@ -315,7 +267,7 @@ export function GradeImprovementsSection({
           </div>
           <div className="rounded-xl bg-rose-50 ring-1 ring-rose-300 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
-              {summaryCards.bigJumps.icon} {summaryCards.bigJumps.label}
+              {summaryCards.bigJumps}
             </div>
             <div className="text-lg font-semibold text-rose-800">
               {bigJumps}
@@ -323,7 +275,7 @@ export function GradeImprovementsSection({
           </div>
           <div className="rounded-xl bg-amber-50 ring-1 ring-amber-300 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-amber-700 font-semibold">
-              {summaryCards.fastTrack.icon} {summaryCards.fastTrack.label}
+              {summaryCards.fastTrack}
             </div>
             <div className="text-lg font-semibold text-amber-800">
               {fastTrack}
@@ -338,13 +290,13 @@ export function GradeImprovementsSection({
           <thead className="bg-slate-50/80">
             <tr>
               <th className="w-40 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {table.improvementColumnLabel}
+                {table.legendColumn}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {leftColumnLabel}
+                {hashToGrade(table.leftColumn, getSecondGrade(gradeScale))}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {rightColumnLabel}
+                {hashToGrade(table.rightColumn, getTopGrade(gradeScale))}
               </th>
             </tr>
           </thead>
