@@ -240,11 +240,25 @@ export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
     type: "json",
   },
   {
-    path: "gradeImprovements.scales",
-    label: "Grade scales",
+    path: "gradeImprovements.scales.ib",
+    label: "Grade scales 1",
     description:
-      "JSON object defining grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels. You can add new scales or adjust existing ones.",
-    type: "json",
+      "Grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels in ascending order (lowest to highest).",
+    type: "string[]",
+  },
+  {
+    path: "gradeImprovements.scales.al",
+    label: "Grade scales 2",
+    description:
+      "Grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels in ascending order (lowest to highest).",
+    type: "string[]",
+  },
+  {
+    path: "gradeImprovements.scales.igcse",
+    label: "Grade scales 3",
+    description:
+      "Grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels in ascending order (lowest to highest).",
+    type: "string[]",
   },
   {
     path: "gradeImprovements.footerNote",
