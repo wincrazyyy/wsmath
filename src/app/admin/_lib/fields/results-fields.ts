@@ -134,25 +134,65 @@ export const RESULTS_GRADE_HEADERS_FIELDS: FieldConfig[] = [
   },
 ];
 
-// export const RESULTS_GRADE_GROUPS_FIELDS: FieldConfig[] = [
-//   {
-//     path: "gradeImprovements.resultGroups",
-//     label: "Programme groups & tabs",
-//     description:
-//       "JSON array of result groups (e.g. IBDP / A-Level / IGCSE) and their items/tabs. You can add or remove groups and items as needed.",
-//     type: "json",
-//   },
-// ]
+function resultGroupsFields(
+  basePath: string,
+  labelPrefix: string
+): FieldConfig[] {
+  return [
+    {
+      path: `${basePath}.tab`,
+      label: `${labelPrefix} – Tab`,
+      description: "Programme group tab.",
+      type: "string",
+    },
+    {
+      path: `${basePath}.subTab`,
+      label: `${labelPrefix} – Sub tab`,
+      description: "Programme group sub tab (if any).",
+      type: "string",
+    },
+    {
+      path: `${basePath}.programLabel`,
+      label: `${labelPrefix} – Programme label`,
+      description:
+        "Programme full name, including all the small details (programme code).",
+      type: "string",
+    },
+    {
+      path: `${basePath}.studentsKey`,
+      label: `${labelPrefix} – Students key`,
+      description: "Should change later...",
+      type: "string",
+    },
+    {
+      path: `${basePath}.gradeScale`,
+      label: `${labelPrefix} – Programme grade scale`,
+      description:
+        "Programme grade scale identifier.",
+      type: "string",
+    },
+  ];
+}
 
-// export const RESULTS_GRADE_STUDENTS_FIELDS: FieldConfig[] = [
-//   {
-//     path: "gradeImprovements.students",
-//     label: "Students by programme",
-//     description:
-//       "JSON object mapping studentsKey → list of students with name, year, from, to, and optional months. You can add as many students as you like.",
-//     type: "json",
-//   },
-// ];
+
+export const RESULTS_GRADE_GROUPS_FIELDS: FieldConfig[] = [
+  ...resultGroupsFields("gradeImprovements.resultGroups[0]", "Programme Group #1"),
+  ...resultGroupsFields("gradeImprovements.resultGroups[1]", "Programme Group #2"),
+  ...resultGroupsFields("gradeImprovements.resultGroups[2]", "Programme Group #3"),
+  ...resultGroupsFields("gradeImprovements.resultGroups[3]", "Programme Group #4"),
+  ...resultGroupsFields("gradeImprovements.resultGroups[4]", "Programme Group #5"),
+  ...resultGroupsFields("gradeImprovements.resultGroups[5]", "Programme Group #6"),
+];
+
+export const RESULTS_GRADE_STUDENTS_FIELDS: FieldConfig[] = [
+  {
+    path: "gradeImprovements.students",
+    label: "Students by programme",
+    description:
+      "JSON object mapping studentsKey → list of students with name, year, from, to, and optional months. You can add as many students as you like.",
+    type: "json",
+  },
+];
 
 export const RESULTS_GRADE_DATA_FIELDS: FieldConfig[] = [
   {
@@ -234,6 +274,7 @@ export const RESULTS_CTA_FIELDS: FieldConfig[] = [
 export const RESULTS_FIELDS: FieldConfig[] = [
   ...RESULTS_HEADER_FIELDS,
   ...RESULTS_GRADE_HEADERS_FIELDS,
+  ...RESULTS_GRADE_GROUPS_FIELDS,
   ...RESULTS_GRADE_DATA_FIELDS,
   ...RESULTS_GRADE_MISC_FIELDS,
   ...RESULTS_CTA_FIELDS,

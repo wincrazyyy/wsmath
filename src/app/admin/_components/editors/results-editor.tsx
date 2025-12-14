@@ -5,8 +5,8 @@ import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import {
   RESULTS_HEADER_FIELDS,
   RESULTS_GRADE_HEADERS_FIELDS,
-  // RESULTS_GRADE_GROUPS_FIELDS,
-  // RESULTS_GRADE_STUDENTS_FIELDS,
+  RESULTS_GRADE_GROUPS_FIELDS,
+  RESULTS_GRADE_STUDENTS_FIELDS,
   RESULTS_GRADE_DATA_FIELDS,
   RESULTS_GRADE_MISC_FIELDS,
   RESULTS_CTA_FIELDS,
@@ -19,7 +19,7 @@ import {
   buildIndexedSubTabs,
 } from "@/app/admin/_lib/json-editor-helpers";
 
-type SubTab = "header" | "gradeHeaders" | "gradeData" | "gradeMisc" | "cta";
+type SubTab = "header" | "gradeHeaders" | "gradeGroups" | "gradeData" | "gradeMisc" | "cta";
 
 type ResultsEditorProps<T extends object> = {
   data: T;
@@ -30,18 +30,18 @@ export function ResultsEditor<T extends object>({
   data,
   onChangeData,
 }: ResultsEditorProps<T>) {
-  // const groupsSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
-  //   RESULTS_GRADE_GROUPS_FIELDS,
-  //   "groups",
-  //   "Result Groups",
-  //   "Edit this individual result group.",
-  // );
-  // const studentsSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
-  //   RESULTS_GRADE_STUDENTS_FIELDS,
-  //   "students",
-  //   "Group of",
-  //   "Edit this individual group of students from a specific result group.",
-  // );
+  const groupsSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
+    RESULTS_GRADE_GROUPS_FIELDS,
+    "gradeImprovements.resultGroups",
+    "Result Groups",
+    "Edit this individual programme group for results.",
+  );
+  const studentsSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
+    RESULTS_GRADE_STUDENTS_FIELDS,
+    "gradeImprovements.students",
+    "Group of students",
+    "Edit this individual group of students from a specific result group.",
+  );
 
   const tabs: JsonEditorTabConfig[] = [
     {
@@ -59,6 +59,15 @@ export function ResultsEditor<T extends object>({
       panelTitle: "Results – grade improvements headers",
       panelDescription:
         "Configure the headers with summary cards for the grade improvements block.",
+    },
+    {
+      key: "gradeGroups",
+      label: "Grade improvements groups",
+      fields: [],
+      subTabs: groupsSubTabs,
+      panelTitle: "Results – grade improvements groups",
+      panelDescription:
+        "Configure the available result groups for the grade improvements block.",
     },
     {
       key: "gradeData",
