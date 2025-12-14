@@ -22,7 +22,6 @@ export type SummaryCardsConfig = {
 };
 
 export type ResultItemConfig = {
-  id: string;
   label: string;
   programLabel: string;
   subtitle?: string;
@@ -31,7 +30,6 @@ export type ResultItemConfig = {
 };
 
 export type ResultGroupConfig = {
-  id: string;
   heading: string;
   items: ResultItemConfig[];
 };

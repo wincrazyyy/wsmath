@@ -4,13 +4,20 @@
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import {
   RESULTS_HEADER_FIELDS,
-  RESULTS_GRADE_IMPROVEMENT_HEADERS_FIELDS,
-  RESULTS_GRADE_IMPROVEMENT_DATA_FIELDS,
-  RESULTS_GRADE_IMPROVEMENT_MISC_FIELDS,
+  RESULTS_GRADE_HEADERS_FIELDS,
+  // RESULTS_GRADE_GROUPS_FIELDS,
+  // RESULTS_GRADE_STUDENTS_FIELDS,
+  RESULTS_GRADE_DATA_FIELDS,
+  RESULTS_GRADE_MISC_FIELDS,
   RESULTS_CTA_FIELDS,
   RESULTS_FIELDS
 } from "@/app/admin/_lib/fields/results-fields";
 import { JsonEditor } from "./json-editor";
+import {
+  JsonEditorTabConfig,
+  JsonEditorSubTabConfig,
+  buildIndexedSubTabs,
+} from "@/app/admin/_lib/json-editor-helpers";
 
 type SubTab = "header" | "gradeHeaders" | "gradeData" | "gradeMisc" | "cta";
 
@@ -23,13 +30,20 @@ export function ResultsEditor<T extends object>({
   data,
   onChangeData,
 }: ResultsEditorProps<T>) {
-  const tabs: {
-    key: SubTab;
-    label: string;
-    fields: FieldConfig[];
-    panelTitle: string;
-    panelDescription: string;
-  }[] = [
+  // const groupsSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
+  //   RESULTS_GRADE_GROUPS_FIELDS,
+  //   "groups",
+  //   "Result Groups",
+  //   "Edit this individual result group.",
+  // );
+  // const studentsSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
+  //   RESULTS_GRADE_STUDENTS_FIELDS,
+  //   "students",
+  //   "Group of",
+  //   "Edit this individual group of students from a specific result group.",
+  // );
+
+  const tabs: JsonEditorTabConfig[] = [
     {
       key: "header",
       label: "Section header",
@@ -41,7 +55,7 @@ export function ResultsEditor<T extends object>({
     {
       key: "gradeHeaders",
       label: "Grade improvements headers",
-      fields: RESULTS_GRADE_IMPROVEMENT_HEADERS_FIELDS,
+      fields: RESULTS_GRADE_HEADERS_FIELDS,
       panelTitle: "Results – grade improvements headers",
       panelDescription:
         "Configure the headers with summary cards for the grade improvements block.",
@@ -49,7 +63,7 @@ export function ResultsEditor<T extends object>({
     {
       key: "gradeData",
       label: "Grade improvements data",
-      fields: RESULTS_GRADE_IMPROVEMENT_DATA_FIELDS,
+      fields: RESULTS_GRADE_DATA_FIELDS,
       panelTitle: "Results – grade improvements data",
       panelDescription:
         "Configure the heatmap tabs and data for the grade improvements block.",
@@ -57,7 +71,7 @@ export function ResultsEditor<T extends object>({
     {
       key: "gradeMisc",
       label: "Grade improvements misc",
-      fields: RESULTS_GRADE_IMPROVEMENT_MISC_FIELDS,
+      fields: RESULTS_GRADE_MISC_FIELDS,
       panelTitle: "Results – grade improvements misc",
       panelDescription:
         "Configure the table outline, grade scales, and footer note for the grade improvements block.",
