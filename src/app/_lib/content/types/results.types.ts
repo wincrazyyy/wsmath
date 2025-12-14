@@ -24,7 +24,6 @@ export type SummaryCardsConfig = {
 export type ResultItemConfig = {
   label: string;
   programLabel: string;
-  subtitle?: string;
   studentsKey: string;
   gradeScale: string;
 };

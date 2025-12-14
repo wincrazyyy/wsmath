@@ -122,7 +122,7 @@ export function GradeImprovementsSection({
   scales,
   footerNote,
 }: GradeImprovementsSectionProps) {
-  const { programLabel, subtitle, gradeScale } = resultItem;
+  const { programLabel, gradeScale } = resultItem;
   const syllabusScale = scales[gradeScale];
 
   const isRightFinal = (g: Student["to"]) =>
@@ -160,7 +160,7 @@ export function GradeImprovementsSection({
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
-            {programLabel} · {subtitle}
+            {programLabel}
           </p>
           <h2 className="mt-1 text-xl font-semibold text-slate-900">
             {header.title}

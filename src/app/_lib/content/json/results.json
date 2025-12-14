@@ -48,15 +48,13 @@
         "items": [
           {
             "label": "HL",
-            "programLabel": "IBDP Math HL",
-            "subtitle": "AAHL / AIHL",
+            "programLabel": "IBDP HL · AAHL / AIHL",
             "studentsKey": "IBDP_HL",
             "gradeScale": "ib"
           },
           {
             "label": "SL",
-            "programLabel": "IBDP Math SL",
-            "subtitle": "AASL / AISL",
+            "programLabel": "IBDP SL · AASL / AISL",
             "studentsKey": "IBDP_SL",
             "gradeScale": "ib"
           }
@@ -67,15 +65,13 @@
         "items": [
           {
             "label": "Further Math",
-            "programLabel": "A-Level Further Math",
-            "subtitle": "Edexcel (IAL YFM01) / Cambridge (CAIE 9231)",
+            "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
             "studentsKey": "AL_FM",
             "gradeScale": "al"
           },
           {
             "label": "Math",
-            "programLabel": "A-Level Math",
-            "subtitle": "Edexcel (IAL YMA01) / Cambridge (CAIE 9709) / OCR (H240)",
+            "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
             "studentsKey": "AL_M",
             "gradeScale": "al"
           }
@@ -85,16 +81,14 @@
         "heading": "IGCSE Mathematics",
         "items": [
           {
-            "label": "Additional / Further Math",
-            "programLabel": "IGCSE Additional / Further Math",
-            "subtitle": "Cambridge (0606) / Edexcel (4PM0)",
+            "label": "Additional Math / Further Math",
+            "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Math (4PM0)",
             "studentsKey": "IGCSE_AM",
             "gradeScale": "igcse"
           },
           {
-            "label": "Math",
-            "programLabel": "IGCSE Math",
-            "subtitle": "Cambridge (0607, 0580) / Edexcel (4PM1)",
+            "label": "International Math / Math",
+            "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM1)",
             "studentsKey": "IGCSE_M",
             "gradeScale": "igcse"
           }
