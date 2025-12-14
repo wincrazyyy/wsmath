@@ -21,16 +21,12 @@ export type SummaryCardsConfig = {
   fastTrack: string;
 };
 
-export type ResultItemConfig = {
-  label: string;
+export type ResultGroupConfig = {
+  tab: string;
+  subTab: string;
   programLabel: string;
   studentsKey: string;
   gradeScale: string;
-};
-
-export type ResultGroupConfig = {
-  heading: string;
-  items: ResultItemConfig[];
 };
 
 export type StudentGrade = number | string;

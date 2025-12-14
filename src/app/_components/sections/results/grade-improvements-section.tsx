@@ -3,7 +3,7 @@
 import {
   GradeImprovementsHeaderConfig,
   SummaryCardsConfig,
-  ResultItemConfig,
+  ResultGroupConfig,
   StudentGrade,
   Student,
   HeatmapCell,
@@ -106,7 +106,7 @@ function buildHeatmapRows(
 interface GradeImprovementsSectionProps {
   header: GradeImprovementsHeaderConfig;
   summaryCards: SummaryCardsConfig;
-  resultItem: ResultItemConfig;
+  resultItem: ResultGroupConfig;
   students: Student[];
   table: HeatmapTableConfig;
   scales: ScalesMapConfig;

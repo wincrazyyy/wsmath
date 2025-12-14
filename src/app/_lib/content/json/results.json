@@ -44,55 +44,46 @@
     },
     "resultGroups": [
       {
-        "heading": "IBDP Mathematics",
-        "items": [
-          {
-            "label": "HL",
-            "programLabel": "IBDP HL · AAHL / AIHL",
-            "studentsKey": "IBDP_HL",
-            "gradeScale": "ib"
-          },
-          {
-            "label": "SL",
-            "programLabel": "IBDP SL · AASL / AISL",
-            "studentsKey": "IBDP_SL",
-            "gradeScale": "ib"
-          }
-        ]
+        "tab": "IBDP Mathematics",
+        "subTab": "HL",
+        "programLabel": "IBDP HL · AAHL / AIHL",
+        "studentsKey": "IBDP_HL",
+        "gradeScale": "ib"
       },
       {
-        "heading": "A-Level Mathematics",
-        "items": [
-          {
-            "label": "Further Math",
-            "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
-            "studentsKey": "AL_FM",
-            "gradeScale": "al"
-          },
-          {
-            "label": "Math",
-            "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
-            "studentsKey": "AL_M",
-            "gradeScale": "al"
-          }
-        ]
+        "tab": "IBDP Mathematics",
+        "subTab": "SL",
+        "programLabel": "IBDP SL · AASL / AISL",
+        "studentsKey": "IBDP_SL",
+        "gradeScale": "ib"
       },
       {
-        "heading": "IGCSE Mathematics",
-        "items": [
-          {
-            "label": "Additional Math / Further Math",
-            "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Math (4PM0)",
-            "studentsKey": "IGCSE_AM",
-            "gradeScale": "igcse"
-          },
-          {
-            "label": "International Math / Math",
-            "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM1)",
-            "studentsKey": "IGCSE_M",
-            "gradeScale": "igcse"
-          }
-        ]
+        "tab": "A-Level Mathematics",
+        "subTab": "Further Math",
+        "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
+        "studentsKey": "AL_FM",
+        "gradeScale": "al"
+      },
+      {
+        "tab": "A-Level Mathematics",
+        "subTab": "Math",
+        "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
+        "studentsKey": "AL_M",
+        "gradeScale": "al"
+      },
+      {
+        "tab": "IGCSE Mathematics",
+        "subTab": "Additional Math / Further Math",
+        "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Math (4PM0)",
+        "studentsKey": "IGCSE_AM",
+        "gradeScale": "igcse"
+      },
+      {
+        "tab": "IGCSE Mathematics",
+        "subTab": "International Math / Math",
+        "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM1)",
+        "studentsKey": "IGCSE_M",
+        "gradeScale": "igcse"
       }
     ],
     "students": {
