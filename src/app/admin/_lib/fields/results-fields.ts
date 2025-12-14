@@ -174,7 +174,6 @@ function resultGroupsFields(
   ];
 }
 
-
 export const RESULTS_GRADE_GROUPS_FIELDS: FieldConfig[] = [
   ...resultGroupsFields("gradeImprovements.resultGroups[0]", "Programme Group #1"),
   ...resultGroupsFields("gradeImprovements.resultGroups[1]", "Programme Group #2"),
