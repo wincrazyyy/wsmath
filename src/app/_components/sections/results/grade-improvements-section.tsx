@@ -96,7 +96,6 @@ interface GradeImprovementsSectionProps {
   header: GradeImprovementsHeaderConfig;
   summaryCards: SummaryCardsConfig;
   resultItem: ResultGroupConfig;
-  students: Student[];
   tableHeader: HeatmapTableHeaderConfig;
   heatmapKeys: HeatmapKey[];
   footerNote?: string;
@@ -106,18 +105,17 @@ export function GradeImprovementsSection({
   header,
   summaryCards,
   resultItem,
-  students,
   tableHeader,
   heatmapKeys,
   footerNote,
 }: GradeImprovementsSectionProps) {
-  const { programLabel, gradeScale } = resultItem;
+  const { programLabel, students, gradeScale } = resultItem;
   const syllabusScale = gradeScale;
 
   const total = students.length;
 
-  const topGrade = getTopGrade(syllabusScale); // e.g. "7"
-  const secondGrade = getSecondGrade(syllabusScale); // e.g. "6"
+  const topGrade = getTopGrade(syllabusScale);
+  const secondGrade = getSecondGrade(syllabusScale);
 
   const topScore = normalizeGrade(topGrade, syllabusScale);
   const secondScore = normalizeGrade(secondGrade, syllabusScale);
