@@ -212,28 +212,28 @@ export const RESULTS_GRADE_DATA_FIELDS: FieldConfig[] = [
 
 export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
   {
-    path: "gradeImprovements.table.keyColumn",
+    path: "gradeImprovements.tableHeader.keyColumn",
     label: "Heatmap table key column label",
     description:
       "Key column label of the improvement table: the label for the legend of the table.",
     type: "string",
   },
   {
-    path: "gradeImprovements.table.leftColumn",
+    path: "gradeImprovements.tableHeader.leftColumn",
     label: "Heatmap table left column",
     description:
       "Left column label of the improvement table: the label for the second top grade column. Use # as a placeholder for the grade",
     type: "string",
   },
   {
-    path: "gradeImprovements.table.rightColumn",
+    path: "gradeImprovements.tableHeader.rightColumn",
     label: "Heatmap table right column",
     description:
       "Right column label of the improvement table: the label for the top grade column. Use # as a placeholder for the grade",
     type: "string",
   },
   {
-    path: "gradeImprovements.table.heatmapKeys",
+    path: "gradeImprovements.heatmapKeys",
     label: "Heatmap table keys",
     description:
       "Key column info of the improvement table: the legend of the table.",

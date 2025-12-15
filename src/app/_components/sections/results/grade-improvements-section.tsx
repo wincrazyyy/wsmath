@@ -7,7 +7,8 @@ import {
   StudentGrade,
   Student,
   HeatmapCell,
-  HeatmapTableConfig,
+  HeatmapTableHeaderConfig,
+  HeatmapKey,
 } from "@/app/_lib/content/types/results.types";
 
 import { TooltipCell } from "./tooltip-cell";
@@ -47,13 +48,13 @@ type HeatmapRow = {
 
 function buildHeatmapRows(
   data: Student[],
-  table: HeatmapTableConfig,
+  heatmapKeys: HeatmapKey[],
   syllabusScale: string[],
   isLeftFinal: (g: Student["to"]) => boolean,
   isRightFinal: (g: Student["to"]) => boolean
 ): HeatmapRow[] {
   const buckets: { left: Student[]; right: Student[] }[] = [];
-  const totalRows = table.heatmapKeys.length;
+  const totalRows = heatmapKeys.length;
   for (let i = 0; i < totalRows; i++) {
     buckets.push({ left: [], right: [] });
   }
@@ -84,7 +85,7 @@ function buildHeatmapRows(
       .join(", ");
 
   // Build rows from config so labels/descriptions live in one place
-  return table.heatmapKeys.map((row, index) => {
+  return heatmapKeys.map((row, index) => {
     const bucket = buckets[index];
 
     return {
@@ -107,7 +108,8 @@ interface GradeImprovementsSectionProps {
   summaryCards: SummaryCardsConfig;
   resultItem: ResultGroupConfig;
   students: Student[];
-  table: HeatmapTableConfig;
+  tableHeader: HeatmapTableHeaderConfig;
+  heatmapKeys: HeatmapKey[];
   footerNote?: string;
 }
 
@@ -116,7 +118,8 @@ export function GradeImprovementsSection({
   summaryCards,
   resultItem,
   students,
-  table,
+  tableHeader,
+  heatmapKeys,
   footerNote,
 }: GradeImprovementsSectionProps) {
   const { programLabel, gradeScale } = resultItem;
@@ -131,7 +134,7 @@ export function GradeImprovementsSection({
 
   const heatmapRows = buildHeatmapRows(
     students,
-    table,
+    heatmapKeys,
     syllabusScale,
     isLeftFinal,
     isRightFinal
@@ -213,16 +216,16 @@ export function GradeImprovementsSection({
           <thead className="bg-slate-50/80">
             <tr>
               <th className="w-40 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {table.keyColumn}
+                {tableHeader.keyColumn}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {hashToGrade(
-                  table.leftColumn,
+                  tableHeader.leftColumn,
                   getSecondGrade(syllabusScale)
                 )}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {hashToGrade(table.rightColumn, getTopGrade(syllabusScale))}
+                {hashToGrade(tableHeader.rightColumn, getTopGrade(syllabusScale))}
               </th>
             </tr>
           </thead>

@@ -164,33 +164,33 @@
         { "name": "Jessica", "year": 2019, "from": "C", "to": "A" }
       ]
     },
-    "table": {
+    "tableHeader": {
       "keyColumn": "Improvement",
       "leftColumn": "Final Grade #",
-      "rightColumn": "Final Grade #",
-      "heatmapKeys": [
-        {
-          "label": "➖ Maintained",
-          "description": "Predicted = Final"
-        },
-        {
-          "label": "↗️ +1 grade",
-          "description": "Small step up"
-        },
-        {
-          "label": "⤴️ +2 grades",
-          "description": "Solid improvement"
-        },
-        {
-          "label": "📈 +3 grades",
-          "description": "Big jump"
-        },
-        {
-          "label": "🚀 4+ grades",
-          "description": "Massive jumps"
-        }
-      ]
+      "rightColumn": "Final Grade #"
     },
+    "heatmapKeys": [
+      {
+        "label": "➖ Maintained",
+        "description": "Predicted = Final"
+      },
+      {
+        "label": "↗️ +1 grade",
+        "description": "Small step up"
+      },
+      {
+        "label": "⤴️ +2 grades",
+        "description": "Solid improvement"
+      },
+      {
+        "label": "📈 +3 grades",
+        "description": "Big jump"
+      },
+      {
+        "label": "🚀 4+ grades",
+        "description": "Massive jumps"
+      }
+    ],
     "footerNote": "👆 Hover on each cell to see the students."
   },
   "resultsCta": {

@@ -53,11 +53,10 @@ export type HeatmapKey = {
   description?: string;
 };
 
-export type HeatmapTableConfig = {
+export type HeatmapTableHeaderConfig = {
   keyColumn: string;
   leftColumn: string;
   rightColumn: string;
-  heatmapKeys: HeatmapKey[];
 };
 
 export type GradeImprovementsConfig = {
@@ -65,7 +64,8 @@ export type GradeImprovementsConfig = {
   summaryCards: SummaryCardsConfig;
   resultGroups: ResultGroupConfig[];
   students: StudentsMapConfig;
-  table: HeatmapTableConfig;
+  tableHeader: HeatmapTableHeaderConfig;
+  heatmapKeys: HeatmapKey[];
   footerNote?: string;
 };
 
