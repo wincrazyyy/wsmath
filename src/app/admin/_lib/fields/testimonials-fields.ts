@@ -1,5 +1,5 @@
-// app/admin/_lib/testimonials-fields.ts
-import type { FieldConfig } from "./fields";
+// app/admin/_lib/fields/testimonials-fields.ts
+import { type FieldConfig, repeatFields } from "./fields";
 
 export const TESTIMONIALS_HEADER_FIELDS: FieldConfig[] = [
   {
@@ -93,17 +93,21 @@ function testimonialFields(
 }
 
 export const TESTIMONIALS_FEATURED_FIELDS: FieldConfig[] = [
-  ...testimonialFields("featured[0]", "Featured #1"),
-  ...testimonialFields("featured[1]", "Featured #2"),
-  ...testimonialFields("featured[2]", "Featured #3"),
-  ...testimonialFields("featured[3]", "Featured #4"),
+  ...repeatFields(
+    "featured",
+    "Featured",
+    4,
+    (path, label) => testimonialFields(path, label)
+  )
 ];
 
 export const TESTIMONIALS_CAROUSEL_FIELDS: FieldConfig[] = [
-  ...testimonialFields("carousel[0]", "Carousel #1"),
-  ...testimonialFields("carousel[1]", "Carousel #2"),
-  ...testimonialFields("carousel[2]", "Carousel #3"),
-  ...testimonialFields("carousel[3]", "Carousel #4"),
+  ...repeatFields(
+    "carousel",
+    "Carousel",
+    4,
+    (path, label) => testimonialFields(path, label)
+  )
 ];
 
 export const TESTIMONIALS_FIELDS: FieldConfig[] = [

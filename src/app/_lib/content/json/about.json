@@ -81,6 +81,7 @@
       {
         "title": "A-Level programmes",
         "caption": "Edexcel · Cambridge · AQA · OCR",
+        "emphasize": false,
         "courses": [
           "Edexcel (IAL YFM01) Further Math",
           "Cambridge (CAIE 9231) Further Math",
@@ -94,6 +95,7 @@
       {
         "title": "IGCSE programmes",
         "caption": "Cambridge · Edexcel",
+        "emphasize": false,
         "courses": [
           "Cambridge (0606) Additional Math",
           "Edexcel (4PM0) Further Math",

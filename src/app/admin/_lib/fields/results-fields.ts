@@ -1,5 +1,5 @@
 // app/admin/_lib/results-fields.ts
-import type { FieldConfig } from "./fields";
+import { type FieldConfig, repeatFields } from "./fields";
 
 export const RESULTS_HEADER_FIELDS: FieldConfig[] = [
   {
@@ -175,12 +175,12 @@ function resultGroupsFields(
 }
 
 export const RESULTS_GRADE_GROUPS_FIELDS: FieldConfig[] = [
-  ...resultGroupsFields("gradeImprovements.resultGroups[0]", "Programme Group #1"),
-  ...resultGroupsFields("gradeImprovements.resultGroups[1]", "Programme Group #2"),
-  ...resultGroupsFields("gradeImprovements.resultGroups[2]", "Programme Group #3"),
-  ...resultGroupsFields("gradeImprovements.resultGroups[3]", "Programme Group #4"),
-  ...resultGroupsFields("gradeImprovements.resultGroups[4]", "Programme Group #5"),
-  ...resultGroupsFields("gradeImprovements.resultGroups[5]", "Programme Group #6"),
+  ...repeatFields(
+    "gradeImprovements.resultGroups",
+    "Programme group",
+    6,
+    (path, label) => resultGroupsFields(path, label)
+  )
 ];
 
 export const RESULTS_GRADE_STUDENTS_FIELDS: FieldConfig[] = [

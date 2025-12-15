@@ -1,4 +1,5 @@
-import type { FieldConfig } from "./fields";
+// app/admin/_lib/fields/about-fields.ts
+import { type FieldConfig, repeatFields } from "./fields";
 
 // Header (SectionHeader)
 export const ABOUT_HEADER_FIELDS: FieldConfig[] = [
@@ -122,6 +123,33 @@ export const ABOUT_HERO_FIELDS: FieldConfig[] = [
   },
 ];
 
+function coursesFields(
+  basePath: string,
+  labelPrefix: string
+): FieldConfig[] {
+  return [
+    {
+      path: `${basePath}.title`,
+      label: `${labelPrefix} – Title`,
+      description: "e.g. “IB programmes”.",
+      type: "string",
+    },
+    {
+      path: `${basePath}.caption`,
+      label: `${labelPrefix} – Caption`,
+      description: "e.g. “IBDP · IBMYP”.",
+      type: "string",
+    },
+    {
+      path: `${basePath}.courses`,
+      label: `${labelPrefix} – Courses`,
+      description:
+        "One course per line (e.g. “IBDP AAHL”, “A-Level Edexcel ...”).",
+      type: "string[]",
+    },
+  ];
+}
+
 // Stats + Courses + Courses section meta
 export const ABOUT_STATS_COURSES_FIELDS: FieldConfig[] = [
   {
@@ -130,15 +158,8 @@ export const ABOUT_STATS_COURSES_FIELDS: FieldConfig[] = [
     description: "One stat per line shown as pills under the image.",
     type: "string[]",
   },
-  {
-    path: "courses",
-    label: "Courses covered (raw list)",
-    description:
-      "One course per line (e.g. “IBDP AAHL”, “A-Level Edexcel ...”). Used to auto-group into IB / A-Level / IGCSE.",
-    type: "string[]",
-  },
 
-  // coursesSection meta (what you just JSON-fied)
+  // coursesSection meta
   {
     path: "coursesSection.title",
     label: "Courses section – heading",
@@ -159,43 +180,13 @@ export const ABOUT_STATS_COURSES_FIELDS: FieldConfig[] = [
     type: "textarea",
   },
 
-  // Group cards (IB / A-Level / IGCSE) – titles + captions
-  {
-    path: "coursesSection.groups[0].title",
-    label: "Courses group #1 – title",
-    description: "e.g. “IB programmes”.",
-    type: "string",
-  },
-  {
-    path: "coursesSection.groups[0].caption",
-    label: "Courses group #1 – caption",
-    description: "e.g. “IBDP · IBMYP”.",
-    type: "string",
-  },
-  {
-    path: "coursesSection.groups[1].title",
-    label: "Courses group #2 – title",
-    description: "e.g. “A-Level programmes”.",
-    type: "string",
-  },
-  {
-    path: "coursesSection.groups[1].caption",
-    label: "Courses group #2 – caption",
-    description: "e.g. “Edexcel · CAIE · AQA · OCR”.",
-    type: "string",
-  },
-  {
-    path: "coursesSection.groups[2].title",
-    label: "Courses group #3 – title",
-    description: "e.g. “IGCSE programmes”.",
-    type: "string",
-  },
-  {
-    path: "coursesSection.groups[2].caption",
-    label: "Courses group #3 – caption",
-    description: "e.g. “Cambridge · Edexcel”.",
-    type: "string",
-  },
+  // Group cards
+  ...repeatFields(
+    "coursesSection.groups",
+    "Courses group",
+    3,
+    (path, label) => coursesFields(path, label)
+  )
 ];
 
 // CTA ribbon
