@@ -55,8 +55,7 @@ export type HeatmapKey = {
 
 export type HeatmapTableHeaderConfig = {
   keyColumn: string;
-  leftColumn: string;
-  rightColumn: string;
+  valueColumn: string;
 };
 
 export type GradeImprovementsConfig = {

@@ -42,22 +42,18 @@ function hashToGrade(text: string, grade: string): string {
 type HeatmapRow = {
   label: string;
   description?: string;
-  left: HeatmapCell;
-  right: HeatmapCell;
+  cell: HeatmapCell;
 };
 
 function buildHeatmapRows(
   data: Student[],
   heatmapKeys: HeatmapKey[],
   syllabusScale: string[],
-  isLeftFinal: (g: Student["to"]) => boolean,
-  isRightFinal: (g: Student["to"]) => boolean
 ): HeatmapRow[] {
-  const buckets: { left: Student[]; right: Student[] }[] = [];
+  const buckets: Student[][] = [];
   const totalRows = heatmapKeys.length;
-  for (let i = 0; i < totalRows; i++) {
-    buckets.push({ left: [], right: [] });
-  }
+
+  for (let i = 0; i < totalRows; i++) buckets.push([]);
 
   for (const s of data) {
     const fromScore = normalizeGrade(s.from, syllabusScale);
@@ -66,10 +62,9 @@ function buildHeatmapRows(
     const diff = toScore - fromScore;
     if (diff < 0) continue;
 
+    // diff=0 => "Maintained", diff=1 => "+1 grade", ...
     const rowNumber = diff >= totalRows ? totalRows - 1 : diff;
-
-    if (isLeftFinal(s.to)) buckets[rowNumber].left.push(s);
-    if (isRightFinal(s.to)) buckets[rowNumber].right.push(s);
+    buckets[rowNumber].push(s);
   }
 
   const makeTooltip = (list: Student[]) =>
@@ -80,28 +75,23 @@ function buildHeatmapRows(
         (s) =>
           `${s.name} (${s.year})${
             typeof s.months === "number" ? ` — ${s.months} months` : ""
-          }`
+          }`,
       )
       .join(", ");
 
-  // Build rows from config so labels/descriptions live in one place
   return heatmapKeys.map((row, index) => {
-    const bucket = buckets[index];
-
+    const list = buckets[index];
     return {
       label: row.label,
       description: row.description,
-      left: {
-        count: bucket.left.length,
-        tooltip: makeTooltip(bucket.left),
-      },
-      right: {
-        count: bucket.right.length,
-        tooltip: makeTooltip(bucket.right),
+      cell: {
+        count: list.length,
+        tooltip: makeTooltip(list),
       },
     };
   });
 }
+
 
 interface GradeImprovementsSectionProps {
   header: GradeImprovementsHeaderConfig;
@@ -132,13 +122,7 @@ export function GradeImprovementsSection({
     normalizeGrade(g, syllabusScale) ===
     normalizeGrade(getSecondGrade(syllabusScale), syllabusScale);
 
-  const heatmapRows = buildHeatmapRows(
-    students,
-    heatmapKeys,
-    syllabusScale,
-    isLeftFinal,
-    isRightFinal
-  );
+  const heatmapRows = buildHeatmapRows(students, heatmapKeys, syllabusScale);
 
   const totalTop = students.filter((s) => isRightFinal(s.to)).length;
   const totalSecond = students.filter((s) => isLeftFinal(s.to)).length;
@@ -219,13 +203,7 @@ export function GradeImprovementsSection({
                 {tableHeader.keyColumn}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {hashToGrade(
-                  tableHeader.leftColumn,
-                  getSecondGrade(syllabusScale)
-                )}
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {hashToGrade(tableHeader.rightColumn, getTopGrade(syllabusScale))}
+                {tableHeader.valueColumn}
               </th>
             </tr>
           </thead>
@@ -238,26 +216,14 @@ export function GradeImprovementsSection({
                 }`}
               >
                 <td className="px-3 py-2 align-top">
-                  <div className="text-xs font-medium text-slate-800">
-                    {row.label}
-                  </div>
+                  <div className="text-xs font-medium text-slate-800">{row.label}</div>
                   {row.description && (
-                    <div className="text-[11px] text-slate-500">
-                      {row.description}
-                    </div>
+                    <div className="text-[11px] text-slate-500">{row.description}</div>
                   )}
                 </td>
+
                 <td className="px-3 py-2">
-                  <TooltipCell
-                    count={row.left.count}
-                    tooltip={row.left.tooltip}
-                  />
-                </td>
-                <td className="px-3 py-2">
-                  <TooltipCell
-                    count={row.right.count}
-                    tooltip={row.right.tooltip}
-                  />
+                  <TooltipCell count={row.cell.count} tooltip={row.cell.tooltip} />
                 </td>
               </tr>
             ))}

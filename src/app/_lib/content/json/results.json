@@ -166,8 +166,7 @@
     },
     "tableHeader": {
       "keyColumn": "Improvement",
-      "leftColumn": "Final Grade #",
-      "rightColumn": "Final Grade #"
+      "valueColumn": "Students"
     },
     "heatmapKeys": [
       {
