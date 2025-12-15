@@ -255,7 +255,7 @@ export function JsonEditor<T extends object>({
         <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-semibold text-neutral-900">
+              <h3 className="text-base font-semibold text-neutral-900">
                 {panelTitle}
               </h3>
               {panelDescription && (
@@ -283,39 +283,45 @@ export function JsonEditor<T extends object>({
               <div className="mt-6 border-t border-neutral-200 pt-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <h4 className="text-xs font-semibold text-neutral-900">
+                    <h4 className="text-base font-semibold text-neutral-900">
                       {activeSubTab?.panelTitle ?? "Items"}
                     </h4>
                     {activeSubTab?.panelDescription && (
-                      <p className="mt-1 text-[11px] text-neutral-500">
+                      <p className="mt-1 text-xs text-neutral-500">
                         {activeSubTab.panelDescription}
                       </p>
                     )}
                   </div>
 
-                  <div className="inline-flex rounded-full border border-neutral-200 bg-neutral-50 p-1 text-[11px] font-medium">
-                    {subTabs.map((sub) => {
-                      const isActive = sub.key === activeSubKey;
-                      return (
-                        <button
-                          key={sub.key}
-                          type="button"
-                          onClick={() =>
-                            setActiveSubTabByParent((prev) => ({
-                              ...prev,
-                              [activeTab!.key]: sub.key,
-                            }))
-                          }
-                          className={`rounded-full px-3 py-1 transition ${
-                            isActive
-                              ? "bg-neutral-900 text-white shadow-sm"
-                              : "text-neutral-600 hover:bg-white"
-                          }`}
-                        >
-                          {sub.label}
-                        </button>
-                      );
-                    })}
+                  <div className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
+                    <div className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                      Group
+                    </div>
+
+                    <div className="ml-auto flex items-center gap-1 rounded-lg bg-neutral-100 p-1">
+                      {subTabs.map((sub) => {
+                        const isActive = sub.key === activeSubKey;
+                        return (
+                          <button
+                            key={sub.key}
+                            type="button"
+                            onClick={() =>
+                              setActiveSubTabByParent((prev) => ({
+                                ...prev,
+                                [activeTab!.key]: sub.key,
+                              }))
+                            }
+                            className={`min-w-[2.25rem] rounded-md px-3 py-1.5 text-xs font-semibold transition ${
+                              isActive
+                                ? "bg-neutral-900 text-white shadow"
+                                : "text-neutral-700 hover:bg-white"
+                            }`}
+                          >
+                            {sub.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
 
