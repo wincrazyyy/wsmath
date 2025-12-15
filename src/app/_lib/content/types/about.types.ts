@@ -20,13 +20,11 @@ export type AboutHeroConfig = {
   area2: AboutHeroArea;
 };
 
-export type CourseGroupKey = "ib" | "alevel" | "igcse";
-
 export type CoursesSectionGroupConfig = {
-  key: CourseGroupKey;
   title: string;
   caption?: string;
   emphasize?: boolean;
+  courses: string[];
 };
 
 export type CoursesSectionConfig = {
@@ -40,6 +38,5 @@ export type AboutConfig = {
   header: AboutHeaderConfig;
   hero: AboutHeroConfig;
   stats: string[];
-  courses: string[];
-  coursesSection?: CoursesSectionConfig;
+  coursesSection: CoursesSectionConfig;
 };

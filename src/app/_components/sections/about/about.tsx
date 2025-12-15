@@ -8,14 +8,14 @@ import { CoursesCovered } from "./courses-covered";
 
 export function About() {
   const about = aboutContent as AboutConfig;
-  const { header, hero, stats, courses, coursesSection } = about;
+  const { header, hero, stats, coursesSection } = about;
 
   return (
     <>
       <AboutHeader header={header} />
       <AboutHero hero={hero} />
       <AboutStats stats={stats} />
-      <CoursesCovered items={courses} section={coursesSection} />
+      <CoursesCovered coursesSection={coursesSection} />
     </>
   );
 }

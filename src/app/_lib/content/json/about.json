@@ -61,45 +61,46 @@
     "250+ one-to-one students",
     "A-Level Math & FM: A* pathway"
   ],
-  "courses": [
-    "IBDP AAHL",
-    "IBDP AASL",
-    "IBDP AIHL",
-    "IBDP AISL",
-    "IBMYP Math",
-    "A-Level Edexcel (IAL YFM01) Further Math",
-    "A-Level Cambridge (CAIE 9231) Further Math",
-    "A-Level AQA (7367) Further Math",
-    "A-Level Edexcel (IAL YMA01, AL 9MA0) Math",
-    "A-Level Cambridge (CAIE 9709) Math",
-    "A-Level AQA (7357) Math",
-    "A-Level OCR (H240) Math",
-    "IGCSE Cambridge (0606) Additional Math",
-    "IGCSE Edexcel (4PM0) Further Math",
-    "IGCSE Cambridge (0607) International Math",
-    "IGCSE Cambridge (0580) Math",
-    "IGCSE Edexcel (4PM1) Math"
-  ],
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-LEVEL · IGCSE",
     "intro": "Full syllabus coverage from pre-IB / IGCSE all the way to IBDP final exams.",
     "groups": [
       {
-        "key": "ib",
         "title": "IB programmes",
         "caption": "IBDP · IBMYP",
-        "emphasize": true
+        "emphasize": true,
+        "courses": [
+          "IBDP AAHL",
+          "IBDP AASL",
+          "IBDP AIHL",
+          "IBDP AISL",
+          "IBMYP Math"
+        ]
       },
       {
-        "key": "alevel",
         "title": "A-Level programmes",
-        "caption": "Edexcel · CAIE · AQA · OCR"
+        "caption": "Edexcel · Cambridge · AQA · OCR",
+        "courses": [
+          "Edexcel (IAL YFM01) Further Math",
+          "Cambridge (CAIE 9231) Further Math",
+          "AQA (7367) Further Math",
+          "Edexcel (IAL YMA01, AL 9MA0) Math",
+          "Cambridge (CAIE 9709) Math",
+          "AQA (7357) Math",
+          "OCR (H240) Math"
+        ]
       },
       {
-        "key": "igcse",
         "title": "IGCSE programmes",
-        "caption": "Cambridge · Edexcel"
+        "caption": "Cambridge · Edexcel",
+        "courses": [
+          "Cambridge (0606) Additional Math",
+          "Edexcel (4PM0) Further Math",
+          "Cambridge (0607) International Math",
+          "Cambridge (0580) Math",
+          "Edexcel (4PM1) Math"
+        ]
       }
     ]
   },
