@@ -263,7 +263,7 @@ export const PACKAGES_GROUP_FIELDS: FieldConfig[] = [
     path: "group.leaflet.pages",
     label: "Leaflet – page image paths",
     description:
-      "One /leaflets/...jpg per line. Shown as A4 preview pages.",
+      "One /leaflets/...png per line. Shown as A4 preview pages.",
     type: "string[]",
   },
   {

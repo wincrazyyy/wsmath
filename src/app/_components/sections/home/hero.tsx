@@ -35,10 +35,10 @@ export function Hero() {
               {hero.title}
             </span>
           </h1>
-          <p className="mt-4 text-lg text-neutral-700 md:text-2xl">
+          <p className="mt-4 text-lg text-neutral-700 md:text-xl">
             {hero.subtitle}
           </p>
-          <p className="mt-2 text-sm text-neutral-600 md:text-base">
+          <p className="mt-2 text-sm text-neutral-600 md:text-xl">
             {hero.tagline}
           </p>
 
