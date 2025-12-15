@@ -43,6 +43,21 @@ export function ResultsEditor<T extends object>({
     "Edit this individual group of students from a specific result group.",
   );
 
+  const miscBaseFields: FieldConfig[] = RESULTS_GRADE_MISC_FIELDS.filter(
+    (f) => !f.path.startsWith("gradeImprovements.heatmapKeys["),
+  );
+
+  const heatmapKeysFields: FieldConfig[] = RESULTS_GRADE_MISC_FIELDS.filter((f) =>
+    f.path.startsWith("gradeImprovements.heatmapKeys["),
+  );
+
+  const heatmapKeysSubTabs = buildIndexedSubTabs(
+    heatmapKeysFields,
+    "gradeImprovements.heatmapKeys",
+    "Heatmap key",
+    "Edit this heatmap key (label and description).",
+  );
+
   const tabs: JsonEditorTabConfig[] = [
     {
       key: "header",
@@ -80,7 +95,8 @@ export function ResultsEditor<T extends object>({
     {
       key: "gradeMisc",
       label: "Grade improvements misc",
-      fields: RESULTS_GRADE_MISC_FIELDS,
+      fields: miscBaseFields,
+      subTabs: heatmapKeysSubTabs,
       panelTitle: "Results – grade improvements misc",
       panelDescription:
         "Configure the table outline, grade scales, and footer note for the grade improvements block.",

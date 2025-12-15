@@ -174,13 +174,33 @@ function resultGroupsFields(
   ];
 }
 
+function heatmapKeysFields(
+  basePath: string,
+  labelPrefix: string
+): FieldConfig[] {
+  return [
+    {
+      path: `${basePath}.label`,
+      label: `${labelPrefix} – Label`,
+      description: "Key column info of the improvement table: the label of each row.",
+      type: "string",
+    },
+    {
+      path: `${basePath}.description`,
+      label: `${labelPrefix} – Description`,
+      description: "Key column info of the improvement table: the description of each row (if any).",
+      type: "string",
+    },
+  ];
+}
+
 export const RESULTS_GRADE_GROUPS_FIELDS: FieldConfig[] = [
   ...repeatFields(
     "gradeImprovements.resultGroups",
     "Programme group",
     6,
     (path, label) => resultGroupsFields(path, label)
-  )
+  ),
 ];
 
 export const RESULTS_GRADE_STUDENTS_FIELDS: FieldConfig[] = [
@@ -226,19 +246,18 @@ export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
     type: "string",
   },
   {
-    path: "gradeImprovements.heatmapKeys",
-    label: "Heatmap table keys",
-    description:
-      "Key column info of the improvement table: the legend of the table.",
-    type: "json",
-  },
-  {
     path: "gradeImprovements.footerNote",
     label: "Footer note",
     description:
       "Small helper text under the table (e.g. ‘Hover on each cell to see the students.’).",
     type: "string",
   },
+  ...repeatFields(
+    "gradeImprovements.heatmapKeys",
+    "Heatmap Key",
+    5,
+    (path, label) => heatmapKeysFields(path, label)
+  ),
 ];
 
 

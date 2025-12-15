@@ -274,10 +274,10 @@ export function JsonEditor<T extends object>({
             )}
           </div>
 
-          {/* ✅ Base fields always visible */}
+          {/* Base fields always visible */}
           {renderFieldsGrid(baseFields)}
 
-          {/* ✅ Sub-tabs sit "in the middle" and only swap the section below */}
+          {/* Sub-tabs sit "in the middle" and only swap the section below */}
           {subTabs.length > 0 && (
             <>
               <div className="mt-6 border-t border-neutral-200 pt-5">
@@ -295,7 +295,7 @@ export function JsonEditor<T extends object>({
 
                   <div className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
                     <div className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-                      Group
+                      Sub Tabs
                     </div>
 
                     <div className="ml-auto flex items-center gap-1 rounded-lg bg-neutral-100 p-1">
@@ -325,7 +325,7 @@ export function JsonEditor<T extends object>({
                   </div>
                 </div>
 
-                {/* ✅ Only this part changes when sub-tab changes */}
+                {/* Only this part changes when sub-tab changes */}
                 {renderFieldsGrid(subFields)}
               </div>
             </>
