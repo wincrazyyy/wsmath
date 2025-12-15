@@ -10,25 +10,33 @@ import {
   ABOUT_FIELDS,
 } from "@/app/admin/_lib/fields/about-fields";
 import { JsonEditor } from "./json-editor";
-
-type SubTab = "header" | "hero" | "statsCourses" | "cta";
+import {
+  buildIndexedSubTabs,
+  type JsonEditorTabConfig,
+} from "@/app/admin/_lib/json-editor-helpers";
 
 type AboutEditorProps<T extends object> = {
   data: T;
   onChangeData: (next: T) => void;
 };
 
-export function AboutEditor<T extends object>({
-  data,
-  onChangeData,
-}: AboutEditorProps<T>) {
-  const tabs: {
-    key: SubTab;
-    label: string;
-    fields: FieldConfig[];
-    panelTitle: string;
-    panelDescription: string;
-  }[] = [
+export function AboutEditor<T extends object>({ data, onChangeData }: AboutEditorProps<T>) {
+  const baseFields: FieldConfig[] = ABOUT_STATS_COURSES_FIELDS.filter(
+    (f) => !f.path.startsWith("coursesSection.groups["),
+  );
+
+  const groupFields: FieldConfig[] = ABOUT_STATS_COURSES_FIELDS.filter((f) =>
+    f.path.startsWith("coursesSection.groups["),
+  );
+
+  const groupSubTabs = buildIndexedSubTabs(
+    groupFields,
+    "coursesSection.groups",
+    "Courses group",
+    "Edit this course card (title, caption, and courses list).",
+  );
+
+  const tabs: JsonEditorTabConfig[] = [
     {
       key: "header",
       label: "Section header",
@@ -48,10 +56,11 @@ export function AboutEditor<T extends object>({
     {
       key: "statsCourses",
       label: "Stats & courses",
-      fields: ABOUT_STATS_COURSES_FIELDS,
+      fields: baseFields,
+      subTabs: groupSubTabs,
       panelTitle: "About – stats & courses",
       panelDescription:
-        "Edit the stats pills and the list of courses that feed the grouped IB / A-Level / IGCSE course cards.",
+        "Edit the stats pills + courses section heading. Use the sub-tabs to edit each course card.",
     },
     {
       key: "cta",

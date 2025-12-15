@@ -8,7 +8,10 @@ import {
   IMAGE_UPLOAD_TARGETS,
   type ImageUploadTarget,
 } from "@/app/admin/_lib/image-upload-targets";
-import { JsonEditorTabConfig, toStringArray } from "@/app/admin/_lib/json-editor-helpers";
+import {
+  JsonEditorTabConfig,
+  toStringArray,
+} from "@/app/admin/_lib/json-editor-helpers";
 import { ImageUploadInput } from "./image-upload-input";
 import { MultiImageUploadInput } from "./multi-image-upload-input";
 
@@ -16,11 +19,14 @@ export type JsonEditorProps<T extends object> = {
   title: string;
   description?: string;
   data: T;
+
   /** Used when there are no tabs */
   fields?: FieldConfig[];
+
   /** For backwards compatibility – still required to turn tabs on */
   enableTabs?: boolean;
   tabs?: JsonEditorTabConfig[];
+
   jsonFileHint?: string;
   slug?: string;
   onChangeData: (next: T) => void;
@@ -42,7 +48,7 @@ export function JsonEditor<T extends object>({
   // ----- state for parent + sub-tabs -----
 
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
-    hasTabs ? tabs![0].key : undefined,
+    hasTabs ? tabs![0].key : undefined
   );
 
   const [activeSubTabByParent, setActiveSubTabByParent] = useState<
@@ -142,44 +148,64 @@ export function JsonEditor<T extends object>({
     );
   };
 
-  // ----- select visible fields + panel copy -----
+  const renderFieldsGrid = (list: FieldConfig[]) => {
+    if (!list || list.length === 0) return null;
 
-  let visibleFields: FieldConfig[] = fields;
-  let panelTitle = title;
-  let panelDescription = description ?? "";
+    return (
+      <div className="mt-4 grid gap-4 md:grid-cols-2">
+        {list.map((field) => (
+          <section key={field.path} className="md:col-span-1">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <h4 className="text-xs font-semibold text-neutral-900">
+                  {field.label}
+                </h4>
+                {field.description && (
+                  <p className="mt-1 text-[11px] text-neutral-500">
+                    {field.description}
+                  </p>
+                )}
+              </div>
+              <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
+                {field.path}
+              </code>
+            </div>
+            <div className="mt-2">{renderFieldInput(field)}</div>
+          </section>
+        ))}
+      </div>
+    );
+  };
 
-  if (hasTabs) {
-    const allTabs = tabs!;
-    const activeTab =
-      allTabs.find((t) => t.key === activeTabKey) ?? allTabs[0];
+  // ----- choose active tab + subtab -----
 
-    const subTabs = activeTab.subTabs ?? [];
-    const activeSubKey =
-      subTabs.length > 0
-        ? activeSubTabByParent[activeTab.key] ?? subTabs[0].key
-        : undefined;
+  const activeTab: JsonEditorTabConfig | undefined = hasTabs
+    ? tabs!.find((t) => t.key === activeTabKey) ?? tabs![0]
+    : undefined;
 
-    const activeSubTab =
-      subTabs.length > 0
-        ? subTabs.find((s) => s.key === activeSubKey) ?? subTabs[0]
-        : undefined;
+  const subTabs = activeTab?.subTabs ?? [];
+  const activeSubKey =
+    subTabs.length > 0
+      ? activeSubTabByParent[activeTab!.key] ?? subTabs[0].key
+      : undefined;
 
-    if (subTabs.length > 0 && activeSubTab) {
-      visibleFields = activeSubTab.fields;
-      panelTitle =
-        activeSubTab.panelTitle ??
-        activeTab.panelTitle ??
-        panelTitle;
-      panelDescription =
-        activeSubTab.panelDescription ??
-        activeTab.panelDescription ??
-        panelDescription;
-    } else {
-      visibleFields = activeTab.fields ?? [];
-      panelTitle = activeTab.panelTitle ?? panelTitle;
-      panelDescription = activeTab.panelDescription ?? panelDescription;
-    }
-  }
+  const activeSubTab =
+    subTabs.length > 0
+      ? subTabs.find((s) => s.key === activeSubKey) ?? subTabs[0]
+      : undefined;
+
+  // Base fields always visible for that tab
+  const baseFields = hasTabs ? activeTab?.fields ?? [] : fields;
+  // Sub-tab fields swap below
+  const subFields = hasTabs ? activeSubTab?.fields ?? [] : [];
+
+  const panelTitle = hasTabs
+    ? activeTab?.panelTitle ?? title
+    : title;
+
+  const panelDescription = hasTabs
+    ? activeTab?.panelDescription ?? (description ?? "")
+    : (description ?? "");
 
   return (
     <div className="mt-6">
@@ -191,11 +217,9 @@ export function JsonEditor<T extends object>({
         <p className="mt-1 text-sm text-neutral-600">{description}</p>
       )}
 
-      {/* Tabs + sub-tabs */}
+      {/* Parent tabs ONLY (sub-tabs moved inside the panel card) */}
       {hasTabs && (
-        <div className="mt-6 flex flex-col gap-3">
-
-          {/* Parent tabs */}
+        <div className="mt-6">
           <div className="inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
             {tabs!.map((tab) => {
               const isActive = tab.key === activeTabKey;
@@ -223,52 +247,11 @@ export function JsonEditor<T extends object>({
               );
             })}
           </div>
-
-          {/* Sub-tabs BELOW parent tabs */}
-          {(() => {
-            const active = tabs!.find((t) => t.key === activeTabKey) ?? tabs![0];
-            const subTabs = active.subTabs ?? [];
-            const activeSubKey =
-              subTabs.length > 0
-                ? activeSubTabByParent[active.key] ?? subTabs[0].key
-                : undefined;
-
-            if (subTabs.length === 0) return null;
-
-            return (
-              <div className="inline-flex rounded-full border border-neutral-200 bg-neutral-50 p-1 text-[11px] font-medium">
-                {subTabs.map((sub) => {
-                  const isActive = sub.key === activeSubKey;
-                  return (
-                    <button
-                      key={sub.key}
-                      type="button"
-                      onClick={() =>
-                        setActiveSubTabByParent((prev) => ({
-                          ...prev,
-                          [active.key]: sub.key,
-                        }))
-                      }
-                      className={`rounded-full px-3 py-1 transition ${
-                        isActive
-                          ? "bg-neutral-900 text-white shadow-sm"
-                          : "text-neutral-600 hover:bg-white"
-                      }`}
-                    >
-                      {sub.label}
-                    </button>
-                  );
-                })}
-              </div>
-            );
-          })()}
         </div>
       )}
 
-
       {/* Fields section */}
       {hasTabs ? (
-        // Tabbed layout: single panel + 2-column grid
         <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -291,28 +274,56 @@ export function JsonEditor<T extends object>({
             )}
           </div>
 
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {visibleFields.map((field) => (
-              <section key={field.path} className="md:col-span-1">
+          {/* ✅ Base fields always visible */}
+          {renderFieldsGrid(baseFields)}
+
+          {/* ✅ Sub-tabs sit "in the middle" and only swap the section below */}
+          {subTabs.length > 0 && (
+            <>
+              <div className="mt-6 border-t border-neutral-200 pt-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <h4 className="text-xs font-semibold text-neutral-900">
-                      {field.label}
+                      {activeSubTab?.panelTitle ?? "Items"}
                     </h4>
-                    {field.description && (
+                    {activeSubTab?.panelDescription && (
                       <p className="mt-1 text-[11px] text-neutral-500">
-                        {field.description}
+                        {activeSubTab.panelDescription}
                       </p>
                     )}
                   </div>
-                  <code className="rounded bg-neutral-100 px-2 py-1 text-[10px] text-neutral-500">
-                    {field.path}
-                  </code>
+
+                  <div className="inline-flex rounded-full border border-neutral-200 bg-neutral-50 p-1 text-[11px] font-medium">
+                    {subTabs.map((sub) => {
+                      const isActive = sub.key === activeSubKey;
+                      return (
+                        <button
+                          key={sub.key}
+                          type="button"
+                          onClick={() =>
+                            setActiveSubTabByParent((prev) => ({
+                              ...prev,
+                              [activeTab!.key]: sub.key,
+                            }))
+                          }
+                          className={`rounded-full px-3 py-1 transition ${
+                            isActive
+                              ? "bg-neutral-900 text-white shadow-sm"
+                              : "text-neutral-600 hover:bg-white"
+                          }`}
+                        >
+                          {sub.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-                <div className="mt-2">{renderFieldInput(field)}</div>
-              </section>
-            ))}
-          </div>
+
+                {/* ✅ Only this part changes when sub-tab changes */}
+                {renderFieldsGrid(subFields)}
+              </div>
+            </>
+          )}
         </div>
       ) : (
         // Non-tabbed layout: one card per field
@@ -347,9 +358,7 @@ export function JsonEditor<T extends object>({
       {/* JSON preview */}
       <div className="mt-8 rounded-xl border border-dashed border-neutral-300 bg-white p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-neutral-900">
-            JSON preview
-          </h3>
+          <h3 className="text-sm font-semibold text-neutral-900">JSON preview</h3>
           {jsonFileHint && !hasTabs && (
             <p className="text-[11px] text-neutral-500">
               Backed by <code>{jsonFileHint}</code>
