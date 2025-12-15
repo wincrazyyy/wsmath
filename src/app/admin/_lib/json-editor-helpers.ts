@@ -98,3 +98,29 @@ export function buildIndexedSubTabs(
       panelDescription,
     }));
 }
+
+export function getBaseFieldsAndSubTabs(
+  scopedFields: FieldConfig[],
+  arrayKey: string,
+  panelTitlePrefix: string,
+  panelDescription: string,
+): [FieldConfig[], JsonEditorSubTabConfig[]] {
+  const arrayPrefix = `${arrayKey}[`; // e.g. "coursesSection.groups["
+
+  const baseFields: FieldConfig[] = scopedFields.filter(
+    (f) => !f.path.startsWith(arrayPrefix),
+  );
+
+  const subFields: FieldConfig[] = scopedFields.filter((f) =>
+    f.path.startsWith(arrayPrefix),
+  );
+
+  const subTabs = buildIndexedSubTabs(
+    subFields,
+    arrayKey,
+    panelTitlePrefix,
+    panelDescription,
+  );
+
+  return [baseFields, subTabs];
+}
