@@ -8,7 +8,6 @@ import {
   Student,
   HeatmapCell,
   HeatmapTableConfig,
-  ScalesMapConfig,
 } from "@/app/_lib/content/types/results.types";
 
 import { TooltipCell } from "./tooltip-cell";
@@ -109,7 +108,6 @@ interface GradeImprovementsSectionProps {
   resultItem: ResultGroupConfig;
   students: Student[];
   table: HeatmapTableConfig;
-  scales: ScalesMapConfig;
   footerNote?: string;
 }
 
@@ -119,11 +117,10 @@ export function GradeImprovementsSection({
   resultItem,
   students,
   table,
-  scales,
   footerNote,
 }: GradeImprovementsSectionProps) {
   const { programLabel, gradeScale } = resultItem;
-  const syllabusScale = scales[gradeScale];
+  const syllabusScale = gradeScale;
 
   const isRightFinal = (g: Student["to"]) =>
     normalizeGrade(g, syllabusScale) ===

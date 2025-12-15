@@ -168,8 +168,8 @@ function resultGroupsFields(
       path: `${basePath}.gradeScale`,
       label: `${labelPrefix} – Programme grade scale`,
       description:
-        "Programme grade scale identifier.",
-      type: "string",
+        "Programme grade scale area (ordered from lowest to highest).",
+      type: "string[]",
     },
   ];
 }
@@ -238,27 +238,6 @@ export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
     description:
       "Key column info of the improvement table: the legend of the table.",
     type: "json",
-  },
-  {
-    path: "gradeImprovements.scales.ib",
-    label: "Grade scales 1",
-    description:
-      "Grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels in ascending order (lowest to highest).",
-    type: "string[]",
-  },
-  {
-    path: "gradeImprovements.scales.al",
-    label: "Grade scales 2",
-    description:
-      "Grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels in ascending order (lowest to highest).",
-    type: "string[]",
-  },
-  {
-    path: "gradeImprovements.scales.igcse",
-    label: "Grade scales 3",
-    description:
-      "Grade scales (ib, al, igcse, etc.) as ordered arrays of grade labels in ascending order (lowest to highest).",
-    type: "string[]",
   },
   {
     path: "gradeImprovements.footerNote",

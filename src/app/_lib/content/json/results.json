@@ -48,42 +48,42 @@
         "subTab": "HL",
         "programLabel": "IBDP HL · AAHL / AIHL",
         "studentsKey": "IBDP_HL",
-        "gradeScale": "ib"
+        "gradeScale": ["1", "2", "3", "4", "5", "6", "7"]
       },
       {
         "tab": "IBDP Mathematics",
         "subTab": "SL",
         "programLabel": "IBDP SL · AASL / AISL",
         "studentsKey": "IBDP_SL",
-        "gradeScale": "ib"
+        "gradeScale": ["1", "2", "3", "4", "5", "6", "7"]
       },
       {
         "tab": "A-Level Mathematics",
         "subTab": "Further Math",
         "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
         "studentsKey": "AL_FM",
-        "gradeScale": "al"
+        "gradeScale": ["F", "E", "D", "C", "B", "A", "A*"]
       },
       {
         "tab": "A-Level Mathematics",
         "subTab": "Math",
         "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
         "studentsKey": "AL_M",
-        "gradeScale": "al"
+        "gradeScale": ["F", "E", "D", "C", "B", "A", "A*"]
       },
       {
         "tab": "IGCSE Mathematics",
         "subTab": "Additional Math / Further Math",
         "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Math (4PM0)",
         "studentsKey": "IGCSE_AM",
-        "gradeScale": "igcse"
+        "gradeScale": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
       },
       {
         "tab": "IGCSE Mathematics",
         "subTab": "International Math / Math",
         "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM1)",
         "studentsKey": "IGCSE_M",
-        "gradeScale": "igcse"
+        "gradeScale": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
       }
     ],
     "students": {
@@ -190,11 +190,6 @@
           "description": "Massive jumps"
         }
       ]
-    },
-    "scales": {
-      "ib": ["1", "2", "3", "4", "5", "6", "7"],
-      "al": ["F", "E", "D", "C", "B", "A", "A*"],
-      "igcse": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
     },
     "footerNote": "👆 Hover on each cell to see the students."
   },

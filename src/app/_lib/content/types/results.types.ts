@@ -26,7 +26,7 @@ export type ResultGroupConfig = {
   subTab: string;
   programLabel: string;
   studentsKey: string;
-  gradeScale: string;
+  gradeScale: string[];
 };
 
 export type StudentGrade = number | string;
@@ -60,17 +60,12 @@ export type HeatmapTableConfig = {
   heatmapKeys: HeatmapKey[];
 };
 
-export type ScalesMapConfig = {
-  [scaleKey: string]: string[];
-};
-
 export type GradeImprovementsConfig = {
   header: GradeImprovementsHeaderConfig;
   summaryCards: SummaryCardsConfig;
   resultGroups: ResultGroupConfig[];
   students: StudentsMapConfig;
   table: HeatmapTableConfig;
-  scales: ScalesMapConfig;
   footerNote?: string;
 };
 
