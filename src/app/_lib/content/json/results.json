@@ -37,8 +37,8 @@
       "description": "How students move from school predictions to final exam results."
     },
     "summaryCards": {
-      "top": "⭐ Final grade #",
-      "second": "📘 Final grade #",
+      "top": "⭐ Final grade =#",
+      "second": "📘 Final grade ≥#",
       "bigJumps": "🔥 Major jumps (≥3 grades)",
       "fastTrack": "⚡ Fast-track (≈3 months)"
     },

@@ -92,7 +92,6 @@ function buildHeatmapRows(
   });
 }
 
-
 interface GradeImprovementsSectionProps {
   header: GradeImprovementsHeaderConfig;
   summaryCards: SummaryCardsConfig;
@@ -115,27 +114,38 @@ export function GradeImprovementsSection({
   const { programLabel, gradeScale } = resultItem;
   const syllabusScale = gradeScale;
 
-  const isRightFinal = (g: Student["to"]) =>
-    normalizeGrade(g, syllabusScale) ===
-    normalizeGrade(getTopGrade(syllabusScale), syllabusScale);
-  const isLeftFinal = (g: Student["to"]) =>
-    normalizeGrade(g, syllabusScale) ===
-    normalizeGrade(getSecondGrade(syllabusScale), syllabusScale);
+  const total = students.length;
+
+  const topGrade = getTopGrade(syllabusScale); // e.g. "7"
+  const secondGrade = getSecondGrade(syllabusScale); // e.g. "6"
+
+  const topScore = normalizeGrade(topGrade, syllabusScale);
+  const secondScore = normalizeGrade(secondGrade, syllabusScale);
+
+  // = top (e.g. =7)
+  const isTop = (g: Student["to"]) =>
+    normalizeGrade(g, syllabusScale) === topScore;
+
+  // >= second (e.g. >=6, includes 6 and 7)
+  const isSecondOrAbove = (g: Student["to"]) =>
+    normalizeGrade(g, syllabusScale) >= secondScore;
+
+  const totalTop = students.filter((s) => isTop(s.to)).length;
+  const totalSecondOrAbove = students.filter((s) => isSecondOrAbove(s.to)).length;
+
+  const pct = (count: number) =>
+    total > 0 ? Math.round((count / total) * 100) : 0;
 
   const heatmapRows = buildHeatmapRows(students, heatmapKeys, syllabusScale);
 
-  const totalTop = students.filter((s) => isRightFinal(s.to)).length;
-  const totalSecond = students.filter((s) => isLeftFinal(s.to)).length;
-
   const bigJumps = students.filter((s) => {
     const diff =
-      normalizeGrade(s.to, syllabusScale) -
-      normalizeGrade(s.from, syllabusScale);
+      normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
     return diff >= 3;
   }).length;
 
   const fastTrack = students.filter(
-    (s) => typeof s.months === "number" && s.months <= 3
+    (s) => typeof s.months === "number" && s.months <= 3,
   ).length;
 
   return (
@@ -153,24 +163,29 @@ export function GradeImprovementsSection({
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
+          {/* TOP (= top grade, e.g. 7 only) */}
           <div className="flex flex-col justify-between rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
-              {hashToGrade(summaryCards.top, getTopGrade(syllabusScale))}
+              {hashToGrade(summaryCards.top, topGrade)}
             </div>
             <div className="text-lg font-semibold text-indigo-800">
               {totalTop}
+              <span className="ml-2 text-xs font-semibold text-indigo-600">
+                ({pct(totalTop)}%)
+              </span>
             </div>
           </div>
 
+          {/* SECOND (>= second grade, e.g. 6 or 7) */}
           <div className="flex flex-col justify-between rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
-              {hashToGrade(
-                summaryCards.second,
-                getSecondGrade(syllabusScale)
-              )}
+              {hashToGrade(summaryCards.second, secondGrade)}
             </div>
             <div className="text-lg font-semibold text-sky-800">
-              {totalSecond}
+              {totalSecondOrAbove}
+              <span className="ml-2 text-xs font-semibold text-sky-600">
+                ({pct(totalSecondOrAbove)}%)
+              </span>
             </div>
           </div>
 
@@ -178,9 +193,7 @@ export function GradeImprovementsSection({
             <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
               {summaryCards.bigJumps}
             </div>
-            <div className="text-lg font-semibold text-rose-800">
-              {bigJumps}
-            </div>
+            <div className="text-lg font-semibold text-rose-800">{bigJumps}</div>
           </div>
 
           <div className="flex flex-col justify-between rounded-xl bg-amber-50 ring-1 ring-amber-300 px-3 py-2">
@@ -194,7 +207,7 @@ export function GradeImprovementsSection({
         </div>
       </div>
 
-      {/* Heatmap grid */}
+      {/* Heatmap grid (merged column) */}
       <div className="mt-1 rounded-xl border border-slate-100 overflow-visible">
         <table className="w-full border-collapse text-sm">
           <thead className="bg-slate-50/80">
@@ -216,9 +229,13 @@ export function GradeImprovementsSection({
                 }`}
               >
                 <td className="px-3 py-2 align-top">
-                  <div className="text-xs font-medium text-slate-800">{row.label}</div>
+                  <div className="text-xs font-medium text-slate-800">
+                    {row.label}
+                  </div>
                   {row.description && (
-                    <div className="text-[11px] text-slate-500">{row.description}</div>
+                    <div className="text-[11px] text-slate-500">
+                      {row.description}
+                    </div>
                   )}
                 </td>
 
