@@ -40,7 +40,7 @@ export type Student = {
 };
 
 export type StudentsMapConfig = {
-  [studentsKey: string]: ;
+  [studentsKey: string]: Student[];
 };
 
 export type HeatmapCell = {
