@@ -206,10 +206,12 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
     // create a sensible blank row with all known columns present
     const blank: Row = {};
     for (const c of columns) {
-      blank[c.key] = numericKeys.has(c.key) ? undefined : "";
+        blank[c.key] = numericKeys.has(c.key) ? undefined : "";
     }
-    commit([...rows, blank]);
+
+    commit([blank, ...rows]);
   }
+
 
   function replaceFromBulk() {
     commit(parseBulk(bulkText, columns, numericKeys));
