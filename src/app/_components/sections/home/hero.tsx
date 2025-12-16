@@ -38,9 +38,6 @@ export function Hero() {
                 />
                 <div className="relative flex items-center gap-4">
                   <div className="shrink-0 rounded-xl bg-white/70 px-3 py-2 ring-1 ring-black/5">
-                    <div className="text-[11px] font-semibold tracking-wide text-neutral-600">
-                      PROOF
-                    </div>
                     <div className="text-3xl font-extrabold leading-none tracking-tight md:text-4xl">
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                         {hero.stat.value}
