@@ -35,14 +35,40 @@ export function Hero() {
               {hero.title}
             </span>
           </h1>
+
           <p className="mt-4 text-lg text-neutral-700 md:text-xl">
             {hero.subtitle}
           </p>
+
           <p className="mt-2 text-sm text-neutral-600 md:text-xl">
             {hero.tagline}
           </p>
 
-          <div className="mt-5">
+          {/* BIG STAT (Hero-level) */}
+          {hero.stat?.value && (
+            <div className="mt-6 inline-flex items-center gap-4 rounded-2xl border border-indigo-200/70 bg-white/70 px-5 py-4 shadow-sm backdrop-blur">
+              <div className="leading-none">
+                <div className="text-3xl font-extrabold tracking-tight md:text-4xl">
+                  <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
+                    {hero.stat.value}
+                  </span>
+                </div>
+              </div>
+
+              <div className="text-left">
+                <div className="text-sm font-semibold text-neutral-900 md:text-base">
+                  {hero.stat.label}
+                </div>
+                {hero.stat.subLabel && (
+                  <div className="text-xs text-neutral-600 md:text-sm">
+                    {hero.stat.subLabel}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="mt-6">
             <WhatsAppButton width={220} height={56} imgClassName="h-14 w-auto" />
           </div>
         </div>
