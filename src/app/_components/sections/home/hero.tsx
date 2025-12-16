@@ -26,6 +26,42 @@ export function Hero() {
             className="object-contain object-top lg:object-cover"
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />
+
+          {/* Floating stat card (inside image area) */}
+          {hero.stat?.value && (
+            <div className="pointer-events-none absolute bottom-4 left-4 right-4 z-10 sm:right-auto sm:max-w-[340px]">
+              <div className="relative rounded-2xl border border-white/60 bg-white/75 p-4 shadow-lg backdrop-blur">
+                {/* subtle glow */}
+                <div
+                  aria-hidden
+                  className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-400/25 blur-2xl"
+                />
+                <div className="relative flex items-center gap-4">
+                  <div className="shrink-0 rounded-xl bg-white/70 px-3 py-2 ring-1 ring-black/5">
+                    <div className="text-[11px] font-semibold tracking-wide text-neutral-600">
+                      PROOF
+                    </div>
+                    <div className="text-3xl font-extrabold leading-none tracking-tight md:text-4xl">
+                      <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
+                        {hero.stat.value}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold text-neutral-900 md:text-base">
+                      {hero.stat.label}
+                    </div>
+                    {hero.stat.subLabel && (
+                      <div className="truncate text-xs text-neutral-600 md:text-sm">
+                        {hero.stat.subLabel}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Text */}
@@ -43,30 +79,6 @@ export function Hero() {
           <p className="mt-2 text-sm text-neutral-600 md:text-xl">
             {hero.tagline}
           </p>
-
-          {/* BIG STAT (Hero-level) */}
-          {hero.stat?.value && (
-            <div className="mt-6 inline-flex items-center gap-4 rounded-2xl border border-indigo-200/70 bg-white/70 px-5 py-4 shadow-sm backdrop-blur">
-              <div className="leading-none">
-                <div className="text-3xl font-extrabold tracking-tight md:text-4xl">
-                  <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
-                    {hero.stat.value}
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-left">
-                <div className="text-sm font-semibold text-neutral-900 md:text-base">
-                  {hero.stat.label}
-                </div>
-                {hero.stat.subLabel && (
-                  <div className="text-xs text-neutral-600 md:text-sm">
-                    {hero.stat.subLabel}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
 
           <div className="mt-6">
             <WhatsAppButton width={220} height={56} imgClassName="h-14 w-auto" />
