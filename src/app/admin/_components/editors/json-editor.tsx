@@ -150,14 +150,12 @@ export function JsonEditor<T extends object>({
     }
 
     // table
-    else {
-      return (
-        <TableInput<T>
-          field={field}
-          data={data}
-          onChangeData={onChangeData}
-        />
-      );
+    if (field.type === "table") {
+      return <TableInput<T>
+        field={field}
+        data={data}
+        onChangeData={onChangeData}
+      />;
     }
 
   };

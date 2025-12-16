@@ -161,9 +161,19 @@ function resultGroupsFields(
     {
       path: `${basePath}.students`,
       label: `${labelPrefix} – Programme students`,
-      description:
-        "Table of students with name, year, from, to, and optional months. You can add as many students as you like.",
+      description: "Edit the students in a table.",
       type: "table",
+      table: {
+        itemLabel: "student",
+        columns: [
+          { key: "name", label: "Name" },
+          { key: "year", label: "Year", kind: "number" },
+          { key: "from", label: "From" },
+          { key: "to", label: "To" },
+          { key: "months", label: "Months", kind: "number", placeholder: "(optional)" },
+        ],
+        minTableWidthPx: 860,
+      },
     },
     {
       path: `${basePath}.gradeScale`,

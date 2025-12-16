@@ -18,8 +18,6 @@ import {
   getBaseFieldsAndSubTabs,
 } from "@/app/admin/_lib/json-editor-helpers";
 
-type SubTab = "header" | "gradeHeaders" | "gradeGroups" | "gradeData" | "gradeMisc" | "cta";
-
 type ResultsEditorProps<T extends object> = {
   data: T;
   onChangeData: (next: T) => void;

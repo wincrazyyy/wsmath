@@ -1,87 +1,158 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import type { FieldConfig, TableColumnConfig } from "@/app/admin/_lib/fields/fields";
 import { getByPath, setByPath } from "@/app/admin/_lib/json-path";
 
-type StudentGrade = number | string;
-
-type Student = {
-  name: string;
-  year: number;
-  from: StudentGrade;
-  to: StudentGrade;
-  months?: number;
-};
+type Cell = string | number | boolean | null | undefined;
+type Row = Record<string, Cell>;
 
 type Props<T extends object> = {
-  field: FieldConfig;          // field.path points to "...students"
+  field: FieldConfig; // field.path points to an array of objects
   data: T;
   onChangeData: (next: T) => void;
 };
 
-function toStudents(raw: unknown): Student[] {
-  return Array.isArray(raw) ? (raw as Student[]) : [];
+function isPlainObject(x: unknown): x is Record<string, unknown> {
+  return !!x && typeof x === "object" && !Array.isArray(x);
 }
 
-function toGradeScale(raw: unknown): string[] | null {
-  if (!Array.isArray(raw)) return null;
-  const xs = raw.filter((x) => typeof x === "string") as string[];
-  return xs.length ? xs : null;
+function toRows(raw: unknown): Row[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(isPlainObject) as Row[];
 }
 
-function parseBulk(text: string): Student[] {
-  // Accept CSV or TSV-ish:
-  // name, year, from, to, months?
-  // name \t year \t from \t to \t months?
+function guessNumericColumn(rows: Row[], key: string): boolean {
+  // If any existing value is a finite number => numeric.
+  for (const r of rows) {
+    const v = r[key];
+    if (typeof v === "number" && Number.isFinite(v)) return true;
+  }
+  return false;
+}
+
+function inferColumns(rows: Row[]): TableColumnConfig[] {
+  const keySet = new Set<string>();
+  for (const r of rows) {
+    for (const k of Object.keys(r)) keySet.add(k);
+  }
+  const keys = Array.from(keySet);
+
+  // nice ordering for common shapes, else alphabetical
+  const preferred = ["name", "year", "from", "to", "months"];
+  keys.sort((a, b) => {
+    const ia = preferred.indexOf(a);
+    const ib = preferred.indexOf(b);
+    if (ia !== -1 || ib !== -1) return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    return a.localeCompare(b);
+  });
+
+  return keys.map((k) => ({ key: k, label: toTitle(k) }));
+}
+
+function toTitle(key: string) {
+  // "gradeScale" -> "Grade Scale", "months" -> "Months"
+  return key
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (m) => m.toUpperCase());
+}
+
+function splitLine(line: string): string[] {
+  const parts = line.includes("\t")
+    ? line.split("\t")
+    : line.split(",");
+  return parts.map((x) => x.trim());
+}
+
+function looksLikeHeader(parts: string[], columns: TableColumnConfig[]) {
+  const colKeys = new Set(columns.map((c) => c.key.toLowerCase()));
+  const colLabels = new Set(columns.map((c) => (c.label ?? c.key).toLowerCase()));
+  const hits = parts.filter((p) => colKeys.has(p.toLowerCase()) || colLabels.has(p.toLowerCase())).length;
+  return hits >= Math.max(2, Math.ceil(columns.length / 2));
+}
+
+function parseBulk(
+  text: string,
+  columns: TableColumnConfig[],
+  numericKeys: Set<string>,
+): Row[] {
   const lines = text
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
 
-  const out: Student[] = [];
+  if (lines.length === 0) return [];
 
-  for (const line of lines) {
-    const parts = line.includes("\t")
-      ? line.split("\t").map((x) => x.trim())
-      : line.split(",").map((x) => x.trim());
+  let start = 0;
+  let mapByIndex = columns.map((c) => c.key);
 
-    if (parts.length < 4) continue;
-
-    const [name, yearStr, from, to, monthsStr] = parts;
-
-    const year = Number(yearStr);
-    if (!name || !Number.isFinite(year)) continue;
-
-    const months =
-      monthsStr !== undefined && monthsStr !== ""
-        ? Number(monthsStr)
-        : undefined;
-
-    out.push({
-      name,
-      year,
-      from,
-      to,
-      ...(Number.isFinite(months as number) ? { months } : {}),
+  // header row support
+  const first = splitLine(lines[0]);
+  if (looksLikeHeader(first, columns)) {
+    start = 1;
+    mapByIndex = first.map((h) => {
+      const hLower = h.toLowerCase();
+      const match =
+        columns.find((c) => c.key.toLowerCase() === hLower) ??
+        columns.find((c) => (c.label ?? "").toLowerCase() === hLower);
+      return match?.key ?? h;
     });
+  }
+
+  const out: Row[] = [];
+
+  for (let i = start; i < lines.length; i++) {
+    const parts = splitLine(lines[i]);
+    if (parts.length === 0) continue;
+
+    const row: Row = {};
+    for (let j = 0; j < parts.length; j++) {
+      const key = mapByIndex[j] ?? columns[j]?.key;
+      if (!key) continue;
+
+      const raw = parts[j];
+      if (raw === "") {
+        row[key] = undefined;
+        continue;
+      }
+
+      if (numericKeys.has(key)) {
+        const n = Number(raw);
+        row[key] = Number.isFinite(n) ? n : raw;
+      } else {
+        row[key] = raw;
+      }
+    }
+
+    // only keep non-empty rows
+    if (Object.keys(row).length > 0) out.push(row);
   }
 
   return out;
 }
 
-export function TableInput<T extends object>({
-  field,
-  data,
-  onChangeData,
-}: Props<T>) {
-  const studentsPath = field.path;
+export function TableInput<T extends object>({ field, data, onChangeData }: Props<T>) {
+  const rowsPath = field.path;
+  const rows = toRows(getByPath(data, rowsPath));
 
-  // Try to discover sibling gradeScale: replace ".students" -> ".gradeScale"
-  const gradeScalePath = studentsPath.replace(/\.students$/, ".gradeScale");
-  const gradeScale = toGradeScale(getByPath(data, gradeScalePath));
+  const columns = useMemo(() => {
+    const cfg = field.table?.columns;
+    return cfg && cfg.length > 0 ? cfg : inferColumns(rows);
+  }, [field.table?.columns, rows]);
 
-  const students = toStudents(getByPath(data, studentsPath));
+  const numericKeys = useMemo(() => {
+    const set = new Set<string>();
+    for (const c of columns) {
+      if (c.kind === "number") set.add(c.key);
+      else if (c.kind === "string") continue;
+      else if (guessNumericColumn(rows, c.key)) set.add(c.key);
+    }
+    return set;
+  }, [columns, rows]);
+
+  const itemLabel = field.table?.itemLabel ?? "row";
+  const minWidth = field.table?.minTableWidthPx ?? 860;
 
   const [query, setQuery] = useState("");
   const [bulkOpen, setBulkOpen] = useState(false);
@@ -89,86 +160,68 @@ export function TableInput<T extends object>({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return students;
+    if (!q) return rows.map((r, idx) => ({ r, idx }));
 
-    return students.filter((s) => {
-      const name = String(s.name ?? "").toLowerCase();
-      const year = String(s.year ?? "");
-      return name.includes(q) || year.includes(q);
-    });
-  }, [students, query]);
+    return rows
+      .map((r, idx) => ({ r, idx }))
+      .filter(({ r }) => {
+        for (const c of columns) {
+          const v = r[c.key];
+          if (v === undefined || v === null) continue;
+          if (String(v).toLowerCase().includes(q)) return true;
+        }
+        return false;
+      });
+  }, [rows, query, columns]);
 
-  function commit(nextStudents: Student[]) {
+  function commit(nextRows: Row[]) {
     const next = structuredClone(data) as T;
-    setByPath(next, studentsPath, nextStudents);
+    setByPath(next, rowsPath, nextRows);
     onChangeData(next);
   }
 
-  function updateRow(idx: number, patch: Partial<Student>) {
-    const next = students.slice();
-    next[idx] = { ...next[idx], ...patch };
+  function updateCell(rowIndex: number, key: string, raw: string) {
+    const next = rows.slice();
+    const current = next[rowIndex] ?? {};
+    const isNum = numericKeys.has(key);
+
+    let v: Cell = raw;
+    if (raw.trim() === "") v = undefined;
+    else if (isNum) {
+      const n = Number(raw);
+      v = Number.isFinite(n) ? n : raw; // fallback to string if not a number
+    }
+
+    next[rowIndex] = { ...current, [key]: v };
     commit(next);
   }
 
-  function removeRow(idx: number) {
-    const next = students.slice();
-    next.splice(idx, 1);
+  function removeRow(rowIndex: number) {
+    const next = rows.slice();
+    next.splice(rowIndex, 1);
     commit(next);
   }
 
   function addRow() {
-    commit([
-      ...students,
-      { name: "New student", year: new Date().getFullYear(), from: "", to: "" },
-    ]);
+    // create a sensible blank row with all known columns present
+    const blank: Row = {};
+    for (const c of columns) {
+      blank[c.key] = numericKeys.has(c.key) ? undefined : "";
+    }
+    commit([...rows, blank]);
   }
 
   function replaceFromBulk() {
-    commit(parseBulk(bulkText));
+    commit(parseBulk(bulkText, columns, numericKeys));
     setBulkText("");
     setBulkOpen(false);
   }
 
   function appendFromBulk() {
-    commit([...students, ...parseBulk(bulkText)]);
+    commit([...rows, ...parseBulk(bulkText, columns, numericKeys)]);
     setBulkText("");
     setBulkOpen(false);
   }
-
-  const GradeInput = ({
-    value,
-    onChange,
-  }: {
-    value: StudentGrade;
-    onChange: (v: StudentGrade) => void;
-  }) => {
-    if (gradeScale) {
-      const v = value === undefined || value === null ? "" : String(value);
-      return (
-        <select
-          className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-          value={v}
-          onChange={(e) => onChange(e.target.value)}
-        >
-          <option value="">—</option>
-          {gradeScale.map((g) => (
-            <option key={g} value={g}>
-              {g}
-            </option>
-          ))}
-        </select>
-      );
-    }
-
-    return (
-      <input
-        className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-        value={value === undefined || value === null ? "" : String(value)}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder="e.g. 6 or A*"
-      />
-    );
-  };
 
   return (
     <div className="space-y-3">
@@ -176,13 +229,11 @@ export function TableInput<T extends object>({
         <div className="flex items-center gap-2">
           <input
             className="w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200 sm:w-72"
-            placeholder="Search by name or year…"
+            placeholder="Search…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <div className="text-xs text-neutral-500">
-            {students.length} total
-          </div>
+          <div className="text-xs text-neutral-500">{rows.length} total</div>
         </div>
 
         <div className="flex items-center gap-2">
@@ -199,7 +250,7 @@ export function TableInput<T extends object>({
             onClick={addRow}
             className="rounded-lg bg-neutral-900 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-neutral-800"
           >
-            + Add student
+            + Add {itemLabel}
           </button>
         </div>
       </div>
@@ -210,7 +261,8 @@ export function TableInput<T extends object>({
             Bulk paste (CSV or tab-separated)
           </div>
           <div className="mt-1 text-[11px] text-neutral-600">
-            Format: <code>name, year, from, to, months?</code>
+            You can paste <b>with</b> an optional header row. Columns detected:{" "}
+            <code>{columns.map((c) => c.key).join(", ")}</code>
           </div>
 
           <textarea
@@ -218,7 +270,7 @@ export function TableInput<T extends object>({
             rows={5}
             value={bulkText}
             onChange={(e) => setBulkText(e.target.value)}
-            placeholder={`Marcus, 2025, 6, 7\nFiona, 2022, 3, 6, 3`}
+            placeholder={`${columns.map((c) => c.key).join(", ")}\n…`}
           />
 
           <div className="mt-2 flex flex-wrap gap-2">
@@ -248,24 +300,17 @@ export function TableInput<T extends object>({
       )}
 
       <div className="w-full overflow-auto rounded-xl border border-neutral-200 bg-white">
-        <table className="min-w-[860px] w-full border-collapse text-sm">
+        <table className="w-full border-collapse text-sm" style={{ minWidth }}>
           <thead className="bg-neutral-50">
             <tr className="border-b border-neutral-200">
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                Name
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                Year
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                From
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                To
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">
-                Months
-              </th>
+              {columns.map((c) => (
+                <th
+                  key={c.key}
+                  className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500"
+                >
+                  {c.label ?? c.key}
+                </th>
+              ))}
               <th className="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-neutral-500">
                 Actions
               </th>
@@ -273,73 +318,46 @@ export function TableInput<T extends object>({
           </thead>
 
           <tbody>
-            {filtered.map((s) => {
-              const idx = students.indexOf(s); // ok for your use case
-              return (
-                <tr key={`${s.name}__${s.year}__${idx}`} className="border-b border-neutral-100">
-                  <td className="px-3 py-2">
-                    <input
-                      className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-                      value={s.name ?? ""}
-                      onChange={(e) => updateRow(idx, { name: e.target.value })}
-                    />
-                  </td>
+            {filtered.map(({ r, idx }) => (
+              <tr key={idx} className="border-b border-neutral-100">
+                {columns.map((c) => {
+                  const v = r[c.key];
+                  const isNum = numericKeys.has(c.key);
+                  const value =
+                    v === undefined || v === null ? "" : String(v);
 
-                  <td className="px-3 py-2">
-                    <input
-                      type="number"
-                      className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-                      value={Number.isFinite(s.year) ? s.year : ""}
-                      onChange={(e) =>
-                        updateRow(idx, { year: Number(e.target.value) })
-                      }
-                    />
-                  </td>
+                  return (
+                    <td key={c.key} className="px-3 py-2">
+                      <input
+                        type={isNum ? "number" : "text"}
+                        className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                        value={value}
+                        placeholder={c.placeholder}
+                        onChange={(e) => updateCell(idx, c.key, e.target.value)}
+                      />
+                    </td>
+                  );
+                })}
 
-                  <td className="px-3 py-2">
-                    <GradeInput
-                      value={s.from}
-                      onChange={(v) => updateRow(idx, { from: v })}
-                    />
-                  </td>
-
-                  <td className="px-3 py-2">
-                    <GradeInput
-                      value={s.to}
-                      onChange={(v) => updateRow(idx, { to: v })}
-                    />
-                  </td>
-
-                  <td className="px-3 py-2">
-                    <input
-                      type="number"
-                      className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-                      value={typeof s.months === "number" ? s.months : ""}
-                      placeholder="(optional)"
-                      onChange={(e) => {
-                        const v = e.target.value.trim();
-                        updateRow(idx, { months: v === "" ? undefined : Number(v) });
-                      }}
-                    />
-                  </td>
-
-                  <td className="px-3 py-2 text-right">
-                    <button
-                      type="button"
-                      onClick={() => removeRow(idx)}
-                      className="rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+                <td className="px-3 py-2 text-right">
+                  <button
+                    type="button"
+                    onClick={() => removeRow(idx)}
+                    className="rounded-md border border-neutral-200 bg-white px-2 py-1 text-xs font-semibold text-rose-700 hover:bg-rose-50"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
 
             {filtered.length === 0 && (
               <tr>
-                <td className="px-3 py-4 text-sm text-neutral-500" colSpan={6}>
-                  No students match your search.
+                <td
+                  className="px-3 py-4 text-sm text-neutral-500"
+                  colSpan={columns.length + 1}
+                >
+                  No rows match your search.
                 </td>
               </tr>
             )}
@@ -348,7 +366,7 @@ export function TableInput<T extends object>({
       </div>
 
       <p className="text-[11px] text-neutral-500">
-        Tip: keep names unique per programme group to avoid tooltip ambiguity.
+        Tip: if you want stable column order, set <code>field.table.columns</code>.
       </p>
     </div>
   );
