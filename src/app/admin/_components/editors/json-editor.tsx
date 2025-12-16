@@ -12,6 +12,7 @@ import {
   JsonEditorTabConfig,
   toStringArray,
 } from "@/app/admin/_lib/json-editor-helpers";
+import { TableInput } from "./table-input";
 import { ImageUploadInput } from "./image-upload-input";
 import { MultiImageUploadInput } from "./multi-image-upload-input";
 
@@ -136,25 +137,46 @@ export function JsonEditor<T extends object>({
       );
     }
 
-    // string[]
-    const arr = toStringArray(raw);
-    return (
-      <textarea
-        className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-        rows={5}
-        value={arr.join("\n")}
-        onChange={(e) => handleChange(field, e.target.value)}
-      />
-    );
+    if (field.type === "string[]") {
+      const arr = toStringArray(raw);
+      return (
+        <textarea
+          className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+          rows={5}
+          value={arr.join("\n")}
+          onChange={(e) => handleChange(field, e.target.value)}
+        />
+      );
+    }
+
+    // table
+    else {
+      return (
+        <TableInput<T>
+          field={field}
+          data={data}
+          onChangeData={onChangeData}
+        />
+      );
+    }
+
   };
 
   const renderFieldsGrid = (list: FieldConfig[]) => {
-    if (!list || list.length === 0) return null;
+  if (!list || list.length === 0) return null;
+
+    const isFullWidth = (field: FieldConfig) => {
+      // Anything that renders a complex editor (TableInput, etc.) should span full width
+      return field.type !== "string" && field.type !== "textarea" && field.type !== "string[]";
+    };
 
     return (
       <div className="mt-4 grid gap-4 md:grid-cols-2">
         {list.map((field) => (
-          <section key={field.path} className="md:col-span-1">
+          <section
+            key={field.path}
+            className={isFullWidth(field) ? "md:col-span-2" : "md:col-span-1"}
+          >
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h4 className="text-xs font-semibold text-neutral-900">
@@ -170,12 +192,14 @@ export function JsonEditor<T extends object>({
                 {field.path}
               </code>
             </div>
+
             <div className="mt-2">{renderFieldInput(field)}</div>
           </section>
         ))}
       </div>
     );
   };
+
 
   // ----- choose active tab + subtab -----
 

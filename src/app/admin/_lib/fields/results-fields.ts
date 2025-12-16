@@ -162,8 +162,8 @@ function resultGroupsFields(
       path: `${basePath}.students`,
       label: `${labelPrefix} – Programme students`,
       description:
-        "JSON object mapping studentsKey → list of students with name, year, from, to, and optional months. You can add as many students as you like.",
-      type: "json",
+        "Table of students with name, year, from, to, and optional months. You can add as many students as you like.",
+      type: "table",
     },
     {
       path: `${basePath}.gradeScale`,

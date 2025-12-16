@@ -1,5 +1,5 @@
 // app/admin/_lib/fields.ts
-export type FieldType = "string" | "textarea" | "string[]";
+export type FieldType = "string" | "textarea" | "string[]" | "table";
 
 export type FieldConfig = {
   path: string;
