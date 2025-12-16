@@ -29,15 +29,16 @@ export function Hero() {
 
           {/* Floating stat card (inside image area) */}
           {hero.stat?.value && (
-            <div className="pointer-events-none absolute bottom-4 left-4 right-4 z-10 sm:right-auto sm:max-w-[340px]">
-              <div className="relative rounded-2xl border border-white/60 bg-white/75 p-4 shadow-lg backdrop-blur">
+            <div className="pointer-events-none absolute inset-x-4 bottom-4 z-10">
+              <div className="relative mx-auto w-full max-w-[620px] rounded-2xl border border-white/60 bg-white/75 px-5 py-4 shadow-lg backdrop-blur">
                 {/* subtle glow */}
                 <div
                   aria-hidden
                   className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-400/25 blur-2xl"
                 />
-                <div className="relative flex items-center gap-4">
-                  <div className="shrink-0 rounded-xl bg-white/70 px-3 py-2 ring-1 ring-black/5">
+
+                <div className="relative flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:justify-center sm:gap-4 sm:text-left">
+                  <div className="shrink-0 rounded-xl bg-white/70 px-4 py-2 ring-1 ring-black/5">
                     <div className="text-3xl font-extrabold leading-none tracking-tight md:text-4xl">
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                         {hero.stat.value}
@@ -45,12 +46,12 @@ export function Hero() {
                     </div>
                   </div>
 
-                  <div className="min-w-0">
-                    <div className="truncate text-sm font-semibold text-neutral-900 md:text-base">
+                  <div className="space-y-0.5">
+                    <div className="text-sm font-semibold text-neutral-900 md:text-base">
                       {hero.stat.label}
                     </div>
                     {hero.stat.subLabel && (
-                      <div className="truncate text-xs text-neutral-600 md:text-sm">
+                      <div className="text-xs text-neutral-600 md:text-sm">
                         {hero.stat.subLabel}
                       </div>
                     )}
