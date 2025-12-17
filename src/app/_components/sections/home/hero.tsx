@@ -1,11 +1,79 @@
 // app/_components/sections/home/hero.tsx
+"use client";
+
 import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import homeContent from "@/app/_lib/content/json/home.json";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
 
 const hero = homeContent.hero;
 
+function toNumber(value: unknown, fallback = 0): number {
+  const n = typeof value === "string" ? Number(value) : (value as number);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function useCountUp(target: number, durationMs = 1100) {
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    if (prefersReduced) {
+      setValue(target);
+      return;
+    }
+
+    let raf = 0;
+    let start: number | null = null;
+
+    const step = (t: number) => {
+      if (start === null) start = t;
+      const p = Math.min((t - start) / durationMs, 1);
+
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - p, 3);
+
+      setValue(Math.round(eased * target));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+
+    setValue(0);
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, durationMs]);
+
+  return value;
+}
+
 export function Hero() {
+  const [entered, setEntered] = useState(false);
+
+  const targetHours = useMemo(() => toNumber(hero.stat?.value, 0), []);
+  const hours = useCountUp(targetHours, 1100);
+
+  const hoursText = useMemo(() => {
+    const nf = new Intl.NumberFormat("en-GB");
+    return `${nf.format(hours)}+`;
+  }, [hours]);
+
+  useEffect(() => {
+    // trigger enter animation after mount
+    const prefersReduced =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+
+    if (prefersReduced) {
+      setEntered(true);
+      return;
+    }
+
+    const id = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
     <section className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-sm">
       {/* subtle grid + spotlight */}
@@ -27,9 +95,15 @@ export function Hero() {
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />
 
-          {/* Floating stat card (inside image area) */}
+          {/* Floating stat card (fade + float up, count-up number) */}
           {hero.stat?.value && (
-            <div className="pointer-events-none absolute inset-x-4 bottom-4 z-10">
+            <div
+              className={[
+                "pointer-events-none absolute inset-x-4 bottom-4 z-10",
+                "transition-all duration-700 ease-out",
+                entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
+              ].join(" ")}
+            >
               <div className="relative mx-auto w-full max-w-[620px] rounded-2xl border border-white/60 bg-white/75 px-5 py-4 shadow-lg backdrop-blur">
                 {/* subtle glow */}
                 <div
@@ -39,9 +113,9 @@ export function Hero() {
 
                 <div className="relative flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:justify-center sm:gap-4 sm:text-left">
                   <div className="shrink-0 rounded-xl bg-white/70 px-4 py-2 ring-1 ring-black/5">
-                    <div className="text-3xl font-extrabold leading-none tracking-tight md:text-4xl">
+                    <div className="text-3xl font-extrabold leading-none tracking-tight md:text-4xl tabular-nums">
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
-                        {hero.stat.value}
+                        {hoursText}
                       </span>
                     </div>
                   </div>
