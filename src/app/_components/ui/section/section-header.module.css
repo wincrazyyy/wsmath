@@ -62,3 +62,29 @@
     transform: translateX(0) translateY(0) rotate(0deg) scale(1);
   }
 }
+
+/* Pop-in on mount */
+.popIn {
+  animation: sectionPop 520ms cubic-bezier(0.21, 0.8, 0.35, 1) both;
+}
+
+@keyframes sectionPop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-1px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popIn {
+    animation: none;
+  }
+}

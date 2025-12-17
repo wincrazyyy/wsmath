@@ -85,7 +85,7 @@ export function SectionHeader({
   // ================= Centered layout =================
   if (isCenter) {
     return (
-      <header className={className}>
+      <header className={`${className} ${styles.popIn}`}>
         <div className="flex flex-col items-center text-center">
           <div className="max-w-2xl">
             {eyebrow && (
@@ -126,7 +126,7 @@ export function SectionHeader({
   const accentColumns = rightAccent?.columns ?? [];
 
   return (
-    <header className={className}>
+    <header className={`${className} ${styles.popIn}`}>
       <div
         className={`flex flex-col gap-4 ${
           showAccent ? "md:flex-row md:items-stretch md:justify-between" : ""
