@@ -24,7 +24,10 @@ export default function Page() {
           <Home />
         </section>
 
-        <section id="about" className="container mx-auto max-w-5xl px-4 py-4">
+        <section
+          id="about"
+          className="container mx-auto max-w-5xl px-4 py-4"
+        >
           <About />
         </section>
 
