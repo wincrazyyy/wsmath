@@ -52,7 +52,7 @@ export function Nav() {
     } hover:text-neutral-900`;
 
   return (
-    <div className="sticky top-0 z-40 w-full border-b border-neutral-200/70 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <div className="w-full border-b border-neutral-200/70 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <nav className="container mx-auto max-w-5xl px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Brand */}

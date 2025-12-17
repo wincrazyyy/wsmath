@@ -16,7 +16,7 @@ export default function Page() {
       <SmoothScroll />
       <BackgroundGlow />
       <div className="relative z-10">
-        <header className="container mx-auto max-w-5xl px-4">
+        <header className="sticky top-0 z-40 w-full">
           <Nav />
         </header>
 
