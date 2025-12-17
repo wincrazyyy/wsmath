@@ -20,7 +20,10 @@ export default function Page() {
           <Nav />
         </header>
 
-        <section className="container mx-auto max-w-5xl px-4 pt-6" id="content">
+        <section
+          id="content"
+          className="container mx-auto max-w-5xl px-4 py-4"
+        >
           <Home />
         </section>
 
@@ -40,14 +43,14 @@ export default function Page() {
 
         <section
           id="testimonials"
-          className="container mx-auto max-w-5xl px-4 py-6"
+          className="container mx-auto max-w-5xl px-4 py-4"
         >
           <Testimonials />
         </section>
 
         <section
           id="results"
-          className="container mx-auto max-w-5xl px-4 pb-16"
+          className="container mx-auto max-w-5xl px-4 py-4"
         >
           <Results />
         </section>

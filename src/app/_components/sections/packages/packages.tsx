@@ -42,10 +42,7 @@ export function Packages() {
   const eightLessonBlockCost = privateRate * intensiveLessons;
 
   return (
-    <section
-      id="packages"
-      className="container mx-auto max-w-5xl px-4 pb-4 pt-6"
-    >
+    <>
       <PackagesHeader header={header} />
 
       <SectionReveal>
@@ -71,6 +68,6 @@ export function Packages() {
           />
         </div>
       </SectionReveal>
-    </section>
+    </>
   );
 }
