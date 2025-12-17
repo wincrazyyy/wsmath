@@ -1,12 +1,13 @@
 import aboutContent from "@/app/_lib/content/json/about.json";
 import type { AboutConfig } from "@/app/_lib/content/types/about.types";
 
+import { SectionReveal } from "../../ui/section/section-reveal";
+
 import { AboutHeader } from "./about-header";
 import { AboutHero } from "./about-hero";
 import { AboutStats } from "./about-stats";
 import { CoursesCovered } from "./courses-covered";
-
-import styles from "./about.module.css";
+import { CtaRibbon } from "@/app/_components/sections/about/cta-ribbon";
 
 export function About() {
   const about = aboutContent as AboutConfig;
@@ -15,13 +16,12 @@ export function About() {
   return (
     <>
       <AboutHeader header={header} />
-
-      {/* body fades in AFTER header pop */}
-      <div className={styles.bodyReveal}>
+      <SectionReveal>
         <AboutHero hero={hero} />
         <AboutStats stats={stats} />
         <CoursesCovered coursesSection={coursesSection} />
-      </div>
+        <CtaRibbon />
+      </SectionReveal>
     </>
   );
 }

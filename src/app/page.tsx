@@ -5,7 +5,6 @@ import { Nav } from "@/app/_components/layout/nav";
 import { Hero } from "@/app/_components/sections/home/hero";
 import { ProofPills } from "@/app/_components/sections/home/proof-pills";
 import { About } from "@/app/_components/sections/about/about";
-import { CtaRibbon } from "@/app/_components/sections/about/cta-ribbon";
 import { Packages } from "@/app/_components/sections/packages/packages";
 import { Testimonials } from "@/app/_components/sections/testimonials/testimonials";
 import { Results } from "@/app/_components/sections/results/results";
@@ -29,7 +28,6 @@ export default function Home() {
 
         <section id="about" className="container mx-auto max-w-5xl px-4 py-4">
           <About />
-          <CtaRibbon />
         </section>
 
         <section

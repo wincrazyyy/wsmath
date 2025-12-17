@@ -8,6 +8,8 @@ import type {
   ComparisonConfig,
 } from "@/app/_lib/content/types/packages.types";
 
+import { SectionReveal } from "../../ui/section/section-reveal";
+
 import { PackagesHeader } from "./packages-header";
 import { PricingComparisonStrip } from "./pricing-comparison-strip";
 import { PrivatePackageCard } from "./private-package-card";
@@ -46,27 +48,29 @@ export function Packages() {
     >
       <PackagesHeader header={header} />
 
-      <PricingComparisonStrip
-        comparison={comparisonCfg}
-        privateRate={privateRate}
-        groupPrice={groupPrice}
-        private32Hours={private32Hours}
-        groupRatePerLesson={groupRatePerLesson}
-      />
-
-      <div className="mt-7 grid gap-6 md:grid-cols-2">
-        <PrivatePackageCard
-          config={privateCfg}
+      <SectionReveal>
+        <PricingComparisonStrip
+          comparison={comparisonCfg}
           privateRate={privateRate}
-          intensiveLessons={intensiveLessons}
-          eightLessonBlockCost={eightLessonBlockCost}
-        />
-        <GroupPackageCard
-          config={groupCfg}
           groupPrice={groupPrice}
+          private32Hours={private32Hours}
           groupRatePerLesson={groupRatePerLesson}
         />
-      </div>
+
+        <div className="mt-7 grid gap-6 md:grid-cols-2">
+          <PrivatePackageCard
+            config={privateCfg}
+            privateRate={privateRate}
+            intensiveLessons={intensiveLessons}
+            eightLessonBlockCost={eightLessonBlockCost}
+          />
+          <GroupPackageCard
+            config={groupCfg}
+            groupPrice={groupPrice}
+            groupRatePerLesson={groupRatePerLesson}
+          />
+        </div>
+      </SectionReveal>
     </section>
   );
 }

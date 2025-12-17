@@ -7,6 +7,8 @@ import type {
   Testimonial,
 } from "@/app/_lib/content/types/testimonials.types";
 
+import { SectionReveal } from "../../ui/section/section-reveal";
+
 import { TestimonialsHeader } from "./testimonials-header";
 import { StudentVoicesVideo } from "./student-voices-video";
 import { FeaturedTestimonialsGrid } from "./featured-testimonials-grid";
@@ -24,17 +26,19 @@ export function Testimonials() {
     <>
       <TestimonialsHeader header={header} />
 
-      <StudentVoicesVideo />
+      <SectionReveal>
+        <StudentVoicesVideo />
 
-      {featured.length > 0 && (
-        <FeaturedTestimonialsGrid items={featured as Testimonial[]} />
-      )}
+        {featured.length > 0 && (
+          <FeaturedTestimonialsGrid items={featured as Testimonial[]} />
+        )}
 
-      {carousel.length > 0 && (
-        <div className="mt-8">
-          <TestimonialCarousel items={carousel as Testimonial[]} />
-        </div>
-      )}
+        {carousel.length > 0 && (
+          <div className="mt-8">
+            <TestimonialCarousel items={carousel as Testimonial[]} />
+          </div>
+        )}
+      </SectionReveal>
     </>
   );
 }
