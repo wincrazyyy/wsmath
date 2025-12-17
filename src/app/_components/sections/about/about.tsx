@@ -6,6 +6,8 @@ import { AboutHero } from "./about-hero";
 import { AboutStats } from "./about-stats";
 import { CoursesCovered } from "./courses-covered";
 
+import styles from "./about.module.css";
+
 export function About() {
   const about = aboutContent as AboutConfig;
   const { header, hero, stats, coursesSection } = about;
@@ -13,9 +15,13 @@ export function About() {
   return (
     <>
       <AboutHeader header={header} />
-      <AboutHero hero={hero} />
-      <AboutStats stats={stats} />
-      <CoursesCovered coursesSection={coursesSection} />
+
+      {/* body fades in AFTER header pop */}
+      <div className={styles.bodyReveal}>
+        <AboutHero hero={hero} />
+        <AboutStats stats={stats} />
+        <CoursesCovered coursesSection={coursesSection} />
+      </div>
     </>
   );
 }
