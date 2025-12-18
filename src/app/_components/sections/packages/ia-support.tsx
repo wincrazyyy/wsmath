@@ -7,7 +7,7 @@ type Props = {
   config: IaSupportConfig;
 };
 
-const SOLO_CARD_ID = "solo-1to1-card";
+const SOLO_CARD_ID = "solo-lessons";
 const HIGHLIGHT_EVENT = "wsmath:highlight";
 
 export function IaSupport({ config }: Props) {

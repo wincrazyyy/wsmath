@@ -1,9 +1,11 @@
 // app/_components/sections/packages/private-package-card.tsx
 "use client";
 
+import { useEffect, useState } from "react";
+
 import type { PrivateConfig } from "@/app/_lib/content/types/packages.types";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
-import { useEffect, useState } from "react";
+import styles from "./private-package-card.module.css";
 
 interface PrivatePackageCardProps {
   config: PrivateConfig;
@@ -13,7 +15,7 @@ interface PrivatePackageCardProps {
 }
 
 const HIGHLIGHT_EVENT = "wsmath:highlight";
-const SOLO_CARD_ID = "solo-1to1-card";
+const SOLO_CARD_ID = "solo-lessons";
 
 export function PrivatePackageCard({
   config,
@@ -29,8 +31,7 @@ export function PrivatePackageCard({
       if (ce.detail?.id !== SOLO_CARD_ID) return;
 
       setHighlight(true);
-      const ms = Math.max(800, ce.detail?.ms ?? 2400);
-
+      const ms = Math.max(900, ce.detail?.ms ?? 2600);
       window.setTimeout(() => setHighlight(false), ms);
     };
 
@@ -43,21 +44,34 @@ export function PrivatePackageCard({
     <article
       id={SOLO_CARD_ID}
       className={[
-        "flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md",
+        "relative flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md",
         "ring-1 ring-transparent transition",
         "hover:-translate-y-1 hover:shadow-lg hover:ring-neutral-200",
-        // highlight effect
         highlight
-          ? "ring-2 ring-violet-400 shadow-lg shadow-violet-200/40"
+          ? [
+              "border-violet-300 ring-2 ring-violet-500/80",
+              "bg-violet-50/40",
+              "shadow-2xl shadow-violet-400/30",
+              styles.highlightPulse, // <-- add the module class here
+            ].join(" ")
           : "",
       ].join(" ")}
     >
-      <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
+      {/* stronger glow layer */}
+      <div
+        aria-hidden="true"
+        className={[
+          "pointer-events-none absolute -inset-1 rounded-[22px] opacity-0 blur-xl transition-opacity duration-300",
+          highlight ? "opacity-100 bg-gradient-to-r from-indigo-400/35 via-violet-400/35 to-sky-400/35" : "",
+        ].join(" ")}
+      />
+
+      <div className="relative z-10 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
         {config.label}
       </div>
 
       {/* PRICE */}
-      <div className="mt-4">
+      <div className="relative z-10 mt-4">
         <p className="text-xs text-neutral-500">{config.rateLabel}</p>
         <p className="text-2xl font-semibold tracking-tight text-neutral-900">
           HKD {privateRate.toLocaleString()}
@@ -65,12 +79,12 @@ export function PrivatePackageCard({
         </p>
       </div>
 
-      <h3 className="mt-3 text-lg font-semibold tracking-tight text-neutral-900 md:text-xl">
+      <h3 className="relative z-10 mt-3 text-lg font-semibold tracking-tight text-neutral-900 md:text-xl">
         {config.title}
       </h3>
-      <p className="mt-1 text-sm text-neutral-600">{config.description}</p>
+      <p className="relative z-10 mt-1 text-sm text-neutral-600">{config.description}</p>
 
-      <ul className="mt-4 space-y-2 text-sm text-neutral-700">
+      <ul className="relative z-10 mt-4 space-y-2 text-sm text-neutral-700">
         {(config.points ?? []).map((item) => (
           <li key={item} className="flex items-start gap-2">
             <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
@@ -80,7 +94,7 @@ export function PrivatePackageCard({
       </ul>
 
       {/* 8-lesson intensive block */}
-      <div className="mt-7 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5">
+      <div className="relative z-10 mt-7 rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5">
         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-indigo-700">
           {config.intensive.label}
         </p>
@@ -100,7 +114,7 @@ export function PrivatePackageCard({
         </ul>
       </div>
 
-      <div className="mt-auto pt-5">
+      <div className="relative z-10 mt-auto pt-5">
         <WhatsAppButton
           width={220}
           height={56}
