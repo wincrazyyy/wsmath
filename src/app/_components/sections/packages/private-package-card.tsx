@@ -1,5 +1,9 @@
+// app/_components/sections/packages/private-package-card.tsx
+"use client";
+
 import type { PrivateConfig } from "@/app/_lib/content/types/packages.types";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
+import { useEffect, useState } from "react";
 
 interface PrivatePackageCardProps {
   config: PrivateConfig;
@@ -8,14 +12,46 @@ interface PrivatePackageCardProps {
   eightLessonBlockCost: number;
 }
 
+const HIGHLIGHT_EVENT = "wsmath:highlight";
+const SOLO_CARD_ID = "solo-1to1-card";
+
 export function PrivatePackageCard({
   config,
   privateRate,
   intensiveLessons,
   eightLessonBlockCost,
 }: PrivatePackageCardProps) {
+  const [highlight, setHighlight] = useState(false);
+
+  useEffect(() => {
+    const onHighlight = (e: Event) => {
+      const ce = e as CustomEvent<{ id?: string; ms?: number }>;
+      if (ce.detail?.id !== SOLO_CARD_ID) return;
+
+      setHighlight(true);
+      const ms = Math.max(800, ce.detail?.ms ?? 2400);
+
+      window.setTimeout(() => setHighlight(false), ms);
+    };
+
+    window.addEventListener(HIGHLIGHT_EVENT, onHighlight as EventListener);
+    return () =>
+      window.removeEventListener(HIGHLIGHT_EVENT, onHighlight as EventListener);
+  }, []);
+
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md ring-1 ring-transparent transition hover:-translate-y-1 hover:shadow-lg hover:ring-neutral-200">
+    <article
+      id={SOLO_CARD_ID}
+      className={[
+        "flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md",
+        "ring-1 ring-transparent transition",
+        "hover:-translate-y-1 hover:shadow-lg hover:ring-neutral-200",
+        // highlight effect
+        highlight
+          ? "ring-2 ring-violet-400 shadow-lg shadow-violet-200/40"
+          : "",
+      ].join(" ")}
+    >
       <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
         {config.label}
       </div>
@@ -25,9 +61,7 @@ export function PrivatePackageCard({
         <p className="text-xs text-neutral-500">{config.rateLabel}</p>
         <p className="text-2xl font-semibold tracking-tight text-neutral-900">
           HKD {privateRate.toLocaleString()}
-          <span className="ml-1 text-xs font-normal text-neutral-500">
-            / hour
-          </span>
+          <span className="ml-1 text-xs font-normal text-neutral-500">/ hour</span>
         </p>
       </div>
 
@@ -52,9 +86,7 @@ export function PrivatePackageCard({
         </p>
         <p className="mt-1 text-sm text-neutral-700">
           {config.intensive.bodyPrefix}{" "}
-          <span className="font-semibold">
-            HKD {eightLessonBlockCost.toLocaleString()}
-          </span>{" "}
+          <span className="font-semibold">HKD {eightLessonBlockCost.toLocaleString()}</span>{" "}
           for an {intensiveLessons}-lesson block (8 × 60 mins).
         </p>
 
@@ -76,9 +108,7 @@ export function PrivatePackageCard({
           ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
         />
         {config.buttonNote && (
-          <p className="mt-2 text-[11px] text-neutral-500">
-            {config.buttonNote}
-          </p>
+          <p className="mt-2 text-[11px] text-neutral-500">{config.buttonNote}</p>
         )}
       </div>
     </article>

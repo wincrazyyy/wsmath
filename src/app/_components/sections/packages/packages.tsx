@@ -1,3 +1,4 @@
+// app/_components/sections/packages/packages.tsx
 "use client";
 
 import packagesContent from "@/app/_lib/content/json/packages.json";

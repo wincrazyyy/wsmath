@@ -58,16 +58,11 @@ export type IaSupportTopic = {
   desc: string;
 };
 
-export type IaSupportCta = {
-  label: string;
-  href: string;
-};
-
 export type IaSupportConfig = {
   eyebrow: string;
   title: string;
   description: string;
-  cta: IaSupportCta;
+  ctaLabel: string;
 
   lessonStructureTitle: string;
   lessonStructure: string[];

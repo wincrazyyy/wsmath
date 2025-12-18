@@ -1,3 +1,4 @@
+// app/_components/sections/packages/group-package-card.tsx
 import type { GroupConfig } from "@/app/_lib/content/types/packages.types";
 import { GroupLeafletViewer } from "./group-leaflet-viewer";
 

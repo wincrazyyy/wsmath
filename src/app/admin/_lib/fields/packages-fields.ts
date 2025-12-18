@@ -297,15 +297,9 @@ export const PACKAGES_IA_SUPPORT_FIELDS: FieldConfig[] = [
 
   // CTA
   {
-    path: "iaSupport.cta.label",
+    path: "iaSupport.ctaLabel",
     label: "IA Support – button label",
     description: "CTA button label text.",
-    type: "string",
-  },
-  {
-    path: "iaSupport.cta.href",
-    label: "IA Support – button link",
-    description: 'CTA href. Use "#" or a section anchor like "#packages".',
     type: "string",
   },
 

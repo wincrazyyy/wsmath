@@ -1,3 +1,4 @@
+// app/_components/sections/packages/packages-header.tsx
 import { SectionHeader } from "@/app/_components/ui/section/section-header";
 import type { PackagesHeaderConfig } from "@/app/_lib/content/types/packages.types";
 

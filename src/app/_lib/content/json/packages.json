@@ -100,10 +100,7 @@
     "eyebrow": "IA Guidance",
     "title": "Math IA Support",
     "description": "A structured, topic-driven guidance format to help students produce a clear, original IA efficiently.",
-    "cta": {
-      "label": "Ask about IA support",
-      "href": "#"
-    },
+    "ctaLabel": "See Solo 1-to-1 lessons",
     "lessonStructureTitle": "Lesson structure",
     "lessonStructure": [
       "Customizes IA topics to align with individual student interests.",
