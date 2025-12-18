@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { FieldConfig, TableColumnConfig } from "@/app/admin/_lib/fields/fields";
 import { getByPath, setByPath } from "@/app/admin/_lib/json-path";
 
@@ -240,6 +240,42 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
     setByPath(next, rowsPath, sorted);
     onChangeData(next);
   }
+
+  // sorted json when table loads
+  const didNormalizeRef = useRef(false);
+
+  useEffect(() => {
+    if (didNormalizeRef.current) return;
+
+    const sortBy = field.table?.sortBy ?? [];
+    if (sortBy.length === 0) {
+      didNormalizeRef.current = true;
+      return;
+    }
+
+    const sorted = sortRowsStable(rows, sortBy, numericKeys);
+
+    // If already sorted, do nothing.
+    const sameOrder =
+      sorted.length === rows.length &&
+      sorted.every((r, i) => {
+        const a = rows[i];
+        if (!a) return false;
+        // shallow compare per row (keys union) to avoid relying on reference equality
+        const keys = new Set([...Object.keys(a), ...Object.keys(r)]);
+        for (const k of keys) {
+          if (a[k] !== r[k]) return false;
+        }
+        return true;
+      });
+
+    didNormalizeRef.current = true;
+
+    if (!sameOrder) {
+      commit(sorted);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function updateCell(rowIndex: number, key: string, raw: string) {
     const next = rows.slice();
