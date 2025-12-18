@@ -130,7 +130,7 @@
         "students": [
           { "name": "Jacky", "year": 2022, "from": "B(6)", "to": "A(8)" },
           { "name": "James", "year": 2022, "from": "B(6)", "to": "A(8)" },
-          { "name": "Emily", "year": 2018, "from": "B", "to": "A*", "months": 2 }
+          { "name": "Emily", "year": 2018, "from": "B(6)", "to": "A*(9)", "months": 2 }
         ],
         "gradeScale": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
       },
@@ -139,19 +139,19 @@
         "subTab": "International Math / Math",
         "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM1)",
         "students": [
-          { "name": "Janis", "year": 2025, "from": "C", "to": "A*", "months": 3 },
+          { "name": "Janis", "year": 2025, "from": "C(6)", "to": "A*(9)", "months": 3 },
           { "name": "Nicole", "year": 2024, "from": "E(4)", "to": "A(8)" },
           { "name": "Jewel", "year": 2024, "from": "E(4)", "to": "A(8)" },
-          { "name": "Cissie", "year": 2023, "from": "F", "to": "A", "months": 12 },
-          { "name": "Kelly", "year": 2023, "from": "F", "to": "A", "months": 12 },
-          { "name": "Evelyn", "year": 2023, "from": "C", "to": "A" },
+          { "name": "Cissie", "year": 2023, "from": "F(3)", "to": "A(8)", "months": 12 },
+          { "name": "Kelly", "year": 2023, "from": "F(3)", "to": "A(8)", "months": 12 },
+          { "name": "Evelyn", "year": 2023, "from": "C(6)", "to": "A(8)" },
           { "name": "Gordon", "year": 2023, "from": "E(4)", "to": "A(8)" },
-          { "name": "Bill Zhang", "year": 2022, "from": "B", "to": "A*" },
-          { "name": "James", "year": 2022, "from": "B", "to": "A*" },
-          { "name": "Ken", "year": 2022, "from": "C", "to": "A" },
-          { "name": "Jacky", "year": 2021, "from": "B", "to": "A*" },
-          { "name": "Catherine", "year": 2021, "from": "B", "to": "A*" },
-          { "name": "Jessica", "year": 2019, "from": "C", "to": "A" }
+          { "name": "Bill Zhang", "year": 2022, "from": "B(7)", "to": "A*(9)" },
+          { "name": "James", "year": 2022, "from": "B(7)", "to": "A*(9)" },
+          { "name": "Ken", "year": 2022, "from": "C(6)", "to": "A(8)" },
+          { "name": "Jacky", "year": 2021, "from": "B(7)", "to": "A*(9)" },
+          { "name": "Catherine", "year": 2021, "from": "B(7)", "to": "A*(9)" },
+          { "name": "Jessica", "year": 2019, "from": "C(6)", "to": "A(8)" }
         ],
         "gradeScale": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
       }
