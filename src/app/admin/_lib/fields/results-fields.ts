@@ -108,28 +108,28 @@ export const RESULTS_GRADE_HEADERS_FIELDS: FieldConfig[] = [
     path: "gradeImprovements.summaryCards.top",
     label: "Summary card – top grade",
     description:
-      "Text for the top-grade summary card. Use # as a placeholder for the grade (e.g. ⭐ Final grade #).",
+      "Text for the top-grade summary card. Use # as a placeholder for the grade.",
     type: "string",
   },
   {
     path: "gradeImprovements.summaryCards.second",
     label: "Summary card – second top grade",
     description:
-      "Text for the second-top-grade summary card. Use # as a placeholder for the grade (e.g. ⭐ Final grade #).",
+      "Text for the second-top-grade summary card. Use # as a placeholder for the grade.",
     type: "string",
   },
   {
     path: "gradeImprovements.summaryCards.bigJumps",
     label: "Summary card – big jumps",
     description:
-      "Text for the ‘major jumps’ summary card (e.g. 🔥 Major jumps (≥3 grades)).",
+      "Text for the ‘major jumps’ summary card.",
     type: "string",
   },
   {
-    path: "gradeImprovements.summaryCards.fastTrack",
-    label: "Summary card – fast track",
+    path: "gradeImprovements.summaryCards.heavyJumps",
+    label: "Summary card – heavy jumps",
     description:
-      "Text for the ‘fast-track’ summary card (e.g. ⚡ Fast-track (≈3 months)).",
+      "Text for the heavy jumps’ summary card.",
     type: "string",
   },
 ];

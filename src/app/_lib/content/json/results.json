@@ -39,8 +39,8 @@
     "summaryCards": {
       "top": "⭐ Final grade =#",
       "second": "📘 Final grade ≥#",
-      "bigJumps": "🔥 Major jumps (≥3 grades)",
-      "fastTrack": "⚡ Fast-track (≈3 months)"
+      "bigJumps": "📈 Major jumps (≥2 grades)",
+      "heavyJumps": "🚀 Heavy jumps (≥4 grades)"
     },
     "resultGroups": [
       {
@@ -89,18 +89,27 @@
           { "name": "Jason", "year": 2025, "from": 6, "to": 7 },
           { "name": "Michael", "year": 2025, "from": 6, "to": 7 },
           { "name": "Gordon", "year": 2025, "from": 1, "to": 6 },
-          { "name": "Alvina", "year": 2025, "from": 4, "to": 6 },
           { "name": "Sabrina", "year": 2025, "from": 5, "to": 6 },
+          { "name": "Alvina", "year": 2025, "from": 4, "to": 6 },
+          { "name": "Ariel", "year": 2025, "from": 2, "to": 5 },
+          { "name": "Cissie", "year": 2025, "from": 1, "to": 5 },
+          { "name": "Gordon", "year": 2025, "from": 1, "to": 5 },
+          { "name": "Alan", "year": 2024, "from": 2, "to": 5 },
+          { "name": "Netis", "year": 2024, "from": 2, "to": 5 },
           { "name": "Kathy", "year": 2024, "from": 1, "to": 6 },
-          { "name": "Sharon", "year": 2023, "from": 3, "to": 7, "months": 1.5 },
+          { "name": "Annie", "year": 2024, "from": 1, "to": 4 },
+          { "name": "Victoria", "year": 2024, "from": 1, "to": 4 },
           { "name": "Cassie", "year": 2023, "from": 4, "to": 7 },
           { "name": "Jasmine", "year": 2023, "from": 4, "to": 6 },
+          { "name": "Sharon", "year": 2023, "from": 3, "to": 7, "months": 1.5 },
           { "name": "Alexandra", "year": 2022, "from": 1, "to": 7 },
-          { "name": "Kitty", "year": 2020, "from": 1, "to": 7 },
+          { "name": "Connie", "year": 2021, "from": 2, "to": 5 },
+          { "name": "Dora", "year": 2021, "from": 1, "to": 4 },
+          { "name": "Rachel", "year": 2020, "from": 7, "to": 7 },
           { "name": "Chloe", "year": 2020, "from": 4, "to": 7 },
           { "name": "Jenny", "year": 2020, "from": 4, "to": 7 },
-          { "name": "Rachel", "year": 2020, "from": 7, "to": 7 },
           { "name": "David", "year": 2020, "from": 4, "to": 6 },
+          { "name": "Kitty", "year": 2020, "from": 1, "to": 7 },
           { "name": "Aidan", "year": 2019, "from": 4, "to": 6 }
         ],
         "gradeScale": ["1", "2", "3", "4", "5", "6", "7"]

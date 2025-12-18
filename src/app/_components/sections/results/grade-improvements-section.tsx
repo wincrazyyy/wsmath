@@ -139,12 +139,14 @@ export function GradeImprovementsSection({
   const bigJumps = students.filter((s) => {
     const diff =
       normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
-    return diff >= 3;
+    return diff >= 2;
   }).length;
 
-  const fastTrack = students.filter(
-    (s) => typeof s.months === "number" && s.months <= 3,
-  ).length;
+  const heavyJumps = students.filter((s) => {
+    const diff =
+      normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
+    return diff >= 4;
+  }).length;
 
   return (
     <section className="space-y-5">
@@ -191,15 +193,23 @@ export function GradeImprovementsSection({
             <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
               {summaryCards.bigJumps}
             </div>
-            <div className="text-lg font-semibold text-rose-800">{bigJumps}</div>
+            <div className="text-lg font-semibold text-rose-800">
+              {bigJumps}
+              <span className="ml-2 text-xs font-semibold text-rose-600">
+                ({pct(bigJumps)}%)
+              </span>
+            </div>
           </div>
 
           <div className="flex flex-col justify-between rounded-xl bg-amber-50 ring-1 ring-amber-300 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-amber-700 font-semibold">
-              {summaryCards.fastTrack}
+              {summaryCards.heavyJumps}
             </div>
             <div className="text-lg font-semibold text-amber-800">
-              {fastTrack}
+              {heavyJumps}
+              <span className="ml-2 text-xs font-semibold text-amber-600">
+                ({pct(heavyJumps)}%)
+              </span>
             </div>
           </div>
         </div>

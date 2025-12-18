@@ -18,7 +18,7 @@ export type SummaryCardsConfig = {
   top: string;
   second: string;
   bigJumps: string;
-  fastTrack: string;
+  heavyJumps: string;
 };
 
 export type ResultGroupConfig = {
