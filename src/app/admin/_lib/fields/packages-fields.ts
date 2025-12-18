@@ -339,12 +339,13 @@ export const PACKAGES_IA_SUPPORT_FIELDS: FieldConfig[] = [
       itemLabel: "topic",
       columns: [
         { key: "title", label: "Title" },
-        { key: "desc", label: "Description" },
+        { key: "desc", label: "Description", kind: "textarea", placeholder: "Write a short description…" },
       ],
       sortBy: [{ key: "title", order: "asc" }],
       minTableWidthPx: 860,
     },
   },
+
 
   // Coverage note
   {

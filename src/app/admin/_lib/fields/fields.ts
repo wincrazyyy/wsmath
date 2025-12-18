@@ -2,9 +2,9 @@
 export type FieldType = "string" | "textarea" | "string[]" | "table";
 
 export type TableColumnConfig = {
-  key: string;                // object key, e.g. "name"
-  label?: string;             // header label
-  kind?: "string" | "number"; // optional override
+  key: string;
+  label?: string;
+  kind?: "string" | "number" | "textarea";
   placeholder?: string;
 };
 
@@ -27,7 +27,6 @@ export type FieldConfig = {
   type: FieldType;
   table?: TableConfig;
 };
-
 
 export function repeatFields(
   listBasePath: string,

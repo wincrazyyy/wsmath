@@ -26,7 +26,6 @@ function toRows(raw: unknown): Row[] {
 }
 
 function guessNumericColumn(rows: Row[], key: string): boolean {
-  // If any existing value is a finite number => numeric.
   for (const r of rows) {
     const v = r[key];
     if (typeof v === "number" && Number.isFinite(v)) return true;
@@ -41,12 +40,12 @@ function inferColumns(rows: Row[]): TableColumnConfig[] {
   }
   const keys = Array.from(keySet);
 
-  // nice ordering for common shapes, else alphabetical
   const preferred = ["name", "year", "from", "to", "months"];
   keys.sort((a, b) => {
     const ia = preferred.indexOf(a);
     const ib = preferred.indexOf(b);
-    if (ia !== -1 || ib !== -1) return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    if (ia !== -1 || ib !== -1)
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
     return a.localeCompare(b);
   });
 
@@ -54,7 +53,6 @@ function inferColumns(rows: Row[]): TableColumnConfig[] {
 }
 
 function toTitle(key: string) {
-  // "gradeScale" -> "Grade Scale", "months" -> "Months"
   return key
     .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
     .replace(/[_-]+/g, " ")
@@ -62,23 +60,25 @@ function toTitle(key: string) {
 }
 
 function splitLine(line: string): string[] {
-  const parts = line.includes("\t")
-    ? line.split("\t")
-    : line.split(",");
+  const parts = line.includes("\t") ? line.split("\t") : line.split(",");
   return parts.map((x) => x.trim());
 }
 
 function looksLikeHeader(parts: string[], columns: TableColumnConfig[]) {
   const colKeys = new Set(columns.map((c) => c.key.toLowerCase()));
-  const colLabels = new Set(columns.map((c) => (c.label ?? c.key).toLowerCase()));
-  const hits = parts.filter((p) => colKeys.has(p.toLowerCase()) || colLabels.has(p.toLowerCase())).length;
+  const colLabels = new Set(
+    columns.map((c) => (c.label ?? c.key).toLowerCase())
+  );
+  const hits = parts.filter(
+    (p) => colKeys.has(p.toLowerCase()) || colLabels.has(p.toLowerCase())
+  ).length;
   return hits >= Math.max(2, Math.ceil(columns.length / 2));
 }
 
 function parseBulk(
   text: string,
   columns: TableColumnConfig[],
-  numericKeys: Set<string>,
+  numericKeys: Set<string>
 ): Row[] {
   const lines = text
     .split("\n")
@@ -90,7 +90,6 @@ function parseBulk(
   let start = 0;
   let mapByIndex = columns.map((c) => c.key);
 
-  // header row support
   const first = splitLine(lines[0]);
   if (looksLikeHeader(first, columns)) {
     start = 1;
@@ -128,7 +127,6 @@ function parseBulk(
       }
     }
 
-    // only keep non-empty rows
     if (Object.keys(row).length > 0) out.push(row);
   }
 
@@ -150,11 +148,10 @@ function compareValues(a: Cell, b: Cell, numeric: boolean): number {
     const bIsNum = Number.isFinite(nb);
 
     if (aIsNum && bIsNum) return na - nb;
-    if (aIsNum) return -1; // numbers before non-numbers
+    if (aIsNum) return -1;
     if (bIsNum) return 1;
   }
 
-  // string-ish compare (handles numbers inside strings nicely)
   return String(a).localeCompare(String(b), undefined, {
     numeric: true,
     sensitivity: "base",
@@ -182,15 +179,17 @@ function sortRowsStable(
       const cmp = compareValues(av, bv, numericKeys.has(key));
       if (cmp !== 0) return cmp * dir;
     }
-
-    // stable tie-breaker
     return A.i - B.i;
   });
 
   return decorated.map((x) => x.r);
 }
 
-export function TableInput<T extends object>({ field, data, onChangeData }: Props<T>) {
+export function TableInput<T extends object>({
+  field,
+  data,
+  onChangeData,
+}: Props<T>) {
   const rowsPath = field.path;
   const rows = toRows(getByPath(data, rowsPath));
 
@@ -234,7 +233,8 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
 
   function commit(nextRows: Row[]) {
     const sortBy = field.table?.sortBy ?? [];
-    const sorted = sortBy.length > 0 ? sortRowsStable(nextRows, sortBy, numericKeys) : nextRows;
+    const sorted =
+      sortBy.length > 0 ? sortRowsStable(nextRows, sortBy, numericKeys) : nextRows;
 
     const next = structuredClone(data) as T;
     setByPath(next, rowsPath, sorted);
@@ -255,13 +255,11 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
 
     const sorted = sortRowsStable(rows, sortBy, numericKeys);
 
-    // If already sorted, do nothing.
     const sameOrder =
       sorted.length === rows.length &&
       sorted.every((r, i) => {
         const a = rows[i];
         if (!a) return false;
-        // shallow compare per row (keys union) to avoid relying on reference equality
         const keys = new Set([...Object.keys(a), ...Object.keys(r)]);
         for (const k of keys) {
           if (a[k] !== r[k]) return false;
@@ -271,9 +269,7 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
 
     didNormalizeRef.current = true;
 
-    if (!sameOrder) {
-      commit(sorted);
-    }
+    if (!sameOrder) commit(sorted);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -286,7 +282,7 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
     if (raw.trim() === "") v = undefined;
     else if (isNum) {
       const n = Number(raw);
-      v = Number.isFinite(n) ? n : raw; // fallback to string if not a number
+      v = Number.isFinite(n) ? n : raw;
     }
 
     next[rowIndex] = { ...current, [key]: v };
@@ -300,15 +296,12 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
   }
 
   function addRow() {
-    // create a sensible blank row with all known columns present
     const blank: Row = {};
     for (const c of columns) {
-        blank[c.key] = numericKeys.has(c.key) ? undefined : "";
+      blank[c.key] = numericKeys.has(c.key) ? undefined : "";
     }
-
     commit([blank, ...rows]);
   }
-
 
   function replaceFromBulk() {
     commit(parseBulk(bulkText, columns, numericKeys));
@@ -422,18 +415,28 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
                 {columns.map((c) => {
                   const v = r[c.key];
                   const isNum = numericKeys.has(c.key);
-                  const value =
-                    v === undefined || v === null ? "" : String(v);
+                  const isTextarea = c.kind === "textarea";
+                  const value = v === undefined || v === null ? "" : String(v);
 
                   return (
                     <td key={c.key} className="px-3 py-2">
-                      <input
-                        type={isNum ? "number" : "text"}
-                        className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
-                        value={value}
-                        placeholder={c.placeholder}
-                        onChange={(e) => updateCell(idx, c.key, e.target.value)}
-                      />
+                      {isTextarea ? (
+                        <textarea
+                          className="w-full resize-y rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                          rows={3}
+                          value={value}
+                          placeholder={c.placeholder}
+                          onChange={(e) => updateCell(idx, c.key, e.target.value)}
+                        />
+                      ) : (
+                        <input
+                          type={isNum ? "number" : "text"}
+                          className="w-full rounded-md border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                          value={value}
+                          placeholder={c.placeholder}
+                          onChange={(e) => updateCell(idx, c.key, e.target.value)}
+                        />
+                      )}
                     </td>
                   );
                 })}
