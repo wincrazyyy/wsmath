@@ -14,6 +14,7 @@ import { PackagesHeader } from "./packages-header";
 import { PricingComparisonStrip } from "./pricing-comparison-strip";
 import { PrivatePackageCard } from "./private-package-card";
 import { GroupPackageCard } from "./group-package-card";
+import { IaSupport } from "./ia-support";
 
 function toNumber(value: unknown, fallback = 0): number {
   const n = typeof value === "string" ? Number(value) : Number.NaN;
@@ -67,6 +68,8 @@ export function Packages() {
             groupRatePerLesson={groupRatePerLesson}
           />
         </div>
+
+        <IaSupport />
       </SectionReveal>
     </>
   );
