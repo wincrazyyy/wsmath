@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { WhatsAppButton } from "../ui/whatsapp-button";
 
 const LINKS = [
@@ -12,8 +11,8 @@ const LINKS = [
   { href: "#results", label: "Results" },
 ];
 
-const HIDE_AFTER_PX = 48;     // scroll distance before nav fades out
-const REVEAL_ZONE_H = 20;     // px height at top for hover-to-reveal
+const HIDE_AFTER_PX = 48; // scroll distance before nav fades out
+const REVEAL_ZONE_H = 20; // px height at top for hover-to-reveal
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -26,15 +25,13 @@ export function Nav() {
 
   useEffect(() => {
     let raf = 0;
-
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         setScrolledPast(window.scrollY > HIDE_AFTER_PX);
       });
     };
-
-    onScroll(); // init
+    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
@@ -45,19 +42,19 @@ export function Nav() {
   const visible = open || hoverTop || hoverNav || !scrolledPast;
   const hidden = !visible && scrolledPast && !open;
 
-  // --- your existing observer logic ---
+  // --- active section observer ---
   useEffect(() => {
-    const ids = ["about", "packages", "testimonials"] as const;
+    const ids = ["about", "packages", "testimonials", "results"] as const;
     const els = ids
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => !!el);
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const visible = entries
+        const best = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(`#${visible.target.id}`);
+        if (best) setActive(`#${best.target.id}`);
       },
       { rootMargin: "-45% 0px -45% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
     );
@@ -81,6 +78,14 @@ export function Nav() {
       active === href ? "text-neutral-900 font-medium" : "text-neutral-600"
     } hover:text-neutral-900`;
 
+  const goHomeNoHash = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    setOpen(false);
+  };
+
   return (
     <>
       {/* Invisible hover zone that reveals the nav */}
@@ -96,7 +101,9 @@ export function Nav() {
         className={[
           "fixed top-0 left-1/2 -translate-x-1/2 z-[60]",
           "transition-all duration-300 ease-out",
-          hidden ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-1 pointer-events-none",
+          hidden
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-1 pointer-events-none",
         ].join(" ")}
         style={{ height: REVEAL_ZONE_H }}
         onMouseEnter={() => setHoverTop(true)}
@@ -104,12 +111,7 @@ export function Nav() {
         aria-hidden={!hidden}
       >
         <div className="mt-1 flex items-center justify-center">
-          <div
-            className={[
-              "flex items-center gap-2 rounded-full border border-neutral-200/80",
-              "bg-white/70 backdrop-blur px-3 py-1 shadow-sm",
-            ].join(" ")}
-          >
+          <div className="flex items-center rounded-full border border-neutral-200/80 bg-white/70 px-3 py-1 shadow-sm backdrop-blur">
             <svg
               width="18"
               height="18"
@@ -150,9 +152,10 @@ export function Nav() {
         <div className="w-full border-b border-neutral-200/70 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60">
           <nav className="container mx-auto max-w-5xl px-4">
             <div className="flex h-16 items-center justify-between">
-              {/* Brand */}
-              <Link
-                href="/"
+              {/* Brand (scroll to top, no hash) */}
+              <button
+                type="button"
+                onClick={goHomeNoHash}
                 className="flex items-center gap-2"
                 aria-label="WSMath Home"
               >
@@ -168,7 +171,7 @@ export function Nav() {
                     WSMath
                   </span>
                 </span>
-              </Link>
+              </button>
 
               {/* Desktop nav */}
               <div className="hidden items-center gap-6 md:flex">
@@ -205,21 +208,25 @@ export function Nav() {
           <div
             id="mobile-menu"
             className={`fixed inset-0 z-50 md:hidden transition-opacity ${
-              open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+              open
+                ? "pointer-events-auto opacity-100"
+                : "pointer-events-none opacity-0"
             }`}
             aria-hidden={!open}
           >
             <div className="absolute inset-0 bg-black/25" onClick={() => setOpen(false)} />
             <div className="absolute inset-x-0 top-0 rounded-b-2xl border-b border-neutral-200 bg-white p-4 shadow-lg">
               <div className="flex items-center justify-between">
-                <Link
-                  href="/"
+                <button
+                  type="button"
+                  onClick={goHomeNoHash}
                   className="flex items-center gap-2"
-                  onClick={() => setOpen(false)}
+                  aria-label="WSMath Home"
                 >
                   <Image src="/icon.svg" alt="" width={20} height={20} className="h-5 w-5" />
                   <span className="font-semibold">WSMath</span>
-                </Link>
+                </button>
+
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
