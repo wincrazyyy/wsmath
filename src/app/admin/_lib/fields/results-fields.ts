@@ -173,6 +173,13 @@ function resultGroupsFields(
           { key: "months", label: "Months", kind: "number", placeholder: "(optional)" },
         ],
         minTableWidthPx: 860,
+
+        sortBy: [
+          { key: "year", order: "desc" },
+          { key: "to", order: "desc" },
+          { key: "from", order: "desc" },
+          { key: "name", order: "asc" },
+        ],
       },
     },
     {

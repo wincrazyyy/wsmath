@@ -8,16 +8,24 @@ export type TableColumnConfig = {
   placeholder?: string;
 };
 
+export type TableSortRule = {
+  key: string;
+  order?: "asc" | "desc";
+};
+
+export type TableConfig = {
+  columns?: TableColumnConfig[];
+  itemLabel?: string;
+  minTableWidthPx?: number;
+  sortBy?: TableSortRule[];
+};
+
 export type FieldConfig = {
   path: string;
   label: string;
   description?: string;
   type: FieldType;
-  table?: {
-    itemLabel?: string;           // e.g. "student" / "row"
-    columns?: TableColumnConfig[]; // if omitted, inferred from data
-    minTableWidthPx?: number;      // default 860
-  };
+  table?: TableConfig;
 };
 
 

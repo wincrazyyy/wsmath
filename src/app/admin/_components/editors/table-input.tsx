@@ -13,6 +13,9 @@ type Props<T extends object> = {
   onChangeData: (next: T) => void;
 };
 
+type SortOrder = "asc" | "desc";
+type TableSortRule = { key: string; order?: SortOrder };
+
 function isPlainObject(x: unknown): x is Record<string, unknown> {
   return !!x && typeof x === "object" && !Array.isArray(x);
 }
@@ -132,6 +135,61 @@ function parseBulk(
   return out;
 }
 
+function compareValues(a: Cell, b: Cell, numeric: boolean): number {
+  const aEmpty = a === undefined || a === null || a === "";
+  const bEmpty = b === undefined || b === null || b === "";
+  if (aEmpty && bEmpty) return 0;
+  if (aEmpty) return 1;
+  if (bEmpty) return -1;
+
+  if (numeric) {
+    const na = typeof a === "number" ? a : Number(a);
+    const nb = typeof b === "number" ? b : Number(b);
+
+    const aIsNum = Number.isFinite(na);
+    const bIsNum = Number.isFinite(nb);
+
+    if (aIsNum && bIsNum) return na - nb;
+    if (aIsNum) return -1; // numbers before non-numbers
+    if (bIsNum) return 1;
+  }
+
+  // string-ish compare (handles numbers inside strings nicely)
+  return String(a).localeCompare(String(b), undefined, {
+    numeric: true,
+    sensitivity: "base",
+  });
+}
+
+function sortRowsStable(
+  rows: Row[],
+  rules: TableSortRule[],
+  numericKeys: Set<string>
+): Row[] {
+  if (!rules || rules.length === 0) return rows;
+
+  const decorated = rows.map((r, i) => ({ r, i }));
+
+  decorated.sort((A, B) => {
+    for (const rule of rules) {
+      const key = rule.key;
+      const order: SortOrder = rule.order ?? "asc";
+      const dir = order === "desc" ? -1 : 1;
+
+      const av = A.r[key];
+      const bv = B.r[key];
+
+      const cmp = compareValues(av, bv, numericKeys.has(key));
+      if (cmp !== 0) return cmp * dir;
+    }
+
+    // stable tie-breaker
+    return A.i - B.i;
+  });
+
+  return decorated.map((x) => x.r);
+}
+
 export function TableInput<T extends object>({ field, data, onChangeData }: Props<T>) {
   const rowsPath = field.path;
   const rows = toRows(getByPath(data, rowsPath));
@@ -175,8 +233,11 @@ export function TableInput<T extends object>({ field, data, onChangeData }: Prop
   }, [rows, query, columns]);
 
   function commit(nextRows: Row[]) {
+    const sortBy = field.table?.sortBy ?? [];
+    const sorted = sortBy.length > 0 ? sortRowsStable(nextRows, sortBy, numericKeys) : nextRows;
+
     const next = structuredClone(data) as T;
-    setByPath(next, rowsPath, nextRows);
+    setByPath(next, rowsPath, sorted);
     onChangeData(next);
   }
 
