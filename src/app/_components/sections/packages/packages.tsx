@@ -1,12 +1,7 @@
 "use client";
 
 import packagesContent from "@/app/_lib/content/json/packages.json";
-import type {
-  PackagesConfig,
-  PrivateConfig,
-  GroupConfig,
-  ComparisonConfig,
-} from "@/app/_lib/content/types/packages.types";
+import type { PackagesConfig } from "@/app/_lib/content/types/packages.types";
 
 import { SectionReveal } from "../../ui/section/section-reveal";
 
@@ -23,19 +18,20 @@ function toNumber(value: unknown, fallback = 0): number {
 
 export function Packages() {
   const data = packagesContent as PackagesConfig;
-  const { header, comparison, private: privateConfig, group: groupConfig } =
-    data;
+  const {
+    header,
+    comparison,
+    private: privateConfig,
+    group: groupConfig,
+    iaSupport
+  } = data;
 
-  const privateCfg: PrivateConfig = privateConfig;
-  const groupCfg: GroupConfig = groupConfig;
-  const comparisonCfg: ComparisonConfig = comparison;
-
-  const privateRate = toNumber(privateCfg.hourlyRate);
-  const groupPrice = toNumber(groupCfg.price);
-  const groupLessons = Math.max(1, toNumber(groupCfg.lessons, 32));
+  const privateRate = toNumber(privateConfig.hourlyRate);
+  const groupPrice = toNumber(groupConfig.price);
+  const groupLessons = Math.max(1, toNumber(groupConfig.lessons, 32));
   const intensiveLessons = Math.max(
     1,
-    toNumber(privateCfg.intensive.lessons, 8)
+    toNumber(privateConfig.intensive.lessons, 8)
   );
 
   const private32Hours = privateRate * groupLessons;
@@ -48,7 +44,7 @@ export function Packages() {
 
       <SectionReveal>
         <PricingComparisonStrip
-          comparison={comparisonCfg}
+          comparison={comparison}
           privateRate={privateRate}
           groupPrice={groupPrice}
           private32Hours={private32Hours}
@@ -57,19 +53,21 @@ export function Packages() {
 
         <div className="mt-7 grid gap-6 md:grid-cols-2">
           <PrivatePackageCard
-            config={privateCfg}
+            config={privateConfig}
             privateRate={privateRate}
             intensiveLessons={intensiveLessons}
             eightLessonBlockCost={eightLessonBlockCost}
           />
           <GroupPackageCard
-            config={groupCfg}
+            config={groupConfig}
             groupPrice={groupPrice}
             groupRatePerLesson={groupRatePerLesson}
           />
         </div>
 
-        <IaSupport />
+        <IaSupport
+          config={iaSupport}
+        />
       </SectionReveal>
     </>
   );

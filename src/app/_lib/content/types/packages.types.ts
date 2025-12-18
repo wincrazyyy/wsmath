@@ -53,9 +53,35 @@ export type GroupConfig = {
   leaflet?: GroupLeafletConfig;
 };
 
+export type IaSupportTopic = {
+  title: string;
+  desc: string;
+};
+
+export type IaSupportCta = {
+  label: string;
+  href: string;
+};
+
+export type IaSupportConfig = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  cta: IaSupportCta;
+
+  lessonStructureTitle: string;
+  lessonStructure: string[];
+
+  topicsTitle: string;
+  topics: IaSupportTopic[];
+
+  coverageNote: string;
+};
+
 export type PackagesConfig = {
   header: PackagesHeaderConfig;
   comparison: ComparisonConfig;
   private: PrivateConfig;
   group: GroupConfig;
+  iaSupport: IaSupportConfig;
 };
