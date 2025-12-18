@@ -274,9 +274,92 @@ export const PACKAGES_GROUP_FIELDS: FieldConfig[] = [
   },
 ];
 
+// IA Support (covered in 1-to-1)
+export const PACKAGES_IA_SUPPORT_FIELDS: FieldConfig[] = [
+  {
+    path: "iaSupport.eyebrow",
+    label: "IA Support – eyebrow",
+    description: "Small label above the IA support title.",
+    type: "string",
+  },
+  {
+    path: "iaSupport.title",
+    label: "IA Support – title",
+    description: "Main heading for the IA support block.",
+    type: "string",
+  },
+  {
+    path: "iaSupport.description",
+    label: "IA Support – description",
+    description: "Short paragraph under the IA support title.",
+    type: "textarea",
+  },
+
+  // CTA
+  {
+    path: "iaSupport.cta.label",
+    label: "IA Support – button label",
+    description: "CTA button label text.",
+    type: "string",
+  },
+  {
+    path: "iaSupport.cta.href",
+    label: "IA Support – button link",
+    description: 'CTA href. Use "#" or a section anchor like "#packages".',
+    type: "string",
+  },
+
+  // Lesson structure
+  {
+    path: "iaSupport.lessonStructureTitle",
+    label: "IA Support – lesson structure title",
+    description: "Title above the lesson structure list.",
+    type: "string",
+  },
+  {
+    path: "iaSupport.lessonStructure",
+    label: "IA Support – lesson structure bullets",
+    description: "One bullet per line.",
+    type: "string[]",
+  },
+
+  // Topics
+  {
+    path: "iaSupport.topicsTitle",
+    label: "IA Support – topics title",
+    description: "Title above the topic directions grid/table.",
+    type: "string",
+  },
+  {
+    path: "iaSupport.topics",
+    label: "IA Support – topics",
+    description: "Edit IA topic directions in a table.",
+    type: "table",
+    table: {
+      itemLabel: "topic",
+      columns: [
+        { key: "title", label: "Title" },
+        { key: "desc", label: "Description" },
+      ],
+      sortBy: [{ key: "title", order: "asc" }],
+      minTableWidthPx: 860,
+    },
+  },
+
+  // Coverage note
+  {
+    path: "iaSupport.coverageNote",
+    label: "IA Support – coverage note",
+    description: "Small note under the block (e.g. covered in Solo 1-to-1 lessons).",
+    type: "string",
+  },
+];
+
 export const PACKAGES_FIELDS: FieldConfig[] = [
   ...PACKAGES_HEADER_FIELDS,
   ...PACKAGES_COMPARISON_FIELDS,
   ...PACKAGES_PRIVATE_FIELDS,
   ...PACKAGES_GROUP_FIELDS,
+  ...PACKAGES_IA_SUPPORT_FIELDS,
 ];
+

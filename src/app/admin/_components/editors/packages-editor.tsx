@@ -7,11 +7,13 @@ import {
   PACKAGES_COMPARISON_FIELDS,
   PACKAGES_PRIVATE_FIELDS,
   PACKAGES_GROUP_FIELDS,
-  PACKAGES_FIELDS
+  PACKAGES_IA_SUPPORT_FIELDS,
+  PACKAGES_FIELDS,
 } from "@/app/admin/_lib/fields/packages-fields";
 import { JsonEditor } from "./json-editor";
-
-type SubTab = "header" | "comparison" | "private" | "group";
+import {
+  JsonEditorTabConfig
+} from "@/app/admin/_lib/json-editor-helpers";
 
 type PackagesEditorProps<T extends object> = {
   data: T;
@@ -22,13 +24,7 @@ export function PackagesEditor<T extends object>({
   data,
   onChangeData,
 }: PackagesEditorProps<T>) {
-  const tabs: {
-    key: SubTab;
-    label: string;
-    fields: FieldConfig[];
-    panelTitle: string;
-    panelDescription: string;
-  }[] = [
+  const tabs: JsonEditorTabConfig[] = [
     {
       key: "header",
       label: "Section header",
@@ -60,6 +56,14 @@ export function PackagesEditor<T extends object>({
       panelTitle: "Packages – group package & leaflet",
       panelDescription:
         "Edit the group course card and the leaflet preview (pages and auto-advance timing).",
+    },
+    {
+      key: "iaSupport",
+      label: "IA support",
+      fields: PACKAGES_IA_SUPPORT_FIELDS,
+      panelTitle: "Packages – IA support",
+      panelDescription:
+        "Edit the IA support block (structure, topics, and CTA). This content is shown as part of the Solo 1-to-1 offering (not a separate package).",
     },
   ];
 
