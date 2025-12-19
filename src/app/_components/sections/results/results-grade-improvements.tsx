@@ -1,4 +1,5 @@
 // src/app/_components/sections/results/results-grade-improvements.tsx
+
 "use client";
 
 import { useMemo, useState } from "react";
@@ -33,9 +34,7 @@ function buildTabsModel(flat: ResultGroupConfig[]): TabsModelGroup[] {
 
   return Array.from(map.entries()).map(([tab, items]) => ({
     tab,
-    items: items
-      .slice()
-      .sort((a, b) => (a.subTab ?? "").localeCompare(b.subTab ?? "")),
+    items: items.slice().sort((a, b) => (a.subTab ?? "").localeCompare(b.subTab ?? "")),
   }));
 }
 // -----------------
@@ -44,20 +43,10 @@ interface ResultsGradeImprovementsProps {
   gradeImprovements: GradeImprovementsConfig;
 }
 
-export function ResultsGradeImprovements({
-  gradeImprovements,
-}: ResultsGradeImprovementsProps) {
-  const {
-    header,
-    summaryCards,
-    resultGroups,
-    tableHeader,
-    heatmapKeys,
-    footerNote,
-  } = gradeImprovements;
+export function ResultsGradeImprovements({ gradeImprovements }: ResultsGradeImprovementsProps) {
+  const { header, summaryCards, resultGroups, tableHeader, footerNote } = gradeImprovements;
 
   const model = useMemo(() => buildTabsModel(resultGroups ?? []), [resultGroups]);
-
   if (model.length === 0) return null;
 
   const firstGroup = model[0];
@@ -104,7 +93,6 @@ export function ResultsGradeImprovements({
               summaryCards={summaryCards}
               resultItem={activeItem}
               tableHeader={tableHeader}
-              heatmapKeys={heatmapKeys}
               footerNote={footerNote}
             />
           </div>

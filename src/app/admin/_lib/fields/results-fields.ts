@@ -126,10 +126,10 @@ export const RESULTS_GRADE_HEADERS_FIELDS: FieldConfig[] = [
     type: "string",
   },
   {
-    path: "gradeImprovements.summaryCards.heavyJumps",
-    label: "Summary card – heavy jumps",
+    path: "gradeImprovements.summaryCards.improvements",
+    label: "Summary card – improvements",
     description:
-      "Text for the heavy jumps’ summary card.",
+      "Text for the ‘improvements’ summary card.",
     type: "string",
   },
 ];
@@ -191,26 +191,6 @@ function resultGroupsFields(
   ];
 }
 
-function heatmapKeysFields(
-  basePath: string,
-  labelPrefix: string
-): FieldConfig[] {
-  return [
-    {
-      path: `${basePath}.label`,
-      label: `${labelPrefix} – Label`,
-      description: "Key column info of the improvement table: the label of each row.",
-      type: "string",
-    },
-    {
-      path: `${basePath}.description`,
-      label: `${labelPrefix} – Description`,
-      description: "Key column info of the improvement table: the description of each row (if any).",
-      type: "string",
-    },
-  ];
-}
-
 export const RESULTS_GRADE_DATA_FIELDS: FieldConfig[] = [
   ...repeatFields(
     "gradeImprovements.resultGroups",
@@ -229,10 +209,27 @@ export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
     type: "string",
   },
   {
-    path: "gradeImprovements.tableHeader.valueColumn",
-    label: "Heatmap table value column (right column)",
-    description:
-      "Value column label of the improvement table: the label for the column displaying the values (right column).",
+    path: "gradeImprovements.tableHeader.col0to1",
+    label: "Heatmap table – column 1 (0–1)",
+    description: "Header label for the 0–1 improvements column.",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.tableHeader.col2",
+    label: "Heatmap table – column 2 (2)",
+    description: "Header label for the 2 improvements column.",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.tableHeader.col3",
+    label: "Heatmap table – column 3 (3)",
+    description: "Header label for the 3 improvements column.",
+    type: "string",
+  },
+  {
+    path: "gradeImprovements.tableHeader.col4plus",
+    label: "Heatmap table – column 4 (4+)",
+    description: "Header label for the 4+ improvements column.",
     type: "string",
   },
   {
@@ -242,12 +239,6 @@ export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
       "Small helper text under the table (e.g. ‘Hover on each cell to see the students.’).",
     type: "string",
   },
-  ...repeatFields(
-    "gradeImprovements.heatmapKeys",
-    "Heatmap Key",
-    5,
-    (path, label) => heatmapKeysFields(path, label)
-  ),
 ];
 
 

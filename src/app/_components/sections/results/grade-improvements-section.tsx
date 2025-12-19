@@ -6,9 +6,7 @@ import {
   ResultGroupConfig,
   StudentGrade,
   Student,
-  HeatmapCell,
   HeatmapTableHeaderConfig,
-  HeatmapKey,
 } from "@/app/_lib/content/types/results.types";
 
 import { TooltipCell } from "./tooltip-cell";
@@ -17,77 +15,101 @@ import { TooltipCell } from "./tooltip-cell";
 function normalizeGrade(grade: StudentGrade, syllabusScale: string[]): number {
   grade = grade.toString();
   for (let i = 0; i < syllabusScale.length; i++) {
-    if (syllabusScale[i].includes(grade)) {
-      return i + 1;
-    }
+    if (syllabusScale[i].includes(grade)) return i + 1;
   }
-  return 0; // grade not found
+  return 0;
 }
 
-// Get the top grade for a given scale
-function getTopGrade(syllabusScale: string[]): string {
-  return syllabusScale.at(-1) as string;
+function getNthTopGrade(syllabusScale: string[], n: number): string | null {
+  // n=1 => top, n=2 => second, ...
+  const idx = syllabusScale.length - n;
+  if (idx < 0 || idx >= syllabusScale.length) return null;
+  return syllabusScale[idx] ?? null;
 }
 
-// Get the second top grade for a given scale
-function getSecondGrade(syllabusScale: string[]): string {
-  return syllabusScale.at(-2) as string;
+function shortGradeLabel(gradeLabel: string): string {
+  // "7 (A*)" -> "7", "A*" -> "A*"
+  return gradeLabel.split(/\s+/)[0] ?? gradeLabel;
 }
 
-// Replace "#" in text with the given grade
 function hashToGrade(text: string, grade: string): string {
   return text.replace("#", grade);
 }
 
-type HeatmapRow = {
-  label: string;
-  description?: string;
-  cell: HeatmapCell;
+type Bucket4 = 0 | 1 | 2 | 3; // 0–1, 2, 3, 4+
+
+type MatrixCell = {
+  count: number;
+  tooltip: string;
 };
 
-function buildHeatmapRows(
-  data: Student[],
-  heatmapKeys: HeatmapKey[],
-  syllabusScale: string[],
-): HeatmapRow[] {
-  const buckets: Student[][] = [];
-  const totalRows = heatmapKeys.length;
+type MatrixRow = {
+  gradeLabel: string;
+  gradeScore: number;
+  cells: [MatrixCell, MatrixCell, MatrixCell, MatrixCell];
+};
 
-  for (let i = 0; i < totalRows; i++) buckets.push([]);
+function diffToBucket4(diff: number): Bucket4 {
+  if (diff <= 1) return 0; // maintained or +1
+  if (diff === 2) return 1;
+  if (diff === 3) return 2;
+  return 3; // 4+
+}
 
-  for (const s of data) {
+function makeTooltip(list: Student[]) {
+  return list
+    .slice()
+    .sort((a, b) => b.year - a.year || a.name.localeCompare(b.name))
+    .map(
+      (s) =>
+        `${s.name} (${s.year})${
+          typeof s.months === "number" ? ` — ${s.months} months` : ""
+        }`,
+    )
+    .join(", ");
+}
+
+function buildTop4Matrix4Cols(students: Student[], syllabusScale: string[]): MatrixRow[] {
+  const topLabels = [1, 2, 3, 4]
+    .map((n) => getNthTopGrade(syllabusScale, n))
+    .filter((x): x is string => !!x);
+
+  const rowsMeta = topLabels
+    .map((label) => {
+      const g = shortGradeLabel(label);
+      return { gradeLabel: g, gradeScore: normalizeGrade(g, syllabusScale) };
+    })
+    .filter((r) => r.gradeScore > 0);
+
+  // buckets[rowIndex][colIndex] => Student[]
+  const buckets: Student[][][] = rowsMeta.map(() => [[], [], [], []]);
+
+  for (const s of students) {
     const fromScore = normalizeGrade(s.from, syllabusScale);
     const toScore = normalizeGrade(s.to, syllabusScale);
-
     const diff = toScore - fromScore;
     if (diff < 0) continue;
 
-    // diff=0 => "Maintained", diff=1 => "+1 grade", ...
-    const rowNumber = diff >= totalRows ? totalRows - 1 : diff;
-    buckets[rowNumber].push(s);
+    const rowIndex = rowsMeta.findIndex((r) => r.gradeScore === toScore);
+    if (rowIndex === -1) continue;
+
+    const colIndex = diffToBucket4(diff);
+    buckets[rowIndex][colIndex].push(s);
   }
 
-  const makeTooltip = (list: Student[]) =>
-    list
-      .slice()
-      .sort((a, b) => b.year - a.year || a.name.localeCompare(b.name))
-      .map(
-        (s) =>
-          `${s.name} (${s.year})${
-            typeof s.months === "number" ? ` — ${s.months} months` : ""
-          }`,
-      )
-      .join(", ");
-
-  return heatmapKeys.map((row, index) => {
-    const list = buckets[index];
-    return {
-      label: row.label,
-      description: row.description,
-      cell: {
+  return rowsMeta.map((r, rowIndex) => {
+    const mk = (colIndex: number): MatrixCell => {
+      const list = buckets[rowIndex][colIndex] ?? [];
+      return {
         count: list.length,
-        tooltip: makeTooltip(list),
-      },
+        tooltip: list.length > 0 ? makeTooltip(list) : "",
+      };
+    };
+
+    return {
+      gradeLabel: r.gradeLabel,
+      gradeScore: r.gradeScore,
+      cells: [mk(0), mk(1), mk(2), mk(3)],
     };
   });
 }
@@ -97,7 +119,6 @@ interface GradeImprovementsSectionProps {
   summaryCards: SummaryCardsConfig;
   resultItem: ResultGroupConfig;
   tableHeader: HeatmapTableHeaderConfig;
-  heatmapKeys: HeatmapKey[];
   footerNote?: string;
 }
 
@@ -106,7 +127,6 @@ export function GradeImprovementsSection({
   summaryCards,
   resultItem,
   tableHeader,
-  heatmapKeys,
   footerNote,
 }: GradeImprovementsSectionProps) {
   const { programLabel, students, gradeScale } = resultItem;
@@ -114,39 +134,35 @@ export function GradeImprovementsSection({
 
   const total = students.length;
 
-  const topGrade = getTopGrade(syllabusScale);
-  const secondGrade = getSecondGrade(syllabusScale);
+  const topGradeRaw = getNthTopGrade(syllabusScale, 1) ?? "";
+  const secondGradeRaw = getNthTopGrade(syllabusScale, 2) ?? "";
 
-  const topScore = normalizeGrade(topGrade, syllabusScale);
-  const secondScore = normalizeGrade(secondGrade, syllabusScale);
+  const topGrade = topGradeRaw ? shortGradeLabel(topGradeRaw) : "";
+  const secondGrade = secondGradeRaw ? shortGradeLabel(secondGradeRaw) : "";
 
-  // = top (e.g. =7)
-  const isTop = (g: Student["to"]) =>
-    normalizeGrade(g, syllabusScale) === topScore;
+  const topScore = topGrade ? normalizeGrade(topGrade, syllabusScale) : 0;
+  const secondScore = secondGrade ? normalizeGrade(secondGrade, syllabusScale) : 0;
 
-  // >= second (e.g. >=6, includes 6 and 7)
+  const isTop = (g: Student["to"]) => normalizeGrade(g, syllabusScale) === topScore;
   const isSecondOrAbove = (g: Student["to"]) =>
     normalizeGrade(g, syllabusScale) >= secondScore;
 
   const totalTop = students.filter((s) => isTop(s.to)).length;
   const totalSecondOrAbove = students.filter((s) => isSecondOrAbove(s.to)).length;
 
-  const pct = (count: number) =>
-    total > 0 ? Math.round((count / total) * 100) : 0;
-
-  const heatmapRows = buildHeatmapRows(students, heatmapKeys, syllabusScale);
+  const pct = (count: number) => (total > 0 ? Math.round((count / total) * 100) : 0);
 
   const bigJumps = students.filter((s) => {
-    const diff =
-      normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
+    const diff = normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
     return diff >= 2;
   }).length;
 
-  const heavyJumps = students.filter((s) => {
-    const diff =
-      normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
-    return diff >= 4;
+  const improvements = students.filter((s) => {
+    const diff = normalizeGrade(s.to, syllabusScale) - normalizeGrade(s.from, syllabusScale);
+    return diff >= 1;
   }).length;
+
+  const matrixRows = buildTop4Matrix4Cols(students, syllabusScale);
 
   return (
     <section className="space-y-5">
@@ -156,30 +172,26 @@ export function GradeImprovementsSection({
           <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
             {programLabel}
           </p>
-          <h2 className="mt-1 text-xl font-semibold text-slate-900">
-            {header.title}
-          </h2>
+          <h2 className="mt-1 text-xl font-semibold text-slate-900">{header.title}</h2>
           <p className="mt-1 text-sm text-slate-500">{header.description}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
-          {/* TOP (= top grade, e.g. 7 only) */}
           <div className="flex flex-col justify-between rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
-              {hashToGrade(summaryCards.top, topGrade)}
+              {topGrade ? hashToGrade(summaryCards.top, topGrade) : summaryCards.top}
             </div>
             <div className="text-lg font-semibold text-indigo-800">
               {totalTop}
-              <span className="ml-2 text-xs font-semibold text-indigo-600">
-                ({pct(totalTop)}%)
-              </span>
+              <span className="ml-2 text-xs font-semibold text-indigo-600">({pct(totalTop)}%)</span>
             </div>
           </div>
 
-          {/* SECOND (>= second grade, e.g. 6 or 7) */}
           <div className="flex flex-col justify-between rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
-              {hashToGrade(summaryCards.second, secondGrade)}
+              {secondGrade
+                ? hashToGrade(summaryCards.second, secondGrade)
+                : summaryCards.second}
             </div>
             <div className="text-lg font-semibold text-sky-800">
               {totalSecondOrAbove}
@@ -195,70 +207,81 @@ export function GradeImprovementsSection({
             </div>
             <div className="text-lg font-semibold text-rose-800">
               {bigJumps}
-              <span className="ml-2 text-xs font-semibold text-rose-600">
-                ({pct(bigJumps)}%)
-              </span>
+              <span className="ml-2 text-xs font-semibold text-rose-600">({pct(bigJumps)}%)</span>
             </div>
           </div>
 
           <div className="flex flex-col justify-between rounded-xl bg-amber-50 ring-1 ring-amber-300 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-amber-700 font-semibold">
-              {summaryCards.heavyJumps}
+              {summaryCards.improvements}
             </div>
             <div className="text-lg font-semibold text-amber-800">
-              {heavyJumps}
+              {improvements}
               <span className="ml-2 text-xs font-semibold text-amber-600">
-                ({pct(heavyJumps)}%)
+                ({pct(improvements)}%)
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Heatmap grid (merged column) */}
+      {/* 4-column matrix */}
       <div className="mt-1 rounded-xl border border-slate-100 overflow-visible">
         <table className="w-full border-collapse text-sm">
           <thead className="bg-slate-50/80">
             <tr>
-              <th className="w-40 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+              <th className="w-32 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 {tableHeader.keyColumn}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {tableHeader.valueColumn}
+                {tableHeader.col0to1}
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {tableHeader.col2}
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {tableHeader.col3}
+              </th>
+              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {tableHeader.col4plus}
               </th>
             </tr>
           </thead>
+
           <tbody>
-            {heatmapRows.map((row, index) => (
+            {matrixRows.map((row) => (
               <tr
-                key={row.label}
-                className={`border-t border-slate-100 ${
-                  index === heatmapRows.length - 1 ? "bg-indigo-50/40" : ""
-                }`}
+                key={`${row.gradeScore}-${row.gradeLabel}`}
+                className="border-t border-slate-100"
               >
                 <td className="px-3 py-2 align-top">
-                  <div className="text-xs font-medium text-slate-800">
-                    {row.label}
-                  </div>
-                  {row.description && (
-                    <div className="text-[11px] text-slate-500">
-                      {row.description}
-                    </div>
-                  )}
+                  <div className="text-xs font-semibold text-slate-900">{row.gradeLabel}</div>
                 </td>
 
-                <td className="px-3 py-2">
-                  <TooltipCell count={row.cell.count} tooltip={row.cell.tooltip} />
-                </td>
+                {row.cells.map((cell, j) => (
+                  <td key={j} className="px-3 py-2">
+                    {cell.count > 0 ? (
+                      <TooltipCell count={cell.count} tooltip={cell.tooltip} />
+                    ) : (
+                      <span className="text-slate-300">-</span>
+                    )}
+                  </td>
+                ))}
               </tr>
             ))}
+
+            {matrixRows.length === 0 && (
+              <tr className="border-t border-slate-100">
+                <td className="px-3 py-3 text-sm text-slate-400" colSpan={5}>
+                  No data to display.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
-      {footerNote && (
-        <p className="mt-1 text-[11px] text-slate-400">{footerNote}</p>
-      )}
+      {footerNote && <p className="mt-1 text-[11px] text-slate-400">{footerNote}</p>}
     </section>
   );
 }

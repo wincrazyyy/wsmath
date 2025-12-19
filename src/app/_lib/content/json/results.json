@@ -39,8 +39,8 @@
     "summaryCards": {
       "top": "⭐ Final grade =#",
       "second": "📘 Final grade ≥#",
-      "bigJumps": "📈 Major jumps (≥2 grades)",
-      "heavyJumps": "🚀 Heavy jumps (≥4 grades)"
+      "bigJumps": "🚀 Major jumps (≥2 grades)",
+      "improvements": "📈 Grade boost (≥1 grades)"
     },
     "resultGroups": [
       {
@@ -175,31 +175,12 @@
       }
     ],
     "tableHeader": {
-      "keyColumn": "Improvement",
-      "valueColumn": "Students"
+      "keyColumn": "Final grade",
+      "col0to1": "0–1 grade improvements",
+      "col2": "2 grade improvements",
+      "col3": "3 grade improvements",
+      "col4plus": "4+ grade improvements"
     },
-    "heatmapKeys": [
-      {
-        "label": "➖ Maintained",
-        "description": "Predicted = Final"
-      },
-      {
-        "label": "↗️ +1 grade",
-        "description": "Small step up"
-      },
-      {
-        "label": "⤴️ +2 grades",
-        "description": "Solid improvement"
-      },
-      {
-        "label": "📈 +3 grades",
-        "description": "Big jump"
-      },
-      {
-        "label": "🚀 4+ grades",
-        "description": "Massive jumps"
-      }
-    ],
     "footerNote": "👆 Hover on each cell to see the students."
   },
   "resultsCta": {

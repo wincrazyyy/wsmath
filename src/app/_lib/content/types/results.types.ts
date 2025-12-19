@@ -18,7 +18,7 @@ export type SummaryCardsConfig = {
   top: string;
   second: string;
   bigJumps: string;
-  heavyJumps: string;
+  improvements: string;
 };
 
 export type ResultGroupConfig = {
@@ -44,14 +44,12 @@ export type HeatmapCell = {
   tooltip?: string;
 };
 
-export type HeatmapKey = {
-  label: string;
-  description?: string;
-};
-
 export type HeatmapTableHeaderConfig = {
   keyColumn: string;
-  valueColumn: string;
+  col0to1: string;
+  col2: string;
+  col3: string;
+  col4plus: string;
 };
 
 export type GradeImprovementsConfig = {
@@ -59,7 +57,6 @@ export type GradeImprovementsConfig = {
   summaryCards: SummaryCardsConfig;
   resultGroups: ResultGroupConfig[];
   tableHeader: HeatmapTableHeaderConfig;
-  heatmapKeys: HeatmapKey[];
   footerNote?: string;
 };
 
