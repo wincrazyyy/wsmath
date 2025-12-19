@@ -1,5 +1,5 @@
 // src/app/_components/sections/testimonials/grade-improvements-section.tsx
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import {
   GradeImprovementsHeaderConfig,
@@ -193,6 +193,91 @@ export function GradeImprovementsSection({
     );
   }, [rowsWithAny]);
 
+  // --- auto demo (randomly opens cells) ---
+  // Demo pauses after any user interaction, then resumes after idle.
+  const IDLE_RESUME_MS = 14_000; // resumes after 14s of no interaction (tweak)
+  const DEMO_START_DELAY_MS = 1_800;
+  const DEMO_OPEN_MS = 3_200; // how long a cell stays open
+  const DEMO_GAP_MIN_MS = 8_500; // time between opens
+  const DEMO_GAP_MAX_MS = 12_500;
+
+  const [idle, setIdle] = useState(true);
+  const idleTimerRef = useRef<number | null>(null);
+
+  function clearIdleTimer() {
+    if (idleTimerRef.current) {
+      window.clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = null;
+    }
+  }
+
+  function markUserInteraction() {
+    setIdle(false);
+    clearIdleTimer();
+    idleTimerRef.current = window.setTimeout(() => setIdle(true), IDLE_RESUME_MS);
+  }
+
+  useEffect(() => {
+    // reset when switching program
+    setIdle(true);
+    clearIdleTimer();
+    return () => clearIdleTimer();
+  }, [programLabel]);
+
+  useEffect(() => {
+    // Never run demo if something is pinned or user isn't idle.
+    if (pinnedCellId) return;
+    if (!idle) return;
+
+    const all = cols.flat(); // already filtered to count > 0
+    if (all.length === 0) return;
+
+    const randBetween = (min: number, max: number) =>
+      min + Math.floor(Math.random() * (max - min + 1));
+
+    const pickNext = () => {
+      if (all.length === 1) return all[0]!.id;
+      let next = all[Math.floor(Math.random() * all.length)]!.id;
+      if (next === hoveredCellId) {
+        next = all[Math.floor(Math.random() * all.length)]!.id;
+      }
+      return next;
+    };
+
+    let startTimer: number | null = null;
+    let closeTimer: number | null = null;
+    let loopTimer: number | null = null;
+
+    const runOnce = () => {
+      const id = pickNext();
+      setHoveredCellId(id);
+
+      if (closeTimer) window.clearTimeout(closeTimer);
+      closeTimer = window.setTimeout(() => {
+        setHoveredCellId((cur) => (cur === id ? null : cur));
+      }, DEMO_OPEN_MS);
+    };
+
+    const scheduleNext = () => {
+      const gap = randBetween(DEMO_GAP_MIN_MS, DEMO_GAP_MAX_MS);
+      loopTimer = window.setTimeout(() => {
+        runOnce();
+        scheduleNext();
+      }, gap);
+    };
+
+    startTimer = window.setTimeout(() => {
+      runOnce();
+      scheduleNext();
+    }, DEMO_START_DELAY_MS);
+
+    return () => {
+      if (startTimer) window.clearTimeout(startTimer);
+      if (closeTimer) window.clearTimeout(closeTimer);
+      if (loopTimer) window.clearTimeout(loopTimer);
+    };
+  }, [cols, hoveredCellId, pinnedCellId, idle]);
+
   return (
     <section className="space-y-5">
       {/* Header + summary */}
@@ -292,9 +377,16 @@ export function GradeImprovementsSection({
                     <ColumnStack
                       cells={cols[j]}
                       pinnedCellId={pinnedCellId}
-                      setPinnedCellId={setPinnedCellId}
+                      setPinnedCellId={(id) => {
+                        markUserInteraction();
+                        setPinnedCellId(id);
+                        if (id) setHoveredCellId(null);
+                      }}
                       hoveredCellId={hoveredCellId}
-                      setHoveredCellId={setHoveredCellId}
+                      setHoveredCellId={(id) => {
+                        markUserInteraction();
+                        setHoveredCellId(id);
+                      }}
                     />
                   </td>
                 ))}
