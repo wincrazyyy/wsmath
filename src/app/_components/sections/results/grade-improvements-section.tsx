@@ -1,4 +1,5 @@
 // src/app/_components/sections/testimonials/grade-improvements-section.tsx
+import { useEffect, useState } from "react";
 
 import { ExpandCell } from "./expand-cell";
 
@@ -162,6 +163,9 @@ export function GradeImprovementsSection({
   }).length;
 
   const matrixRows = buildTop4Matrix4Cols(students, syllabusScale);
+  const [pinnedCellId, setPinnedCellId] = useState<string | null>(null);
+
+  useEffect(() => setPinnedCellId(null), [programLabel]);
 
   return (
     <section className="space-y-5">
@@ -233,14 +237,11 @@ export function GradeImprovementsSection({
 
           <table className="min-w-[720px] w-full table-fixed border-collapse text-sm">
             <colgroup>
-              {/* key column */}
-              <col style={{ width: "8rem" }} />
-
-              {/* 4 equal data columns */}
-              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
-              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
-              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
-              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
+              <col className="w-32" />
+              <col />
+              <col />
+              <col />
+              <col />
             </colgroup>
 
             <thead className="bg-slate-50/80">
@@ -275,15 +276,26 @@ export function GradeImprovementsSection({
                     </div>
                   </td>
 
-                  {row.cells.map((cell, j) => (
-                    <td key={j} className="px-3 py-2 align-top">
-                      {cell.count > 0 ? (
-                        <ExpandCell count={cell.count} items={cell.items} />
-                      ) : (
-                        <span className="text-slate-300">-</span>
-                      )}
-                    </td>
-                  ))}
+                  {row.cells.map((cell, j) => {
+                    const id = `${row.gradeScore}-${j}`; // stable per rendered table
+
+                    return (
+                      <td key={j} className="px-3 py-2 align-top">
+                        {cell.count > 0 ? (
+                          <ExpandCell
+                            count={cell.count}
+                            items={cell.items}
+                            pinned={pinnedCellId === id}
+                            onPinChange={(nextPinned) =>
+                              setPinnedCellId(nextPinned ? id : null)
+                            }
+                          />
+                        ) : (
+                          <span className="text-slate-300">-</span>
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
 

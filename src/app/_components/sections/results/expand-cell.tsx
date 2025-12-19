@@ -3,12 +3,18 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export function ExpandCell({ count, items }: { count: number; items: string[] }) {
-  const [open, setOpen] = useState(false);
+type Props = {
+  count: number;
+  items: string[];
+  pinned: boolean;
+  onPinChange: (nextPinned: boolean) => void;
+};
+
+export function ExpandCell({ count, items, pinned, onPinChange }: Props) {
   const [hovered, setHovered] = useState(false);
   const closeTimer = useRef<number | null>(null);
 
-  const active = open || hovered;
+  const active = pinned || hovered;
 
   function clearCloseTimer() {
     if (closeTimer.current) {
@@ -29,8 +35,8 @@ export function ExpandCell({ count, items }: { count: number; items: string[] })
 
   useEffect(() => () => clearCloseTimer(), []);
 
-  function toggle() {
-    setOpen((v) => !v);
+  function togglePin() {
+    onPinChange(!pinned);
   }
 
   return (
@@ -38,16 +44,16 @@ export function ExpandCell({ count, items }: { count: number; items: string[] })
       role="button"
       tabIndex={0}
       aria-expanded={active}
-      onClick={toggle}
+      onClick={togglePin}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
-          toggle();
+          togglePin();
         }
         if (e.key === "Escape") {
-          setOpen(false);
+          onPinChange(false);
           setHovered(false);
         }
       }}
@@ -59,18 +65,17 @@ export function ExpandCell({ count, items }: { count: number; items: string[] })
           : "border-slate-200 hover:border-indigo-300 hover:shadow-md",
       ].join(" ")}
     >
-      {/* header stays visible always */}
       <div className="flex items-baseline justify-between gap-2">
         <div className="text-sm font-semibold text-slate-900">{count}</div>
         <div className="text-[10px] text-slate-400">
-          {open ? "Pinned" : "Hover / click"}
+          {pinned ? "Pinned" : "Hover / click"}
         </div>
       </div>
+
       <div className="text-[11px] text-slate-500">
         {count === 1 ? "student" : "students"}
       </div>
 
-      {/* EXPAND IN FLOW (this is the key change) */}
       <div
         className={[
           "overflow-hidden transition-[max-height,opacity] duration-200 ease-out",
@@ -84,7 +89,7 @@ export function ExpandCell({ count, items }: { count: number; items: string[] })
         </div>
 
         <div className="mt-2 text-[10px] text-slate-400">
-          {open ? "Click to collapse" : "Click to pin open"}
+          {pinned ? "Click to collapse" : "Click to pin open"}
         </div>
       </div>
     </div>
