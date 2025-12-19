@@ -2,12 +2,13 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { Testimonial, TestimonialsConfig } from "@/app/_lib/content/types/testimonials.types";
 import {
   TESTIMONIALS_HEADER_FIELDS,
   TESTIMONIALS_VIDEO_FIELDS,
   TESTIMONIALS_FEATURED_FIELDS,
-  TESTIMONIALS_CAROUSEL_FIELDS,
-  TESTIMONIALS_FIELDS
+  makeTestimonialsCarouselFields,
+  makeTestimonialsFields,
 } from "@/app/admin/_lib/fields/testimonials-fields";
 import { JsonEditor } from "./json-editor";
 import {
@@ -16,15 +17,23 @@ import {
   buildIndexedSubTabs,
 } from "@/app/admin/_lib/json-editor-helpers";
 
-type TestimonialsEditorProps<T extends object> = {
+export function makeEmptyTestimonial(): Testimonial {
+  return { name: "", role: "", quote: "", avatarSrc: "" };
+}
+
+type TestimonialsEditorProps<T extends TestimonialsConfig> = {
   data: T;
   onChangeData: (next: T) => void;
 };
 
-export function TestimonialsEditor<T extends object>({
+export function TestimonialsEditor<T extends TestimonialsConfig>({
   data,
   onChangeData,
 }: TestimonialsEditorProps<T>) {
+  const carouselCount = Array.isArray(data.carousel) ? data.carousel.length : 0;
+
+  const carouselFields = makeTestimonialsCarouselFields(carouselCount);
+
   const featuredSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
     TESTIMONIALS_FEATURED_FIELDS,
     "featured",
@@ -33,7 +42,7 @@ export function TestimonialsEditor<T extends object>({
   );
 
   const carouselSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
-    TESTIMONIALS_CAROUSEL_FIELDS,
+    carouselFields,
     "carousel",
     "Carousel testimonial",
     "Edit this individual testimonial in the scrolling carousel strip.",
@@ -70,18 +79,25 @@ export function TestimonialsEditor<T extends object>({
       label: "Carousel strip",
       fields: [],
       subTabs: carouselSubTabs,
+      subTabAdd: {
+        listPath: "carousel",
+        buttonLabel: "Add testimonial",
+        defaultItem: makeEmptyTestimonial(),
+      },
       panelTitle: "Carousel testimonials (scrolling strip)",
       panelDescription:
         "Use the numbered tabs to edit each testimonial in the scrolling carousel strip.",
     },
   ];
 
+  const dynamicFields = makeTestimonialsFields({ carouselCount });
+
   return (
     <JsonEditor<T>
       title="Testimonials"
       description="Edit the testimonials header, student voices video, featured testimonials, and carousel strip."
       data={data}
-      fields={TESTIMONIALS_FIELDS as FieldConfig[]}
+      fields={dynamicFields as FieldConfig[]}
       jsonFileHint="src/app/_lib/content/json/testimonials.json"
       onChangeData={onChangeData}
       slug="testimonials"

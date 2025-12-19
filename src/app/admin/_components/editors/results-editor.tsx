@@ -2,6 +2,7 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { ResultsConfig } from "@/app/_lib/content/types/results.types";
 import {
   RESULTS_HEADER_FIELDS,
   RESULTS_GRADE_HEADERS_FIELDS,
@@ -18,12 +19,12 @@ import {
   getBaseFieldsAndSubTabs,
 } from "@/app/admin/_lib/json-editor-helpers";
 
-type ResultsEditorProps<T extends object> = {
+type ResultsEditorProps<T extends ResultsConfig> = {
   data: T;
   onChangeData: (next: T) => void;
 };
 
-export function ResultsEditor<T extends object>({
+export function ResultsEditor<T extends ResultsConfig>({
   data,
   onChangeData,
 }: ResultsEditorProps<T>) {

@@ -220,6 +220,8 @@ export function JsonEditor<T extends object>({
   const baseFields = hasTabs ? activeTab?.fields ?? [] : fields;
   // Sub-tab fields swap below
   const subFields = hasTabs ? activeSubTab?.fields ?? [] : [];
+  // Add sub tab optional
+  const addCfg = hasTabs ? activeTab?.subTabAdd : undefined;
 
   const panelTitle = hasTabs
     ? activeTab?.panelTitle ?? title
@@ -228,6 +230,30 @@ export function JsonEditor<T extends object>({
   const panelDescription = hasTabs
     ? activeTab?.panelDescription ?? (description ?? "")
     : (description ?? "");
+
+  function handleAddSubTab() {
+    if (!activeTab || !addCfg) return;
+
+    const next = structuredClone(data) as T;
+
+    const raw = getByPath(next, addCfg.listPath);
+    const arr = Array.isArray(raw) ? [...raw] : [];
+
+    if (typeof addCfg.maxItems === "number" && arr.length >= addCfg.maxItems) return;
+
+    arr.push(structuredClone(addCfg.defaultItem));
+    setByPath(next, addCfg.listPath, arr);
+
+    onChangeData(next);
+
+    const newIndex = arr.length - 1;
+    const newKey = `${addCfg.listPath}[${newIndex}]`;
+
+    setActiveSubTabByParent((prev) => ({
+      ...prev,
+      [activeTab.key]: newKey,
+    }));
+  }
 
   return (
     <div className="mt-6">
@@ -315,42 +341,75 @@ export function JsonEditor<T extends object>({
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
-                    <div className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-                      Sub Tabs
+                  <div className="flex items-center gap-2">
+                    {/* existing subtab pills */}
+                    <div className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
+                      <div className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                        Sub Tabs
+                      </div>
+
+                      <div className="ml-auto flex items-center gap-1 rounded-lg bg-neutral-100 p-1">
+                        {subTabs.map((sub) => {
+                          const isActive = sub.key === activeSubKey;
+                          return (
+                            <button
+                              key={sub.key}
+                              type="button"
+                              onClick={() =>
+                                setActiveSubTabByParent((prev) => ({
+                                  ...prev,
+                                  [activeTab!.key]: sub.key,
+                                }))
+                              }
+                              className={`min-w-[2.25rem] rounded-md px-3 py-1.5 text-xs font-semibold transition ${
+                                isActive
+                                  ? "bg-neutral-900 text-white shadow"
+                                  : "text-neutral-700 hover:bg-white"
+                              }`}
+                            >
+                              {sub.label}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
 
-                    <div className="ml-auto flex items-center gap-1 rounded-lg bg-neutral-100 p-1">
-                      {subTabs.map((sub) => {
-                        const isActive = sub.key === activeSubKey;
-                        return (
-                          <button
-                            key={sub.key}
-                            type="button"
-                            onClick={() =>
-                              setActiveSubTabByParent((prev) => ({
-                                ...prev,
-                                [activeTab!.key]: sub.key,
-                              }))
-                            }
-                            className={`min-w-[2.25rem] rounded-md px-3 py-1.5 text-xs font-semibold transition ${
-                              isActive
-                                ? "bg-neutral-900 text-white shadow"
-                                : "text-neutral-700 hover:bg-white"
-                            }`}
-                          >
-                            {sub.label}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    {/* Add button if enabled for this tab */}
+                    {addCfg && (
+                      <button
+                        type="button"
+                        onClick={handleAddSubTab}
+                        className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-800 shadow-sm hover:bg-neutral-50"
+                      >
+                        + {addCfg.buttonLabel ?? "Add"}
+                      </button>
+                    )}
                   </div>
                 </div>
 
-                {/* Only this part changes when sub-tab changes */}
                 {renderFieldsGrid(subFields)}
               </div>
             </>
+          )}
+
+          {subTabs.length === 0 && addCfg && (
+            <div className="mt-6 border-t border-neutral-200 pt-5">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-base font-semibold text-neutral-900">Items</h4>
+                  <p className="mt-1 text-xs text-neutral-500">
+                    No items yet. Click Add to create one.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAddSubTab}
+                  className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-800 shadow-sm hover:bg-neutral-50"
+                >
+                  + {addCfg.buttonLabel ?? "Add"}
+                </button>
+              </div>
+            </div>
           )}
         </div>
       ) : (

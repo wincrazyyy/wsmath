@@ -2,6 +2,7 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { PackagesConfig } from "@/app/_lib/content/types/packages.types";
 import {
   PACKAGES_HEADER_FIELDS,
   PACKAGES_COMPARISON_FIELDS,
@@ -15,12 +16,12 @@ import {
   JsonEditorTabConfig
 } from "@/app/admin/_lib/json-editor-helpers";
 
-type PackagesEditorProps<T extends object> = {
+type PackagesEditorProps<T extends PackagesConfig> = {
   data: T;
   onChangeData: (next: T) => void;
 };
 
-export function PackagesEditor<T extends object>({
+export function PackagesEditor<T extends PackagesConfig>({
   data,
   onChangeData,
 }: PackagesEditorProps<T>) {

@@ -2,6 +2,7 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { AboutConfig } from "@/app/_lib/content/types/about.types";
 import {
   ABOUT_HEADER_FIELDS,
   ABOUT_HERO_FIELDS,
@@ -15,12 +16,12 @@ import {
   type JsonEditorTabConfig,
 } from "@/app/admin/_lib/json-editor-helpers";
 
-type AboutEditorProps<T extends object> = {
+type AboutEditorProps<T extends AboutConfig> = {
   data: T;
   onChangeData: (next: T) => void;
 };
 
-export function AboutEditor<T extends object>({ data, onChangeData }: AboutEditorProps<T>) {
+export function AboutEditor<T extends AboutConfig>({ data, onChangeData }: AboutEditorProps<T>) {
   const [statsCoursesBaseFields, statsCoursesSubTabs] = getBaseFieldsAndSubTabs(
     ABOUT_STATS_COURSES_FIELDS,
     "coursesSection.groups",

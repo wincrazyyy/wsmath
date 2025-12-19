@@ -2,15 +2,16 @@
 "use client";
 
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
+import { HomeConfig } from "@/app/_lib/content/types/home.types";
 import { HOME_FIELDS } from "@/app/admin/_lib/fields/home-fields";
 import { JsonEditor } from "./json-editor";
 
-type HomeEditorProps<T extends object> = {
+type HomeEditorProps<T extends HomeConfig> = {
   data: T;
   onChangeData: (next: T) => void;
 };
 
-export function HomeEditor<T extends object>({
+export function HomeEditor<T extends HomeConfig>({
   data,
   onChangeData,
 }: HomeEditorProps<T>) {

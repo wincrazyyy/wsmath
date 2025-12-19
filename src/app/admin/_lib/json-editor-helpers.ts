@@ -11,11 +11,19 @@ export type JsonEditorSubTabConfig = {
   panelDescription?: string;
 };
 
+export type JsonEditorSubTabAddConfig = {
+  listPath: string;
+  defaultItem: unknown;
+  buttonLabel?: string;
+  maxItems?: number;
+};
+
 export type JsonEditorTabConfig = {
   key: string;
   label: string;
   fields?: FieldConfig[];
   subTabs?: JsonEditorSubTabConfig[];
+  subTabAdd?: JsonEditorSubTabAddConfig;
   panelTitle?: string;
   panelDescription?: string;
 };

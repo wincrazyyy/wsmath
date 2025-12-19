@@ -101,18 +101,22 @@ export const TESTIMONIALS_FEATURED_FIELDS: FieldConfig[] = [
   )
 ];
 
-export const TESTIMONIALS_CAROUSEL_FIELDS: FieldConfig[] = [
-  ...repeatFields(
+export function makeTestimonialsCarouselFields(count: number): FieldConfig[] {
+  return repeatFields(
     "carousel",
     "Carousel",
-    4,
+    count,
     (path, label) => testimonialFields(path, label)
-  )
-];
+  );
+}
 
-export const TESTIMONIALS_FIELDS: FieldConfig[] = [
-  ...TESTIMONIALS_HEADER_FIELDS,
-  ...TESTIMONIALS_VIDEO_FIELDS,
-  ...TESTIMONIALS_FEATURED_FIELDS,
-  ...TESTIMONIALS_CAROUSEL_FIELDS,
-];
+export function makeTestimonialsFields(opts: {
+  carouselCount: number;
+}): FieldConfig[] {
+  return [
+    ...TESTIMONIALS_HEADER_FIELDS,
+    ...TESTIMONIALS_VIDEO_FIELDS,
+    ...TESTIMONIALS_FEATURED_FIELDS,
+    ...makeTestimonialsCarouselFields(opts.carouselCount),
+  ];
+}
