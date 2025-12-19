@@ -6,7 +6,7 @@ import {
   ResultGroupConfig,
   StudentGrade,
   Student,
-  HeatmapTableHeaderConfig,
+  MatrixHeaderConfig,
 } from "@/app/_lib/content/types/results.types";
 
 import { TooltipCell } from "./tooltip-cell";
@@ -118,7 +118,7 @@ interface GradeImprovementsSectionProps {
   header: GradeImprovementsHeaderConfig;
   summaryCards: SummaryCardsConfig;
   resultItem: ResultGroupConfig;
-  tableHeader: HeatmapTableHeaderConfig;
+  matrixHeader: MatrixHeaderConfig;
   footerNote?: string;
 }
 
@@ -126,7 +126,7 @@ export function GradeImprovementsSection({
   header,
   summaryCards,
   resultItem,
-  tableHeader,
+  matrixHeader,
   footerNote,
 }: GradeImprovementsSectionProps) {
   const { programLabel, students, gradeScale } = resultItem;
@@ -231,19 +231,19 @@ export function GradeImprovementsSection({
           <thead className="bg-slate-50/80">
             <tr>
               <th className="w-32 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {tableHeader.keyColumn}
+                {matrixHeader.keyColumn}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {tableHeader.col0to1}
+                {matrixHeader.col0to1}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {tableHeader.col2}
+                {matrixHeader.col2}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {tableHeader.col3}
+                {matrixHeader.col3}
               </th>
               <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {tableHeader.col4plus}
+                {matrixHeader.col4plus}
               </th>
             </tr>
           </thead>

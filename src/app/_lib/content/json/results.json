@@ -46,7 +46,7 @@
       {
         "tab": "IBDP Mathematics",
         "subTab": "HL",
-        "programLabel": "IBDP HL · AAHL / AIHL",
+        "programLabel": "IBDP · HL / AAHL / AIHL",
         "students": [
           { "name": "Marcus", "year": 2025, "from": 6, "to": 7 },
           { "name": "Miriam", "year": 2025, "from": 6, "to": 7 },
@@ -84,7 +84,7 @@
       {
         "tab": "IBDP Mathematics",
         "subTab": "SL",
-        "programLabel": "IBDP SL · AASL / AISL",
+        "programLabel": "IBDP · SL / AASL / AISL",
         "students": [
           { "name": "Jason", "year": 2025, "from": 6, "to": 7 },
           { "name": "Michael", "year": 2025, "from": 6, "to": 7 },
@@ -174,7 +174,7 @@
         "gradeScale": ["U(1)", "G(2)", "F(3)", "E(4)", "D(5)", "C(6)", "B(7)", "A(8)", "A*(9)"]
       }
     ],
-    "tableHeader": {
+    "matrixHeader": {
       "keyColumn": "Final grade",
       "col0to1": "0–1 grade improvements",
       "col2": "2 grade improvements",

@@ -202,33 +202,33 @@ export const RESULTS_GRADE_DATA_FIELDS: FieldConfig[] = [
 
 export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
   {
-    path: "gradeImprovements.tableHeader.keyColumn",
-    label: "Heatmap table key column label (left column)",
+    path: "gradeImprovements.matrixHeader.keyColumn",
+    label: "Matrix key column label (left column)",
     description:
       "Key column label of the improvement table: the label for the legend of the table (left column).",
     type: "string",
   },
   {
-    path: "gradeImprovements.tableHeader.col0to1",
-    label: "Heatmap table – column 1 (0–1)",
+    path: "gradeImprovements.matrixHeader.col0to1",
+    label: "Matrix – column 1 (0–1)",
     description: "Header label for the 0–1 improvements column.",
     type: "string",
   },
   {
-    path: "gradeImprovements.tableHeader.col2",
-    label: "Heatmap table – column 2 (2)",
+    path: "gradeImprovements.matrixHeader.col2",
+    label: "Matrix – column 2 (2)",
     description: "Header label for the 2 improvements column.",
     type: "string",
   },
   {
-    path: "gradeImprovements.tableHeader.col3",
-    label: "Heatmap table – column 3 (3)",
+    path: "gradeImprovements.matrixHeader.col3",
+    label: "Matrix – column 3 (3)",
     description: "Header label for the 3 improvements column.",
     type: "string",
   },
   {
-    path: "gradeImprovements.tableHeader.col4plus",
-    label: "Heatmap table – column 4 (4+)",
+    path: "gradeImprovements.matrixHeader.col4plus",
+    label: "Matrix – column 4 (4+)",
     description: "Header label for the 4+ improvements column.",
     type: "string",
   },

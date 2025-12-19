@@ -39,12 +39,7 @@ export type Student = {
   months?: number;
 };
 
-export type HeatmapCell = {
-  count: number;
-  tooltip?: string;
-};
-
-export type HeatmapTableHeaderConfig = {
+export type MatrixHeaderConfig = {
   keyColumn: string;
   col0to1: string;
   col2: string;
@@ -56,7 +51,7 @@ export type GradeImprovementsConfig = {
   header: GradeImprovementsHeaderConfig;
   summaryCards: SummaryCardsConfig;
   resultGroups: ResultGroupConfig[];
-  tableHeader: HeatmapTableHeaderConfig;
+  matrixHeader: MatrixHeaderConfig;
   footerNote?: string;
 };
 

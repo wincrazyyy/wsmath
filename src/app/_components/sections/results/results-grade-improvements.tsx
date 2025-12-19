@@ -44,7 +44,7 @@ interface ResultsGradeImprovementsProps {
 }
 
 export function ResultsGradeImprovements({ gradeImprovements }: ResultsGradeImprovementsProps) {
-  const { header, summaryCards, resultGroups, tableHeader, footerNote } = gradeImprovements;
+  const { header, summaryCards, resultGroups, matrixHeader, footerNote } = gradeImprovements;
 
   const model = useMemo(() => buildTabsModel(resultGroups ?? []), [resultGroups]);
   if (model.length === 0) return null;
@@ -92,7 +92,7 @@ export function ResultsGradeImprovements({ gradeImprovements }: ResultsGradeImpr
               header={header}
               summaryCards={summaryCards}
               resultItem={activeItem}
-              tableHeader={tableHeader}
+              matrixHeader={matrixHeader}
               footerNote={footerNote}
             />
           </div>
