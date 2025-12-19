@@ -1,5 +1,7 @@
 // src/app/_components/sections/testimonials/grade-improvements-section.tsx
 
+import { ExpandCell } from "./expand-cell";
+
 import {
   GradeImprovementsHeaderConfig,
   SummaryCardsConfig,
@@ -8,8 +10,6 @@ import {
   Student,
   MatrixHeaderConfig,
 } from "@/app/_lib/content/types/results.types";
-
-import { TooltipCell } from "./tooltip-cell";
 
 // Map a display grade string to a normalised score based on scale (>0 if found).
 function normalizeGrade(grade: StudentGrade, syllabusScale: string[]): number {
@@ -40,7 +40,7 @@ type Bucket4 = 0 | 1 | 2 | 3; // 0–1, 2, 3, 4+
 
 type MatrixCell = {
   count: number;
-  tooltip: string;
+  items: string[];
 };
 
 type MatrixRow = {
@@ -56,7 +56,7 @@ function diffToBucket4(diff: number): Bucket4 {
   return 3; // 4+
 }
 
-function makeTooltip(list: Student[]) {
+function makeItems(list: Student[]): string[] {
   return list
     .slice()
     .sort((a, b) => b.year - a.year || a.name.localeCompare(b.name))
@@ -65,8 +65,7 @@ function makeTooltip(list: Student[]) {
         `${s.name} (${s.year})${
           typeof s.months === "number" ? ` — ${s.months} months` : ""
         }`,
-    )
-    .join(", ");
+    );
 }
 
 function buildTop4Matrix4Cols(students: Student[], syllabusScale: string[]): MatrixRow[] {
@@ -102,7 +101,7 @@ function buildTop4Matrix4Cols(students: Student[], syllabusScale: string[]): Mat
       const list = buckets[rowIndex][colIndex] ?? [];
       return {
         count: list.length,
-        tooltip: list.length > 0 ? makeTooltip(list) : "",
+        items: list.length > 0 ? makeItems(list) : [],
       };
     };
 
@@ -261,7 +260,7 @@ export function GradeImprovementsSection({
                 {row.cells.map((cell, j) => (
                   <td key={j} className="px-3 py-2">
                     {cell.count > 0 ? (
-                      <TooltipCell count={cell.count} tooltip={cell.tooltip} />
+                      <ExpandCell count={cell.count} items={cell.items} />
                     ) : (
                       <span className="text-slate-300">-</span>
                     )}
