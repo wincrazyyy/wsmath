@@ -22,18 +22,9 @@ export type StudentVoicesVideoConfig = {
   poster: string;
 };
 
-export type TestimonialsCtaConfig = {
-  heading: string;
-  subheading: string;
-  bullets: string[];
-  note?: string;
-  logoSrc: string;
-};
-
 export type TestimonialsConfig = {
   header: TestimonialsHeaderConfig;
   video: StudentVoicesVideoConfig;
   featured: Testimonial[];
   carousel: Testimonial[];
-  testimonialsCta: TestimonialsCtaConfig;
 };
