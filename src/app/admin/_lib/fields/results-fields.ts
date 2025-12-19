@@ -202,13 +202,6 @@ export const RESULTS_GRADE_DATA_FIELDS: FieldConfig[] = [
 
 export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
   {
-    path: "gradeImprovements.matrixHeader.keyColumn",
-    label: "Matrix key column label (left column)",
-    description:
-      "Key column label of the improvement table: the label for the legend of the table (left column).",
-    type: "string",
-  },
-  {
     path: "gradeImprovements.matrixHeader.col0to1",
     label: "Matrix – column 1 (0–1)",
     description: "Header label for the 0–1 improvements column.",

@@ -1,10 +1,10 @@
 // src/app/_components/sections/results/column-stack.tsx
-import { useRef, useState } from "react";
 
 import { ExpandCell } from "./expand-cell";
 
-export type ColCell = {
+export type ColumnCell = {
   id: string;
+  gradeLabel: string;
   count: number;
   items: string[];
 };
@@ -13,52 +13,44 @@ export function ColumnStack({
   cells,
   pinnedCellId,
   setPinnedCellId,
-  colIndex,
+  hoveredCellId,
+  setHoveredCellId,
 }: {
-  cells: ColCell[];
+  cells: ColumnCell[];
   pinnedCellId: string | null;
-  setPinnedCellId: (v: string | null) => void;
-  colIndex: number;
+  setPinnedCellId: (id: string | null) => void;
+  hoveredCellId: string | null;
+  setHoveredCellId: (id: string | null) => void;
 }) {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const lockUntil = useRef(0);
-
-  const pinnedInThisCol = pinnedCellId?.endsWith(`-${colIndex}`) ?? false;
-  const activeId = pinnedInThisCol ? pinnedCellId : hoveredId;
-
-  function tryHover(id: string) {
-    if (pinnedInThisCol) return; // pin wins in this column
-    const now = Date.now();
-    if (now < lockUntil.current) return; // prevent bounce during reflow
-    lockUntil.current = now + 220;
-    setHoveredId(id);
-  }
+  // Adjust once and all columns behave consistently.
+  const STACK_H = "h-[360px] md:h-[420px]";
 
   return (
-    <div
-      className="h-full min-h-0 overflow-hidden flex flex-col divide-y divide-slate-100"
-      onPointerLeave={() => setHoveredId(null)}
-    >
+    <div className={["min-h-0", STACK_H, "flex flex-col gap-2"].join(" ")}>
       {cells.map((c) => {
-        const isActive = activeId === c.id;
-        const isPinned = pinnedCellId === c.id;
+        const pinned = pinnedCellId === c.id;
+        const active = pinned || hoveredCellId === c.id;
 
         return (
           <div
             key={c.id}
-            onPointerEnter={() => tryHover(c.id)}
-            className="min-h-0 overflow-hidden transition-[flex-grow] duration-200"
-            style={{ flexGrow: isActive ? 6 : 1, flexBasis: 0 }}
+            className={[
+              "min-h-0",
+              // active cell gets more height, siblings shrink — within this column only
+              active ? "flex-[4] md:flex-[5]" : "flex-1",
+              "transition-[flex-grow] duration-200",
+            ].join(" ")}
+            onPointerEnter={() => setHoveredCellId(c.id)}
+            onPointerLeave={() => setHoveredCellId(null)}
           >
-            <div className="h-full min-h-0 p-2">
-              <ExpandCell
-                count={c.count}
-                items={c.items}
-                pinned={isPinned}
-                active={isActive || isPinned}
-                onPinChange={(nextPinned) => setPinnedCellId(nextPinned ? c.id : null)}
-              />
-            </div>
+            <ExpandCell
+              count={c.count}
+              items={c.items}
+              gradeLabel={c.gradeLabel}
+              pinned={pinned}
+              active={active}
+              onPinChange={(nextPinned) => setPinnedCellId(nextPinned ? c.id : null)}
+            />
           </div>
         );
       })}

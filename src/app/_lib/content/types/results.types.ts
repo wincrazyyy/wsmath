@@ -40,7 +40,6 @@ export type Student = {
 };
 
 export type MatrixHeaderConfig = {
-  keyColumn: string;
   col0to1: string;
   col2: string;
   col3: string;

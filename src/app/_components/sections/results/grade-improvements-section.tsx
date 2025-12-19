@@ -1,5 +1,5 @@
 // src/app/_components/sections/testimonials/grade-improvements-section.tsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   GradeImprovementsHeaderConfig,
@@ -10,7 +10,7 @@ import {
   MatrixHeaderConfig,
 } from "@/app/_lib/content/types/results.types";
 
-import { ColCell, ColumnStack } from "./column-stack";
+import { ColumnCell, ColumnStack } from "./column-stack";
 
 // Map a display grade string to a normalised score based on scale (>0 if found).
 function normalizeGrade(grade: StudentGrade, syllabusScale: string[]): number {
@@ -162,12 +162,36 @@ export function GradeImprovementsSection({
     return diff >= 1;
   }).length;
 
-  const BODY_H = "h-[360px]";
-
   const matrixRows = buildTop4Matrix4Cols(students, syllabusScale);
-  const [pinnedCellId, setPinnedCellId] = useState<string | null>(null);
 
-  useEffect(() => setPinnedCellId(null), [programLabel]);
+  const rowsWithAny = useMemo(
+    () => matrixRows.filter((r) => r.cells.some((c) => c.count > 0)),
+    [matrixRows]
+  );
+
+  const [pinnedCellId, setPinnedCellId] = useState<string | null>(null);
+  const [hoveredCellId, setHoveredCellId] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPinnedCellId(null);
+    setHoveredCellId(null);
+  }, [programLabel]);
+
+  const cols = useMemo(() => {
+    return [0, 1, 2, 3].map((j) =>
+      rowsWithAny
+        .map((r) => {
+          const cell = r.cells[j];
+          return {
+            id: `${r.gradeScore}-${j}`,
+            gradeLabel: r.gradeLabel,
+            count: cell.count,
+            items: cell.items,
+          } satisfies ColumnCell;
+        })
+        .filter((x) => x.count > 0)
+    );
+  }, [rowsWithAny]);
 
   return (
     <section className="space-y-5">
@@ -230,68 +254,55 @@ export function GradeImprovementsSection({
         </div>
       </div>
 
-      {/* 4-column matrix */}
       <div className="mt-1 rounded-xl border border-slate-100 bg-white">
-        {/* mobile horizontal scroll */}
         <div className="relative overflow-x-auto">
           <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-white/0 sm:hidden" />
 
-          <div className="min-w-[720px]">
-            {/* Header row */}
-            <div className="grid grid-cols-[8rem_repeat(4,minmax(0,1fr))] bg-slate-50/80 border-b border-slate-100">
-              <div className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.keyColumn}
-              </div>
-              <div className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col0to1}
-              </div>
-              <div className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col2}
-              </div>
-              <div className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col3}
-              </div>
-              <div className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col4plus}
-              </div>
-            </div>
+          <table className="min-w-[720px] w-full table-fixed border-collapse text-sm">
+            {/* 4 equal columns */}
+            <colgroup>
+              <col />
+              <col />
+              <col />
+              <col />
+            </colgroup>
 
-            {/* Body: each column is independent */}
-            <div className={["grid grid-cols-[8rem_repeat(4,minmax(0,1fr))]", BODY_H].join(" ")}>
-              {/* Grade labels column (also a stack, but DOES NOT reflow with others) */}
-              <div className="h-full min-h-0 overflow-hidden flex flex-col divide-y divide-slate-100">
-                {matrixRows.map((r) => (
-                  <div
-                    key={r.gradeScore}
-                    className="px-3 py-3 text-xs font-semibold text-slate-900 flex-1 min-h-0"
-                  >
-                    {r.gradeLabel}
-                  </div>
+            <thead className="bg-slate-50/80">
+              <tr>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col0to1}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col2}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col3}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col4plus}
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {/* single row: each column is an independent stack */}
+              <tr className="border-t border-slate-100 align-top">
+                {[0, 1, 2, 3].map((j) => (
+                  <td key={j} className="px-3 py-2 align-top">
+                    <ColumnStack
+                      cells={cols[j]}
+                      pinnedCellId={pinnedCellId}
+                      setPinnedCellId={setPinnedCellId}
+                      hoveredCellId={hoveredCellId}
+                      setHoveredCellId={setHoveredCellId}
+                    />
+                  </td>
                 ))}
-              </div>
-
-              {([0, 1, 2, 3] as const).map((colIndex) => {
-                const colCells: ColCell[] = matrixRows.map((row) => {
-                  const id = `${row.gradeScore}-${colIndex}`;
-                  const cell = row.cells[colIndex];
-                  return { id, count: cell.count, items: cell.items };
-                });
-
-                return (
-                  <ColumnStack
-                    key={colIndex}
-                    colIndex={colIndex}
-                    cells={colCells}
-                    pinnedCellId={pinnedCellId}
-                    setPinnedCellId={setPinnedCellId}
-                  />
-                );
-              })}
-            </div>
-          </div>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
-        {/* optional helper text for mobile */}
         <div className="px-3 pb-3 pt-2 text-[11px] text-slate-400 sm:hidden">
           Swipe left/right to view the full table.
         </div>
