@@ -225,59 +225,72 @@ export function GradeImprovementsSection({
       </div>
 
       {/* 4-column matrix */}
-      <div className="mt-1 rounded-xl border border-slate-100 overflow-visible">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-slate-50/80">
-            <tr>
-              <th className="w-32 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.keyColumn}
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col0to1}
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col2}
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col3}
-              </th>
-              <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
-                {matrixHeader.col4plus}
-              </th>
-            </tr>
-          </thead>
+      <div className="mt-1 rounded-xl border border-slate-100 bg-white">
+        {/* mobile horizontal scroll */}
+        <div className="relative overflow-x-auto">
+          {/* scroll hint (only on small screens) */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-white/0 sm:hidden" />
 
-          <tbody>
-            {matrixRows.map((row) => (
-              <tr
-                key={`${row.gradeScore}-${row.gradeLabel}`}
-                className="border-t border-slate-100"
-              >
-                <td className="px-3 py-2 align-top">
-                  <div className="text-xs font-semibold text-slate-900">{row.gradeLabel}</div>
-                </td>
+          <table className="min-w-[720px] w-full border-collapse text-sm">
+            <thead className="bg-slate-50/80">
+              <tr>
+                <th className="w-32 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.keyColumn}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col0to1}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col2}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col3}
+                </th>
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {matrixHeader.col4plus}
+                </th>
+              </tr>
+            </thead>
 
-                {row.cells.map((cell, j) => (
-                  <td key={j} className="px-3 py-2">
-                    {cell.count > 0 ? (
-                      <ExpandCell count={cell.count} items={cell.items} />
-                    ) : (
-                      <span className="text-slate-300">-</span>
-                    )}
+            <tbody>
+              {matrixRows.map((row) => (
+                <tr
+                  key={`${row.gradeScore}-${row.gradeLabel}`}
+                  className="border-t border-slate-100"
+                >
+                  <td className="px-3 py-2 align-top">
+                    <div className="text-xs font-semibold text-slate-900">
+                      {row.gradeLabel}
+                    </div>
                   </td>
-                ))}
-              </tr>
-            ))}
 
-            {matrixRows.length === 0 && (
-              <tr className="border-t border-slate-100">
-                <td className="px-3 py-3 text-sm text-slate-400" colSpan={5}>
-                  No data to display.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                  {row.cells.map((cell, j) => (
+                    <td key={j} className="px-3 py-2 align-top">
+                      {cell.count > 0 ? (
+                        <ExpandCell count={cell.count} items={cell.items} />
+                      ) : (
+                        <span className="text-slate-300">-</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+
+              {matrixRows.length === 0 && (
+                <tr className="border-t border-slate-100">
+                  <td className="px-3 py-3 text-sm text-slate-400" colSpan={5}>
+                    No data to display.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* optional helper text for mobile */}
+        <div className="px-3 pb-3 pt-2 text-[11px] text-slate-400 sm:hidden">
+          Swipe left/right to view the full table.
+        </div>
       </div>
 
       {footerNote && <p className="mt-1 text-[11px] text-slate-400">{footerNote}</p>}
