@@ -4,6 +4,8 @@
 import Image from "next/image";
 import type { Testimonial } from "@/app/_lib/content/types/testimonials.types";
 
+import { TestimonialAvatar } from "./testimonial-avatar";
+
 type FeaturedTestimonialsGridProps = {
   items: Testimonial[];
 };
@@ -21,7 +23,12 @@ export function FeaturedTestimonialsGrid({
           <div className="h-1 w-full rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 opacity-20" />
 
           <div className="mt-4 flex items-start gap-4">
-            <Avatar name={t.name || "Student"} src={t.avatarSrc} />
+            <TestimonialAvatar
+              name={t.name || "Student"}
+              src={t.avatarSrc}
+              useDefaultAvatar={t.useDefaultAvatar}
+              size={48}
+            />
             <div>
               <h3 className="font-medium">{t.name || "Student name"}</h3>
               {t.role && (
@@ -46,34 +53,5 @@ export function FeaturedTestimonialsGrid({
         </li>
       ))}
     </ul>
-  );
-}
-
-function Avatar({ name, src }: { name: string; src?: string }) {
-  if (src) {
-    return (
-      <div className="relative h-12 w-12 overflow-hidden rounded-full ring-1 ring-neutral-200">
-        <Image
-          src={src}
-          alt={`${name} avatar`}
-          fill
-          className="object-cover"
-          sizes="48px"
-        />
-      </div>
-    );
-  }
-
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-
-  return (
-    <div className="grid h-12 w-12 place-items-center rounded-full bg-gradient-to-br from-indigo-600 via-violet-600 to-sky-600 text-sm font-semibold text-white ring-1 ring-neutral-200">
-      {initials}
-    </div>
   );
 }

@@ -37,6 +37,11 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
     note: "Upload multiple images for the group package leaflet pages. Upload all leaflet pages in PNG format.",
     mode: "multi",
   },
+  "testimonials.featured[*].avatarSrc": {
+    note: "Featured avatar. Will be saved as /avatars/featured-<id>.png (id = tab number).",
+    forcedPublicPathTemplate: "/avatars/featured-{{index1}}.png",
+    forcedFileNameTemplate: "featured-{{index1}}.png",
+  },
   "testimonials.carousel[*].avatarSrc": {
     note: "Carousel avatar. Will be saved as /avatars/carousel-<id>.png (id = tab number).",
     forcedPublicPathTemplate: "/avatars/carousel-{{index1}}.png",
