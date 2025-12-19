@@ -255,6 +255,52 @@ export function JsonEditor<T extends object>({
     }));
   }
 
+  function escapeRegExp(s: string) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function parseIndexFromSubKey(subKey: string, listPath: string): number | null {
+    const re = new RegExp(`^${escapeRegExp(listPath)}\\[(\\d+)\\]$`);
+    const m = subKey.match(re);
+    if (!m) return null;
+    const idx = Number(m[1]);
+    return Number.isFinite(idx) ? idx : null;
+  }
+
+  function handleDeleteSubTab() {
+      if (!activeTab || !addCfg) return;
+      if (!activeSubKey) return;
+
+      const idx = parseIndexFromSubKey(activeSubKey, addCfg.listPath);
+      if (idx === null) return;
+
+      const ok = window.confirm("Delete this item? This cannot be undone.");
+      if (!ok) return;
+
+      const next = structuredClone(data) as T;
+
+      const raw = getByPath(next, addCfg.listPath);
+      const arr = Array.isArray(raw) ? [...raw] : [];
+
+      if (idx < 0 || idx >= arr.length) return;
+
+      arr.splice(idx, 1);
+      setByPath(next, addCfg.listPath, arr);
+
+      onChangeData(next);
+
+      // Choose next active subtab key
+      const nextKey =
+        arr.length === 0
+          ? undefined
+          : `${addCfg.listPath}[${Math.min(idx, arr.length - 1)}]`;
+
+      setActiveSubTabByParent((prev) => ({
+        ...prev,
+        [activeTab.key]: nextKey,
+      }));
+    }
+
   return (
     <div className="mt-6">
       {/* Top-level heading */}
@@ -378,15 +424,31 @@ export function JsonEditor<T extends object>({
                       </div>
                     </div>
 
-                    {/* Add button if enabled for this tab */}
+                    {/* Add / Delete buttons if enabled for this tab */}
                     {addCfg && (
-                      <button
-                        type="button"
-                        onClick={handleAddSubTab}
-                        className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-800 shadow-sm hover:bg-neutral-50"
-                      >
-                        + {addCfg.buttonLabel ?? "Add"}
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          onClick={handleAddSubTab}
+                          className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-800 shadow-sm hover:bg-neutral-50"
+                        >
+                          + {addCfg.buttonLabel ?? "Add"}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={handleDeleteSubTab}
+                          disabled={subTabs.length === 0 || !activeSubKey}
+                          className={[
+                            "rounded-lg border px-3 py-2 text-xs font-semibold shadow-sm transition",
+                            subTabs.length === 0 || !activeSubKey
+                              ? "border-neutral-200 bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                              : "border-rose-200 bg-white text-rose-700 hover:bg-rose-50",
+                          ].join(" ")}
+                        >
+                          Delete
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
