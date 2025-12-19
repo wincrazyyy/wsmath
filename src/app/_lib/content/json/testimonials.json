@@ -16,25 +16,29 @@
       "name": "Yuki W.",
       "role": "IBDP AAHL — Level 7",
       "quote": "Winson’s targeted drills and weekly plans took me from a predicted 5 to a solid 7 before finals.",
-      "avatarSrc": "/avatars/yuki.jpg"
+      "avatarSrc": "/avatars/featured-1.png",
+      "useDefaultAvatar": true
     },
     {
       "name": "Parent of Darren",
       "role": "HKU Medicine (MBBS) admit",
       "quote": "Professional, strict on pacing, and genuinely invested in outcomes. Worth every bit.",
-      "avatarSrc": "/avatars/parent-darren.jpg"
+      "avatarSrc": "/avatars/featured-2.png",
+      "useDefaultAvatar": true
     },
     {
       "name": "James P.",
       "role": "IBDP AASL — 6",
       "quote": "Winson's teaching methods are exceptional. He breaks down complex concepts into simple, understandable parts.",
-      "avatarSrc": "/avatars/james.jpg"
+      "avatarSrc": "/avatars/featured-3.png",
+      "useDefaultAvatar": true
     },
     {
       "name": "Pauline S.",
       "role": "A-Level Math & FM — A* A*",
       "quote": "Winson is an amazing tutor! He is very patient and explains concepts clearly. I saw significant improvement in my grades.",
-      "avatarSrc": "/avatars/pauline.jpg"
+      "avatarSrc": "/avatars/featured-4.png",
+      "useDefaultAvatar": true
     }
   ],
   "carousel": [
@@ -42,25 +46,29 @@
       "name": "Alex L.",
       "role": "A-Level Math & FM — A* A*",
       "quote": "Crystal-clear exam strategies. I always knew exactly what to practice each week.",
-      "avatarSrc": "/avatars/alex.jpg"
+      "avatarSrc": "/avatars/carousel-1.png",
+      "useDefaultAvatar": true
     },
     {
       "name": "Sabrina C.",
       "role": "IBDP AISL — 7",
       "quote": "Online lessons with iPad + GoodNotes were more effective than any face-to-face class I tried.",
-      "avatarSrc": "/avatars/sabrina.jpg"
+      "avatarSrc": "/avatars/carousel-2.png",
+      "useDefaultAvatar": true
     },
     {
       "name": "Bobby K.",
       "role": "IBDP AASL — 7",
       "quote": "I love the lessons Winson has to offer! The way he teaches is very easy to understand and he is always very patient with me.",
-      "avatarSrc": "/avatars/bobby.jpg"
+      "avatarSrc": "/avatars/carousel-3.png",
+      "useDefaultAvatar": true
     },
     {
       "name": "Jonathan G.",
       "role": "IBDP AAHL — 6",
       "quote": "Winson helped me improve my math skills and gain confidence. His lessons are engaging and effective.",
-      "avatarSrc": "/avatars/jonathan.jpg"
+      "avatarSrc": "/avatars/carousel-4.png",
+      "useDefaultAvatar": true
     }
   ]
 }

@@ -63,7 +63,7 @@ function Card({ t }: { t: Testimonial }) {
   return (
     <div className="h-full rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
       <div className="flex items-start gap-3">
-        <Avatar name={t.name} src={t.avatarSrc} />
+        <Avatar name={t.name} src={t.avatarSrc} useDefaultAvatar={t.useDefaultAvatar} />
         <div>
           <p className="font-medium leading-tight">{t.name}</p>
           {t.role && <p className="text-xs text-neutral-500">{t.role}</p>}
@@ -78,12 +78,22 @@ function Card({ t }: { t: Testimonial }) {
   );
 }
 
-function Avatar({ name, src }: { name: string; src?: string }) {
-  if (src) {
+function Avatar({
+  name,
+  src,
+  useDefaultAvatar,
+}: {
+  name: string;
+  src?: string;
+  useDefaultAvatar?: boolean;
+}) {
+  const showImage = !!src && !useDefaultAvatar;
+
+  if (showImage) {
     return (
       <div className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-neutral-200">
         <Image
-          src={src}
+          src={src!}
           alt={`${name} avatar`}
           fill
           className="object-cover"
@@ -92,16 +102,41 @@ function Avatar({ name, src }: { name: string; src?: string }) {
       </div>
     );
   }
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
 
   return (
-    <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-indigo-600 via-violet-600 to-sky-600 text-xs font-semibold text-white ring-1 ring-neutral-200">
-      {initials}
+    <div
+      className="grid h-10 w-10 place-items-center rounded-full bg-neutral-100 ring-1 ring-neutral-200"
+      aria-label={`${name} default avatar`}
+      title={`${name}`}
+    >
+      <PersonIcon className="h-5 w-5 text-neutral-500" />
     </div>
+  );
+}
+
+function PersonIcon({ className }: { className?: string }) {
+  // Simple, clean “person outline” icon (no dependency)
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <path
+        d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 20a8 8 0 1 0-16 0"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }

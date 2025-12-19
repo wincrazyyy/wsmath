@@ -1,5 +1,5 @@
 // app/admin/_lib/fields.ts
-export type FieldType = "string" | "textarea" | "string[]" | "table";
+export type FieldType = "string" | "textarea" | "string[]" | "table" | "boolean";
 
 export type TableColumnConfig = {
   key: string;
@@ -26,6 +26,7 @@ export type FieldConfig = {
   description?: string;
   type: FieldType;
   table?: TableConfig;
+  checkboxLabel?: string;
 };
 
 export function repeatFields(

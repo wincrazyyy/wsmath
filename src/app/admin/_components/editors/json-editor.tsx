@@ -5,8 +5,9 @@ import { useState } from "react";
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { getByPath, setByPath } from "@/app/admin/_lib/json-path";
 import {
-  IMAGE_UPLOAD_TARGETS,
+  resolveImageUploadTarget,
   type ImageUploadTarget,
+  type ResolvedImageUploadTarget,
 } from "@/app/admin/_lib/image-upload-targets";
 import {
   JsonEditorTabConfig,
@@ -85,8 +86,10 @@ export function JsonEditor<T extends object>({
 
   const renderFieldInput = (field: FieldConfig) => {
     const keyWithSlug = slug ? `${slug}.${field.path}` : field.path;
-    const uploadTarget: ImageUploadTarget | undefined =
-      IMAGE_UPLOAD_TARGETS[keyWithSlug] ?? IMAGE_UPLOAD_TARGETS[field.path];
+    const resolved: ResolvedImageUploadTarget | null =
+      resolveImageUploadTarget(keyWithSlug) ?? resolveImageUploadTarget(field.path);
+
+    const uploadTarget: ImageUploadTarget | undefined = resolved?.target;
 
     // image upload integration
     if (uploadTarget) {
@@ -107,6 +110,8 @@ export function JsonEditor<T extends object>({
           target={uploadTarget}
           data={data}
           onChangeData={onChangeData}
+          forcedPublicPath={resolved?.forcedPublicPath}
+          forcedFileName={resolved?.forcedFileName}
         />
       );
     }
@@ -149,13 +154,32 @@ export function JsonEditor<T extends object>({
       );
     }
 
-    // table
     if (field.type === "table") {
       return <TableInput<T>
         field={field}
         data={data}
         onChangeData={onChangeData}
       />;
+    }
+
+    if (field.type === "boolean") {
+      const value = typeof raw === "boolean" ? raw : false;
+
+      return (
+        <label className="inline-flex items-center gap-2 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900">
+          <input
+            type="checkbox"
+            className="h-4 w-4 accent-violet-600"
+            checked={value}
+            onChange={(e) => {
+              const next = structuredClone(data) as T;
+              setByPath(next, field.path, e.target.checked);
+              onChangeData(next);
+            }}
+          />
+          <span className="text-sm">{field.checkboxLabel}</span>
+        </label>
+      );
     }
 
   };

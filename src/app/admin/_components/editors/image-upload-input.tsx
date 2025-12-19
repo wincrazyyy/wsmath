@@ -16,6 +16,8 @@ type ImageUploadInputProps<T extends object> = {
   target: ImageUploadTarget;
   data: T;
   onChangeData: (next: T) => void;
+  forcedPublicPath?: string; // e.g. "/avatars/carousel-3.png"
+  forcedFileName?: string;   // e.g. "carousel-3.png"
 };
 
 export function ImageUploadInput<T extends object>({
@@ -23,21 +25,28 @@ export function ImageUploadInput<T extends object>({
   target,
   data,
   onChangeData,
+  forcedPublicPath,
+  forcedFileName,
 }: ImageUploadInputProps<T>) {
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
   const raw = getByPath(data, field.path);
-  const publicPath =
+  const jsonPublicPath =
     typeof raw === "string" && raw.trim().length > 0 ? raw.trim() : "";
-  const repoPath = publicPath ? buildRepoPathFromPublic(publicPath) : "";
 
-  // Prefer queued preview (if user picked a new file), otherwise existing asset
-  const queuedPreview = publicPath
-    ? getPreviewUrlForPublicPath(publicPath)
+  const targetPublicPath = (forcedPublicPath ?? jsonPublicPath).trim();
+
+  const repoPath = targetPublicPath
+    ? buildRepoPathFromPublic(targetPublicPath)
+    : "";
+
+  const queuedPreview = targetPublicPath
+    ? getPreviewUrlForPublicPath(targetPublicPath)
     : null;
-  const previewSrc = queuedPreview || publicPath || "/placeholder.png";
+
+  const previewSrc = queuedPreview || targetPublicPath || "/placeholder.png";
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,10 +65,10 @@ export function ImageUploadInput<T extends object>({
       return;
     }
 
-    if (!publicPath || !repoPath) {
+    if (!targetPublicPath || !repoPath) {
       setStatus("error");
       setError(
-        "JSON field for this image is empty or invalid. Please set a valid path like '/hero.png' in JSON.",
+        "This image field has no target path. Set a JSON value (e.g. '/hero.png') or provide a forcedPublicPath for indexed fields.",
       );
       e.target.value = "";
       return;
@@ -70,16 +79,22 @@ export function ImageUploadInput<T extends object>({
     setError(null);
 
     try {
-      // 1) Update JSON state (even if the value stays the same string)
+      // If forcedFileName is provided, rename the uploaded file to match
+      const finalFile =
+        forcedFileName && forcedFileName.trim().length > 0
+          ? new File([file], forcedFileName, { type: file.type })
+          : file;
+
+      // 1) Update JSON state to the *targetPublicPath*
       const next = structuredClone(data) as T;
-      setByPath(next, field.path, publicPath);
+      setByPath(next, field.path, targetPublicPath);
       onChangeData(next);
 
-      // 2) Queue image for save-all (this creates the previewUrl internally)
+      // 2) Queue image for save-all
       queueImageUpload({
         repoPath,
-        publicPath,
-        file,
+        publicPath: targetPublicPath,
+        file: finalFile,
       });
 
       setStatus("success");
@@ -115,9 +130,9 @@ export function ImageUploadInput<T extends object>({
             </code>
           </p>
           <p className="mt-1 text-[11px] text-neutral-500">
-            Current public path:{" "}
+            Target public path:{" "}
             <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
-              {publicPath || "(not set)"}
+              {targetPublicPath || "(not set)"}
             </code>
           </p>
           {target.note && (

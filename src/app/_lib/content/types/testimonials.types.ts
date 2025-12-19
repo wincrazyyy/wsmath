@@ -11,6 +11,7 @@ export type Testimonial = {
   role?: string;
   quote: string;
   avatarSrc?: string;
+  useDefaultAvatar?: boolean;
 };
 
 export type StudentVoicesVideoConfig = {

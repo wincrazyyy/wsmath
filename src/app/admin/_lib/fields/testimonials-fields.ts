@@ -86,8 +86,16 @@ function testimonialFields(
       path: `${basePath}.avatarSrc`,
       label: `${labelPrefix} – Avatar image path`,
       description:
-        "Optional avatar image in /public/avatars (e.g. /avatars/yuki.jpg).",
+        "Path to the testimonial image in /public/avatars, (e.g. /avatars/carousel-1.png).",
       type: "string",
+    },
+    {
+      path: `${basePath}.useDefaultAvatar`,
+      label: `${labelPrefix} – Default avatar`,
+      description:
+        "A default avatar could be used instead of the image for the testimonial.",
+      type: "boolean",
+      checkboxLabel: "Use default avatar icon"
     },
   ];
 }
