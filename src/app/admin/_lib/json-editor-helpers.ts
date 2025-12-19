@@ -83,7 +83,6 @@ export function buildIndexedSubTabs(
   panelDescription: string,
 ): JsonEditorSubTabConfig[] {
   const byIndex: Record<number, FieldConfig[]> = {};
-
   const regex = new RegExp(`^${arrayKey}\\[(\\d+)\\]\\.`);
 
   for (const field of scopedFields) {
@@ -99,13 +98,14 @@ export function buildIndexedSubTabs(
     .map(Number)
     .sort((a, b) => a - b)
     .map((idx) => ({
-      key: `${arrayKey}-${idx}`,
+      key: `${arrayKey}[${idx}]`,
       label: String(idx + 1),
       fields: byIndex[idx],
       panelTitle: `${panelTitlePrefix} #${idx + 1}`,
       panelDescription,
     }));
 }
+
 
 export function getBaseFieldsAndSubTabs(
   scopedFields: FieldConfig[],

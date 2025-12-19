@@ -278,10 +278,14 @@ export function JsonEditor<T extends object>({
                   onClick={() => {
                     setActiveTabKey(tab.key);
                     if (tab.subTabs?.length) {
-                      setActiveSubTabByParent((prev) => ({
-                        ...prev,
-                        [tab.key]: prev[tab.key] ?? tab.subTabs![0].key,
-                      }));
+                      setActiveSubTabByParent((prev) => {
+                        const prevKey = prev[tab.key];
+                        const exists = prevKey && tab.subTabs!.some((s) => s.key === prevKey);
+                        return {
+                          ...prev,
+                          [tab.key]: exists ? prevKey : tab.subTabs![0].key,
+                        };
+                      });
                     }
                   }}
                   className={`rounded-full px-4 py-1.5 transition ${
