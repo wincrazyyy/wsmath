@@ -231,10 +231,21 @@ export function GradeImprovementsSection({
           {/* scroll hint (only on small screens) */}
           <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-white to-white/0 sm:hidden" />
 
-          <table className="min-w-[720px] w-full border-collapse text-sm">
+          <table className="min-w-[720px] w-full table-fixed border-collapse text-sm">
+            <colgroup>
+              {/* key column */}
+              <col style={{ width: "8rem" }} />
+
+              {/* 4 equal data columns */}
+              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
+              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
+              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
+              <col style={{ width: "calc((100% - 8rem) / 4)" }} />
+            </colgroup>
+
             <thead className="bg-slate-50/80">
               <tr>
-                <th className="w-32 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                   {matrixHeader.keyColumn}
                 </th>
                 <th className="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">

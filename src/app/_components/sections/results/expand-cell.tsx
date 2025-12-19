@@ -52,7 +52,7 @@ export function ExpandCell({ count, items }: { count: number; items: string[] })
         }
       }}
       className={[
-        "w-full rounded-lg border bg-white px-2 py-2",
+        "w-full min-w-0 rounded-lg border bg-white px-2 py-2",
         "transition-[box-shadow,border-color,background-color] duration-200",
         active
           ? "border-indigo-400 bg-indigo-50/70 shadow-lg shadow-indigo-200/40 ring-2 ring-indigo-300"
@@ -78,13 +78,9 @@ export function ExpandCell({ count, items }: { count: number; items: string[] })
         ].join(" ")}
       >
         <div className="mt-2 max-h-[180px] overflow-auto pr-1">
-          <ul className="space-y-1 text-[11px] text-slate-700 whitespace-normal break-words">
-            {items.map((x) => (
-              <li key={x} className="leading-snug">
-                {x}
-              </li>
-            ))}
-          </ul>
+          <div className="text-[11px] leading-snug text-slate-700 whitespace-normal break-words">
+            {items.join(", ")}
+          </div>
         </div>
 
         <div className="mt-2 text-[10px] text-slate-400">
