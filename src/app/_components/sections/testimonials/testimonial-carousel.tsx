@@ -12,7 +12,6 @@ export function TestimonialCarousel({
   items,
 }: {
   items: Testimonial[];
-  speedSec?: number;
 }) {
 
   const scrollRef = useRef<HTMLDivElement | null>(null);

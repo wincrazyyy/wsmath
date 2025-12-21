@@ -19,37 +19,30 @@ export function TestimonialAvatar({
 }: Props) {
   const showImage = !!src && !useDefaultAvatar;
 
-  if (showImage) {
-    return (
-      <div
-        className={[
-          "relative overflow-hidden rounded-full ring-1 ring-neutral-200 bg-neutral-100",
-          className,
-        ].join(" ")}
-        style={{ width: size, height: size }}
-      >
+  return (
+    <div
+      className={[
+        "relative shrink-0 overflow-hidden rounded-full ring-1 ring-neutral-200 bg-neutral-100",
+        className,
+      ].join(" ")}
+      style={{ width: size, height: size }}
+      aria-label={`${name} avatar`}
+      title={name}
+    >
+      {showImage ? (
         <Image
           src={src!}
           alt={`${name} avatar`}
           fill
-          className="object-cover"
           sizes={`${size}px`}
+          className="object-cover"
         />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={[
-        "grid place-items-center rounded-full bg-neutral-100 ring-1 ring-neutral-200",
-        className,
-      ].join(" ")}
-      style={{ width: size, height: size }}
-      aria-label={`${name} default avatar`}
-      title={name}
-    >
-      <PersonIcon className="text-neutral-500" size={Math.round(size * 0.5)} />
+      ) : (
+        <PersonIcon
+          className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 text-neutral-500"
+          size={Math.round(size * 0.5)}
+        />
+      )}
     </div>
   );
 }
