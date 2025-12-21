@@ -1,18 +1,105 @@
 // app/_components/sections/testimonials/testimonial-carousel.tsx
 "use client";
 
-import Image from "next/image";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type React from "react";
 import type { Testimonial } from "@/app/_lib/content/types/testimonials.types";
 
 import { TestimonialAvatar } from "./testimonial-avatar";
+import styles from "./testimonial-carousel.module.css";
 
 export function TestimonialCarousel({
   items,
-  speedSec = 28,
 }: {
   items: Testimonial[];
   speedSec?: number;
 }) {
+
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const isPausedRef = useRef(false);
+
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const loopingItems = useMemo(
+    () => (items?.length ? [...items, ...items] : []),
+    [items]
+  );
+
+  useEffect(() => {
+    let animationFrameId: number;
+    const speed = 0.5;
+
+    const step = () => {
+      const container = scrollRef.current;
+      if (container && !isPausedRef.current) {
+        container.scrollLeft += speed;
+
+        const loopWidth = container.scrollWidth / 2;
+
+        if (container.scrollLeft >= loopWidth) {
+          container.scrollLeft -= loopWidth;
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(step);
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    isDraggingRef.current = true;
+    setIsDragging(true);
+    isPausedRef.current = true;
+
+    startXRef.current = e.clientX;
+    scrollLeftRef.current = container.scrollLeft;
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+    setIsDragging(false);
+    isPausedRef.current = false;
+  };
+
+  const handleMouseLeave = () => {
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      setIsDragging(false);
+      isPausedRef.current = false;
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const container = scrollRef.current;
+    if (!container || !isDraggingRef.current) return;
+
+    e.preventDefault();
+
+    const deltaX = e.clientX - startXRef.current;
+    const loopWidth = container.scrollWidth / 2;
+
+    let nextScrollLeft = scrollLeftRef.current - deltaX;
+
+    if (nextScrollLeft < 0) {
+      nextScrollLeft += loopWidth;
+      scrollLeftRef.current += loopWidth;
+    } else if (nextScrollLeft >= loopWidth * 2) {
+      nextScrollLeft -= loopWidth;
+      scrollLeftRef.current -= loopWidth;
+    }
+
+    container.scrollLeft = nextScrollLeft;
+  };
+
   return (
     <section className="mt-8">
       <div className="group relative overflow-hidden rounded-2xl border border-neutral-200 bg-white">
@@ -20,42 +107,23 @@ export function TestimonialCarousel({
         <div className="pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent" />
 
-        {/* track */}
+        {/* scroll track */}
         <div
-          className="marquee flex"
-          style={{ animation: `marquee ${speedSec}s linear infinite` }}
+          ref={scrollRef}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+          className={`relative z-10 flex gap-4 overflow-x-auto px-4 py-5 select-none touch-pan-x ${
+            isDragging ? "cursor-grabbing" : "cursor-grab"
+          } ${styles.scrollSmooth}`}
         >
-          <ul className="flex shrink-0 gap-4 px-4 py-5">
-            {items.map((t, i) => (
-              <li key={`a-${i}`} className="w-[280px] md:w-[340px] flex-none">
-                <Card t={t} />
-              </li>
-            ))}
-          </ul>
-          {/* duplicate for seamless loop */}
-          <ul className="flex shrink-0 gap-4 px-4 py-5" aria-hidden="true">
-            {items.map((t, i) => (
-              <li key={`b-${i}`} className="w-[280px] md:w-[340px] flex-none">
-                <Card t={t} />
-              </li>
-            ))}
-          </ul>
+          {loopingItems.map((t, i) => (
+            <div key={`${t.name ?? "t"}-${i}`} className="w-[280px] md:w-[340px] flex-none">
+              <Card t={t} />
+            </div>
+          ))}
         </div>
-
-        <style jsx>{`
-          @keyframes marquee {
-            from {
-              transform: translateX(0);
-            }
-            to {
-              transform: translateX(-50%);
-            }
-          }
-          /* pause on hover */
-          .group:hover .marquee {
-            animation-play-state: paused;
-          }
-        `}</style>
       </div>
     </section>
   );
@@ -76,10 +144,15 @@ function Card({ t }: { t: Testimonial }) {
           {t.role && <p className="text-xs text-neutral-500">{t.role}</p>}
         </div>
       </div>
+
       <p className="mt-3 text-sm text-neutral-700">
-        <span aria-hidden className="mr-1 text-neutral-400">“</span>
+        <span aria-hidden className="mr-1 text-neutral-400">
+          “
+        </span>
         {t.quote}
-        <span aria-hidden className="ml-1 text-neutral-400">”</span>
+        <span aria-hidden className="ml-1 text-neutral-400">
+          ”
+        </span>
       </p>
     </div>
   );

@@ -1,0 +1,7 @@
+.scrollSmooth::-webkit-scrollbar {
+  display: none;
+}
+.scrollSmooth {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
