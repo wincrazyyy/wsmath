@@ -65,16 +65,16 @@ export function SectionHeader({
   const ChipBanner = ({ centered = false }: { centered?: boolean }) =>
     currentChip ? (
       <div className={`mt-4 ${centered ? "flex justify-center" : ""}`}>
-        {/* let the chip size to content */}
-        <div className={styles.chipStack}>
+        {/* full width on mobile, shrink-to-content on sm+ */}
+        <div className={`${styles.chipStack} w-full md:w-auto`}>
           {/* deck “shadow cards” */}
           <div className={styles.chipShadowBack} aria-hidden="true" />
           <div className={styles.chipShadow} aria-hidden="true" />
 
-          {/* active card – key triggers animation on change */}
+          {/* active card */}
           <div
             key={chipIndex}
-            className={`${styles.chipCard} inline-flex items-center justify-center px-4 py-2.5 text-xs md:text-sm font-semibold text-neutral-900`}
+            className={`${styles.chipCard} flex w-full items-center justify-center px-4 py-2.5 text-xs font-semibold text-neutral-900 md:inline-flex md:w-auto`}
           >
             {currentChip}
           </div>
@@ -157,8 +157,8 @@ export function SectionHeader({
 
         {/* Right column: accent card */}
         {showAccent && (
-          <div className="flex md:flex-1 md:h-full justify-end">
-            <div className="relative w-full max-w-xs h-full flex">
+          <div className="flex md:flex-1 md:h-full justify-center md:justify-end">
+            <div className="relative w-full max-w-none md:max-w-md h-full flex">
               <div
                 className="pointer-events-none absolute -inset-4 -z-10 bg-gradient-to-br from-violet-500/30 via-sky-400/20 to-fuchsia-500/30 blur-2xl"
                 aria-hidden="true"

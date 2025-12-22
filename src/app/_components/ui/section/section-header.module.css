@@ -9,6 +9,12 @@
   padding: 0.15rem; /* tiny breathing room for the deck */
 }
 
+@media (max-width: 639px) {
+  .chipStack {
+    width: 100%;
+  }
+}
+
 /* Fake cards underneath to look like a subtle deck */
 .chipShadow,
 .chipShadowBack {
