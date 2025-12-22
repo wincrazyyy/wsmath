@@ -65,7 +65,7 @@ export function AboutHero({ hero }: AboutHeroProps) {
       {/* Eyebrow ribbon */}
       {hero.eyebrow && (
         <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5">
-          <div className="inline-flex items-center gap-3 rounded-full border border-white/40 bg-white/80 px-3 py-1 backdrop-blur">
+          <div className="inline-flex items-center gap-3 rounded-full border border-white/35 bg-white/35 px-3 py-1 shadow-lg backdrop-blur-lg">
             <span className="text-[11px] font-medium text-neutral-900">
               {hero.eyebrow}
             </span>
