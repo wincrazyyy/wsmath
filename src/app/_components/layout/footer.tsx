@@ -1,4 +1,6 @@
 // app/_components/layout/footer.tsx
+import Image from "next/image";
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
@@ -10,15 +12,20 @@ export function SiteFooter() {
           <div>
             <div className="flex items-center gap-3">
               {/* Swap for WSMath logo */}
-              <div className="grid h-10 w-10 place-items-center rounded-xl border border-neutral-200 bg-neutral-50">
-                <span className="text-sm font-semibold text-neutral-900">
-                  WS
-                </span>
+              <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                <Image
+                  src="/icon.svg"
+                  alt="WSMath"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 object-contain"
+                  priority={false}
+                />
               </div>
               <div>
                 <p className="text-sm font-semibold text-neutral-900">WSMath</p>
                 <p className="text-xs text-neutral-500">
-                  Premium online math coaching
+                  International Mathematics Exam Strategist - 國際數學科考試軍師
                 </p>
               </div>
             </div>
@@ -159,7 +166,7 @@ export function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col gap-4 border-t border-neutral-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          {/* WSMath watermark (primary) */}
+          {/* WSMath watermark */}
           <div className="text-sm">
             <p className="font-semibold text-neutral-900">
               © {year} WSMath. All rights reserved.
