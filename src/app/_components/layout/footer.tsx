@@ -1,4 +1,4 @@
-// app/_components/layout/site-footer.tsx
+// app/_components/layout/footer.tsx
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
@@ -9,7 +9,7 @@ export function SiteFooter() {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3">
-              {/* Swap for your WSMath logo? */}
+              {/* Swap for WSMath logo */}
               <div className="grid h-10 w-10 place-items-center rounded-xl border border-neutral-200 bg-neutral-50">
                 <span className="text-sm font-semibold text-neutral-900">
                   WS
@@ -31,7 +31,12 @@ export function SiteFooter() {
             <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1 text-xs text-neutral-600">
               <span className="font-medium text-neutral-900">WSMath</span>
               <span aria-hidden>•</span>
-              <span>Official site</span>
+              <a
+                href="#content"
+                className="transition hover:text-neutral-900"
+              >
+                Back to top
+              </a>
             </div>
           </div>
 
@@ -41,7 +46,7 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-3 text-sm">
               <li>
                 <a
-                  href="/packages"
+                  href="#packages"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   1-to-1 Coaching
@@ -49,7 +54,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="/packages#group"
+                  href="#packages"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   Group Classes
@@ -57,7 +62,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="/results"
+                  href="#results"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   Results & Case Studies
@@ -65,7 +70,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="/testimonials"
+                  href="#testimonials"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   Student Testimonials
@@ -80,31 +85,34 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-3 text-sm">
               <li>
                 <a
-                  href="/about"
+                  href="#about"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   About WSMath
                 </a>
               </li>
               <li>
+                {/* placeholder section for now */}
                 <a
-                  href="/faq"
+                  href="#faq"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   FAQs
                 </a>
               </li>
               <li>
+                {/* placeholder section for now */}
                 <a
-                  href="/contact"
+                  href="#contact"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   Contact
                 </a>
               </li>
               <li>
+                {/* placeholder section for now */}
                 <a
-                  href="/privacy"
+                  href="#privacy"
                   className="text-neutral-600 transition hover:text-neutral-900"
                 >
                   Privacy Policy
@@ -123,13 +131,13 @@ export function SiteFooter() {
 
             <div className="mt-4 flex flex-wrap gap-3">
               <a
-                href="/contact"
+                href="#contact"
                 className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800"
               >
                 Enquire now
               </a>
               <a
-                href="/packages"
+                href="#packages"
                 className="inline-flex items-center justify-center rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-50"
               >
                 View packages
