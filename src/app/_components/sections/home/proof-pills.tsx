@@ -18,7 +18,7 @@ export function ProofPills() {
       {pills.map((t, i) => (
         <span
           key={t}
-          className={`${styles.proofPill} inline-flex rounded-full bg-gradient-to-r from-indigo-500/70 via-violet-500/70 to-sky-500/70 p-[1px]`}
+          className={`${styles.proofPill} flex w-full justify-center sm:inline-flex sm:w-auto rounded-full bg-gradient-to-r from-indigo-500/70 via-violet-500/70 to-sky-500/70 p-[1px]`}
           style={
             {
               "--delay": `${i * 0.12}s`,
@@ -27,7 +27,7 @@ export function ProofPills() {
           }
         >
           <span
-            className={`${styles.innerPill} inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[0.8rem] font-semibold text-neutral-800 shadow-sm md:text-sm`}
+            className={`${styles.innerPill} inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-4 py-2 text-[0.8rem] font-semibold text-neutral-800 shadow-sm md:text-sm sm:w-auto`}
           >
             <span className="h-1 w-1 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
             {t}
