@@ -1,6 +1,7 @@
 import Image from "next/image";
 import miscContent from "@/app/_lib/content/json/misc.json";
 import type { MiscConfig } from "@/app/_lib/content/types/misc.types";
+import { PrivacyPolicyModalAnchor } from "./privacy-policy-modal-anchor";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -55,12 +56,20 @@ export function SiteFooter() {
               <ul className="mt-4 space-y-3 text-sm">
                 {col.links.map((l) => (
                   <li key={`${col.title}-${l.label}`}>
-                    <a
-                      href={l.href}
-                      className="text-neutral-600 transition hover:text-neutral-900"
-                    >
-                      {l.label}
-                    </a>
+                    {l.href === "#privacy" ? (
+                      <PrivacyPolicyModalAnchor
+                        href={l.href}
+                        label={l.label}
+                        className="text-neutral-600 transition hover:text-neutral-900"
+                      />
+                    ) : (
+                      <a
+                        href={l.href}
+                        className="text-neutral-600 transition hover:text-neutral-900"
+                      >
+                        {l.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
