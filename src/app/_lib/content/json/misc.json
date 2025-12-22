@@ -2,5 +2,57 @@
   "whatsapp": {
     "phoneNumber": "85293199914",
     "prefillText": "Hi Winson Siu, I'm interested in your Math tutoring service!"
+  },
+  "footer": {
+    "brand": {
+      "name": "WSMath",
+      "tagline": "International Mathematics Exam Strategist - 國際數學科考試軍師",
+      "description": "Results-driven tutoring for IBDP, A-Level, and IGCSE students. Structured learning, exam strategy, and measurable progress.",
+      "iconSrc": "/hero.png",
+      "backToTop": { "label": "Back to top", "href": "#content" }
+    },
+    "columns": [
+      {
+        "title": "Programs",
+        "links": [
+          { "label": "1-to-1 Coaching", "href": "#packages" },
+          { "label": "Group Classes", "href": "#packages" },
+          { "label": "Results & Case Studies", "href": "#results" },
+          { "label": "Student Testimonials", "href": "#testimonials" }
+        ]
+      },
+      {
+        "title": "Resources",
+        "links": [
+          { "label": "About WSMath", "href": "#about" },
+          { "label": "FAQs", "href": "#faq" },
+          { "label": "Contact", "href": "#contact" },
+          { "label": "Privacy Policy", "href": "#privacy" }
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Get in touch",
+      "body": "For availability, pricing, and course placement, reach out to schedule an initial consultation.",
+      "primary": { "label": "Enquire now", "href": "#contact" },
+      "secondary": { "label": "View packages", "href": "#packages" },
+      "meta": [
+        { "label": "Time zone:", "value": "Hong Kong / Global online" },
+        { "label": "Platform:", "value": "Zoom · iPad + Apple Pencil recommended" }
+      ]
+    },
+    "bottom": {
+      "wsmath": {
+        "rights": "All rights reserved.",
+        "disclaimer": "WSMath is a premium tutoring brand. Results vary by student commitment and starting level."
+      },
+      "builder": {
+        "label": "Built by",
+        "name": "XiniDev",
+        "siteUrl": "https://xini.dev",
+        "githubUrl": "https://github.com/XiniDev",
+        "stack": "Next.js + Tailwind"
+      }
+    }
   }
 }
