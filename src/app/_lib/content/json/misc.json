@@ -8,7 +8,7 @@
       "name": "WSMath",
       "tagline": "International Mathematics Exam Strategist - 國際數學科考試軍師",
       "description": "Results-driven tutoring for IBDP, A-Level, and IGCSE students. Structured learning, exam strategy, and measurable progress.",
-      "iconSrc": "/hero.png",
+      "iconSrc": "/icon.png",
       "backToTop": { "label": "Back to top", "href": "#content" }
     },
     "columns": [
