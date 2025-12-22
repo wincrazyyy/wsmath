@@ -13,6 +13,13 @@ export function GroupPackageCard({
   groupPrice,
   groupRatePerLesson,
 }: GroupPackageCardProps) {
+  const originalPrice = config.originalPrice ? Number(config.originalPrice) : NaN;
+  const hasOriginal =
+    Number.isFinite(originalPrice) && originalPrice > groupPrice;
+
+  const saveAmount = hasOriginal ? originalPrice - groupPrice : 0;
+  const savePct = hasOriginal ? Math.round((saveAmount / originalPrice) * 100) : 0;
+
   return (
     <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md ring-2 ring-sky-100 transition hover:-translate-y-1 hover:shadow-lg">
       <div className="flex items-center justify-between gap-2">
@@ -29,7 +36,26 @@ export function GroupPackageCard({
       {/* PRICE */}
       <div className="mt-4">
         <p className="text-xs text-neutral-500">{config.programmeLabel}</p>
-        <p className="text-2xl font-semibold tracking-tight text-neutral-900">
+
+        {hasOriginal && (
+          <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+            <span className="line-through">
+              HKD {originalPrice.toLocaleString()}
+            </span>
+
+            <span className="inline-flex items-center rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
+              Save {savePct}%
+            </span>
+
+            <span className="text-neutral-400" aria-hidden>
+              •
+            </span>
+
+            <span>Save HKD {saveAmount.toLocaleString()}</span>
+          </div>
+        )}
+
+        <p className="mt-1 text-2xl font-semibold tracking-tight text-neutral-900">
           HKD {groupPrice.toLocaleString()}
           <span className="ml-1 text-xs font-normal text-neutral-500">
             (~HKD {groupRatePerLesson.toLocaleString()} / lesson)

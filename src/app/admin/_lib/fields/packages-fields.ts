@@ -222,6 +222,12 @@ export const PACKAGES_GROUP_FIELDS: FieldConfig[] = [
     type: "string",
   },
   {
+    path: "group.originalPrice",
+    label: "Group – original price (HKD)",
+    description: "Digits only, e.g. 60000.",
+    type: "string",
+  },
+  {
     path: "group.price",
     label: "Group – full price (HKD)",
     description: "Digits only, e.g. 16800.",

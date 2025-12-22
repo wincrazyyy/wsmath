@@ -47,6 +47,7 @@ export type GroupConfig = {
   programmeLabel: string;
   title: string;
   description: string;
+  originalPrice: string; // parsed as number
   price: string; // parsed as number
   lessons: string; // parsed as number
   points: string[];

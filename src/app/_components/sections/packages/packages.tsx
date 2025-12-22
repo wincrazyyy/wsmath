@@ -19,21 +19,15 @@ function toNumber(value: unknown, fallback = 0): number {
 
 export function Packages() {
   const data = packagesContent as PackagesConfig;
-  const {
-    header,
-    comparison,
-    private: privateConfig,
-    group: groupConfig,
-    iaSupport
-  } = data;
+  const { header, comparison, private: privateConfig, group: groupConfig, iaSupport } = data;
 
   const privateRate = toNumber(privateConfig.hourlyRate);
+
   const groupPrice = toNumber(groupConfig.price);
+  const groupOriginalPrice = toNumber((groupConfig as any).originalPrice, 0); // or groupConfig.originalPrice once typed
   const groupLessons = Math.max(1, toNumber(groupConfig.lessons, 32));
-  const intensiveLessons = Math.max(
-    1,
-    toNumber(privateConfig.intensive.lessons, 8)
-  );
+
+  const intensiveLessons = Math.max(1, toNumber(privateConfig.intensive.lessons, 8));
 
   const private32Hours = privateRate * groupLessons;
   const groupRatePerLesson = Math.round(groupPrice / groupLessons);
@@ -48,6 +42,7 @@ export function Packages() {
           comparison={comparison}
           privateRate={privateRate}
           groupPrice={groupPrice}
+          groupOriginalPrice={groupOriginalPrice}
           private32Hours={private32Hours}
           groupRatePerLesson={groupRatePerLesson}
         />
@@ -66,9 +61,7 @@ export function Packages() {
           />
         </div>
 
-        <IaSupport
-          config={iaSupport}
-        />
+        <IaSupport config={iaSupport} />
       </SectionReveal>
     </>
   );

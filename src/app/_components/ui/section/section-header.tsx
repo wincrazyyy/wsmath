@@ -157,7 +157,7 @@ export function SectionHeader({
 
         {/* Right column: accent card */}
         {showAccent && (
-          <div className="flex md:flex-1 md:h-full justify-center md:justify-end">
+          <div className="flex md:h-full justify-center md:justify-end">
             <div className="relative w-full max-w-none md:max-w-md h-full flex">
               <div
                 className="pointer-events-none absolute -inset-4 -z-10 bg-gradient-to-br from-violet-500/30 via-sky-400/20 to-fuchsia-500/30 blur-2xl"
@@ -199,7 +199,7 @@ export function SectionHeader({
                 )}
 
                 {accentColumns.length > 0 && (
-                  <div className="mt-2 grid grid-cols-1 gap-3 text-[11px] text-slate-700 md:grid-cols-2 md:text-xs">
+                  <div className="mt-2 grid grid-cols-2 gap-3 text-[11px] text-slate-700 md:text-xs">
                     {accentColumns.map((col) => (
                       <div key={col.title}>
                         <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
