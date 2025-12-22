@@ -31,7 +31,7 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
     note: "Used on the homepage hero. Upload a square-ish PNG image with transparent background.",
   },
   "about.hero.imageSrc": {
-    note: "Used on the About section hero. Upload a horizontal PNG image with transparent background.",
+    note: "Used on the About section hero. Upload a horizontal JPG image banner.",
   },
   "packages.group.leaflet.pages": {
     note: "Upload multiple images for the group package leaflet pages. Upload all leaflet pages in PNG format.",

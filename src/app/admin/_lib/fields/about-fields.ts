@@ -88,7 +88,7 @@ export const ABOUT_HERO_FIELDS: FieldConfig[] = [
   {
     path: "hero.imageSrc",
     label: "Hero image path",
-    description: "Path to the horizontal image, e.g. /about-hero.png.",
+    description: "Path to the horizontal image, e.g. /about-hero.jpg.",
     type: "string",
   },
   {
