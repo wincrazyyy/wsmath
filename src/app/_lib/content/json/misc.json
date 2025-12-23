@@ -3,6 +3,34 @@
     "phoneNumber": "85293199914",
     "prefillText": "Hi Winson Siu, I'm interested in your Math tutoring service!"
   },
+  "privacyPolicy": {
+    "modalTitle": "Privacy Policy",
+    "lastUpdatedLabel": "Last updated:",
+    "lastUpdated": "2025-12-22",
+    "intro": "This Privacy Policy explains how WSMath handles information when you visit our website or contact us.",
+    "sections": [
+      {
+        "heading": "What we collect",
+        "body": "If you contact us (e.g. via WhatsApp), we may receive information you provide such as your name, contact details, school year, and message content."
+      },
+      {
+        "heading": "How we use information",
+        "body": "We use information to respond to enquiries, schedule lessons, and provide tutoring services."
+      },
+      {
+        "heading": "Sharing",
+        "body": "We do not sell your information. We may use service providers required to operate the website (e.g. hosting), and only when necessary."
+      },
+      {
+        "heading": "Retention & requests",
+        "body": "We keep enquiry details only as long as needed for communication and service delivery. You may request access to or deletion of your messages by contacting us."
+      }
+    ],
+    "footerHintPrefix": "Click outside or press",
+    "footerHintKey": "Esc",
+    "footerHintSuffix": "to close.",
+    "closeButton": "Close"
+  },
   "footer": {
     "brand": {
       "name": "WSMath",
