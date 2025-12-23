@@ -14,28 +14,32 @@
   "featured": [
     {
       "name": "JC (2024)",
-      "role": "IBDP AAHL — From Level 1 to 7 (The University of Hong Kong)",
+      "role": "IBDP AAHL — From Level 1 to 7",
+      "university": "The University of Hong Kong",
       "quote": "Siu Sir is an exceptional educator with a genuine passion for teaching and fostering young talent. Over the past six years, Siu Sir has been an unwavering support and inspiration throughout my mathematical journey. His long-term commitment to my education dedication has been evident through the precise and thoughtful compilation of past paper questions, detailed booklets, and notes for every chapter we covered. They provided invaluable practice and reinforced my understanding in a structured manner.",
       "avatarSrc": "/avatars/featured-1.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Bill Ting (2021)",
-      "role": "Edexcel IAL Math + Further Math — From F to A* (University of Cambridge)",
+      "role": "Edexcel IAL Math + Further Math — From F to A*",
+      "university": "University of Cambridge",
       "quote": "Winson 老師的教學風格十分契合我的學習模式，能把艱深乏味的內容講得有趣而易懂。對於我的疑問，老師都會耐心解答，直至我真正明白，因此我非常享受每一堂課。每節課老師均有充分規劃與準備，並常自願延長課堂時間完成教學。課後他亦會精心挑選課本及歷屆 Past Paper 題目讓我練習，並整理專屬錯題本，協助我迅速鞏固弱項。老師亦會先親自示範解題思路，讓我理解評分準則，從而累積實戰經驗，甚至預測出題方向。Winson 不僅是一位專業而友善的老師，更像一位朋友，我非常感恩能遇到這位良師益友，陪伴我面對學習上的挑戰。",
       "avatarSrc": "/avatars/featured-2.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Joy Angela Sun (2022)",
-      "role": "IBDP AAHL — From 5 to 7 [in 10 months] (The Chinese University of Hong Kong)",
+      "role": "IBDP AAHL — From 5 to 7 [in 10 months]",
+      "university": "The Chinese University of Hong Kong",
       "quote": "Winson is the best math tutor I’ve had. During my final year of IBDP, his experience-based, past-paper-driven approach was highly effective. He provided targeted questions, clear revision notes, and tailored assignments. With his guidance, I achieved a grade 7 in Math AAHL. Definitely a good choice to find him for math tutorials!!",
       "avatarSrc": "/avatars/featured-3.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Michelle Chan (2021)",
-      "role": "Edexcel IAL Further Math — From F to A* (University of Melbourne)",
+      "role": "Edexcel IAL Further Math — From F to A*",
+      "university": "University of Melbourne",
       "quote": "Winson was a beneficial tutor who helped me achieve A*s for IAL Math and IAL Further Math. He was always well prepared and gave many past paper questions for practice after every lesson. He’s also an easy-going guy with a true passion for tutoring. I highly recommend him for exam prep!",
       "avatarSrc": "/avatars/featured-4.png",
       "useDefaultAvatar": true
@@ -44,35 +48,40 @@
   "carousel": [
     {
       "name": "Vera Jing (2021)",
-      "role": "IBDP AAHL — From 6 to 7 (University College London)",
+      "role": "IBDP AAHL — From 6 to 7",
+      "university": "University College London",
       "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. We started regular tuition in 2019. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions! With his help, I achieved a grade of 7 in Math AAHL.",
       "avatarSrc": "/avatars/carousel-1.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Jasmine Yang (2023)",
-      "role": "IBDP AAHL — From 2 to 6 (The University of Edinburgh)",
+      "role": "IBDP AAHL — From 2 to 6",
+      "university": "The University of Edinburgh",
       "quote": "Mr. Siu is hands down the best math teacher I've come across. His teaching style is crystal clear, with easy-to-follow structures and a stash of super-relevant questions. His strong sense of responsibility and genuine passion for tutoring make him exceptional. Thanks to his guidance, my IBDP Math AAHL journey has significantly improved.",
       "avatarSrc": "/avatars/carousel-2.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Sharon Deng (2023)",
-      "role": "IBDP AASL — From 3 to 7 [in 1.5 months] (The University of Hong Kong)",
+      "role": "IBDP AASL — From 3 to 7 [in 1.5 months]",
+      "university": "The University of Hong Kong",
       "quote": "我的学校数学老师非常不负责，我迫切地需要一个合适的数学老师帮我查漏补缺，不然我大考的时侯可能就得望着没做几道题的卷子无语凝噎、默默流泪了。我与Winson老师让学生直接实操Past Paper的教学方式十分契合，且迅速总结出Past Papers的做题方式。让我在IBDP的最后阶段成功取得了7分的成绩。很推荐正在suffer in math的IBer们尝试尝试Winson的课程~",
       "avatarSrc": "/avatars/carousel-3.png",
       "useDefaultAvatar": true
     },
     {
       "name": "CL (2023)",
-      "role": "IBDP AASL — From 4 to 7 (The University of Hong Kong)",
+      "role": "IBDP AASL — From 4 to 7",
+      "university": "The University of Hong Kong",
       "quote": "Winson 老师是一位满怀责任心的数学老师。他会在课堂中先带领我学习及总结单元知识，接下来将挑选合适的题目以供我练习。如果期间有任何不解，老师都会针对性地进行详细的讲解。Winson老师亦会在课后为我整理好Past Paper Booklet，以便我课后进行复习及巩固。在老师的帮助下，我每次的数学考试皆取得了6-7的分数。 ",
       "avatarSrc": "/avatars/carousel-4.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Bill Zhang (2023)",
-      "role": "CAIE Math — From F to A* (The University of Hong Kong)",
+      "role": "CAIE Math — From F to A*",
+      "university": "The University of Hong Kong",
       "quote": "Winson 老师的上课风格轻松无压力，且教书模式灵活变通，将複杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定製的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之馀的刷题效率。在我高中的最后一年，更是一鼓作气取得了A-Level Further Math A*。 ",
       "avatarSrc": "",
       "useDefaultAvatar": true
