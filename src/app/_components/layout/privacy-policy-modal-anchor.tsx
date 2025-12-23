@@ -2,17 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Props = {
-  href?: string;          // keep for semantics / right-click copy link
-  label?: string;         // link text in footer
-  className?: string;     // same styling as other footer links
+type PrivacyPolicyModalAnchorProps = {
+  href?: string;
+  label?: string;
+  className?: string;
 };
 
 export function PrivacyPolicyModalAnchor({
   href = "#privacy",
   label = "Privacy Policy",
   className = "",
-}: Props) {
+}: PrivacyPolicyModalAnchorProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
