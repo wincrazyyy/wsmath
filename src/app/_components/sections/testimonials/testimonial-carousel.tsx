@@ -141,6 +141,9 @@ function Card({ t }: { t: Testimonial }) {
         <div>
           <p className="font-medium leading-tight">{t.name}</p>
           {t.role && <p className="text-xs text-neutral-500">{t.role}</p>}
+          {t.university && (
+            <p className="text-xs text-neutral-500">{t.university}</p>
+          )}
         </div>
       </div>
 

@@ -9,6 +9,7 @@ export type TestimonialsHeaderConfig = {
 export type Testimonial = {
   name: string;
   role?: string;
+  university?: string;
   quote: string;
   avatarSrc?: string;
   useDefaultAvatar?: boolean;
