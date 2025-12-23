@@ -9,36 +9,75 @@
       "tagline": "International Mathematics Exam Strategist - 國際數學科考試軍師",
       "description": "Results-driven tutoring for IBDP, A-Level, and IGCSE students. Structured learning, exam strategy, and measurable progress.",
       "iconSrc": "/icon.png",
-      "backToTop": { "label": "Back to top", "href": "#content" }
+      "backToTop": {
+        "label": "Back to top",
+        "href": "#content"
+      }
     },
     "columns": [
       {
         "title": "Programs",
         "links": [
-          { "label": "1-to-1 Coaching", "href": "#packages" },
-          { "label": "Group Classes", "href": "#packages" },
-          { "label": "Results & Case Studies", "href": "#results" },
-          { "label": "Student Testimonials", "href": "#testimonials" }
+          {
+            "label": "1-to-1 Coaching",
+            "href": "#packages"
+          },
+          {
+            "label": "Group Classes",
+            "href": "#packages"
+          },
+          {
+            "label": "Results & Case Studies",
+            "href": "#results"
+          },
+          {
+            "label": "Student Testimonials",
+            "href": "#testimonials"
+          }
         ]
       },
       {
         "title": "Resources",
         "links": [
-          { "label": "About WSMath", "href": "#about" },
-          { "label": "FAQs", "href": "#faq" },
-          { "label": "Contact", "href": "#contact" },
-          { "label": "Privacy Policy", "href": "#privacy" }
+          {
+            "label": "About WSMath",
+            "href": "#about"
+          },
+          {
+            "label": "FAQs",
+            "href": "#faq"
+          },
+          {
+            "label": "Contact",
+            "href": "#contact"
+          },
+          {
+            "label": "Privacy Policy",
+            "href": "#privacy"
+          }
         ]
       }
     ],
     "cta": {
       "title": "Get in touch",
       "body": "For availability, pricing, and course placement, reach out to schedule an initial consultation.",
-      "primary": { "label": "Enquire now", "href": "#contact" },
-      "secondary": { "label": "View packages", "href": "#packages" },
+      "primary": {
+        "label": "Enquire now",
+        "href": "#contact"
+      },
+      "secondary": {
+        "label": "View packages",
+        "href": "#packages"
+      },
       "meta": [
-        { "label": "Time zone:", "value": "Hong Kong / Global online" },
-        { "label": "Platform:", "value": "Zoom · iPad + Apple Pencil recommended" }
+        {
+          "label": "Time zone:",
+          "value": "Hong Kong / Global online"
+        },
+        {
+          "label": "Platform:",
+          "value": "Zoom · iPad + Apple Pencil recommended"
+        }
       ]
     },
     "bottom": {
