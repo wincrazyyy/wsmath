@@ -73,7 +73,14 @@ function testimonialFields(
       path: `${basePath}.role`,
       label: `${labelPrefix} – Role / result`,
       description:
-        "Short line under the name, e.g. “IBDP AAHL — Level 7”.",
+        "Short line under the name, e.g. “IBDP AAHL — From 1 to 7 [in 10 months]”. (No university here.)",
+      type: "string",
+    },
+    {
+      path: `${basePath}.university`,
+      label: `${labelPrefix} – University`,
+      description:
+        "Optional. University name shown separately (no brackets), e.g. “The University of Hong Kong”.",
       type: "string",
     },
     {
@@ -95,26 +102,20 @@ function testimonialFields(
       description:
         "A default avatar could be used instead of the image for the testimonial.",
       type: "boolean",
-      checkboxLabel: "Use default avatar icon"
+      checkboxLabel: "Use default avatar icon",
     },
   ];
 }
 
 export const TESTIMONIALS_FEATURED_FIELDS: FieldConfig[] = [
-  ...repeatFields(
-    "featured",
-    "Featured",
-    4,
-    (path, label) => testimonialFields(path, label)
-  )
+  ...repeatFields("featured", "Featured", 4, (path, label) =>
+    testimonialFields(path, label)
+  ),
 ];
 
 export function makeTestimonialsCarouselFields(count: number): FieldConfig[] {
-  return repeatFields(
-    "carousel",
-    "Carousel",
-    count,
-    (path, label) => testimonialFields(path, label)
+  return repeatFields("carousel", "Carousel", count, (path, label) =>
+    testimonialFields(path, label)
   );
 }
 
