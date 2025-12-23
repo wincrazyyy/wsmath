@@ -1,36 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const PRIVACY_POLICY = {
-  modalTitle: "Privacy Policy",
-  lastUpdatedLabel: "Last updated:",
-  lastUpdated: "2025-12-22",
-  intro:
-    "This Privacy Policy explains how WSMath handles information when you visit our website or contact us.",
-  sections: [
-    {
-      heading: "What we collect",
-      body: "If you contact us (e.g. via WhatsApp), we may receive information you provide such as your name, contact details, school year, and message content.",
-    },
-    {
-      heading: "How we use information",
-      body: "We use information to respond to enquiries, schedule lessons, and provide tutoring services.",
-    },
-    {
-      heading: "Sharing",
-      body: "We do not sell your information. We may use service providers required to operate the website (e.g. hosting), and only when necessary.",
-    },
-    {
-      heading: "Retention & requests",
-      body: "We keep enquiry details only as long as needed for communication and service delivery. You may request access to or deletion of your messages by contacting us.",
-    },
-  ],
-  footerHintPrefix: "Click outside or press",
-  footerHintKey: "Esc",
-  footerHintSuffix: "to close.",
-  closeButton: "Close",
-} as const;
+import miscContent from "@/app/_lib/content/json/misc.json";
+import type { MiscConfig } from "@/app/_lib/content/types/misc.types";
 
 type PrivacyPolicyModalAnchorProps = {
   href?: string;
@@ -43,6 +15,8 @@ export function PrivacyPolicyModalAnchor({
   label = "Privacy Policy",
   className = "",
 }: PrivacyPolicyModalAnchorProps) {
+  const { privacyPolicy } = miscContent as MiscConfig;
+
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLAnchorElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -101,7 +75,7 @@ export function PrivacyPolicyModalAnchor({
               ref={panelRef}
               role="dialog"
               aria-modal="true"
-              aria-label={PRIVACY_POLICY.modalTitle}
+              aria-label={privacyPolicy.modalTitle}
               tabIndex={-1}
               onMouseDown={(e) => e.stopPropagation()}
               onTouchStart={(e) => e.stopPropagation()}
@@ -110,10 +84,10 @@ export function PrivacyPolicyModalAnchor({
               <div className="flex items-start justify-between gap-4 border-b border-neutral-200 p-5">
                 <div>
                   <p className="text-sm font-semibold text-neutral-900">
-                    {PRIVACY_POLICY.modalTitle}
+                    {privacyPolicy.modalTitle}
                   </p>
                   <p className="mt-1 text-xs text-neutral-500">
-                    {PRIVACY_POLICY.lastUpdatedLabel} {PRIVACY_POLICY.lastUpdated}
+                    {privacyPolicy.lastUpdatedLabel} {privacyPolicy.lastUpdated}
                   </p>
                 </div>
 
@@ -129,10 +103,10 @@ export function PrivacyPolicyModalAnchor({
               </div>
 
               <div className="max-h-[70vh] overflow-y-auto p-5 text-sm text-neutral-700">
-                <p className="leading-relaxed">{PRIVACY_POLICY.intro}</p>
+                <p className="leading-relaxed">{privacyPolicy.intro}</p>
 
                 <div className="mt-5 space-y-4">
-                  {PRIVACY_POLICY.sections.map((s) => (
+                  {privacyPolicy.sections.map((s) => (
                     <section key={s.heading}>
                       <p className="font-medium text-neutral-900">{s.heading}</p>
                       <p className="mt-1 leading-relaxed">{s.body}</p>
@@ -143,16 +117,16 @@ export function PrivacyPolicyModalAnchor({
 
               <div className="flex items-center justify-between gap-3 border-t border-neutral-200 p-4">
                 <p className="text-xs text-neutral-500">
-                  {PRIVACY_POLICY.footerHintPrefix}{" "}
-                  <span className="font-medium">{PRIVACY_POLICY.footerHintKey}</span>{" "}
-                  {PRIVACY_POLICY.footerHintSuffix}
+                  {privacyPolicy.footerHintPrefix}{" "}
+                  <span className="font-medium">{privacyPolicy.footerHintKey}</span>{" "}
+                  {privacyPolicy.footerHintSuffix}
                 </p>
                 <button
                   type="button"
                   onClick={close}
                   className="rounded-xl bg-neutral-900 px-4 py-2 text-xs font-semibold text-white transition hover:bg-neutral-800"
                 >
-                  {PRIVACY_POLICY.closeButton}
+                  {privacyPolicy.closeButton}
                 </button>
               </div>
             </div>
