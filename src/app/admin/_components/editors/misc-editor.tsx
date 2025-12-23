@@ -6,12 +6,11 @@ import { MiscConfig } from "@/app/_lib/content/types/misc.types";
 import {
   WHATSAPP_GLOBAL_FIELDS,
   FOOTER_FIELDS,
-  MISC_FIELDS
+  MISC_FIELDS,
+  PRIVACY_POLICY_FIELDS,
 } from "@/app/admin/_lib/fields/misc-fields";
 import { JsonEditor } from "./json-editor";
-import {
-  type JsonEditorTabConfig,
-} from "@/app/admin/_lib/json-editor-helpers";
+import { type JsonEditorTabConfig } from "@/app/admin/_lib/json-editor-helpers";
 
 type MiscEditorProps<T extends MiscConfig> = {
   data: T;
@@ -32,13 +31,21 @@ export function MiscEditor<T extends MiscConfig>({
         "Edit the WhatsApp phone number and pre-filled message used in the WhatsApp CTA button.",
     },
     {
+      key: "privacy",
+      label: "Privacy Policy",
+      fields: PRIVACY_POLICY_FIELDS,
+      panelTitle: "Privacy Policy – modal content",
+      panelDescription:
+        "Edit the privacy policy text shown in the modal opened from the footer link.",
+    },
+    {
       key: "footer",
       label: "Footer",
       fields: FOOTER_FIELDS,
       panelTitle: "Footer – global settings",
       panelDescription:
         "Edit the footer branding, columns, CTA block, and bottom bar.",
-    }
+    },
   ];
 
   return (

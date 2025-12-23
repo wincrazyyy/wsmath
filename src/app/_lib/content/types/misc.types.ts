@@ -1,5 +1,27 @@
 // src/app/_lib/content/types/misc.types.ts
 
+export type WhatsappConfig = {
+  phoneNumber: string;
+  prefillText?: string;
+};
+
+export type PrivacyPolicySection = {
+  heading: string;
+  body: string;
+};
+
+export type PrivacyPolicyConfig = {
+  modalTitle: string;
+  lastUpdatedLabel: string;
+  lastUpdated: string;
+  intro: string;
+  sections: PrivacyPolicySection[];
+  footerHintPrefix: string;
+  footerHintKey: string;
+  footerHintSuffix: string;
+  closeButton: string;
+};
+
 export type LinkItem = {
   label: string;
   href: string;
@@ -52,12 +74,8 @@ export type FooterConfig = {
   bottom: FooterBottomConfig;
 };
 
-export type WhatsappConfig = {
-  phoneNumber: string;
-  prefillText?: string;
-};
-
 export type MiscConfig = {
   whatsapp: WhatsappConfig;
+  privacyPolicy: PrivacyPolicyConfig;
   footer: FooterConfig;
 };
