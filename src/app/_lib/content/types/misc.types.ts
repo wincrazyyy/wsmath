@@ -45,6 +45,15 @@ export type FooterBrandConfig = {
   backToTop: LinkItem;
 };
 
+export type FooterSocialConfig = {
+  label: string;
+  links: {
+    facebook: string;
+    instagram: string;
+    xhs: string;
+  };
+};
+
 export type FooterCtaConfig = {
   title: string;
   body: string;
@@ -69,6 +78,7 @@ export type FooterBottomConfig = {
 
 export type FooterConfig = {
   brand: FooterBrandConfig;
+  social: FooterSocialConfig;
   columns: FooterColumn[];
   cta: FooterCtaConfig;
   bottom: FooterBottomConfig;

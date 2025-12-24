@@ -158,6 +158,32 @@ export const FOOTER_FIELDS: FieldConfig[] = [
     type: "string",
   },
 
+  // Socials block
+  {
+    path: "footer.social.label",
+    label: "Footer socials – section label",
+    description: "Label for the social links section (e.g. “Social”).",
+    type: "string",
+  },
+  {
+    path: "footer.social.links.facebook",
+    label: "Footer socials – Facebook URL",
+    description: "Full URL to the Facebook profile/page.",
+    type: "string",
+  },
+  {
+    path: "footer.social.links.instagram",
+    label: "Footer socials – Instagram URL",
+    description: "Full URL to the Instagram profile/page.",
+    type: "string",
+  },
+  {
+    path: "footer.social.links.xhs",
+    label: "Footer socials – 小红书 URL",
+    description: "Full URL to the 小红书 profile/page.",
+    type: "string",
+  },
+
   // Columns: titles + link labels
   {
     path: "footer.columns.0.title",

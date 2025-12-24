@@ -3,13 +3,6 @@ import miscContent from "@/app/_lib/content/json/misc.json";
 import type { MiscConfig } from "@/app/_lib/content/types/misc.types";
 import { PrivacyPolicyModalAnchor } from "./privacy-policy-modal-anchor";
 
-const SOCIALS = {
-  facebook: "https://www.facebook.com/profile.php?id=61564257721098",
-  instagram:
-    "https://www.instagram.com/wsmath_ib_alevel?igsh=a2V0d2xieHk3cXMx&utm_source=qr",
-  xhs: "https://xhslink.com/m/A3RfIEPO7Wf",
-};
-
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const { footer } = miscContent as MiscConfig;
@@ -56,12 +49,12 @@ export function SiteFooter() {
             {/* Client socials (cleaner row styling) */}
             <div className="mt-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
-                Social
+                {footer.social.label}
               </p>
 
               <div className="mt-2 flex items-center gap-2">
                 <a
-                  href={SOCIALS.facebook}
+                  href={footer.social.links.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WSMath on Facebook"
@@ -83,7 +76,7 @@ export function SiteFooter() {
                 </a>
 
                 <a
-                  href={SOCIALS.instagram}
+                  href={footer.social.links.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WSMath on Instagram"
@@ -105,7 +98,7 @@ export function SiteFooter() {
                 </a>
 
                 <a
-                  href={SOCIALS.xhs}
+                  href={footer.social.links.xhs}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="WSMath on 小红书"
