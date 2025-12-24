@@ -3,6 +3,14 @@ import miscContent from "@/app/_lib/content/json/misc.json";
 import type { MiscConfig } from "@/app/_lib/content/types/misc.types";
 import { PrivacyPolicyModalAnchor } from "./privacy-policy-modal-anchor";
 
+const SOCIALS = {
+  facebook: "https://www.facebook.com/profile.php?id=61564257721098",
+  instagram:
+    "https://www.instagram.com/wsmath_ib_alevel?igsh=a2V0d2xieHk3cXMx&utm_source=qr",
+  xhs: "https://xhslink.com/m/A3RfIEPO7Wf",
+};
+
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const { footer } = miscContent as MiscConfig;
@@ -118,7 +126,46 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div className="text-xs text-neutral-500">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+            {/* Client socials */}
+            <span className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1">
+              <span className="font-medium text-neutral-700">Follow</span>
+
+              <a
+                href={SOCIALS.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WSMath on Facebook"
+                title="Facebook"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-700 transition hover:bg-neutral-50 hover:text-neutral-900"
+              >
+                <FacebookIcon className="h-4 w-4" />
+              </a>
+
+              <a
+                href={SOCIALS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WSMath on Instagram"
+                title="Instagram"
+                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-700 transition hover:bg-neutral-50 hover:text-neutral-900"
+              >
+                <InstagramIcon className="h-4 w-4" />
+              </a>
+
+              <a
+                href={SOCIALS.xhs}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WSMath on 小红书"
+                title="小红书"
+                className="inline-flex h-7 items-center justify-center rounded-full border border-neutral-200 bg-white px-2 text-[11px] font-semibold text-neutral-700 transition hover:bg-neutral-50 hover:text-neutral-900"
+              >
+                小红书
+              </a>
+            </span>
+
+            {/* Builder pill (existing) */}
             <span className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1">
               <span className="font-medium text-neutral-700">
                 {footer.bottom.builder.label}
@@ -158,6 +205,24 @@ export function SiteFooter() {
         </div>
       </div>
     </footer>
+  );
+}
+
+function FacebookIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M13.5 22v-8h2.7l.4-3H13.5V9.1c0-.9.2-1.5 1.5-1.5h1.6V5a22 22 0 0 0-2.4-.1C11.8 4.9 10 6.3 10 9v2H7.3v3H10v8h3.5z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+      <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4z" />
+      <path d="M12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
+      <path d="M17.6 6.4a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+    </svg>
   );
 }
 
