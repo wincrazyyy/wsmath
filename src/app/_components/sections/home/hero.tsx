@@ -91,7 +91,7 @@ export function Hero() {
             alt="WSMath hero"
             fill
             priority
-            className="object-contain object-top lg:object-cover"
+            className="object-cover object-top"
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />
 
@@ -99,28 +99,32 @@ export function Hero() {
           {hero.stat?.value && (
             <div
               className={[
-                "pointer-events-none absolute inset-x-4 bottom-4 z-10",
+                "pointer-events-none absolute inset-x-4 bottom-3 z-10", // bottom-4 -> bottom-3
                 "transition-all duration-700 ease-out",
                 entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
               ].join(" ")}
             >
-              <div className="relative mx-auto w-full max-w-[620px] rounded-2xl border border-white/60 bg-white/75 px-5 py-4 shadow-lg backdrop-blur">
-                {/* subtle glow */}
+              <div className="relative mx-auto w-full max-w-[620px] rounded-2xl border border-white/60 bg-white/75 px-4 py-2.5 shadow-lg backdrop-blur sm:px-5 sm:py-4">
+                {/* subtle glow (smaller on mobile) */}
                 <div
                   aria-hidden
-                  className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-400/25 blur-2xl"
+                  className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-400/25 blur-xl sm:-inset-1 sm:blur-2xl"
                 />
 
-                <div className="relative flex flex-col items-center gap-3 text-center sm:flex-row sm:items-center sm:justify-center sm:gap-4 sm:text-left">
-                  <div className="shrink-0 rounded-xl bg-white/70 px-4 py-2 ring-1 ring-black/5">
-                    <div className="text-3xl font-extrabold leading-none tracking-tight md:text-4xl tabular-nums">
+                <div className="relative flex flex-col items-center gap-2 text-center sm:flex-row sm:items-center sm:justify-center sm:gap-4 sm:text-left">
+                  <div className="shrink-0 rounded-xl bg-white/70 px-3 py-1.5 ring-1 ring-black/5 sm:px-4 sm:py-2">
+                    <div className="text-2xl font-extrabold leading-none tracking-tight tabular-nums sm:text-3xl md:text-4xl">
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                         {hoursText}
                       </span>
+                      {/* mobile-only suffix */}
+                      <span className="ml-1 text-base font-bold text-neutral-900 sm:hidden">
+                        / hrs
+                      </span>
                     </div>
                   </div>
-
-                  <div className="space-y-0.5">
+                  {/* desktop (sm+) label stack */}
+                  <div className="hidden space-y-0.5 sm:block">
                     <div className="text-sm font-semibold text-neutral-900 md:text-base">
                       {hero.stat.label}
                     </div>

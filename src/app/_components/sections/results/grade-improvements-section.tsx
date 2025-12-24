@@ -291,16 +291,6 @@ export function GradeImprovementsSection({
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
-          <div className="flex flex-col justify-between rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
-            <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
-              {topGrade ? hashToGrade(summaryCards.top, topGrade) : summaryCards.top}
-            </div>
-            <div className="text-lg font-semibold text-indigo-800">
-              {totalTop}
-              <span className="ml-2 text-xs font-semibold text-indigo-600">({pct(totalTop)}%)</span>
-            </div>
-          </div>
-
           <div className="flex flex-col justify-between rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
             <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
               {secondGrade
@@ -315,13 +305,13 @@ export function GradeImprovementsSection({
             </div>
           </div>
 
-          <div className="flex flex-col justify-between rounded-xl bg-rose-50 ring-1 ring-rose-300 px-3 py-2">
-            <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
-              {summaryCards.bigJumps}
+          <div className="flex flex-col justify-between rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
+            <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
+              {topGrade ? hashToGrade(summaryCards.top, topGrade) : summaryCards.top}
             </div>
-            <div className="text-lg font-semibold text-rose-800">
-              {bigJumps}
-              <span className="ml-2 text-xs font-semibold text-rose-600">({pct(bigJumps)}%)</span>
+            <div className="text-lg font-semibold text-indigo-800">
+              {totalTop}
+              <span className="ml-2 text-xs font-semibold text-indigo-600">({pct(totalTop)}%)</span>
             </div>
           </div>
 
@@ -334,6 +324,16 @@ export function GradeImprovementsSection({
               <span className="ml-2 text-xs font-semibold text-amber-600">
                 ({pct(improvements)}%)
               </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-between rounded-xl bg-rose-50 ring-1 ring-rose-300 px-3 py-2">
+            <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
+              {summaryCards.bigJumps}
+            </div>
+            <div className="text-lg font-semibold text-rose-800">
+              {bigJumps}
+              <span className="ml-2 text-xs font-semibold text-rose-600">({pct(bigJumps)}%)</span>
             </div>
           </div>
         </div>
