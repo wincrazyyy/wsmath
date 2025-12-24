@@ -35,8 +35,8 @@
     "privateLabel": "Standard 1-to-1 rate",
     "groupLabel": "Group course investment",
     "title": "Value comparison",
-    "privateLinePrefix": "32 hours 1-to-1 ≈",
-    "groupLineSuffix": "for 32 structured group sessions."
+    "privateLinePrefix": "32+ hours 1-to-1 ≈",
+    "groupLineSuffix": "for 32+ structured group sessions."
   },
   "private": {
     "label": "Premium 1-to-1",
@@ -65,19 +65,19 @@
         "Referral rebate of up to HKD 3,000 per student referred."
       ]
     },
-    "buttonNote": "Mention “1-to-1 8-lesson package” and your current grade / target score."
+    "privateSrc": "/private-package.jpg"
   },
   "group": {
     "label": "High-value group",
     "tag": "Most popular",
     "programmeLabel": "Full programme",
-    "title": "32-lesson Zoom group course",
+    "title": "32+ lesson Zoom group course",
     "description": "Structured syllabus for IBMYP / IGCSE students bridging into IBDP AASL / AISL, with full notes and exam-style practice.",
     "originalPrice": "60000",
     "price": "19800",
     "lessons": "32",
     "points": [
-      "Approx. 32 live Zoom lessons + high-quality teaching videos.",
+      "Approx. 32+ live Zoom lessons + high-quality teaching videos.",
       "By-topic notes, GoodNotes materials, and curated past-paper sets.",
       "Designed so motivated students can rely on group only and still reach strong exam results."
     ],

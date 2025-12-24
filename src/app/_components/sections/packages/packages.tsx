@@ -30,7 +30,7 @@ export function Packages() {
   const intensiveLessons = Math.max(1, toNumber(privateConfig.intensive.lessons, 8));
 
   const private32Hours = privateRate * groupLessons;
-  const groupRatePerLesson = Math.round(groupPrice / groupLessons);
+  const groupRatePerLesson = Math.floor(Math.round(groupPrice / groupLessons) / 100) * 100;
   const eightLessonBlockCost = privateRate * intensiveLessons;
 
   return (

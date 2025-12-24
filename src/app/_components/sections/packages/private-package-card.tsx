@@ -1,11 +1,12 @@
 // app/_components/sections/packages/private-package-card.tsx
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import type { PrivateConfig } from "@/app/_lib/content/types/packages.types";
-import { WhatsAppButton } from "../../ui/whatsapp-button";
 import styles from "./private-package-card.module.css";
+import { BookButton } from "../../ui/book-button";
 
 interface PrivatePackageCardProps {
   config: PrivateConfig;
@@ -114,16 +115,23 @@ export function PrivatePackageCard({
         </ul>
       </div>
 
+      {/* image (between content and WhatsApp) */}
+      <div className="relative z-10 mt-6 flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 min-h-[140px]">
+        <Image
+          src="/private-package.jpg"
+          alt="Tutor pointing upward"
+          fill
+          sizes="(max-width: 640px) 100vw, 560px"
+          className="object-cover object-top"
+          priority
+        />
+      </div>
+
       <div className="relative z-10 mt-auto pt-5">
-        <WhatsAppButton
-          width={220}
-          height={56}
-          imgClassName="h-14 w-auto"
+        <BookButton
+          label="Book a private coaching lesson"
           ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
         />
-        {config.buttonNote && (
-          <p className="mt-2 text-[11px] text-neutral-500">{config.buttonNote}</p>
-        )}
       </div>
     </article>
   );

@@ -1,6 +1,7 @@
 // app/_components/sections/packages/group-package-card.tsx
 import type { GroupConfig } from "@/app/_lib/content/types/packages.types";
 import { GroupLeafletViewer } from "./group-leaflet-viewer";
+import { BookButton } from "../../ui/book-button";
 
 interface GroupPackageCardProps {
   config: GroupConfig;
@@ -79,6 +80,13 @@ export function GroupPackageCard({
 
       <div className="mt-5">
         <GroupLeafletViewer />
+      </div>
+
+      <div className="relative z-10 mt-auto pt-5">
+        <BookButton
+          label="Book the group course"
+          ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
+        />
       </div>
     </article>
   );
