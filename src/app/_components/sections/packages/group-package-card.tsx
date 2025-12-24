@@ -22,20 +22,36 @@ export function GroupPackageCard({
   const savePct = hasOriginal ? Math.round((saveAmount / originalPrice) * 100) : 0;
 
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md ring-2 ring-sky-100 transition hover:-translate-y-1 hover:shadow-lg">
-      <div className="flex items-center justify-between gap-2">
-        <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 px-3 py-1 text-[11px] font-medium text-white">
+    <article
+      className={[
+        "relative flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md",
+        "ring-2 ring-emerald-100/80 transition hover:-translate-y-1 hover:shadow-lg",
+      ].join(" ")}
+    >
+      {/* subtle group accent */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 opacity-70"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-6 bg-gradient-to-r from-emerald-400/10 via-teal-400/10 to-cyan-400/10 blur-2xl"
+      />
+
+      <div className="relative flex items-center justify-between gap-2">
+        <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-3 py-1 text-[11px] font-medium text-white">
           {config.label}
         </div>
+
         {config.tag && (
-          <span className="rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-sky-700">
+          <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-emerald-700">
             {config.tag}
           </span>
         )}
       </div>
 
       {/* PRICE */}
-      <div className="mt-4">
+      <div className="relative mt-4">
         <p className="text-xs text-neutral-500">{config.programmeLabel}</p>
 
         {hasOriginal && (
@@ -64,28 +80,29 @@ export function GroupPackageCard({
         </p>
       </div>
 
-      <h3 className="mt-3 text-lg font-semibold tracking-tight text-neutral-900 md:text-xl">
+      <h3 className="relative mt-3 text-lg font-semibold tracking-tight text-neutral-900 md:text-xl">
         {config.title}
       </h3>
-      <p className="mt-1 text-sm text-neutral-600">{config.description}</p>
+      <p className="relative mt-1 text-sm text-neutral-600">{config.description}</p>
 
-      <ul className="mt-4 space-y-2 text-sm text-neutral-700">
+      <ul className="relative mt-4 space-y-2 text-sm text-neutral-700">
         {(config.points ?? []).map((item) => (
           <li key={item} className="flex items-start gap-2">
-            <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
+            <span className="mt-[0.35rem] h-2 w-2 flex-none rounded-full bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600" />
             {item}
           </li>
         ))}
       </ul>
 
-      <div className="mt-5">
+      <div className="relative mt-5">
         <GroupLeafletViewer />
       </div>
 
       <div className="relative z-10 mt-auto pt-5">
         <BookButton
+          variant="group"
           label={config.bookLabel}
-          ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
+          ariaLabel="Enquire about group lessons on WhatsApp"
         />
       </div>
     </article>
