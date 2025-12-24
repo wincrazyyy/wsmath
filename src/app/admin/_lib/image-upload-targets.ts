@@ -33,6 +33,9 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
   "about.hero.imageSrc": {
     note: "Used on the About section hero. Upload a horizontal JPG image banner.",
   },
+  "packages.private.privateSrc": {
+    note: "Image for the private package card. Upload a horizontal JPG image banner.",
+  },
   "packages.group.leaflet.pages": {
     note: "Upload multiple images for the group package leaflet pages. Upload all leaflet pages in JPG format.",
     mode: "multi",

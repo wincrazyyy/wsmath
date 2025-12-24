@@ -32,7 +32,7 @@ export type PrivateConfig = {
   description: string;
   points: string[];
   intensive: PrivateIntensiveConfig;
-  buttonNote?: string;
+  privateSrc: string;
 };
 
 export type GroupLeafletConfig = {

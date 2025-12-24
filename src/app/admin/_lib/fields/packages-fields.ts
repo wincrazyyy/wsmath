@@ -194,9 +194,9 @@ export const PACKAGES_PRIVATE_FIELDS: FieldConfig[] = [
     type: "string[]",
   },
   {
-    path: "private.buttonNote",
-    label: "Private – note under WhatsApp button",
-    description: "Small hint text, e.g. what to mention in the message.",
+    path: "private.privateSrc",
+    label: "Private – image for private card",
+    description: "Path to image shown in the private package card. e.g. /private-package.jpg.",
     type: "string",
   },
 ];
