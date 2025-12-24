@@ -33,6 +33,7 @@ export type PrivateConfig = {
   points: string[];
   intensive: PrivateIntensiveConfig;
   privateSrc: string;
+  bookLabel: string;
 };
 
 export type GroupLeafletConfig = {
@@ -52,6 +53,7 @@ export type GroupConfig = {
   lessons: string; // parsed as number
   points: string[];
   leaflet?: GroupLeafletConfig;
+  bookLabel: string;
 };
 
 export type IaSupportTopic = {

@@ -65,7 +65,8 @@
         "Referral rebate of up to HKD 3,000 per student referred."
       ]
     },
-    "privateSrc": "/private-package.jpg"
+    "privateSrc": "/private-package.jpg",
+    "bookLabel": "Book a private coaching lesson"
   },
   "group": {
     "label": "High-value group",
@@ -97,7 +98,8 @@
         "/leaflets/group-leaflet-page-9.jpg"
       ],
       "autoAdvanceSeconds": "5"
-    }
+    },
+    "bookLabel": "Book the group course"
   },
   "iaSupport": {
     "eyebrow": "IA Guidance",

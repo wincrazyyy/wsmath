@@ -84,7 +84,7 @@ export function GroupPackageCard({
 
       <div className="relative z-10 mt-auto pt-5">
         <BookButton
-          label="Book the group course"
+          label={config.bookLabel}
           ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
         />
       </div>

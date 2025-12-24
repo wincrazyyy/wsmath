@@ -199,6 +199,12 @@ export const PACKAGES_PRIVATE_FIELDS: FieldConfig[] = [
     description: "Path to image shown in the private package card. e.g. /private-package.jpg.",
     type: "string",
   },
+  {
+    path: "private.bookLabel",
+    label: "Private – Book button label",
+    description: "Label for the Book button on the private package card.",
+    type: "string",
+  }
 ];
 
 // Group card + leaflet
@@ -278,6 +284,12 @@ export const PACKAGES_GROUP_FIELDS: FieldConfig[] = [
     description: "Digits only, e.g. 5. How often to auto-advance pages.",
     type: "string",
   },
+  {
+    path: "group.bookLabel",
+    label: "Group – Book button label",
+    description: "Label for the Book button on the group package card.",
+    type: "string",
+  }
 ];
 
 // IA Support (covered in 1-to-1)

@@ -118,7 +118,7 @@ export function PrivatePackageCard({
       {/* image (between content and WhatsApp) */}
       <div className="relative z-10 mt-6 flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 min-h-[140px]">
         <Image
-          src="/private-package.jpg"
+          src={config.privateSrc}
           alt="Tutor pointing upward"
           fill
           sizes="(max-width: 640px) 100vw, 560px"
@@ -129,7 +129,7 @@ export function PrivatePackageCard({
 
       <div className="relative z-10 mt-auto pt-5">
         <BookButton
-          label="Book a private coaching lesson"
+          label={config.bookLabel}
           ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
         />
       </div>
