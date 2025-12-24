@@ -5,7 +5,13 @@ import { PrivacyPolicyModalAnchor } from "./privacy-policy-modal-anchor";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
-  const { footer } = miscContent as MiscConfig;
+  const { footer, whatsapp } = miscContent as MiscConfig & {
+    whatsapp: { phoneNumber: string; prefillText: string };
+  };
+
+  const waHref = `https://wa.me/${whatsapp.phoneNumber}?text=${encodeURIComponent(
+    whatsapp.prefillText
+  )}`;
 
   return (
     <footer className="border-t border-neutral-200 bg-white">
@@ -46,7 +52,7 @@ export function SiteFooter() {
               </span>
             </a>
 
-            {/* Client socials (cleaner row styling) */}
+            {/* Client socials */}
             <div className="mt-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-neutral-500">
                 {footer.social.label}
@@ -115,7 +121,8 @@ export function SiteFooter() {
                     aria-hidden
                     className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-rose-50"
                   >
-                    <XhsIcon className="h-5 w-5" />
+                    {/* Make it a bit bigger inside the inner circle */}
+                    <XhsIcon className="h-6 w-6" />
                   </span>
                 </a>
               </div>
@@ -127,24 +134,48 @@ export function SiteFooter() {
             <div key={col.title}>
               <p className="text-sm font-semibold text-neutral-900">{col.title}</p>
               <ul className="mt-4 space-y-3 text-sm">
-                {col.links.map((l) => (
-                  <li key={`${col.title}-${l.label}`}>
-                    {l.href === "#privacy" ? (
-                      <PrivacyPolicyModalAnchor
-                        href={l.href}
-                        label={l.label}
-                        className="text-neutral-600 transition hover:text-neutral-900"
-                      />
-                    ) : (
+                {col.links.map((l) => {
+                  const isPrivacy = l.href === "#privacy";
+                  const isContact = l.href === "#contact";
+
+                  if (isPrivacy) {
+                    return (
+                      <li key={`${col.title}-${l.label}`}>
+                        <PrivacyPolicyModalAnchor
+                          href={l.href}
+                          label={l.label}
+                          className="text-neutral-600 transition hover:text-neutral-900"
+                        />
+                      </li>
+                    );
+                  }
+
+                  if (isContact) {
+                    return (
+                      <li key={`${col.title}-${l.label}`}>
+                        <a
+                          href={waHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-neutral-600 transition hover:text-neutral-900"
+                        >
+                          {l.label}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li key={`${col.title}-${l.label}`}>
                       <a
                         href={l.href}
                         className="text-neutral-600 transition hover:text-neutral-900"
                       >
                         {l.label}
                       </a>
-                    )}
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
@@ -186,17 +217,13 @@ export function SiteFooter() {
             <p className="font-semibold text-neutral-900">
               © {year} {footer.brand.name}. {footer.bottom.wsmath.rights}
             </p>
-            <p className="mt-1 text-xs text-neutral-500">
-              {footer.bottom.wsmath.disclaimer}
-            </p>
+            <p className="mt-1 text-xs text-neutral-500">{footer.bottom.wsmath.disclaimer}</p>
           </div>
 
-          {/* Builder pill stays here (client socials removed from bottom bar) */}
+          {/* Builder pill stays here */}
           <div className="text-xs text-neutral-500">
             <span className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-3 py-1">
-              <span className="font-medium text-neutral-700">
-                {footer.bottom.builder.label}
-              </span>
+              <span className="font-medium text-neutral-700">{footer.bottom.builder.label}</span>
 
               <a
                 href={footer.bottom.builder.siteUrl}
