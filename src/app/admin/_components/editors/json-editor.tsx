@@ -47,6 +47,8 @@ export function JsonEditor<T extends object>({
 }: JsonEditorProps<T>) {
   const hasTabs = !!enableTabs && !!tabs && tabs.length > 0;
 
+  const [draftByPath, setDraftByPath] = useState<Record<string, string>>({});
+
   // ----- state for parent + sub-tabs -----
 
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
@@ -138,21 +140,40 @@ export function JsonEditor<T extends object>({
           rows={4}
           value={value}
           onChange={(e) => handleChange(field, e.target.value)}
+          onKeyDownCapture={(e) => {
+            if (e.key === "Enter") e.stopPropagation();
+          }}
         />
       );
     }
 
     if (field.type === "string[]") {
       const arr = toStringArray(raw);
+      const canonical = arr.join("\n");
+      const draft = draftByPath[field.path];
+      const value = typeof draft === "string" ? draft : canonical;
+
       return (
         <textarea
           className="mt-1 w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
           rows={5}
-          value={arr.join("\n")}
-          onChange={(e) => handleChange(field, e.target.value)}
+          value={value}
+          onChange={(e) => {
+            const text = e.target.value;
+            setDraftByPath((prev) => ({ ...prev, [field.path]: text }));
+            handleChange(field, text); // still updates JSON array (empties filtered)
+          }}
+          onBlur={() => {
+            setDraftByPath((prev) => {
+              const next = { ...prev };
+              delete next[field.path];
+              return next;
+            });
+          }}
         />
       );
     }
+
 
     if (field.type === "table") {
       return <TableInput<T>
