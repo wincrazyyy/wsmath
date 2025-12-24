@@ -56,7 +56,7 @@ export function ResultsCta( { data }: { data: ResultsConfig["resultsCta"] } ) {
               alt="WSMath visual"
               fill
               priority
-              className="object-cover object-[0%_15%]"
+              className="object-cover object-top"
               sizes="(min-width: 1024px) 280px, (min-width: 768px) 40vw, 80vw"
             />
           </div>
