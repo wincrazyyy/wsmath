@@ -57,7 +57,7 @@ export function IaSupport({ config }: Props) {
         <button
           type="button"
           onClick={goToSoloAndHighlight}
-          className="inline-flex w-fit items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-neutral-800"
+          className="inline-flex w-fit items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
         >
           {ctaLabel}
         </button>
@@ -70,11 +70,47 @@ export function IaSupport({ config }: Props) {
           <div className="text-sm font-semibold text-neutral-900">
             {lessonStructureTitle}
           </div>
+
           <ul className="mt-3 space-y-2">
             {(lessonStructure ?? []).map((t) => (
-              <li key={t} className="flex gap-2 text-sm text-neutral-700">
-                <span className="mt-[6px] h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-400" />
-                <span>{t}</span>
+              <li
+                key={t}
+                className={[
+                  "group relative rounded-xl p-[1px] transition-transform duration-200 ease-out",
+                  "hover:-translate-y-[1px]",
+                ].join(" ")}
+              >
+                {/* full-item highlight ring */}
+                <div
+                  aria-hidden
+                  className={[
+                    "pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-200",
+                    "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                    "group-hover:opacity-100",
+                  ].join(" ")}
+                />
+
+                {/* Item content */}
+                <div
+                  className={[
+                    "relative flex min-h-[44px] items-start gap-2 rounded-[11px] bg-white px-3 py-2",
+                    "border border-neutral-200 text-sm text-neutral-700 transition",
+                    "group-hover:border-transparent group-hover:shadow-sm",
+                  ].join(" ")}
+                >
+                  {/* Colored dot */}
+                  <span
+                    aria-hidden
+                    className={[
+                      "mt-[6px] h-2 w-2 shrink-0 rounded-full",
+                      "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                      "ring-2 ring-white shadow-sm",
+                      "transition-transform duration-200",
+                      "group-hover:scale-110",
+                    ].join(" ")}
+                  />
+                  <span className="transition group-hover:text-neutral-900">{t}</span>
+                </div>
               </li>
             ))}
           </ul>
@@ -84,11 +120,44 @@ export function IaSupport({ config }: Props) {
         <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
           <div className="text-sm font-semibold text-neutral-900">{topicsTitle}</div>
 
-          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Topics grid */}
+          <div className="mt-3 grid auto-rows-fr gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(topics ?? []).map((t) => (
-              <div key={t.title} className="rounded-xl border border-neutral-200 bg-white p-3">
-                <div className="text-sm font-semibold text-neutral-900">{t.title}</div>
-                <div className="mt-1 text-xs text-neutral-600">{t.desc}</div>
+              <div
+                key={t.title}
+                className={[
+                  "group relative h-full rounded-xl p-[1px] transition-transform duration-200 ease-out",
+                  "hover:-translate-y-1 hover:shadow-md",
+                ].join(" ")}
+              >
+                {/* full-card highlight ring */}
+                <div
+                  aria-hidden
+                  className={[
+                    "pointer-events-none absolute inset-0 rounded-xl opacity-0 transition-opacity duration-200",
+                    "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                    "group-hover:opacity-100",
+                  ].join(" ")}
+                />
+
+                {/* Card content */}
+                <div
+                  className={[
+                    "relative h-full rounded-[11px] bg-white p-3 transition",
+                    "border border-neutral-200",
+                    "group-hover:border-transparent group-hover:shadow-sm",
+                    "flex flex-col",
+                  ].join(" ")}
+                >
+                  <div className="text-sm font-semibold text-neutral-900 transition group-hover:text-indigo-700">
+                    {t.title}
+                  </div>
+                  <div className="mt-1 text-xs text-neutral-600 transition group-hover:text-neutral-700">
+                    {t.desc}
+                  </div>
+                  {/* spacer to keep cards consistent even if text is short */}
+                  <div className="mt-auto" />
+                </div>
               </div>
             ))}
           </div>
