@@ -17,15 +17,15 @@
       "mainSize": "sm",
       "columns": [
         {
-          "title": "IBDP HL 6+ rate",
+          "title": "Math HL 6+ rate",
           "items": [
-            "60%+"
+            "65%+"
           ]
         },
         {
-          "title": "IBDP SL 6+ rate",
+          "title": "Math SL 6+ rate",
           "items": [
-            "60%+"
+            "65%+"
           ]
         }
       ]
@@ -45,7 +45,7 @@
     "title": "Private coaching",
     "description": "For students who want maximum customisation, tight accountability, and fast score improvements.",
     "points": [
-      "Deep dive into school tests, IA preparation, and mock exams.",
+      "Deep dive into school tests, Math IA preparation, and mock exams.",
       "Fully personalised by-topic drills and homework, adjusted weekly.",
       "Weekly performance tracking with targeted correction of weak topics.",
       "Ideal if you’re pushing for Level 7 / A* and want strict pacing."
@@ -66,7 +66,7 @@
     },
     "privateSrc": "/private-package.jpg",
     "bookLabel": "Book a private coaching lesson",
-    "whatsappPrefillText": "Hello Winson Siu, I am interested in booking a private coaching lesson. I am (name?) from (school?) in (year?)."
+    "whatsappPrefillText": "Hi Winson Siu, I am interested in booking a private coaching lesson. I am (name?) from (school?) in (year?)."
   },
   "group": {
     "label": "High-value Structured Package",
@@ -100,19 +100,19 @@
       "autoAdvanceSeconds": "1"
     },
     "bookLabel": "Book the Level 7 Mastery System",
-    "whatsappPrefillText": "Hello Winson Siu, I am interested in joining the group course. I am (name?) from (school?) in (year?)."
+    "whatsappPrefillText": "Hi Winson Siu, I am interested in joining the group course. I am (name?) from (school?) in (year?)."
   },
   "iaSupport": {
-    "eyebrow": "IA Guidance",
-    "title": "Math IA Support",
-    "description": "A structured, topic-driven guidance format to help students produce a clear, original IA efficiently.",
+    "eyebrow": "With the help of PhD in Pure Mathematics Professionals",
+    "title": "IBDP Math IA Guidance",
+    "description": "A structured, topic-driven guidance format to help students produce a unique and high-quality Math IA.",
     "ctaLabel": "See Solo 1-to-1 lessons",
     "lessonStructureTitle": "Lesson structure",
     "lessonStructure": [
-      "Customizes IA topics to align with individual student interests.",
-      "Integrates knowledge beyond standard curriculum for enhanced grades.",
+      "Customizes Math IA topics to align with individual student interests.",
+      "Integrates knowledge beyond the standard curriculum for enhanced grades.",
       "Guides students to produce high-quality, unique essays efficiently within lesson time.",
-      "Achieved successful outcomes for over 60 students from 2020 to 2024.",
+      "Achieved successful outcomes for over 80 students from 2020 to 2025.",
       "Effectively boosts Predicted Grades and makes a positive impression on teachers.",
       "Minimized the need for extra work outside of lessons."
     ],
