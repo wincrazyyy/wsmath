@@ -20,32 +20,54 @@ export function ResultsSchools({ data }: { data: ResultsSchoolsConfig }) {
             {heading}
           </h3>
           {subheading ? (
-            <p className="mt-1 text-xs text-neutral-600 sm:text-sm">
-              {subheading}
-            </p>
+            <p className="mt-1 text-xs text-neutral-600 sm:text-sm">{subheading}</p>
           ) : null}
         </div>
 
-        {/* Cards with subtle divider + better rhythm */}
+        {/* Cards shell */}
         <div className="mt-5 rounded-2xl border border-neutral-200 bg-gradient-to-br from-indigo-50 via-white to-sky-50 p-[1px]">
           <ul className="grid gap-2 rounded-[1.1rem] bg-white/90 p-3 backdrop-blur-sm sm:grid-cols-2 sm:gap-3 sm:p-4 lg:grid-cols-3">
             {items.map((name) => (
               <li key={name} className="h-full">
                 <div
                   className={[
-                    "group h-full rounded-xl border border-neutral-200 bg-white px-3 py-2.5",
-                    "shadow-sm transition",
-                    "hover:-translate-y-0.5 hover:shadow-md",
+                    "group relative h-full rounded-xl p-[1px]",
+                    "transition-transform duration-200 ease-out",
+                    "hover:-translate-y-0.5",
                   ].join(" ")}
                 >
-                  <div className="flex items-start gap-2.5">
-                    <span
-                      aria-hidden
-                      className="mt-1.5 h-2 w-2 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 opacity-80"
-                    />
-                    <span className="text-[13px] font-medium leading-snug text-neutral-800">
-                      {name}
-                    </span>
+                  {/* Gradient ring */}
+                  <div
+                    aria-hidden
+                    className={[
+                      "pointer-events-none absolute inset-0 rounded-xl",
+                      "opacity-0 transition-opacity duration-200 group-hover:opacity-100",
+                      "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                    ].join(" ")}
+                  />
+
+                  {/* Content */}
+                  <div
+                    className={[
+                      "relative h-full rounded-[11px] bg-white px-3 py-2.5",
+                      "border border-neutral-200 shadow-sm transition",
+                      "group-hover:border-transparent group-hover:shadow-md",
+                    ].join(" ")}
+                  >
+                    <div className="flex items-start gap-2.5">
+                      <span
+                        aria-hidden
+                        className={[
+                          "mt-[6px] h-2 w-2 shrink-0 rounded-full",
+                          "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                          "ring-2 ring-white shadow-sm",
+                          "transition-transform duration-200 group-hover:scale-110",
+                        ].join(" ")}
+                      />
+                      <span className="text-[13px] font-medium leading-snug text-neutral-800">
+                        {name}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -53,7 +75,6 @@ export function ResultsSchools({ data }: { data: ResultsSchoolsConfig }) {
           </ul>
         </div>
 
-        {/* Tiny footnote / count */}
         <p className="mt-4 text-xs text-neutral-500">
           {items.length.toLocaleString()} total schools
         </p>
