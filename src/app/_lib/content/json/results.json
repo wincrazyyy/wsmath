@@ -13,7 +13,7 @@
       "heading": "Impact Overview",
       "badge": "100% satisfaction",
       "mainValue": "2+",
-      "mainLabel": "average grade grade jumps",
+      "mainLabel": "average grade jumps",
       "mainSize": "sm",
       "columns": [
         {
@@ -25,7 +25,7 @@
         {
           "title": "Top grade bands",
           "items": [
-            "Guarenteed highest score range"
+            "Guaranteed highest score range"
           ]
         },
         {
@@ -434,9 +434,9 @@
         ]
       },
       {
-        "tab": "A Level Mathematics",
+        "tab": "A-Level Mathematics",
         "subTab": "Further Math",
-        "programLabel": "A Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
+        "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
         "students": [
           {
             "name": "Bill Zhang",
@@ -468,9 +468,9 @@
         ]
       },
       {
-        "tab": "A Level Mathematics",
+        "tab": "A-Level Mathematics",
         "subTab": "Math",
-        "programLabel": "A Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
+        "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
         "students": [
           {
             "name": "Quinto Lam",
@@ -689,7 +689,7 @@
   "schools": {
     "eyebrow": "Hong Kong and International Schools",
     "heading": "Schools our students come from",
-    "subheading": "A snapshot of schools we’ve supported across IBDP / A Level / IGCSE.",
+    "subheading": "A snapshot of schools we’ve supported across IBDP / A-Level / IGCSE.",
     "items": [
       "Yew Chung International School",
       "St. Stephen's College",

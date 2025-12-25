@@ -85,7 +85,7 @@
         }
       },
       {
-        "title": "A Level Courses",
+        "title": "A-Level Courses",
         "caption": "Edexcel · Cambridge · AQA · OCR",
         "emphasize": false,
         "courses": [
@@ -100,7 +100,7 @@
           "OCR Math H240"
         ],
         "cta": {
-          "label": "Inquire about A Level tutoring",
+          "label": "Inquire about A-Level tutoring",
           "prefillText": "Hi Winson Siu, I'm interested in A-Level Math tutoring. I am (name?) from (school?) in (year?) and need help with (Math / Further Math?)."
         }
       },
