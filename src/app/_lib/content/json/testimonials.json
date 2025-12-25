@@ -14,7 +14,7 @@
   "featured": [
     {
       "name": "Alice Gao (2022)",
-      "role": "IBDP AAHL — From Level 6 to 7",
+      "role": "IBDP AAHL — From Level 6 to 7 [in 7 months]",
       "university": "University College London",
       "quote": "I had the great fortune of being tutored by Winson during my IBDP years. Winson's passion for tutoring is evident in every session. He pinpoints specific areas where I need assistance and tailors his instruction to address my challenges. His notes are clear, concise, and easy to grasp. One standout aspect was the wealth of past paper questions he provided, meticulously sorted by topics and years. I am truly grateful for his guidance.",
       "avatarSrc": "/avatars/featured-1.png",
@@ -30,7 +30,7 @@
     },
     {
       "name": "Jason Yeung (2025)",
-      "role": "IBDP AASL — From 4 to 7",
+      "role": "IBDP AASL — From 4 to 7 [in 16 months]",
       "university": "The University of Hong Kong",
       "quote": "Mr. Siu is the best math teacher I have ever had. His explanations, particularly for calculus, are outstanding. His resources are comprehensive, offering targeted exercises and past papers dating back to the 2000s. He was also a great motivator, encouraging me to complete past papers and homework when my own drive was low.",
       "avatarSrc": "/avatars/featured-3.png",
@@ -38,7 +38,7 @@
     },
     {
       "name": "Cissie Ching (2025)",
-      "role": "IBDP AISL — From 1 to 5",
+      "role": "IBDP AISL — From 1 to 5 [in 20 months]",
       "university": "The University of Hong Kong",
       "quote": "Winson老师的教学方式以习题练习为主，不断加强记忆并深入了解知识点，课后亦会有相应笔记供学生复习。老师一直很用心，包括备课／考前准备等，性格热情，教课不死板而且认真，并量身定做往年习题、易错题以及薄弱知识点单元等。",
       "avatarSrc": "/avatars/featured-4.png",
@@ -56,7 +56,7 @@
     },
     {
       "name": "Sharon Deng (2023)",
-      "role": "IBDP AASL — From 3 to 7 [in 1.5 months]",
+      "role": "IBDP AASL — From 3 to 7",
       "university": "The University of Hong Kong",
       "quote": "我个人认为数学本身是一门实践大于理论，并需时刻保持手感的科目。因此我与Winson老师让学生直接实操Past Paper的教学方式十分契合，且迅速总结出Past Papers的做题方式；课上的比对作业以及改错环节使我更愿意在课后抽出时间学习这个科目。",
       "avatarSrc": "/avatars/carousel-2.png",
@@ -88,14 +88,14 @@
     },
     {
       "name": "Bill Zhang (2025)",
-      "role": "Cambridge CAIE Math + Further Math — From F to A*",
+      "role": "CAIE Math + Further Math — From F to A*",
       "quote": "Winson老师的上课风格轻松无压力，且教书模式灵活变通，将複杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定製的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之馀的刷题效率。",
       "avatarSrc": "/avatars/carousel-6.png",
       "university": "University College London"
     },
     {
       "name": "Michelle Chan (2021)",
-      "role": "Edexcel IAL Further Math — From F to A*",
+      "role": "IAL Further Math — From F to A*",
       "quote": "Winson was always well prepared and gave many past paper questions for practice after every lesson. He’s also an easy-going guy with a true passion for tutoring. I highly recommend him for exam prep!!",
       "avatarSrc": "",
       "university": "University of Melbourne",
@@ -126,7 +126,7 @@
     },
     {
       "name": "Lucia Zhu (2018)",
-      "role": "IBDP Math HL — From 3 to 6 [in 3 months]",
+      "role": "IBDP Math HL — From 3 to 6",
       "quote": "When I received my disappointing grade, I knew I had to get help immediately. Winson is familiar with IBDP past paper styles and exam techniques. He quickly spotted my weaknesses, set a tailored plan, and trained me with past papers. His notes sort key concepts methodically and logically, helping me learn systematically and feel more confident.",
       "avatarSrc": "",
       "university": "The University of Hong Kong",
@@ -134,14 +134,14 @@
     },
     {
       "name": "Coco Cheng (2024)",
-      "role": "Cambridge CAIE Math — From D to A",
+      "role": "CAIE Math — From D to A",
       "quote": "我认为Winson教学方法简洁明了，令人头疼且复杂的数学概念，通过老师的讲解变得十分易于理解。我的疑问都得到了耐心的解答，并且给予了我很多实用的解题技巧及策略。通过他的辅导，我在数学领域的进步与日俱增，并最终在考试中取得了优异的成绩。我非常感激他的帮助，他是一位十分出色的数学老师！",
       "avatarSrc": "/avatars/carousel-12.png",
       "university": "University College London"
     },
     {
       "name": "Nicole Li (2024)",
-      "role": "Edexcel IGCSE Math — From 4 to 8",
+      "role": "IGCSE Math — From 4 to 8",
       "quote": "Winson has helped me improve my math in just one year. He gave me many past papers on different topics, which have drastically improved my math scores. We go through many exercises and questions during our lessons, and I can learn a lot. I now have more confidence in math, thanks to Winson.",
       "avatarSrc": "",
       "useDefaultAvatar": true
@@ -156,7 +156,7 @@
     },
     {
       "name": "Kelly Li (2023)",
-      "role": "Cambridge IGCSE 0607 — From F to A",
+      "role": "IGCSE 0607 — From F to A",
       "quote": "我與Winson老師上了超過兩年的課。最大的原因是我能感受到老師對我的用心及衝勁。Winson老師備課嚴謹，用心製作筆記及題集，以此尋找最適合學生的學習方式。Winson老師對學生提問非常有耐性，即使講了五次十次我都聽不懂，他也能做到語氣不改地重複解答。Winson老師對我們來說更像是戰友和定心針。",
       "avatarSrc": "/avatars/carousel-15.png",
       "useDefaultAvatar": false
@@ -179,7 +179,7 @@
     },
     {
       "name": "Gordon Lo (2023)",
-      "role": "Cambridge IGCSE 0607 — From E to A",
+      "role": "IGCSE 0607 — From E to A",
       "quote": "My impression of Mr. Siu has never truly changed. Winson is a kind and reliable mentor, which is why I enjoy mathematics so much. His method is simple and efficient: learn the key concepts of each topic and apply them to past paper questions. I appreciate having lessons with Winson.",
       "avatarSrc": "",
       "university": "The University of Hong Kong",
@@ -202,7 +202,7 @@
     },
     {
       "name": "Ken Chen (2024)",
-      "role": "Edexcel GCEAL Math — From F to A",
+      "role": "GCE AL Math — From F to A",
       "quote": "Winson has a unique teaching approach that I greatly admire. He diligently compiles valuable past paper questions for practice before and after each class, often taking several days to complete. Working closely with Winson has been instrumental.",
       "avatarSrc": "",
       "university": "University College London",

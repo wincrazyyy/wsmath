@@ -434,9 +434,9 @@
         ]
       },
       {
-        "tab": "A-Level Mathematics",
+        "tab": "A Level Mathematics",
         "subTab": "Further Math",
-        "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
+        "programLabel": "A Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
         "students": [
           {
             "name": "Bill Zhang",
@@ -468,27 +468,45 @@
         ]
       },
       {
-        "tab": "A-Level Mathematics",
+        "tab": "A Level Mathematics",
         "subTab": "Math",
-        "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
+        "programLabel": "A Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
         "students": [
           {
-            "name": "Quinto",
+            "name": "Quinto Lam",
             "year": 2025,
             "from": "F",
             "to": "A*"
           },
           {
-            "name": "Coco",
+            "name": "Jenny Ngai",
+            "year": 2024,
+            "from": "D",
+            "to": "B"
+          },
+          {
+            "name": "Jenny Huang",
+            "year": 2024,
+            "from": "B",
+            "to": "A*"
+          },
+          {
+            "name": "Coco Cheng",
             "year": 2024,
             "from": "F",
             "to": "A"
           },
           {
-            "name": "Ken",
+            "name": "Ken Chen",
             "year": 2024,
             "from": "F",
             "to": "A"
+          },
+          {
+            "name": "Sophie Rijnbeek",
+            "year": 2023,
+            "from": "E",
+            "to": "B"
           },
           {
             "name": "Bill Zhang",
@@ -497,7 +515,7 @@
             "to": "A*"
           },
           {
-            "name": "Quintin",
+            "name": "Quintin Leung",
             "year": 2023,
             "from": "F",
             "to": "A"
@@ -509,14 +527,8 @@
             "to": "A*"
           },
           {
-            "name": "Michelle",
+            "name": "Michelle Chan",
             "year": 2021,
-            "from": "B",
-            "to": "A*"
-          },
-          {
-            "name": "Jenny",
-            "year": 2020,
             "from": "B",
             "to": "A*"
           }
@@ -533,8 +545,8 @@
       },
       {
         "tab": "IGCSE Mathematics",
-        "subTab": "Additional Math / Further Math",
-        "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Math (4PM0)",
+        "subTab": "Additional Math / Further Pure Math",
+        "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
         "students": [
           {
             "name": "Jacky",
@@ -571,7 +583,7 @@
       {
         "tab": "IGCSE Mathematics",
         "subTab": "International Math / Math",
-        "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM1)",
+        "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM0)",
         "students": [
           {
             "name": "Janis",
@@ -581,13 +593,13 @@
             "months": 3
           },
           {
-            "name": "Nicole",
+            "name": "Jewel",
             "year": 2024,
             "from": "E(4)",
             "to": "A(8)"
           },
           {
-            "name": "Jewel",
+            "name": "Nicole",
             "year": 2024,
             "from": "E(4)",
             "to": "A(8)"
@@ -596,26 +608,24 @@
             "name": "Cissie",
             "year": 2023,
             "from": "F(3)",
-            "to": "A(8)",
-            "months": 12
+            "to": "A(8)"
           },
           {
             "name": "Kelly",
             "year": 2023,
             "from": "F(3)",
-            "to": "A(8)",
-            "months": 12
-          },
-          {
-            "name": "Evelyn",
-            "year": 2023,
-            "from": "C(6)",
             "to": "A(8)"
           },
           {
             "name": "Gordon",
             "year": 2023,
             "from": "E(4)",
+            "to": "A(8)"
+          },
+          {
+            "name": "Evelyn",
+            "year": 2023,
+            "from": "C(6)",
             "to": "A(8)"
           },
           {
@@ -637,13 +647,13 @@
             "to": "A(8)"
           },
           {
-            "name": "Jacky",
+            "name": "Catherine",
             "year": 2021,
             "from": "B(7)",
             "to": "A*(9)"
           },
           {
-            "name": "Catherine",
+            "name": "Jacky",
             "year": 2021,
             "from": "B(7)",
             "to": "A*(9)"
@@ -677,24 +687,30 @@
     "footerNote": "👆 Hover on each cell to see the students."
   },
   "schools": {
-    "eyebrow": "Students from",
-    "heading": "Schools our students come from",
-    "subheading": "A snapshot of schools we’ve supported across IB / A-Level / IGCSE.",
+    "eyebrow": "Hong Kong and International Schools",
+    "heading": "Our students come from",
+    "subheading": "A snapshot of schools we’ve supported across IBDP / A Level / IGCSE.",
     "items": [
       "Yew Chung International School",
-      "Diocesan Boys' School",
-      "St. Paul's Co-educational College",
-      "Li Po Chun United World College",
-      "Po Leung Kuk Choi Kai Yau School",
       "St. Stephen's College",
+      "Po Leung Kuk Choi Kai Yau School",
+      "Diocesan Boys' School",
+      "Diocesan Girls' School",
+      "St. Paul's Co-educational College",
+      "St. Paul’s Convent School",
+      "Wong Kam Fai Secondary School",
+      "Li Po Chun United World College",
+      "G.T. (Ellen Yeung) College",
       "German Swiss International School",
       "The Independent Schools Foundation Academy",
       "Victoria Shanghai Academy",
+      "Malvern College Hong Kong",
       "ESF King George V School",
       "ESF Sha Tin College",
       "ESF Island School",
       "ESF West Island School",
       "ESF Discovery College",
+      "ESF Renaissance College",
       "Chinese International School",
       "Canadian International School of Hong Kong",
       "Singapore International School (Hong Kong)",
@@ -702,6 +718,7 @@
       "Australian International School Hong Kong",
       "Harrow International School Hong Kong",
       "American School Hong Kong",
+      "International College Hong Kong",
       "Kiangsu-Chekiang College International Section"
     ]
   },
