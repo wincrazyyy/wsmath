@@ -13,7 +13,7 @@
       "heading": "Impact Overview",
       "badge": "100% satisfaction",
       "mainValue": "2+",
-      "mainLabel": "average grade jumps",
+      "mainLabel": "average grade-band improvement",
       "mainSize": "sm",
       "columns": [
         {
@@ -25,7 +25,7 @@
         {
           "title": "Top grade bands",
           "items": [
-            "Guaranteed highest score range"
+            "Strong outcomes in the top score bands"
           ]
         },
         {
