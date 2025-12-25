@@ -82,14 +82,14 @@
       "name": "Vera Jing (2021)",
       "role": "IBDP AAHL — From 6 to 7",
       "university": "University College London",
-      "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. We started regular tuition in 2019. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions!",
+      "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions!",
       "avatarSrc": "",
       "useDefaultAvatar": true
     },
     {
       "name": "Bill Zhang (2025)",
       "role": "Cambridge CAIE Math + Further Math — From F to A*",
-      "quote": "Winson老师的上课风格轻松无压力，且教书模式灵活变通，将复杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定制的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之余的刷题效率。",
+      "quote": "Winson老师的上课风格轻松无压力，且教书模式灵活变通，将複杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定製的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之馀的刷题效率。",
       "avatarSrc": "/avatars/carousel-6.png",
       "university": "University College London"
     },
@@ -152,6 +152,55 @@
       "quote": "Mr. Siu’s teaching style is crystal clear, with easy-to-follow structures and a stash of super-relevant questions. His strong sense of responsibility and genuine passion for tutoring make him exceptional. I thoroughly enjoy his tutoring sessions every week.",
       "avatarSrc": "",
       "university": "The University of Edinburgh"
+    },
+    {
+      "name": "Kelly Li",
+      "role": "",
+      "quote": "",
+      "avatarSrc": ""
+    },
+    {
+      "name": "Judy Wei",
+      "role": "",
+      "quote": "",
+      "avatarSrc": ""
+    },
+    {
+      "name": "Vivian Chen",
+      "role": "",
+      "quote": "",
+      "avatarSrc": ""
+    },
+    {
+      "name": "Gordon Lo",
+      "role": "",
+      "quote": "",
+      "avatarSrc": ""
+    },
+    {
+      "name": "Aidan Cheung",
+      "role": "",
+      "quote": "",
+      "avatarSrc": ""
+    },
+    {
+      "name": "David Zhang",
+      "role": "IBDP Math SL — From 4 to 6",
+      "quote": "Winson helped me a lot in my IBDP mathematics journey. His teaching style and the “by topic” past paper question bank are highly recommended. He breaks down concepts clearly and focuses on practical exam questions, which made my practice more structured and effective.",
+      "avatarSrc": "/avatars/carousel-20.png",
+      "university": "The University of Hong Kong"
+    },
+    {
+      "name": "Ken Chen",
+      "role": "",
+      "quote": "Winson has a unique teaching approach that I greatly admire. He diligently compiles valuable past paper questions for practice before and after each class, often taking several days to complete. Working closely with Winson has been instrumental.",
+      "avatarSrc": ""
+    },
+    {
+      "name": "Kitty Lam",
+      "role": "",
+      "quote": "Winson’s explanations are clear and easy to understand. He patiently guides you through any concepts you find challenging. His uplifting and kind demeanor makes learning enjoyable, and he’s always willing to answer your questions even outside of lesson time.",
+      "avatarSrc": ""
     }
   ]
 }
