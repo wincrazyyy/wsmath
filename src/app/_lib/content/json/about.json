@@ -96,11 +96,12 @@
         "caption": "Cambridge · Edexcel",
         "emphasize": false,
         "courses": [
-          "Cambridge (0606) Additional Math",
-          "Edexcel (4PM0) Further Math",
-          "Cambridge (0607) International Math",
-          "Cambridge (0580) Math",
-          "Edexcel (4PM1) Math"
+          "Cambridge (0606) Additional Maths",
+          "Cambridge (0607) International Maths",
+          "Cambridge (0580) Maths",
+          "Edexcel (4PM0) Further Maths",
+          "Edexcel (4PM1) Maths",
+          "IBMYP"
         ]
       }
     ]
