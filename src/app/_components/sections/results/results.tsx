@@ -24,9 +24,7 @@ export function Results() {
 
         <ResultsSchools data={schools} />
 
-        <div className="container mt-16 max-w-5xl space-y-10">
-          <ResultsCta data={resultsCta} />
-        </div>
+        <ResultsCta data={resultsCta} />
       </SectionReveal>
     </>
   );

@@ -11,7 +11,7 @@ export function ResultsCta( { data }: { data: ResultsConfig["resultsCta"] } ) {
   const resultsCta = data;
 
   return (
-    <section className="rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+    <section className="mt-8 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
       <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
         {/* Left: text + button */}
         <div className="max-w-xl">
