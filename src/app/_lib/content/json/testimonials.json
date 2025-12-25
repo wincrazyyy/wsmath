@@ -13,36 +13,36 @@
   },
   "featured": [
     {
-      "name": "JC (2024)",
-      "role": "IBDP AAHL — From Level 1 to 7",
-      "university": "The University of Hong Kong",
-      "quote": "Siu Sir is an exceptional educator with a genuine passion for teaching and fostering young talent. Over the past six years, Siu Sir has been an unwavering support and inspiration throughout my mathematical journey. His long-term commitment to my education dedication has been evident through the precise and thoughtful compilation of past paper questions, detailed booklets, and notes for every chapter we covered. They provided invaluable practice and reinforced my understanding in a structured manner.",
+      "name": "Alice Gao (2022)",
+      "role": "IBDP AAHL — From Level 6 to 7 [in 7 months]",
+      "university": "University College London",
+      "quote": "I had the great fortune of being tutored by Winson during my IBDP years. Winson's passion for tutoring is evident in every session. He pinpoints specific areas where I need assistance and tailors his instruction to address my challenges. His notes are clear, concise, and easy to grasp. One standout aspect was the wealth of past paper questions he provided, meticulously sorted by topics and years. I am truly grateful for his guidance.",
       "avatarSrc": "/avatars/featured-1.png",
-      "useDefaultAvatar": true
+      "useDefaultAvatar": false
     },
     {
       "name": "Bill Ting (2021)",
       "role": "Edexcel IAL Math + Further Math — From F to A*",
       "university": "University of Cambridge",
-      "quote": "Winson 老師的教學風格十分契合我的學習模式，能把艱深乏味的內容講得有趣而易懂。對於我的疑問，老師都會耐心解答，直至我真正明白，因此我非常享受每一堂課。每節課老師均有充分規劃與準備，並常自願延長課堂時間完成教學。課後他亦會精心挑選課本及歷屆 Past Paper 題目讓我練習，並整理專屬錯題本，協助我迅速鞏固弱項。老師亦會先親自示範解題思路，讓我理解評分準則，從而累積實戰經驗，甚至預測出題方向。Winson 不僅是一位專業而友善的老師，更像一位朋友，我非常感恩能遇到這位良師益友，陪伴我面對學習上的挑戰。",
+      "quote": "Winson老師擅長讓艱深乏味的內容變得有趣且易於理解。對於我的任何疑問，老師都會耐心解答，直至我明白。老師對每一堂課都有充分規劃與準備，並常自願延長課堂時間完成教學。課後他會精心挑選相關題目供我練習及鞏固，如課本題目或歷屆Past Paper，並整理專屬錯題本。老師通常會先親自解題，讓我觀察解題思路及了解評分要求。Winson不僅是一位專業而友善的老師，更像一位朋友，我非常感恩能遇到這位良師益友。",
       "avatarSrc": "/avatars/featured-2.png",
       "useDefaultAvatar": false
     },
     {
-      "name": "Joy Angela Sun (2022)",
-      "role": "IBDP AAHL — From 5 to 7 [in 10 months]",
-      "university": "The Chinese University of Hong Kong",
-      "quote": "Winson is the best math tutor I’ve had. During my final year of IBDP, his experience-based, past-paper-driven approach was highly effective. He provided targeted questions, clear revision notes, and tailored assignments. With his guidance, I achieved a grade 7 in Math AAHL. Definitely a good choice to find him for math tutorials!!",
+      "name": "Jason Yeung (2025)",
+      "role": "IBDP AASL — From 6 to 7",
+      "university": "The University of Hong Kong",
+      "quote": "Mr. Siu is the best math teacher I have ever had. His explanations, particularly for calculus, are outstanding. His resources are comprehensive, offering targeted exercises and past papers dating back to the 2000s. He was also a great motivator, encouraging me to complete past papers and homework when my own drive was low.",
       "avatarSrc": "/avatars/featured-3.png",
       "useDefaultAvatar": true
     },
     {
-      "name": "Michelle Chan (2021)",
-      "role": "Edexcel IAL Further Math — From F to A*",
-      "university": "University of Melbourne",
-      "quote": "Winson was a beneficial tutor who helped me achieve A*s for IAL Math and IAL Further Math. He was always well prepared and gave many past paper questions for practice after every lesson. He’s also an easy-going guy with a true passion for tutoring. I highly recommend him for exam prep!",
+      "name": "Cissie Ching (2025)",
+      "role": "IBDP AISL — From 1 to 5",
+      "university": "The University of Hong Kong",
+      "quote": "Winson老師的教學方式以習題練習為主，不斷加強記憶並深入了解知識點，課後亦會有相應筆記供學生複習。老師一直很用心，包括備課／考前準備等，性格熱情，教課不死板而且認真，並量身定做往年習題、易錯題以及薄弱知識點單元等。",
       "avatarSrc": "/avatars/featured-4.png",
-      "useDefaultAvatar": true
+      "useDefaultAvatar": false
     }
   ],
   "carousel": [
