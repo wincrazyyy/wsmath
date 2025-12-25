@@ -7,7 +7,6 @@ import {
   ABOUT_HEADER_FIELDS,
   ABOUT_HERO_FIELDS,
   ABOUT_STATS_COURSES_FIELDS,
-  ABOUT_CTA_FIELDS,
   ABOUT_FIELDS,
 } from "@/app/admin/_lib/fields/about-fields";
 import { JsonEditor } from "./json-editor";
@@ -54,14 +53,6 @@ export function AboutEditor<T extends AboutConfig>({ data, onChangeData }: About
       panelTitle: "About – stats & courses",
       panelDescription:
         "Edit the stats pills + courses section heading. Use the sub-tabs to edit each course card.",
-    },
-    {
-      key: "cta",
-      label: "CTA ribbon",
-      fields: ABOUT_CTA_FIELDS,
-      panelTitle: "About – CTA ribbon",
-      panelDescription:
-        "Edit the CTA ribbon heading and subheading shown under the About section.",
     },
   ];
 
