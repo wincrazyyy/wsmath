@@ -64,7 +64,7 @@
     },
     {
       "name": "Joy Angela Sun (2022)",
-      "role": "IBDP AAHL — From 5 to 7 [in 10 months]",
+      "role": "IBDP AAHL — From 5 to 7",
       "university": "The Chinese University of Hong Kong",
       "quote": "Winson’s teaching style is based on experience: his insistence on learning by practicing past papers is sensible and practical. He provides specific past paper questions for each topic separately, and his notes are very useful for final exam revisions. Winson is very patient and experienced. His assignments are based on each student’s ability and needs.",
       "avatarSrc": "/avatars/carousel-3.png",
@@ -85,6 +85,13 @@
       "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. We started regular tuition in 2019. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions!",
       "avatarSrc": "",
       "useDefaultAvatar": true
+    },
+    {
+      "name": "Bill Zhang (2025)",
+      "role": "Cambridge CAIE Math + Further Math — From F to A*",
+      "quote": "Winson老师的上课风格轻松无压力，且教书模式灵活变通，将复杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定制的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之余的刷题效率。",
+      "avatarSrc": "/avatars/carousel-6.png",
+      "university": "University College London"
     }
   ]
 }
