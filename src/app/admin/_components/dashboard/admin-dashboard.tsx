@@ -8,6 +8,7 @@ import aboutContent from "@/app/_lib/content/json/about.json";
 import packagesContent from "@/app/_lib/content/json/packages.json";
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
 import resultsContent from "@/app/_lib/content/json/results.json";
+import faqContent from "@/app/_lib/content/json/faq.json";
 import miscContent from "@/app/_lib/content/json/misc.json";
 
 import { HomeEditor } from "../editors/home-editor";
@@ -15,6 +16,7 @@ import { AboutEditor } from "../editors/about-editor";
 import { PackagesEditor } from "../editors/packages-editor";
 import { TestimonialsEditor } from "../editors/testimonials-editor";
 import { ResultsEditor } from "../editors/results-editor";
+import { FaqEditor } from "../editors/faq-editor";
 import { MiscEditor } from "../editors/misc-editor";
 
 import {
@@ -31,6 +33,7 @@ type AboutContent = typeof aboutContent;
 type PackagesContent = typeof packagesContent;
 type TestimonialsContent = typeof testimonialsContent;
 type ResultsContent = typeof resultsContent;
+type FaqContent = typeof faqContent;
 type MiscContent = typeof miscContent;
 
 // Helper: ArrayBuffer -> base64 (matches server expectation)
@@ -55,6 +58,8 @@ export function AdminDashboard() {
     useState<TestimonialsContent>(testimonialsContent);
   const [resultsData, setResultsData] =
     useState<ResultsContent>(resultsContent);
+  const [faqData, setFaqData] =
+    useState<FaqContent>(faqContent);
   const [miscData, setMiscData] = useState<MiscContent>(miscContent);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -92,6 +97,11 @@ export function AdminDashboard() {
     setHasJsonChanges(true);
   };
 
+  const handleFaqChange = (next: FaqContent) => {
+    setFaqData(next);
+    setHasJsonChanges(true);
+  };
+
   const handleMiscChange = (next: MiscContent) => {
     setMiscData(next);
     setHasJsonChanges(true);
@@ -110,6 +120,7 @@ export function AdminDashboard() {
         { slug: "packages", content: packagesData },
         { slug: "testimonials", content: testimonialsData },
         { slug: "results", content: resultsData },
+        { slug: "faq", content: faqData },
         { slug: "misc", content: miscData },
       ];
 
@@ -209,6 +220,15 @@ export function AdminDashboard() {
         <ResultsEditor
           data={resultsData}
           onChangeData={handleResultsChange}
+        />
+      );
+    }
+
+    if (activeTab === "faq") {
+      return (
+        <FaqEditor
+          data={faqData}
+          onChangeData={handleFaqChange}
         />
       );
     }

@@ -24,7 +24,7 @@ export function Results() {
         <ResultsGradeImprovements gradeImprovements={gradeImprovements} />
 
         {/* CTA under results */}
-        <div className="container my-16 max-w-5xl space-y-10">
+        <div className="container mt-16 max-w-5xl space-y-10">
           <ResultsCta data={resultsCta} />
         </div>
       </SectionReveal>

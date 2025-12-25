@@ -1,0 +1,46 @@
+{
+  "header": {
+    "eyebrow": "FAQ",
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to common questions about WSMath coaching services."
+  },
+  "top": {
+    "eyebrow": "FAQ",
+    "heading": "Questions parents and students ask most",
+    "subheading": "Clear expectations. Clear structure. Clear results."
+  },
+  "items": [
+    {
+      "q": "Who is WSMath for?",
+      "a": "IBDP (AA/AI SL/HL), A-Level/IAL, and IGCSE students who want a structured, exam-focused plan and measurable grade improvement."
+    },
+    {
+      "q": "How are lessons run?",
+      "a": "Live Zoom lessons with active problem-solving. I teach the concept, then we apply it immediately using targeted past-paper questions and markscheme thinking. Homework is assigned after each lesson."
+    },
+    {
+      "q": "How many hours per week do I need for a Level 6 / 7?",
+      "a": "As a baseline: Level 6 typically needs ~6 hours/week total (lessons + practice), and Level 7 ~7 hours/week. Your exact plan depends on your current level and timeline."
+    },
+    {
+      "q": "Do you teach in English or Chinese?",
+      "a": "Lessons can be bilingual for understanding, but exam training is always English: questions, key terms, and written solutions are practised in the style required by the markscheme."
+    },
+    {
+      "q": "What if my foundation is weak?",
+      "a": "That’s common. We rebuild fundamentals by topic first, then move to past papers once the basics are stable. You’ll also get a clear weekly practice plan."
+    },
+    {
+      "q": "Do you offer trial lessons?",
+      "a": "Usually no — my teaching is a system (diagnosis → plan → practice → feedback loops), so a single lesson doesn’t represent the real experience or results."
+    },
+    {
+      "q": "Group class vs 1-to-1 — what’s the difference?",
+      "a": "Group is the most cost-effective way to follow a full structure and routine. 1-to-1 is fully personalised with faster feedback and more targeted pacing."
+    },
+    {
+      "q": "What do I need to prepare?",
+      "a": "iPad + Apple Pencil + GoodNotes is ideal for fast, interactive work. A stable internet connection and willingness to practise between lessons matter most."
+    }
+  ]
+}

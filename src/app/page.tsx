@@ -7,7 +7,7 @@ import { About } from "@/app/_components/sections/about/about";
 import { Packages } from "@/app/_components/sections/packages/packages";
 import { Testimonials } from "@/app/_components/sections/testimonials/testimonials";
 import { Results } from "@/app/_components/sections/results/results";
-import { Faq } from "./_components/layout/faq";
+import { Faq } from "./_components/sections/faq/faq";
 import { SiteFooter } from "@/app/_components/layout/footer";
 import { FloatingCta } from "@/app/_components/ui/floating-cta";
 
@@ -56,12 +56,12 @@ export default function Page() {
           <Results />
         </section>
 
-        {/* <section
+        <section
           id="faq"
           className="container mx-auto max-w-5xl px-4 py-4"
         >
           <Faq />
-        </section> */}
+        </section>
 
         <SiteFooter />
         <FloatingCta />

@@ -1,6 +1,6 @@
 // src/app/admin/_components/admin-tabs-config.ts
 
-export type TabKey = "home" | "about" | "packages" | "testimonials" | "results" | "misc";
+export type TabKey = "home" | "about" | "packages" | "testimonials" | "results" | "faq" | "misc";
 
 export const TABS: { key: TabKey; label: string }[] = [
   { key: "home", label: "Home" },
@@ -8,5 +8,6 @@ export const TABS: { key: TabKey; label: string }[] = [
   { key: "packages", label: "Packages" },
   { key: "testimonials", label: "Testimonials" },
   { key: "results", label: "Results" },
+  { key: "faq", label: "FAQ" },
   { key: "misc", label: "Misc" },
 ];
