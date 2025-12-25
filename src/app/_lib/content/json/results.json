@@ -62,6 +62,13 @@
             "months": 3
           },
           {
+            "name": "Marcus",
+            "year": 2025,
+            "from": 4,
+            "to": 7,
+            "months": 10
+          },
+          {
             "name": "Josephine",
             "year": 2025,
             "from": 4,
@@ -247,13 +254,6 @@
             "year": 2018,
             "from": 5,
             "to": 6
-          },
-          {
-            "name": "Marcus",
-            "year": 2,
-            "from": 6,
-            "to": 7,
-            "months": 10
           }
         ],
         "gradeScale": [
@@ -272,17 +272,17 @@
         "programLabel": "IBDP · SL / AASL / AISL",
         "students": [
           {
-            "name": "Jason",
-            "year": 2025,
-            "from": 6,
-            "to": 7
-          },
-          {
             "name": "Michael",
             "year": 2025,
             "from": 6,
             "to": 7,
             "months": 5
+          },
+          {
+            "name": "Jason",
+            "year": 2025,
+            "from": 4,
+            "to": 7
           },
           {
             "name": "Sabrina",

@@ -112,7 +112,7 @@
     {
       "name": "Jasmine Hung (2023)",
       "role": "IBDP AISL — From 4 to 6",
-      "quote": "Winson is a patient tutor and well-prepared for every lesson, maximising the time spent in class. He provides many past paper questions and tips that have well-equipped me for my IBDP exams.",
+      "quote": "Winson is a patient tutor and is well-prepared for every lesson, which maximizes the time spent in class. He provides many past paper questions and tips that have well-equipped me for my IBDP exams.  I got a 6 in Math AISL and couldn’t have done it without him.",
       "avatarSrc": "",
       "university": "University of Westminster",
       "useDefaultAvatar": true
@@ -127,7 +127,7 @@
     {
       "name": "Lucia Zhu (2018)",
       "role": "IBDP Math HL — From 3 to 6 [in 3 months]",
-      "quote": "Winson is familiar with the IBDP exam details, including all the past paper's questioning styles, exam techniques, and key points. He is an excellent tutor who can customize an appropriate learning plan. He quickly spotted my weaknesses and trained me with past papers. Winson also provided his notes by sorting and organizing important concepts methodically and logically.",
+      "quote": "When I received my disappointing grade, I knew I had to get help immediately. Winson is familiar with IBDP exam details, past paper styles, and exam techniques. He quickly spotted my weaknesses, set a tailored plan, and trained me with past papers. His notes sort key concepts methodically and logically, helping me learn systematically and feel more confident.",
       "avatarSrc": "",
       "university": "The University of Hong Kong",
       "useDefaultAvatar": true
@@ -138,6 +138,20 @@
       "quote": "我认为Winson教学方法简洁明了，令人头疼且复杂的数学概念，通过老师的讲解变得十分易于理解。我的疑问都得到了耐心的解答，并且给予了我很多实用的解题技巧及策略。通过他的辅导，我在数学领域的进步与日俱增，并最终在考试中取得了优异的成绩。我非常感激他的帮助，他是一位十分出色的数学老师！",
       "avatarSrc": "/avatars/carousel-12.png",
       "university": "University College London"
+    },
+    {
+      "name": "Nicole Li (2024)",
+      "role": "Edexcel IGCSE Math — From 4 to 8",
+      "quote": "Winson has helped me improve my math in just one year. He gave me many past papers on different topics, which have drastically improved my math scores. We go through many exercises and questions during our lessons, and I can learn a lot. I now have more confidence in math, thanks to Winson.",
+      "avatarSrc": "",
+      "useDefaultAvatar": true
+    },
+    {
+      "name": "Jasmine Yang (2023)",
+      "role": "IBDP AAHL — From 1 to 6",
+      "quote": "Mr. Siu’s teaching style is crystal clear, with easy-to-follow structures and a stash of super-relevant questions. His strong sense of responsibility and genuine passion for tutoring make him exceptional. I thoroughly enjoy his tutoring sessions every week.",
+      "avatarSrc": "",
+      "university": "The University of Edinburgh"
     }
   ]
 }
