@@ -127,7 +127,7 @@
     {
       "name": "Lucia Zhu (2018)",
       "role": "IBDP Math HL — From 3 to 6 [in 3 months]",
-      "quote": "When I received my disappointing grade, I knew I had to get help immediately. Winson is familiar with IBDP exam details, past paper styles, and exam techniques. He quickly spotted my weaknesses, set a tailored plan, and trained me with past papers. His notes sort key concepts methodically and logically, helping me learn systematically and feel more confident.",
+      "quote": "When I received my disappointing grade, I knew I had to get help immediately. Winson is familiar with IBDP past paper styles and exam techniques. He quickly spotted my weaknesses, set a tailored plan, and trained me with past papers. His notes sort key concepts methodically and logically, helping me learn systematically and feel more confident.",
       "avatarSrc": "",
       "university": "The University of Hong Kong",
       "useDefaultAvatar": true
@@ -215,6 +215,13 @@
       "avatarSrc": "/avatars/carousel-22.png",
       "university": "Loughborough University",
       "useDefaultAvatar": false
+    },
+    {
+      "name": "Lucy Han (2019)",
+      "role": "HKDSE Math — From 3 to 5",
+      "quote": "我從 Form 6 開始上 Winson 的 HKDSE 數學課。他溫柔細緻，每堂會按課題提供筆記與試題，逐題拆解我的錯題，講清背後邏輯，讓我下次遇到同類題有清晰思路。時間緊迫時亦補充 MC／Short Questions 技巧與公式整理，真的很讚！",
+      "avatarSrc": "/avatars/carousel-23.png",
+      "university": "The Hong Kong University of Science and Technology"
     }
   ]
 }
