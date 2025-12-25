@@ -1,6 +1,6 @@
 {
   "header": {
-    "eyebrow": "COACHING PACKAGES",
+    "eyebrow": "IBDP COACHING PACKAGES",
     "title": "Choose the path that fits your goal",
     "subtitle": "From high-leverage small group classes to fully tailored 1-to-1 coaching.",
     "chips": [
@@ -11,21 +11,21 @@
     ],
     "rightAccent": {
       "heading": "Results snapshot",
-      "badge": "Since 2017",
+      "badge": "Since 2018",
       "mainValue": "250+",
       "mainLabel": "students coached 1-on-1",
       "mainSize": "sm",
       "columns": [
         {
-          "title": "IBDP HL 7 rate",
+          "title": "IBDP HL 6+ rate",
           "items": [
-            "50%+"
+            "60%+"
           ]
         },
         {
-          "title": "IGCSE A / A*",
+          "title": "IBDP SL 6+ rate",
           "items": [
-            "70%+"
+            "60%+"
           ]
         }
       ]
@@ -42,13 +42,13 @@
     "label": "Premium 1-to-1",
     "rateLabel": "Typical rate",
     "hourlyRate": "1500",
-    "title": "Private online coaching",
+    "title": "Private coaching",
     "description": "For students who want maximum customisation, tight accountability, and fast score improvements.",
     "points": [
       "Deep dive into school tests, IA preparation, and mock exams.",
       "Fully personalised by-topic drills and homework, adjusted weekly.",
       "Weekly performance tracking with targeted correction of weak topics.",
-      "Ideal if you’re pushing for Level 6–7 / A* and want strict pacing."
+      "Ideal if you’re pushing for Level 7 / A* and want strict pacing."
     ],
     "intensive": {
       "label": "8-lesson intensive",
@@ -61,26 +61,26 @@
         "Detailed summary by topic and school mock exam prediction.",
         "IBDP Math IA topic setup & guidance until completion.",
         "Expected 2 grades improvement or better (e.g. from 5 to 7 in IBDP or from B to A* in A-Level) with full commitment.",
-        "GoodNotes 6 one-time payment sponsorship.",
         "Referral rebate of up to HKD 3,000 per student referred."
       ]
     },
     "privateSrc": "/private-package.jpg",
-    "bookLabel": "Book a private coaching lesson"
+    "bookLabel": "Book a private coaching lesson",
+    "whatsappPrefillText": "Hello Winson, I am interested in booking a private coaching lesson. Could you please provide me with more details? Thank you!"
   },
   "group": {
     "label": "High-value group",
     "tag": "Most popular",
     "programmeLabel": "Full programme",
     "title": "32+ lesson Zoom group course",
-    "description": "Structured syllabus for IBMYP / IGCSE students bridging into IBDP AASL / AISL, with full notes and exam-style practice.",
+    "description": "Structured syllabus for IBDP, IBMYP and IGCSE students with full notes and exam-style practice.",
     "originalPrice": "60000",
     "price": "19800",
     "lessons": "32",
     "points": [
-      "Approx. 32+ live Zoom lessons + high-quality teaching videos.",
-      "By-topic notes, GoodNotes materials, and curated past-paper sets.",
-      "Designed so motivated students can rely on group only and still reach strong exam results."
+      "Approx. 32+ high-quality live Zoom lessons.",
+      "By-topic notes and selected past paper questions.",
+      "Designed for motivated students who rely on group classes only and still achieve strong exam results."
     ],
     "leaflet": {
       "label": "Course leaflet preview",
@@ -99,7 +99,8 @@
       ],
       "autoAdvanceSeconds": "5"
     },
-    "bookLabel": "Book the group course"
+    "bookLabel": "Book the group course",
+    "whatsappPrefillText": "Hello Winson, I am interested in joining the group course. Could you please provide me with more details? Thank you!"
   },
   "iaSupport": {
     "eyebrow": "IA Guidance",
@@ -122,22 +123,6 @@
         "desc": "Uncover how modern techniques breathe new life into solving ancient mathematical puzzles."
       },
       {
-        "title": "Sports and Mathematics",
-        "desc": "Explore the relationship between athletic performance and mathematical principles, like optimizing sports equipment."
-      },
-      {
-        "title": "Environmental Math",
-        "desc": "Tackle environmental challenges and natural phenomena with insightful mathematical analysis."
-      },
-      {
-        "title": "Mathematics in Society",
-        "desc": "Explore socio-economic issues through mathematical methodologies, understanding the world in numbers."
-      },
-      {
-        "title": "Geometry in Everyday Life",
-        "desc": "Investigate common objects through a mathematical lens, revealing hidden geometrical wonders."
-      },
-      {
         "title": "Artistic Math",
         "desc": "Unleash creativity through mathematical patterns and designs, blending art with equations."
       },
@@ -146,14 +131,31 @@
         "desc": "Delve into the celestial realm, using math to model the complex interactions of planets and stars."
       },
       {
-        "title": "Practical Problem-Solving",
-        "desc": "Apply math to everyday scenarios, from game strategies to efficient division of resources."
+        "title": "Environmental Math",
+        "desc": "Tackle environmental challenges and natural phenomena with insightful mathematical analysis."
+      },
+      {
+        "title": "Geometry in Everyday Life",
+        "desc": "Investigate common objects through a mathematical lens, revealing hidden geometrical wonders."
       },
       {
         "title": "Math in Engineering",
         "desc": "From designing roller coasters to solving structural problems, discover the application of math in engineering."
+      },
+      {
+        "title": "Mathematics in Society",
+        "desc": "Explore socio-economic issues through mathematical methodologies, understanding the world in numbers."
+      },
+      {
+        "title": "Practical Problem-Solving",
+        "desc": "Apply math to everyday scenarios, from game strategies to efficient division of resources."
+      },
+      {
+        "title": "Sports and Mathematics",
+        "desc": "Explore the relationship between athletic performance and mathematical principles, like optimizing sports equipment."
       }
     ],
-    "coverageNote": "Covered in Solo 1-to-1 lessons (no separate IA package required)."
+    "bookLabel": "Enquire about IA support",
+    "whatsappPrefillText": "Hi Winson Siu, I'm interested in Math IA support (topic selection / structure / feedback). Can you advise on the plan and pricing?"
   }
 }

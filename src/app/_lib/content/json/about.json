@@ -51,46 +51,54 @@
       "items": [
         "Live Zoom lessons with iPad + Apple Pencil + GoodNotes for instant feedback.",
         "Clear, step-by-step worked solutions and post-lesson homework.",
-        "English or Cantonese delivery; professional, results-first approach."
+        "Cantonese, Mandarin or English delivery; professional, results-first approach."
       ]
     }
   },
   "stats": [
-    "50%+ IBDP Level 7 track record",
-    "18,000+ teaching hours",
-    "250+ one-to-one students",
-    "A-Level Math & FM: A* pathway"
+    "James (2024) AAHL From 1 to 7 in 2 years",
+    "Sharon (2023) AASL From 3 to 7 in 1.5 months",
+    "Cissie (2023) 0607 From F to A in 1 year"
   ],
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-LEVEL · IGCSE",
-    "intro": "By-topic past papers from 2008 to 2025 are available in the following courses.",
+    "intro": "2008",
     "groups": [
       {
-        "title": "IB Diploma Programme",
-        "caption": "AA / AI · HL / SL",
+        "title": "IB programmes",
+        "caption": "IBDP · IBMYP",
         "emphasize": true,
         "courses": [
-          "Math Analysis and Approaches HL",
-          "Math Analysis and Approaches SL",
-          "Math Applications and Interpretation HL",
-          "Math Applications and Interpretation SL",
-          "Math Internal Assessment (IA)"
-        ]
+          "IBDP Math AAHL",
+          "IBDP Math AASL",
+          "IBDP Math AIHL",
+          "IBDP Math AISL",
+          "Math IA",
+          "IBMYP Math"
+        ],
+        "cta": {
+          "label": "Inquire about IBDP plan",
+          "prefillText": "Hi Winson Siu, I'm interested in IBDP Math tutoring. Can you suggest a course plan and arrange a lesson?"
+        }
       },
       {
         "title": "A-Level programmes",
         "caption": "Edexcel · Cambridge · AQA · OCR",
         "emphasize": false,
         "courses": [
-          "Edexcel (IAL YFM01) Further Math",
-          "Cambridge (CAIE 9231) Further Math",
-          "AQA (7367) Further Math",
+          "Edexcel (IAL YFM01, AL 9FM0) Further Math",
           "Edexcel (IAL YMA01, AL 9MA0) Math",
+          "Cambridge (CAIE 9231) Further Math",
           "Cambridge (CAIE 9709) Math",
+          "AQA (7367) Further Math",
           "AQA (7357) Math",
           "OCR (H240) Math"
-        ]
+        ],
+        "cta": {
+          "label": "Inquire about A-Level plan",
+          "prefillText": "Hi Winson Siu, I'm interested in A-Level Math tutoring. Can you suggest a course plan and arrange a lesson?"
+        }
       },
       {
         "title": "IGCSE programmes",
@@ -98,16 +106,20 @@
         "emphasize": false,
         "courses": [
           "Cambridge (0606) Additional Math",
-          "Edexcel (4PM0) Further Math",
           "Cambridge (0607) International Math",
           "Cambridge (0580) Math",
-          "Edexcel (4PM1) Math"
-        ]
+          "Edexcel (4PM1) Further Pure Math",
+          "Edexcel (4PM0) Math"
+        ],
+        "cta": {
+          "label": "Inquire about IGCSE plan",
+          "prefillText": "Hi Winson Siu, I'm interested in IGCSE Math tutoring. Can you suggest a course plan and arrange a lesson?"
+        }
       }
     ]
   },
   "ctaRibbon": {
-    "heading": "Limited 1:1 slots — start boosting IBDP results now",
-    "subheading": "Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL."
+    "heading": "Limited 1:1 slots — start boosting your results now",
+    "subheading": "Premium, outcomes-driven coaching for IBDP / A-Level / IGCSE."
   }
 }
