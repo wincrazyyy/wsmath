@@ -201,8 +201,25 @@ export const ABOUT_STATS_COURSES_FIELDS: FieldConfig[] = [
   )
 ];
 
+// CTA ribbon
+export const ABOUT_CTA_FIELDS: FieldConfig[] = [
+  {
+    path: "ctaRibbon.heading",
+    label: "CTA ribbon heading",
+    description: "Big line in the coloured strip under About.",
+    type: "string",
+  },
+  {
+    path: "ctaRibbon.subheading",
+    label: "CTA ribbon subheading",
+    description: "Smaller line under the CTA heading.",
+    type: "string",
+  },
+];
+
 export const ABOUT_FIELDS: FieldConfig[] = [
   ...ABOUT_HEADER_FIELDS,
   ...ABOUT_HERO_FIELDS,
   ...ABOUT_STATS_COURSES_FIELDS,
+  ...ABOUT_CTA_FIELDS,
 ];

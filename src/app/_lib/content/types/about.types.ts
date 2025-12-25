@@ -39,6 +39,11 @@ export type CoursesSectionConfig = {
   groups: CoursesSectionGroupConfig[];
 };
 
+export type AboutCtaConfig = {
+  heading: string;
+  subheading: string;
+};
+
 export type AboutConfig = {
   header: AboutHeaderConfig;
   hero: AboutHeroConfig;

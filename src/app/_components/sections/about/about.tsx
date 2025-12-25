@@ -7,6 +7,7 @@ import { AboutHeader } from "./about-header";
 import { AboutHero } from "./about-hero";
 import { AboutStats } from "./about-stats";
 import { CoursesCovered } from "./courses-covered";
+import { CtaRibbon } from "@/app/_components/sections/about/cta-ribbon";
 
 export function About() {
   const about = aboutContent as AboutConfig;
@@ -19,6 +20,7 @@ export function About() {
         <AboutHero hero={hero} />
         <AboutStats stats={stats} />
         <CoursesCovered coursesSection={coursesSection} />
+        <CtaRibbon />
       </SectionReveal>
     </>
   );
