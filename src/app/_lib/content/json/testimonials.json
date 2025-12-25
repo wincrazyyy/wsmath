@@ -14,7 +14,7 @@
   "featured": [
     {
       "name": "Alice Gao (2022)",
-      "role": "IBDP AAHL — From Level 6 to 7 [in 7 months]",
+      "role": "IBDP AAHL — From Level 6 to 7",
       "university": "University College London",
       "quote": "I had the great fortune of being tutored by Winson during my IBDP years. Winson's passion for tutoring is evident in every session. He pinpoints specific areas where I need assistance and tailors his instruction to address my challenges. His notes are clear, concise, and easy to grasp. One standout aspect was the wealth of past paper questions he provided, meticulously sorted by topics and years. I am truly grateful for his guidance.",
       "avatarSrc": "/avatars/featured-1.png",
@@ -30,7 +30,7 @@
     },
     {
       "name": "Jason Yeung (2025)",
-      "role": "IBDP AASL — From 6 to 7",
+      "role": "IBDP AASL — From 4 to 7",
       "university": "The University of Hong Kong",
       "quote": "Mr. Siu is the best math teacher I have ever had. His explanations, particularly for calculus, are outstanding. His resources are comprehensive, offering targeted exercises and past papers dating back to the 2000s. He was also a great motivator, encouraging me to complete past papers and homework when my own drive was low.",
       "avatarSrc": "/avatars/featured-3.png",
@@ -40,49 +40,49 @@
       "name": "Cissie Ching (2025)",
       "role": "IBDP AISL — From 1 to 5",
       "university": "The University of Hong Kong",
-      "quote": "Winson老師的教學方式以習題練習為主，不斷加強記憶並深入了解知識點，課後亦會有相應筆記供學生複習。老師一直很用心，包括備課／考前準備等，性格熱情，教課不死板而且認真，並量身定做往年習題、易錯題以及薄弱知識點單元等。",
+      "quote": "Winson老师的教学方式以习题练习为主，不断加强记忆并深入了解知识点，课后亦会有相应笔记供学生复习。老师一直很用心，包括备课／考前准备等，性格热情，教课不死板而且认真，并量身定做往年习题、易错题以及薄弱知识点单元等。",
       "avatarSrc": "/avatars/featured-4.png",
       "useDefaultAvatar": false
     }
   ],
   "carousel": [
     {
-      "name": "Vera Jing (2021)",
-      "role": "IBDP AAHL — From 6 to 7",
-      "university": "University College London",
-      "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. We started regular tuition in 2019. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions! With his help, I achieved a grade of 7 in Math AAHL.",
+      "name": "James Chow (2024)",
+      "role": "IBDP AAHL — From 1 to 7",
+      "university": "The University of Hong Kong",
+      "quote": "He is an exceptional educator with a genuine passion for teaching and fostering young talent. What makes Siu Sir truly outstanding is his long-term commitment to my education. His dedication has been evident through the precise and thoughtful compilation of past paper questions, detailed booklets, and notes for every chapter we covered. Siu Sir's belief in me and his encouragement were pivotal. He was always willing to accommodate additional classes at short notice and generously took time to answer questions outside of our lessons. His explanations were clear, insightful, and tailored to my learning style.",
       "avatarSrc": "/avatars/carousel-1.png",
-      "useDefaultAvatar": true
-    },
-    {
-      "name": "Jasmine Yang (2023)",
-      "role": "IBDP AAHL — From 2 to 6",
-      "university": "The University of Edinburgh",
-      "quote": "Mr. Siu is hands down the best math teacher I've come across. His teaching style is crystal clear, with easy-to-follow structures and a stash of super-relevant questions. His strong sense of responsibility and genuine passion for tutoring make him exceptional. Thanks to his guidance, my IBDP Math AAHL journey has significantly improved.",
-      "avatarSrc": "/avatars/carousel-2.png",
       "useDefaultAvatar": true
     },
     {
       "name": "Sharon Deng (2023)",
       "role": "IBDP AASL — From 3 to 7 [in 1.5 months]",
       "university": "The University of Hong Kong",
-      "quote": "我的学校数学老师非常不负责，我迫切地需要一个合适的数学老师帮我查漏补缺，不然我大考的时侯可能就得望着没做几道题的卷子无语凝噎、默默流泪了。我与Winson老师让学生直接实操Past Paper的教学方式十分契合，且迅速总结出Past Papers的做题方式。让我在IBDP的最后阶段成功取得了7分的成绩。很推荐正在suffer in math的IBer们尝试尝试Winson的课程~",
+      "quote": "我个人认为数学本身是一门实践大于理论，并需时刻保持手感的科目。因此我与Winson老师让学生直接实操Past Paper的教学方式十分契合，且迅速总结出Past Papers的做题方式；课上的比对作业以及改错环节使我更愿意在课后抽出时间学习这个科目。",
+      "avatarSrc": "/avatars/carousel-2.png",
+      "useDefaultAvatar": true
+    },
+    {
+      "name": "Joy Angela Sun (2022)",
+      "role": "IBDP AAHL — From 5 to 7 [in 10 months]",
+      "university": "The Chinese University of Hong Kong",
+      "quote": "Winson’s teaching style is based on experience: his insistence on learning by practicing past papers is sensible and practical. He provides specific past paper questions for each topic separately, and his notes are very useful for final exam revisions. Winson is very patient and experienced. His assignments are based on each student’s ability and needs.",
       "avatarSrc": "/avatars/carousel-3.png",
       "useDefaultAvatar": true
     },
     {
-      "name": "CL (2023)",
+      "name": "Cassie Luo (2023)",
       "role": "IBDP AASL — From 4 to 7",
       "university": "The University of Hong Kong",
-      "quote": "Winson 老师是一位满怀责任心的数学老师。他会在课堂中先带领我学习及总结单元知识，接下来将挑选合适的题目以供我练习。如果期间有任何不解，老师都会针对性地进行详细的讲解。Winson老师亦会在课后为我整理好Past Paper Booklet，以便我课后进行复习及巩固。在老师的帮助下，我每次的数学考试皆取得了6-7的分数。 ",
+      "quote": "Winson老师是一位满怀责任心的数学老师。他会在课堂中先带领我学习及总结单元知识，接下来将挑选合适的题目以供我练习。如果期间有任何不解，老师都会针对性地进行详细的讲解。一节课中70%时间学生做题；30%时间老师讲课，这是Winson老师独特的教学方式。Winson老师亦会在课后为我整理好Past Paper Booklet，以便我课后进行复习及巩固。",
       "avatarSrc": "/avatars/carousel-4.png",
       "useDefaultAvatar": true
     },
     {
-      "name": "Bill Zhang (2023)",
-      "role": "CAIE Math — From F to A*",
-      "university": "The University of Hong Kong",
-      "quote": "Winson 老师的上课风格轻松无压力，且教书模式灵活变通，将複杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定製的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之馀的刷题效率。在我高中的最后一年，更是一鼓作气取得了A-Level Further Math A*。 ",
+      "name": "Vera Jing (2021)",
+      "role": "IBDP AAHL — From 6 to 7",
+      "university": "University College London",
+      "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. We started regular tuition in 2019. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions!",
       "avatarSrc": "",
       "useDefaultAvatar": true
     }
