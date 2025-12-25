@@ -9,6 +9,7 @@ const LINKS = [
   { href: "#packages", label: "Packages" },
   { href: "#testimonials", label: "Testimonials" },
   { href: "#results", label: "Results" },
+  { href: "#faq", label: "FAQ" },
 ];
 
 const HIDE_AFTER_PX = 48; // scroll distance before nav fades out
@@ -160,7 +161,7 @@ export function Nav() {
                 aria-label="WSMath Home"
               >
                 <Image
-                  src="/icon.svg"
+                  src="/icon.png"
                   alt=""
                   width={24}
                   height={24}
