@@ -2,7 +2,7 @@
   "header": {
     "eyebrow": "ABOUT WSMATH",
     "title": "Professional online math coaching",
-    "subtitle": "High-end, exam-focused tutoring for IBDP, A-Level and IGCSE students around the world.",
+    "subtitle": "High-end, exam-focused tutoring for IBDP, A Level and IGCSE students around the world.",
     "chips": [
       "🧠 1-to-1 coaching · Zoom live lessons 💻",
       "📚 By-topic past papers · Exam strategy 🎯",
@@ -10,8 +10,8 @@
     ],
     "rightAccent": {
       "heading": "Who I teach",
-      "badge": "IBDP · A-Level · IGCSE",
-      "mainValue": "Year 10–13",
+      "badge": "IBDP · A Level · IGCSE",
+      "mainValue": "Year 9–13",
       "mainLabel": "students worldwide",
       "mainSize": "sm",
       "columns": [
@@ -27,7 +27,7 @@
         {
           "title": "Other programmes",
           "items": [
-            "A-Level",
+            "A Level",
             "IGCSE",
             "IBMYP"
           ]
@@ -125,6 +125,6 @@
   },
   "ctaRibbon": {
     "heading": "Limited private 1:1 slots — start boosting your results now",
-    "subheading": "Premium, outcomes-driven coaching for IBDP / A-Level / IGCSE."
+    "subheading": "Premium, outcomes-driven coaching for IBDP / A Level / IGCSE."
   }
 }

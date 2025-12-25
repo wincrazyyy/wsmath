@@ -66,14 +66,14 @@
     },
     "privateSrc": "/private-package.jpg",
     "bookLabel": "Book a private coaching lesson",
-    "whatsappPrefillText": "Hello Winson, I am interested in booking a private coaching lesson. Could you please provide me with more details? Thank you!"
+    "whatsappPrefillText": "Hello Winson Siu, I am interested in booking a private coaching lesson. I am (name?) from (school?) in (year?)."
   },
   "group": {
-    "label": "High-value group",
+    "label": "High-value Structured Package",
     "tag": "Most popular",
     "programmeLabel": "Full programme",
-    "title": "32+ lesson Zoom group course",
-    "description": "Structured syllabus for IBDP, IBMYP and IGCSE students with full notes and exam-style practice.",
+    "title": "IBDP Math Level 7 Mastery System",
+    "description": "Structured syllabus for IBDP, IGCSE and IBMYP students with full notes and exam-style practice.",
     "originalPrice": "60000",
     "price": "19800",
     "lessons": "32",
@@ -97,10 +97,10 @@
         "/leaflets/group-leaflet-page-8.jpg",
         "/leaflets/group-leaflet-page-9.jpg"
       ],
-      "autoAdvanceSeconds": "5"
+      "autoAdvanceSeconds": "2"
     },
     "bookLabel": "Book the group course",
-    "whatsappPrefillText": "Hello Winson, I am interested in joining the group course. Could you please provide me with more details? Thank you!"
+    "whatsappPrefillText": "Hello Winson Siu, I am interested in joining the group course. I am (name?) from (school?) in (year?)."
   },
   "iaSupport": {
     "eyebrow": "IA Guidance",
