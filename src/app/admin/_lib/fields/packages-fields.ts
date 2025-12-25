@@ -371,12 +371,18 @@ export const PACKAGES_IA_SUPPORT_FIELDS: FieldConfig[] = [
   },
 
 
-  // Coverage note
+  // book button
   {
-    path: "iaSupport.coverageNote",
-    label: "IA Support – coverage note",
-    description: "Small note under the block (e.g. covered in Solo 1-to-1 lessons).",
+    path: "iaSupport.bookLabel",
+    label: "IA Support – Book button label",
+    description: "Label for the Book button on the IA support section.",
     type: "string",
+  },
+  {
+    path: "iaSupport.whatsappPrefillText",
+    label: "IA Support – WhatsApp prefill text",
+    description: "Prefill text for WhatsApp message when enquiring about IA support.",
+    type: "textarea",
   },
 ];
 

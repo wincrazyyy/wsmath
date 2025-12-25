@@ -75,7 +75,8 @@ export type IaSupportConfig = {
   topicsTitle: string;
   topics: IaSupportTopic[];
 
-  coverageNote: string;
+  bookLabel: string;
+  whatsappPrefillText: string;
 };
 
 export type PackagesConfig = {

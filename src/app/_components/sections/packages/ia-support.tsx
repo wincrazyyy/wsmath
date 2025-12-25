@@ -2,6 +2,7 @@
 "use client";
 
 import type { IaSupportConfig } from "@/app/_lib/content/types/packages.types";
+import { BookButton } from "@/app/_components/ui/book-button";
 
 type Props = {
   config: IaSupportConfig;
@@ -20,7 +21,8 @@ export function IaSupport({ config }: Props) {
     lessonStructure,
     topicsTitle,
     topics,
-    coverageNote,
+    bookLabel,
+    whatsappPrefillText,
   } = config;
 
   function goToSoloAndHighlight() {
@@ -39,7 +41,7 @@ export function IaSupport({ config }: Props) {
   }
 
   return (
-    <div className="mt-8 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+    <div className="mt-8 flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -65,7 +67,9 @@ export function IaSupport({ config }: Props) {
       <div className="mt-6 space-y-6">
         {/* Lesson structure */}
         <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
-          <div className="text-sm font-semibold text-neutral-900">{lessonStructureTitle}</div>
+          <div className="text-sm font-semibold text-neutral-900">
+            {lessonStructureTitle}
+          </div>
           <ul className="mt-3 space-y-2">
             {(lessonStructure ?? []).map((t) => (
               <li key={t} className="flex gap-2 text-sm text-neutral-700">
@@ -91,7 +95,16 @@ export function IaSupport({ config }: Props) {
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-neutral-500">{coverageNote}</p>
+      {/* Bottom CTA */}
+      <div className="mt-auto pt-5">
+        <BookButton
+          variant="plain"
+          label={bookLabel}
+          ariaLabel="Enquire about IA support on WhatsApp"
+          prefillText={whatsappPrefillText}
+          buttonClassName="rounded-xl px-4 py-2.5 text-[13px]"
+        />
+      </div>
     </div>
   );
 }

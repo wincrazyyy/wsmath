@@ -155,6 +155,7 @@
         "desc": "Explore the relationship between athletic performance and mathematical principles, like optimizing sports equipment."
       }
     ],
-    "coverageNote": "Covered in Solo 1-to-1 lessons (no separate IA package required)."
+    "bookLabel": "Enquire about IA support",
+    "whatsappPrefillText": "Hi Winson Siu, I'm interested in Math IA support (topic selection / structure / feedback). Can you advise on the plan and pricing?"
   }
 }
