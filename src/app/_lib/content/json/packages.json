@@ -17,15 +17,15 @@
       "mainSize": "sm",
       "columns": [
         {
-          "title": "IBDP HL 7 rate",
+          "title": "IBDP HL 6+ rate",
           "items": [
-            "50%+"
+            "60%+"
           ]
         },
         {
-          "title": "IBDP HL 7 rate",
+          "title": "IBDP SL 6+ rate",
           "items": [
-            "70%+"
+            "60%+"
           ]
         }
       ]
@@ -48,7 +48,7 @@
       "Deep dive into school tests, IA preparation, and mock exams.",
       "Fully personalised by-topic drills and homework, adjusted weekly.",
       "Weekly performance tracking with targeted correction of weak topics.",
-      "Ideal if you’re pushing for Level 6–7 / A* and want strict pacing."
+      "Ideal if you’re pushing for Level 7 / A* and want strict pacing."
     ],
     "intensive": {
       "label": "8-lesson intensive",
@@ -61,7 +61,6 @@
         "Detailed summary by topic and school mock exam prediction.",
         "IBDP Math IA topic setup & guidance until completion.",
         "Expected 2 grades improvement or better (e.g. from 5 to 7 in IBDP or from B to A* in A-Level) with full commitment.",
-        "GoodNotes 6 one-time payment sponsorship.",
         "Referral rebate of up to HKD 3,000 per student referred."
       ]
     },

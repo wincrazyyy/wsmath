@@ -70,12 +70,12 @@
         "caption": "IBDP · IBMYP",
         "emphasize": true,
         "courses": [
-          "IBDP AAHL",
-          "IBDP AASL",
-          "IBDP AIHL",
-          "IBDP AISL",
+          "IBDP Math AAHL",
+          "IBDP Math AASL",
+          "IBDP Math AIHL",
+          "IBDP Math AISL",
           "Math IA",
-          "IBMYP"
+          "IBMYP Math"
         ]
       },
       {
@@ -83,13 +83,13 @@
         "caption": "Edexcel · Cambridge · AQA · OCR",
         "emphasize": false,
         "courses": [
-          "Edexcel (IAL YFM01, AL 9FM0) Further Maths",
-          "Edexcel (IAL YMA01, AL 9MA0) Maths",
-          "Cambridge (CAIE 9231) Further Maths",
-          "Cambridge (CAIE 9709) Maths",
-          "AQA (7367) Further Maths",
-          "AQA (7357) Maths",
-          "OCR (H240) Maths"
+          "Edexcel (IAL YFM01, AL 9FM0) Further Math",
+          "Edexcel (IAL YMA01, AL 9MA0) Math",
+          "Cambridge (CAIE 9231) Further Math",
+          "Cambridge (CAIE 9709) Math",
+          "AQA (7367) Further Math",
+          "AQA (7357) Math",
+          "OCR (H240) Math"
         ]
       },
       {
@@ -97,11 +97,11 @@
         "caption": "Cambridge · Edexcel",
         "emphasize": false,
         "courses": [
-          "Cambridge (0606) Additional Maths",
-          "Cambridge (0607) International Maths",
-          "Cambridge (0580) Maths",
-          "Edexcel (4PM0) Further Maths",
-          "Edexcel (4PM1) Maths"
+          "Cambridge (0606) Additional Math",
+          "Cambridge (0607) International Math",
+          "Cambridge (0580) Math",
+          "Edexcel (4PM1) Further Pure Math",
+          "Edexcel (4PM0) Math"
         ]
       }
     ]
