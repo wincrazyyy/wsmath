@@ -28,8 +28,11 @@ export function CtaRibbon() {
           aria-hidden
         />
 
-        {/* subtle moving highlight */}
+        {/* idle sheen sweep */}
         <div className={styles.sheen} aria-hidden />
+
+        {/* extra hover sweep (only visible on hover) */}
+        <div className={styles.hoverSheen} aria-hidden />
 
         <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <h2 className="text-base font-semibold tracking-tight text-neutral-900 sm:text-lg">
