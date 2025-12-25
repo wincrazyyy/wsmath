@@ -58,25 +58,28 @@
             "name": "Marcus",
             "year": 2025,
             "from": 6,
-            "to": 7
+            "to": 7,
+            "months": 10
           },
           {
             "name": "Miriam",
             "year": 2025,
             "from": 6,
-            "to": 7
-          },
-          {
-            "name": "Sophia",
-            "year": 2025,
-            "from": 4,
-            "to": 6
+            "to": 7,
+            "months": 3
           },
           {
             "name": "Josephine",
             "year": 2025,
             "from": 4,
             "to": 6
+          },
+          {
+            "name": "Sophia",
+            "year": 2025,
+            "from": 4,
+            "to": 6,
+            "months": 5
           },
           {
             "name": "Evelyn",
@@ -88,20 +91,21 @@
             "name": "Tina",
             "year": 2025,
             "from": 1,
-            "to": 4
+            "to": 4,
+            "months": 9
           },
           {
             "name": "James",
             "year": 2024,
             "from": 1,
-            "to": 7,
-            "months": 24
+            "to": 7
           },
           {
             "name": "Ricky",
             "year": 2024,
             "from": 3,
-            "to": 5
+            "to": 5,
+            "months": 6
           },
           {
             "name": "Jasmine",
@@ -110,34 +114,38 @@
             "to": 6
           },
           {
-            "name": "Joy",
+            "name": "Mary",
             "year": 2022,
-            "from": 5,
-            "to": 7
-          },
-          {
-            "name": "Ethan",
-            "year": 2022,
-            "from": 5,
-            "to": 7
-          },
-          {
-            "name": "Cici",
-            "year": 2022,
-            "from": 6,
+            "from": 7,
             "to": 7
           },
           {
             "name": "Alice",
             "year": 2022,
             "from": 6,
-            "to": 7
+            "to": 7,
+            "months": 7
           },
           {
-            "name": "Mary",
+            "name": "Cici",
             "year": 2022,
-            "from": 7,
-            "to": 7
+            "from": 6,
+            "to": 7,
+            "months": 7
+          },
+          {
+            "name": "Ethan",
+            "year": 2022,
+            "from": 5,
+            "to": 7,
+            "months": 9
+          },
+          {
+            "name": "Joy",
+            "year": 2022,
+            "from": 5,
+            "to": 7,
+            "months": 8
           },
           {
             "name": "Fiona",
@@ -153,15 +161,9 @@
             "to": 5
           },
           {
-            "name": "Janice",
+            "name": "Ivy",
             "year": 2021,
-            "from": 5,
-            "to": 7
-          },
-          {
-            "name": "Hebe",
-            "year": 2021,
-            "from": 5,
+            "from": 6,
             "to": 7
           },
           {
@@ -171,16 +173,23 @@
             "to": 7
           },
           {
-            "name": "Ivy",
+            "name": "Hebe",
             "year": 2021,
-            "from": 6,
+            "from": 5,
+            "to": 7
+          },
+          {
+            "name": "Janice",
+            "year": 2021,
+            "from": 5,
             "to": 7
           },
           {
             "name": "Owen",
             "year": 2021,
             "from": 3,
-            "to": 5
+            "to": 5,
+            "months": 1
           },
           {
             "name": "Judy",
@@ -213,6 +222,12 @@
             "to": 7
           },
           {
+            "name": "Evelyn",
+            "year": 2018,
+            "from": 5,
+            "to": 6
+          },
+          {
             "name": "Lucia",
             "year": 2018,
             "from": 3,
@@ -220,22 +235,18 @@
             "months": 3
           },
           {
-            "name": "Evelyn",
-            "year": 2018,
-            "from": 5,
-            "to": 6
-          },
-          {
             "name": "Kelly",
             "year": 2018,
             "from": 3,
-            "to": 5
+            "to": 5,
+            "months": 1.5
           },
           {
             "name": "Vivian",
             "year": 2018,
             "from": 1,
-            "to": 4
+            "to": 4,
+            "months": 5
           }
         ],
         "gradeScale": [

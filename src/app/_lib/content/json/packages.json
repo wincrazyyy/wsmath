@@ -1,6 +1,6 @@
 {
   "header": {
-    "eyebrow": "COACHING PACKAGES",
+    "eyebrow": "IBDP COACHING PACKAGES",
     "title": "Choose the path that fits your goal",
     "subtitle": "From high-leverage small group classes to fully tailored 1-to-1 coaching.",
     "chips": [
@@ -11,7 +11,7 @@
     ],
     "rightAccent": {
       "heading": "Results snapshot",
-      "badge": "Since 2017",
+      "badge": "Since 2018",
       "mainValue": "250+",
       "mainLabel": "students coached 1-on-1",
       "mainSize": "sm",
@@ -23,7 +23,7 @@
           ]
         },
         {
-          "title": "IGCSE A / A*",
+          "title": "IBDP HL 7 rate",
           "items": [
             "70%+"
           ]
