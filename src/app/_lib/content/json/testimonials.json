@@ -151,7 +151,8 @@
       "role": "IBDP AAHL — From 1 to 6",
       "quote": "Mr. Siu’s teaching style is crystal clear, with easy-to-follow structures and a stash of super-relevant questions. His strong sense of responsibility and genuine passion for tutoring make him exceptional. I thoroughly enjoy his tutoring sessions every week.",
       "avatarSrc": "",
-      "university": "The University of Edinburgh"
+      "university": "The University of Edinburgh",
+      "useDefaultAvatar": true
     },
     {
       "name": "Kelly Li (2023)",
@@ -165,45 +166,55 @@
       "role": "IBDP AAHL — From 2 to 5",
       "quote": "Winson's tutoring helped me immensely during the period of the COVID online class. Especially for someone who wasn't an active learner, I could follow his path and finish all the assignments/past papers. The lesson notes he provided with detailed formulas and keywords have been a major source for revision material.",
       "avatarSrc": "",
-      "university": "The Chinese University of Hong Kong"
+      "university": "The Chinese University of Hong Kong",
+      "useDefaultAvatar": true
     },
     {
       "name": "Vivian Chen (2018)",
       "role": "IBDP Math HL — From 2 to 5",
       "quote": "Finding Winson as my IBDP Math tutor was an incredible stroke of luck! He truly saved me from my struggles with IBDP Math HL. His teaching style is both enjoyable and easily understandable. His fluency in Mandarin, English, and Cantonese was a tremendous asset, allowing me to learn the language I felt most comfortable with.",
       "avatarSrc": "",
-      "university": "Istituto Marangoni London"
+      "university": "Istituto Marangoni London",
+      "useDefaultAvatar": true
     },
     {
-      "name": "Gordon Lo",
-      "role": "",
-      "quote": "",
-      "avatarSrc": ""
+      "name": "Gordon Lo (2023)",
+      "role": "Cambridge IGCSE 0607 — From E to A",
+      "quote": "My impression of Mr. Siu has never truly changed. Winson is a kind and reliable mentor, which is why I enjoy mathematics so much. His method is simple and efficient: learn the key concepts of each topic and apply them to past paper questions. I appreciate having lessons with Winson.",
+      "avatarSrc": "",
+      "university": "The University of Hong Kong",
+      "useDefaultAvatar": true
     },
     {
-      "name": "Aidan Cheung",
-      "role": "",
-      "quote": "",
-      "avatarSrc": ""
+      "name": "Aidan Cheung (2019)",
+      "role": "IBDP Math HL — From 4 to 6",
+      "quote": "Winson is a great Math Tutor who breaks down concepts easily and applies his learning to practical exam questions. He carefully procures exam questions in a neatly formatted workbook full of practice questions for every lesson.",
+      "avatarSrc": "",
+      "university": "The University of Warwick",
+      "useDefaultAvatar": true
     },
     {
-      "name": "David Zhang",
+      "name": "David Zhang (2020)",
       "role": "IBDP Math SL — From 4 to 6",
       "quote": "Winson helped me a lot in my IBDP mathematics journey. His teaching style and the “by topic” past paper question bank are highly recommended. He breaks down concepts clearly and focuses on practical exam questions, which made my practice more structured and effective.",
       "avatarSrc": "/avatars/carousel-20.png",
       "university": "The University of Hong Kong"
     },
     {
-      "name": "Ken Chen",
-      "role": "",
+      "name": "Ken Chen (2024)",
+      "role": "Edexcel GCEAL Math — From F to A",
       "quote": "Winson has a unique teaching approach that I greatly admire. He diligently compiles valuable past paper questions for practice before and after each class, often taking several days to complete. Working closely with Winson has been instrumental.",
-      "avatarSrc": ""
+      "avatarSrc": "",
+      "university": "University College London",
+      "useDefaultAvatar": true
     },
     {
-      "name": "Kitty Lam",
-      "role": "",
+      "name": "Kitty Lam (2020)",
+      "role": "IBDP Math SL — From 1 to 7",
       "quote": "Winson’s explanations are clear and easy to understand. He patiently guides you through any concepts you find challenging. His uplifting and kind demeanor makes learning enjoyable, and he’s always willing to answer your questions even outside of lesson time.",
-      "avatarSrc": ""
+      "avatarSrc": "/avatars/carousel-22.png",
+      "university": "Loughborough University",
+      "useDefaultAvatar": false
     }
   ]
 }
