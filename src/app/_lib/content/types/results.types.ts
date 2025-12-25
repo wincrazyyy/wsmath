@@ -54,6 +54,13 @@ export type GradeImprovementsConfig = {
   footerNote?: string;
 };
 
+export type ResultsSchoolsConfig = {
+  eyebrow: string;
+  heading: string;
+  subheading?: string;
+  items: string[];
+};
+
 export type ResultsCtaConfig = {
   heading: string;
   subheading: string;
@@ -65,5 +72,6 @@ export type ResultsCtaConfig = {
 export type ResultsConfig = {
   header: ResultsHeaderConfig;
   gradeImprovements: GradeImprovementsConfig;
+  schools: ResultsSchoolsConfig;
   resultsCta: ResultsCtaConfig;
 };
