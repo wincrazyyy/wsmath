@@ -234,6 +234,32 @@ export const RESULTS_GRADE_MISC_FIELDS: FieldConfig[] = [
   },
 ];
 
+export const RESULTS_SCHOOLS_FIELDS: FieldConfig[] = [
+  {
+    path: "schools.eyebrow",
+    label: "Schools – Eyebrow",
+    description: "Small label above the schools heading.",
+    type: "string",
+  },
+  {
+    path: "schools.heading",
+    label: "Schools – Heading",
+    description: "Main heading for the schools section.",
+    type: "string",
+  },
+  {
+    path: "schools.subheading",
+    label: "Schools – Subheading",
+    description: "Short description under the heading.",
+    type: "string",
+  },
+  {
+    path: "schools.items",
+    label: "Schools – List of schools",
+    description: "One school name per line.",
+    type: "string[]",
+  },
+];
 
 export const RESULTS_CTA_FIELDS: FieldConfig[] = [
   {
@@ -275,5 +301,6 @@ export const RESULTS_FIELDS: FieldConfig[] = [
   ...RESULTS_GRADE_HEADERS_FIELDS,
   ...RESULTS_GRADE_DATA_FIELDS,
   ...RESULTS_GRADE_MISC_FIELDS,
+  ...RESULTS_SCHOOLS_FIELDS,
   ...RESULTS_CTA_FIELDS,
 ];

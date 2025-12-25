@@ -8,6 +8,7 @@ import {
   RESULTS_GRADE_HEADERS_FIELDS,
   RESULTS_GRADE_DATA_FIELDS,
   RESULTS_GRADE_MISC_FIELDS,
+  RESULTS_SCHOOLS_FIELDS,
   RESULTS_CTA_FIELDS,
   RESULTS_FIELDS
 } from "@/app/admin/_lib/fields/results-fields";
@@ -76,6 +77,14 @@ export function ResultsEditor<T extends ResultsConfig>({
       panelTitle: "Results – grade improvements misc",
       panelDescription:
         "Configure the table outline, grade scales, and footer note for the grade improvements block.",
+    },
+    {
+      key: "schools",
+      label: "Results schools",
+      fields: RESULTS_SCHOOLS_FIELDS,
+      panelTitle: "Results – schools",
+      panelDescription:
+        "Configure the eyebrow, heading, subheading, and list of schools for the results schools section.",
     },
     {
       key: "cta",
