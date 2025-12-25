@@ -1,0 +1,77 @@
+/* app/_components/sections/about/cta-ribbon.module.css */
+
+.shell {
+  position: relative;
+  transform: translateZ(0);
+}
+
+/* gentle pulse + slight hue drift */
+.wash {
+  opacity: 0.085;
+  animation: washPulse 2.4s ease-in-out infinite, washDrift 7s linear infinite;
+  will-change: opacity, filter;
+}
+
+@keyframes washPulse {
+  0%,
+  100% {
+    opacity: 0.06;
+  }
+  50% {
+    opacity: 0.14;
+  }
+}
+
+@keyframes washDrift {
+  0% {
+    filter: hue-rotate(0deg) saturate(1);
+  }
+  50% {
+    filter: hue-rotate(18deg) saturate(1.1);
+  }
+  100% {
+    filter: hue-rotate(0deg) saturate(1);
+  }
+}
+
+/* moving sheen sweep across the banner */
+.sheen {
+  pointer-events: none;
+  position: absolute;
+  inset: -40% -60%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 35%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 65%
+  );
+  transform: translateX(-30%) rotate(0.001deg);
+  opacity: 0.0;
+  animation: sheenSweep 3.8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes sheenSweep {
+  0% {
+    transform: translateX(-45%);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.35;
+  }
+  55% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateX(45%);
+    opacity: 0;
+  }
+}
+
+/* reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+  .wash,
+  .sheen {
+    animation: none !important;
+  }
+}
