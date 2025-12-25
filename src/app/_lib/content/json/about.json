@@ -63,19 +63,18 @@
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-LEVEL · IGCSE",
-    "intro": "2008",
+    "intro": "By-topic past papers from 2008 to 2025 are available in the following courses.",
     "groups": [
       {
-        "title": "IB programmes",
+        "title": "IB Diploma Programme",
         "caption": "IBDP · IBMYP",
         "emphasize": true,
         "courses": [
-          "IBDP Math AAHL",
-          "IBDP Math AASL",
-          "IBDP Math AIHL",
-          "IBDP Math AISL",
-          "Math IA",
-          "IBMYP Math"
+          "Math Analysis and Approaches HL",
+          "Math Analysis and Approaches SL",
+          "Math Applications and Interpretation HL",
+          "Math Applications and Interpretation SL",
+          "Math Internal Assessment (IA)"
         ],
         "cta": {
           "label": "Inquire about IBDP plan",
