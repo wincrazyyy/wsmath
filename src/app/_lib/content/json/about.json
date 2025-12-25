@@ -51,20 +51,19 @@
       "items": [
         "Live Zoom lessons with iPad + Apple Pencil + GoodNotes for instant feedback.",
         "Clear, step-by-step worked solutions and post-lesson homework.",
-        "English or Cantonese delivery; professional, results-first approach."
+        "Cantonese, Mandarin or English delivery; professional, results-first approach."
       ]
     }
   },
   "stats": [
-    "50%+ IBDP Level 7 track record",
-    "18,000+ teaching hours",
-    "250+ one-to-one students",
-    "A-Level Math & FM: A* pathway"
+    "James (2024) AAHL From 1 to 7 in 2 years",
+    "Sharon (2023) AASL From 3 to 7 in 1.5 months",
+    "Cissie (2023) 0607 From F to A in 1 year"
   ],
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-LEVEL · IGCSE",
-    "intro": "Full syllabus coverage from pre-IB / IGCSE all the way to IBDP final exams.",
+    "intro": "Full syllabus coverage from IBMYP / IGCSE all the way to IBDP final exams.",
     "groups": [
       {
         "title": "IB programmes",
@@ -75,7 +74,7 @@
           "IBDP AASL",
           "IBDP AIHL",
           "IBDP AISL",
-          "IBMYP Math"
+          "Math IA"
         ]
       },
       {
@@ -83,13 +82,13 @@
         "caption": "Edexcel · Cambridge · AQA · OCR",
         "emphasize": false,
         "courses": [
-          "Edexcel (IAL YFM01) Further Math",
-          "Cambridge (CAIE 9231) Further Math",
-          "AQA (7367) Further Math",
-          "Edexcel (IAL YMA01, AL 9MA0) Math",
-          "Cambridge (CAIE 9709) Math",
-          "AQA (7357) Math",
-          "OCR (H240) Math"
+          "Edexcel (IAL YFM01, AL 9FM0) Further Maths",
+          "Edexcel (IAL YMA01, AL 9MA0) Maths",
+          "Cambridge (CAIE 9231) Further Maths",
+          "Cambridge (CAIE 9709) Maths",
+          "AQA (7367) Further Maths",
+          "AQA (7357) Maths",
+          "OCR (H240) Maths"
         ]
       },
       {
@@ -108,6 +107,6 @@
   },
   "ctaRibbon": {
     "heading": "Limited 1:1 slots — start boosting IBDP results now",
-    "subheading": "Premium, outcomes-driven coaching for AAHL/AISL/AASL/AIHL."
+    "subheading": "Premium, outcomes-driven coaching for AAHL / AASL / AIHL / AISL."
   }
 }
