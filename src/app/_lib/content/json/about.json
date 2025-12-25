@@ -63,45 +63,39 @@
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-LEVEL · IGCSE",
-    "intro": "Full syllabus coverage from IBMYP / IGCSE all the way to IBDP final exams.",
+    "intro": "By-topic past papers from 2008 to 2025 are available in the following courses.",
     "groups": [
       {
-        "title": "IB programmes",
-        "caption": "IBDP · IBMYP",
+        "title": "IB Diploma Programme",
+        "caption": "AA / AI · HL / SL",
         "emphasize": true,
         "courses": [
-          "IBDP Math AAHL",
-          "IBDP Math AASL",
-          "IBDP Math AIHL",
-          "IBDP Math AISL",
-          "Math IA",
-          "IBMYP Math"
-        ],
-        "cta": {
-          "label": "Inquire about IBDP plan",
-          "prefillText": "Hi Winson Siu, I'm interested in IBDP Math tutoring. Can you suggest a course plan and arrange a lesson?"
-        }
+          "Math Analysis and Approaches HL",
+          "Math Analysis and Approaches SL",
+          "Math Applications and Interpretation HL",
+          "Math Applications and Interpretation SL",
+          "Math internal assessment (IA)"
+        ]
       },
       {
         "title": "A-Level programmes",
         "caption": "Edexcel · Cambridge · AQA · OCR",
         "emphasize": false,
         "courses": [
-          "Edexcel (IAL YFM01, AL 9FM0) Further Math",
+          "Edexcel International A Level Further Math",
+          "Edexcel International A Level Math",
+          "Edexcel GCE A Level Further Math",
+          "Edexcel GCE A Level Math",
           "Edexcel (IAL YMA01, AL 9MA0) Math",
           "Cambridge (CAIE 9231) Further Math",
           "Cambridge (CAIE 9709) Math",
           "AQA (7367) Further Math",
           "AQA (7357) Math",
           "OCR (H240) Math"
-        ],
-        "cta": {
-          "label": "Inquire about A-Level plan",
-          "prefillText": "Hi Winson Siu, I'm interested in A-Level Math tutoring. Can you suggest a course plan and arrange a lesson?"
-        }
+        ]
       },
       {
-        "title": "IGCSE programmes",
+        "title": "IGCSE / IBMYP programmes",
         "caption": "Cambridge · Edexcel",
         "emphasize": false,
         "courses": [
@@ -109,17 +103,14 @@
           "Cambridge (0607) International Math",
           "Cambridge (0580) Math",
           "Edexcel (4PM1) Further Pure Math",
-          "Edexcel (4PM0) Math"
-        ],
-        "cta": {
-          "label": "Inquire about IGCSE plan",
-          "prefillText": "Hi Winson Siu, I'm interested in IGCSE Math tutoring. Can you suggest a course plan and arrange a lesson?"
-        }
+          "Edexcel (4PM0) Math",
+          "IBMYP"
+        ]
       }
     ]
   },
   "ctaRibbon": {
-    "heading": "Limited 1:1 slots — start boosting your results now",
-    "subheading": "Premium, outcomes-driven coaching for IBDP / A-Level / IGCSE."
+    "heading": "Limited 1:1 slots — start boosting IBDP results now",
+    "subheading": "Premium, outcomes-driven coaching for AAHL / AASL / AIHL / AISL."
   }
 }

@@ -65,8 +65,7 @@
       ]
     },
     "privateSrc": "/private-package.jpg",
-    "bookLabel": "Book a private coaching lesson",
-    "whatsappPrefillText": "Hello Winson, I am interested in booking a private coaching lesson. Could you please provide me with more details? Thank you!"
+    "bookLabel": "Book a private coaching lesson"
   },
   "group": {
     "label": "High-value group",
@@ -99,8 +98,7 @@
       ],
       "autoAdvanceSeconds": "5"
     },
-    "bookLabel": "Book the group course",
-    "whatsappPrefillText": "Hello Winson, I am interested in joining the group course. Could you please provide me with more details? Thank you!"
+    "bookLabel": "Book the group course"
   },
   "iaSupport": {
     "eyebrow": "IA Guidance",
@@ -155,7 +153,6 @@
         "desc": "Explore the relationship between athletic performance and mathematical principles, like optimizing sports equipment."
       }
     ],
-    "bookLabel": "Enquire about IA support",
-    "whatsappPrefillText": "Hi Winson Siu, I'm interested in Math IA support (topic selection / structure / feedback). Can you advise on the plan and pricing?"
+    "coverageNote": "Covered in Solo 1-to-1 lessons (no separate IA package required)."
   }
 }
