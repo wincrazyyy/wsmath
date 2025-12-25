@@ -97,7 +97,7 @@
         "/leaflets/group-leaflet-page-8.jpg",
         "/leaflets/group-leaflet-page-9.jpg"
       ],
-      "autoAdvanceSeconds": "2"
+      "autoAdvanceSeconds": "1"
     },
     "bookLabel": "Book the group course",
     "whatsappPrefillText": "Hello Winson Siu, I am interested in joining the group course. I am (name?) from (school?) in (year?)."
