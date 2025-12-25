@@ -55,13 +55,6 @@
         "programLabel": "IBDP · HL / AAHL / AIHL",
         "students": [
           {
-            "name": "Marcus",
-            "year": 2025,
-            "from": 6,
-            "to": 7,
-            "months": 10
-          },
-          {
             "name": "Miriam",
             "year": 2025,
             "from": 6,
@@ -99,6 +92,13 @@
             "year": 2024,
             "from": 1,
             "to": 7
+          },
+          {
+            "name": "Penny",
+            "year": 2024,
+            "from": 3,
+            "to": 5,
+            "months": 1
           },
           {
             "name": "Ricky",
@@ -216,6 +216,27 @@
             "to": 6
           },
           {
+            "name": "Lucia",
+            "year": 2019,
+            "from": 3,
+            "to": 6,
+            "months": 3
+          },
+          {
+            "name": "Kelly",
+            "year": 2019,
+            "from": 3,
+            "to": 5,
+            "months": 1.5
+          },
+          {
+            "name": "Vivian",
+            "year": 2019,
+            "from": 1,
+            "to": 4,
+            "months": 5
+          },
+          {
             "name": "Mickey",
             "year": 2018,
             "from": 7,
@@ -228,25 +249,11 @@
             "to": 6
           },
           {
-            "name": "Lucia",
-            "year": 2018,
-            "from": 3,
-            "to": 6,
-            "months": 3
-          },
-          {
-            "name": "Kelly",
-            "year": 2018,
-            "from": 3,
-            "to": 5,
-            "months": 1.5
-          },
-          {
-            "name": "Vivian",
-            "year": 2018,
-            "from": 1,
-            "to": 4,
-            "months": 5
+            "name": "Marcus",
+            "year": 2,
+            "from": 6,
+            "to": 7,
+            "months": 10
           }
         ],
         "gradeScale": [
@@ -274,13 +281,8 @@
             "name": "Michael",
             "year": 2025,
             "from": 6,
-            "to": 7
-          },
-          {
-            "name": "Gordon",
-            "year": 2025,
-            "from": 1,
-            "to": 6
+            "to": 7,
+            "months": 5
           },
           {
             "name": "Sabrina",
@@ -292,6 +294,12 @@
             "name": "Alvina",
             "year": 2025,
             "from": 4,
+            "to": 6
+          },
+          {
+            "name": "Gordon",
+            "year": 2025,
+            "from": 1,
             "to": 6
           },
           {
@@ -307,10 +315,10 @@
             "to": 5
           },
           {
-            "name": "Gordon",
-            "year": 2025,
+            "name": "Kathy",
+            "year": 2024,
             "from": 1,
-            "to": 5
+            "to": 6
           },
           {
             "name": "Alan",
@@ -322,19 +330,15 @@
             "name": "Netis",
             "year": 2024,
             "from": 2,
-            "to": 5
-          },
-          {
-            "name": "Kathy",
-            "year": 2024,
-            "from": 1,
-            "to": 6
+            "to": 5,
+            "months": 4
           },
           {
             "name": "Annie",
             "year": 2024,
             "from": 1,
-            "to": 4
+            "to": 4,
+            "months": 10
           },
           {
             "name": "Victoria",
@@ -349,17 +353,18 @@
             "to": 7
           },
           {
-            "name": "Jasmine",
-            "year": 2023,
-            "from": 4,
-            "to": 6
-          },
-          {
             "name": "Sharon",
             "year": 2023,
             "from": 3,
             "to": 7,
             "months": 1.5
+          },
+          {
+            "name": "Jasmine",
+            "year": 2023,
+            "from": 4,
+            "to": 6,
+            "months": 10
           },
           {
             "name": "Alexandra",
@@ -389,7 +394,8 @@
             "name": "Chloe",
             "year": 2020,
             "from": 4,
-            "to": 7
+            "to": 7,
+            "months": 10
           },
           {
             "name": "Jenny",
@@ -398,16 +404,17 @@
             "to": 7
           },
           {
-            "name": "David",
-            "year": 2020,
-            "from": 4,
-            "to": 6
-          },
-          {
             "name": "Kitty",
             "year": 2020,
             "from": 1,
             "to": 7
+          },
+          {
+            "name": "David",
+            "year": 2020,
+            "from": 4,
+            "to": 6,
+            "months": 10
           },
           {
             "name": "Aidan",
