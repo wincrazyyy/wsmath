@@ -25,6 +25,11 @@ export type CoursesSectionGroupConfig = {
   caption?: string;
   emphasize?: boolean;
   courses: string[];
+  cta: {
+    label: string;
+    prefillText: string;  
+    ariaLabel?: string;
+  };
 };
 
 export type CoursesSectionConfig = {

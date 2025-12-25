@@ -4,6 +4,8 @@ import type {
   CoursesSectionGroupConfig,
 } from "@/app/_lib/content/types/about.types";
 
+import { BookButton } from "@/app/_components/ui/book-button";
+
 type CoursesCoveredProps = {
   coursesSection: CoursesSectionConfig;
   className?: string;
@@ -53,7 +55,15 @@ export function CoursesCovered({
               const baseWrapper =
                 "relative h-full transition-transform duration-200 ease-out hover:-translate-y-1.5";
 
-              const cardKey = meta.title ? `courses-${meta.title}` : `courses-${idx}`;
+              const cardKey = meta.title
+                ? `courses-${meta.title}`
+                : `courses-${idx}`;
+
+              const ctaVariant = meta.emphasize ? "blue" : "plain";
+              const ctaLabel = meta.cta.label;
+              const ctaPrefill = meta.cta.prefillText;
+              const ctaAria =
+                meta.cta?.ariaLabel ?? `Enquire about ${meta.title} on WhatsApp`;
 
               if (meta.emphasize) {
                 return (
@@ -61,9 +71,21 @@ export function CoursesCovered({
                     <div
                       className={`${baseWrapper} rounded-2xl bg-gradient-to-r from-indigo-500 via-violet-500 to-sky-500 p-[1.5px] shadow-[0_0_0_1px_rgba(129,140,248,0.35)]`}
                     >
-                      <div className="h-full rounded-[1rem] border border-indigo-100 bg-white p-4 shadow-sm sm:p-5">
+                      {/* make card a flex-col so CTA can sit at bottom */}
+                      <div className="flex h-full flex-col rounded-[1rem] border border-indigo-100 bg-white p-4 shadow-sm sm:p-5">
                         <Header meta={meta} flagship />
                         <CourseList courses={courses} dot={dot} />
+
+                        {/* CTA pinned to bottom, aligned across columns */}
+                        <div className="mt-auto pt-4">
+                          <BookButton
+                            variant={ctaVariant}
+                            label={ctaLabel}
+                            ariaLabel={ctaAria}
+                            prefillText={ctaPrefill}
+                            buttonClassName="rounded-xl px-4 py-2.5 text-[13px]"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -72,11 +94,23 @@ export function CoursesCovered({
 
               return (
                 <div key={cardKey} className="h-full">
+                  {/* make card a flex-col so CTA can sit at bottom */}
                   <div
-                    className={`${baseWrapper} rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5`}
+                    className={`${baseWrapper} flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5`}
                   >
                     <Header meta={meta} />
                     <CourseList courses={courses} dot={dot} />
+
+                    {/* CTA pinned to bottom, aligned across columns */}
+                    <div className="mt-auto pt-4">
+                      <BookButton
+                        variant={ctaVariant}
+                        label={ctaLabel}
+                        ariaLabel={ctaAria}
+                        prefillText={ctaPrefill}
+                        buttonClassName="rounded-xl px-4 py-2.5 text-[13px]"
+                      />
+                    </div>
                   </div>
                 </div>
               );

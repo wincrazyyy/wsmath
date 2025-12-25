@@ -1,7 +1,6 @@
-// app/_components/whatsapp-button.tsx
 import miscContent from "@/app/_lib/content/json/misc.json";
 
-type BookButtonVariant = "private" | "group";
+type BookButtonVariant = "blue" | "green" | "plain";
 
 type BookButtonProps = {
   /** Extra classes for the outer anchor */
@@ -32,7 +31,7 @@ const VARIANTS: Record<
     hoverShadow: string;
   }
 > = {
-  private: {
+  blue: {
     bg: "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
     glow: "bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-500/25",
     ring: "ring-white/20",
@@ -40,14 +39,21 @@ const VARIANTS: Record<
     hoverShadow: "hover:shadow-violet-500/25",
     focus: "focus-visible:ring-violet-500",
   },
-  group: {
-    // more “emerald / teal” vibe
+  green: {
     bg: "bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600",
     glow: "bg-gradient-to-r from-emerald-500/25 via-teal-500/25 to-cyan-500/25",
     ring: "ring-white/20",
     shadow: "shadow-emerald-500/20",
     hoverShadow: "hover:shadow-emerald-500/25",
     focus: "focus-visible:ring-emerald-500",
+  },
+  plain: {
+    bg: "bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900",
+    glow: "bg-gradient-to-r from-neutral-900/20 via-neutral-700/15 to-neutral-900/20",
+    ring: "ring-black/10",
+    shadow: "shadow-black/10",
+    hoverShadow: "hover:shadow-black/15",
+    focus: "focus-visible:ring-neutral-900",
   },
 };
 
@@ -57,7 +63,7 @@ export function BookButton({
   href,
   label = "Book a lesson",
   subLabel,
-  variant = "private",
+  variant = "blue",
   prefillText = whatsapp.prefillText,
 }: BookButtonProps) {
   const defaultHref = `https://wa.me/${whatsapp.phoneNumber}?text=${encodeURIComponent(
@@ -90,7 +96,6 @@ export function BookButton({
         buttonClassName,
       ].join(" ")}
     >
-      {/* subtle glow */}
       <span
         aria-hidden
         className={[

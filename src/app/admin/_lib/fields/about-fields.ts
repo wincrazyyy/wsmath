@@ -147,6 +147,18 @@ function coursesFields(
         "One course per line (e.g. “IBDP AAHL”, “A-Level Edexcel ...”).",
       type: "string[]",
     },
+    {
+      path: `${basePath}.cta.label`,
+      label: `${labelPrefix} – CTA label`,
+      description: "Text on the button, e.g. “Book a session”.",
+      type: "string",
+    },
+    {
+      path: `${basePath}.cta.prefillText`,
+      label: `${labelPrefix} – CTA prefill text`,
+      description: "Prefilled WhatsApp message, e.g. “Hi Winson Siu, I'm interested in ...”.",
+      type: "string",
+    },
   ];
 }
 

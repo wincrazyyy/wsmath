@@ -129,7 +129,7 @@ export function PrivatePackageCard({
 
       <div className="relative z-10 mt-auto pt-5">
         <BookButton
-          variant="private"
+          variant="blue"
           label={config.bookLabel}
           ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
           prefillText={config.whatsappPrefillText}
