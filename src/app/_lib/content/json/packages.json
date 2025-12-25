@@ -65,7 +65,8 @@
       ]
     },
     "privateSrc": "/private-package.jpg",
-    "bookLabel": "Book a private coaching lesson"
+    "bookLabel": "Book a private coaching lesson",
+    "whatsappPrefillText": "Hello Winson, I am interested in booking a private coaching lesson. Could you please provide me with more details? Thank you!"
   },
   "group": {
     "label": "High-value group",
@@ -98,7 +99,8 @@
       ],
       "autoAdvanceSeconds": "5"
     },
-    "bookLabel": "Book the group course"
+    "bookLabel": "Book the group course",
+    "whatsappPrefillText": "Hello Winson, I am interested in joining the group course. Could you please provide me with more details? Thank you!"
   },
   "iaSupport": {
     "eyebrow": "IA Guidance",

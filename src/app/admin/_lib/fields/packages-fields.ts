@@ -204,7 +204,13 @@ export const PACKAGES_PRIVATE_FIELDS: FieldConfig[] = [
     label: "Private – Book button label",
     description: "Label for the Book button on the private package card.",
     type: "string",
-  }
+  },
+  {
+    path: "private.whatsappPrefillText",
+    label: "Private – WhatsApp prefill text",
+    description: "Prefill text for WhatsApp message when booking the private coaching lesson.",
+    type: "textarea",
+  },
 ];
 
 // Group card + leaflet
@@ -289,7 +295,13 @@ export const PACKAGES_GROUP_FIELDS: FieldConfig[] = [
     label: "Group – Book button label",
     description: "Label for the Book button on the group package card.",
     type: "string",
-  }
+  },
+  {
+    path: "group.whatsappPrefillText",
+    label: "Group – WhatsApp prefill text",
+    description: "Prefill text for WhatsApp message when booking the group course.",
+    type: "textarea",
+  },
 ];
 
 // IA Support (covered in 1-to-1)

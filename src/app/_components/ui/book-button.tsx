@@ -15,6 +15,8 @@ type BookButtonProps = {
   subLabel?: string;
   /** Color theme */
   variant?: BookButtonVariant;
+  /** Prefill text for WhatsApp message (default from misc.json) */
+  prefillText?: string;
 };
 
 const { whatsapp } = miscContent;
@@ -56,9 +58,10 @@ export function BookButton({
   label = "Book a lesson",
   subLabel,
   variant = "private",
+  prefillText = whatsapp.prefillText,
 }: BookButtonProps) {
   const defaultHref = `https://wa.me/${whatsapp.phoneNumber}?text=${encodeURIComponent(
-    whatsapp.prefillText
+    prefillText
   )}`;
 
   const finalHref = href ?? defaultHref;

@@ -132,6 +132,7 @@ export function PrivatePackageCard({
           variant="private"
           label={config.bookLabel}
           ariaLabel="Enquire about 1-to-1 lessons on WhatsApp"
+          prefillText={config.whatsappPrefillText}
         />
       </div>
     </article>

@@ -103,6 +103,7 @@ export function GroupPackageCard({
           variant="group"
           label={config.bookLabel}
           ariaLabel="Enquire about group lessons on WhatsApp"
+          prefillText={config.whatsappPrefillText}
         />
       </div>
     </article>

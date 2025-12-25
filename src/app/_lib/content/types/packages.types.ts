@@ -34,6 +34,7 @@ export type PrivateConfig = {
   intensive: PrivateIntensiveConfig;
   privateSrc: string;
   bookLabel: string;
+  whatsappPrefillText: string;
 };
 
 export type GroupLeafletConfig = {
@@ -54,6 +55,7 @@ export type GroupConfig = {
   points: string[];
   leaflet?: GroupLeafletConfig;
   bookLabel: string;
+  whatsappPrefillText: string;
 };
 
 export type IaSupportTopic = {
