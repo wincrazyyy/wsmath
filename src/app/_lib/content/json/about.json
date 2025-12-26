@@ -1,10 +1,10 @@
 {
   "header": {
     "eyebrow": "ABOUT WSMATH",
-    "title": "Professional Online Math Coaching",
-    "subtitle": "Premium, exam-focused coaching for IBDP / A-Level / IGCSE students worldwide.",
+    "title": "Premium Exam Coaching",
+    "subtitle": "IBDP, A-Level/IAL and IGCSE — a structured system focused on marks, not guesswork.",
     "chips": [
-      "💻Hardware required: iPad, Apple Pencil, GDC",
+      "💻Recommended setup: iPad + stylus and a GDC",
       "📱Software required: GoodNotes, Zoom",
       "📚 By-topic and By-level Past Papers"
     ],
@@ -41,32 +41,32 @@
     "area1": {
       "title": "What you get",
       "items": [
-        "Exam-technique playbooks and targeted drills for final-paper performance.",
-        "Weekly study plans with measurable goals and accountability.",
-        "Calculator mastery (e.g., Casio fx-CG50) and past-paper optimisation."
+        "Diagnostic-first planning: a week-by-week roadmap based on your exact bottlenecks.",
+        "Markscheme execution: how to write solutions that consistently score.",
+        "Deliberate practice: targeted sets, review, and error-proof routines."
       ]
     },
     "area2": {
       "title": "How I teach",
       "items": [
-        "Live Zoom lessons with iPad + Apple Pencil + GoodNotes for instant feedback.",
-        "Clear, step-by-step worked solutions and post-lesson homework.",
-        "Cantonese, Mandarin or English delivery; professional, results-first approach."
+        "Live Zoom lessons with interactive problem-solving and clean digital working.",
+        "Post-lesson homework and correction loops to eliminate recurring errors.",
+        "Lessons are primarily delivered in Cantonese/Mandarin; English delivery is available on request. Exam writing is trained in English."
       ]
     }
   },
   "stats": [
-    "James (2024) IBDP AAHL from 1 to 7 in 2 years",
-    "Fiona (2022) IBDP AAHL from 3 to 6 in 3 months",
-    "Sharon (2023) IBDP AASL from 3 to 7 in 1.5 months",
-    "Bill (2021) IAL Math & Further Math from F to A*",
-    "Cissie (2023) IGCSE 0607 from F to A in 1 year",
-    "Emily (2018) IGCSE 0606 from B to A* in 2 months"
+    "IBDP AAHL: 1 → 7 (20 months)",
+    "IBDP AAHL: 3 → 6 (3 months)",
+    "IBDP AASL: 3 → 7 (1.5 months)",
+    "Edexcel IAL: F → A* (Math + Further Math)",
+    "IGCSE 0607: F → A (1 year)",
+    "IGCSE 0606: B → A* (2 months)"
   ],
   "coursesSection": {
     "title": "Courses covered",
     "strapline": "IBDP · A-Level · IGCSE",
-    "intro": "By-topic past papers from 2008 to 2025 are available in the following courses.",
+    "intro": "A structured by-topic question bank (2008–2025), organised by topic and year, is used across the following courses.",
     "groups": [
       {
         "title": "IBDP Courses",
@@ -124,7 +124,7 @@
     ]
   },
   "ctaRibbon": {
-    "heading": "Limited private 1:1 slots — start boosting your results now",
+    "heading": "Limited 1-to-1 availability — enquire for placement and a recommended plan.",
     "subheading": "Premium, outcomes-driven coaching for IBDP / A-Level / IGCSE."
   }
 }

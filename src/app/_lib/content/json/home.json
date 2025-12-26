@@ -2,19 +2,17 @@
   "hero": {
     "title": "WINSON SIU",
     "subtitle": "International Mathematics Exam Strategist",
-    "tagline": "國際數學科考試軍師",
+    "tagline": "Premium coaching for IBDP, A-Level/IAL & IGCSE — delivered primarily in Cantonese/Mandarin for real understanding, with English exam execution (terminology, writing, markscheme alignment).",
     "imageSrc": "/hero.png",
     "stat": {
       "value": "18000",
       "label": "1-to-1 teaching hours",
-      "subLabel": "一對一教學時數"
+      "subLabel": ""
     }
   },
   "proofPills": [
-    "250+ 1v1 students | 11000+ lessons since 2018",
-    "CityU HK | BSc QFRM (Math minor) | First Class Honours",
-    "HK A-Level Examination Pure Math A (4.8%)",
-    "HKCEE Add Math A (6.0%), Math A (3.1%)",
-    "HKDSE Math M1 5** (2.9%)"
+    "250+ students coached (1-to-1) • 11,000+ lessons since 2018",
+    "CityUHK • BBA (Hons) QFRM (Math Minor) • First Class Honours",
+    "HK A-Level Examination Pure Math A (4.8%)"
   ]
 }
