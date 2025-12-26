@@ -1,94 +1,73 @@
 // app/admin/_lib/results-fields.ts
 import { type FieldConfig, repeatFields } from "./fields";
+import { makeHeaderRightAccentColumnFields } from "./section-header-fields-helper";
 
-export const RESULTS_HEADER_FIELDS: FieldConfig[] = [
-  {
-    path: "header.eyebrow",
-    label: "Header eyebrow",
-    description:
-      'Small label above the section heading (e.g. “STUDENT VOICES”).',
-    type: "string",
-  },
-  {
-    path: "header.title",
-    label: "Header title",
-    description: "Main heading for the Results section.",
-    type: "string",
-  },
-  {
-    path: "header.subtitle",
-    label: "Header subtitle",
-    description: "Short description under the heading.",
-    type: "textarea",
-  },
-  {
-    path: "header.chips",
-    label: "Header – proof pills",
-    description:
-      "One selling point per line. These show as small animated badges under the heading.",
-    type: "string[]",
-  },
+export function makeResultsHeaderFields(count: number): FieldConfig[] {
+  return [
+    {
+      path: "header.eyebrow",
+      label: "Header eyebrow",
+      description:
+        'Small label above the section heading (e.g. “STUDENT VOICES”).',
+      type: "string",
+    },
+    {
+      path: "header.title",
+      label: "Header title",
+      description: "Main heading for the Results section.",
+      type: "string",
+    },
+    {
+      path: "header.subtitle",
+      label: "Header subtitle",
+      description: "Short description under the heading.",
+      type: "textarea",
+    },
+    {
+      path: "header.chips",
+      label: "Header – proof pills",
+      description:
+        "One selling point per line. These show as small animated badges under the heading.",
+      type: "string[]",
+    },
 
-  // Right accent card
-  {
-    path: "header.rightAccent.heading",
-    label: "Right card – heading",
-    description:
-      'Title of the right-side accent box, e.g. “Results snapshot”.',
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.badge",
-    label: "Right card – badge",
-    description: 'Small badge above the main stat, e.g. “Since 2017”.',
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.mainValue",
-    label: "Right card – main value",
-    description: 'Big stat number, e.g. “250+”.',
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.mainLabel",
-    label: "Right card – main label",
-    description:
-      'Text under the main value, e.g. “students coached 1-on-1”.',
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.mainSize",
-    label: "Right card – main size",
-    description: 'Visual size of the main stat. Use “sm” or “lg”.',
-    type: "string",
-  },
+    // Right accent card
+    {
+      path: "header.rightAccent.heading",
+      label: "Right card – heading",
+      description:
+        'Title of the right-side accent box, e.g. “Results snapshot”.',
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.badge",
+      label: "Right card – badge",
+      description: 'Small badge above the main stat, e.g. “Since 2017”.',
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.mainValue",
+      label: "Right card – main value",
+      description: 'Big stat number, e.g. “250+”.',
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.mainLabel",
+      label: "Right card – main label",
+      description:
+        'Text under the main value, e.g. “students coached 1-on-1”.',
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.mainSize",
+      label: "Right card – main size",
+      description: 'Visual size of the main stat. Use “sm” or “lg”.',
+      type: "string",
+    },
+    ...makeHeaderRightAccentColumnFields(count),
+  ];
+}
 
-  // Right accent columns (you can tweak these labels; they match your JSON)
-  {
-    path: "header.rightAccent.columns[0].title",
-    label: "Right card – column 1 title",
-    description: 'E.g. “IBDP HL 7 rate”.',
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.columns[0].items",
-    label: "Right card – column 1 items",
-    description: "One line per stat under column 1.",
-    type: "string[]",
-  },
-  {
-    path: "header.rightAccent.columns[1].title",
-    label: "Right card – column 2 title",
-    description: 'E.g. “IGCSE A / A*”.',
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.columns[1].items",
-    label: "Right card – column 2 items",
-    description: "One line per stat under column 2.",
-    type: "string[]",
-  },
-];
 export const RESULTS_GRADE_HEADERS_FIELDS: FieldConfig[] = [
   // Headers
   {
@@ -296,11 +275,15 @@ export const RESULTS_CTA_FIELDS: FieldConfig[] = [
   },
 ];
 
-export const RESULTS_FIELDS: FieldConfig[] = [
-  ...RESULTS_HEADER_FIELDS,
-  ...RESULTS_GRADE_HEADERS_FIELDS,
-  ...RESULTS_GRADE_DATA_FIELDS,
-  ...RESULTS_GRADE_MISC_FIELDS,
-  ...RESULTS_SCHOOLS_FIELDS,
-  ...RESULTS_CTA_FIELDS,
-];
+export function makeResultsFields(opts: {
+  accentColumnCount: number;
+}): FieldConfig[] {
+  return [
+    ...makeResultsHeaderFields(opts.accentColumnCount),
+    ...RESULTS_GRADE_HEADERS_FIELDS,
+    ...RESULTS_GRADE_DATA_FIELDS,
+    ...RESULTS_GRADE_MISC_FIELDS,
+    ...RESULTS_SCHOOLS_FIELDS,
+    ...RESULTS_CTA_FIELDS,
+  ];
+}

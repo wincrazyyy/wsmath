@@ -4,13 +4,13 @@
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { ResultsConfig } from "@/app/_lib/content/types/results.types";
 import {
-  RESULTS_HEADER_FIELDS,
+  makeResultsHeaderFields,
   RESULTS_GRADE_HEADERS_FIELDS,
   RESULTS_GRADE_DATA_FIELDS,
   RESULTS_GRADE_MISC_FIELDS,
   RESULTS_SCHOOLS_FIELDS,
   RESULTS_CTA_FIELDS,
-  RESULTS_FIELDS
+  makeResultsFields
 } from "@/app/admin/_lib/fields/results-fields";
 import { JsonEditor } from "./json-editor";
 import {
@@ -19,6 +19,7 @@ import {
   buildIndexedSubTabs,
   getBaseFieldsAndSubTabs,
 } from "@/app/admin/_lib/json-editor-helpers";
+import { makeEmptyRightAccentColumn } from "@/app/admin/_lib/fields/section-header-fields-helper";
 
 type ResultsEditorProps<T extends ResultsConfig> = {
   data: T;
@@ -29,6 +30,15 @@ export function ResultsEditor<T extends ResultsConfig>({
   data,
   onChangeData,
 }: ResultsEditorProps<T>) {
+  const accentColumnCount = Array.isArray(data.header.rightAccent?.columns) ? data.header.rightAccent.columns.length : 0;
+
+  const [accentColumnBaseFields, accentColumnSubTabs] = getBaseFieldsAndSubTabs(
+    makeResultsHeaderFields(accentColumnCount),
+    "header.rightAccent.columns",
+    "Right Accent Column",
+    "Edit this individual right accent column.",
+  );
+
   const dataSubTabs: JsonEditorSubTabConfig[] = buildIndexedSubTabs(
     RESULTS_GRADE_DATA_FIELDS,
     "gradeImprovements.resultGroups",
@@ -47,7 +57,13 @@ export function ResultsEditor<T extends ResultsConfig>({
     {
       key: "header",
       label: "Section header",
-      fields: RESULTS_HEADER_FIELDS,
+      fields: accentColumnBaseFields,
+      subTabs: accentColumnSubTabs,
+      subTabAdd: {
+        listPath: "header.rightAccent.columns",
+        buttonLabel: "Add right accent column",
+        defaultItem: makeEmptyRightAccentColumn(),
+      },
       panelTitle: "Results – section header",
       panelDescription:
         "Edit the eyebrow, title, and subtitle for the Results section heading.",
@@ -96,12 +112,14 @@ export function ResultsEditor<T extends ResultsConfig>({
     },
   ];
 
+  const dynamicFields = makeResultsFields({ accentColumnCount });
+
   return (
     <JsonEditor<T>
       title="Results"
       description="Edit the results header, grade improvements, and WhatsApp CTA box."
       data={data}
-      fields={RESULTS_FIELDS as FieldConfig[]}
+      fields={dynamicFields as FieldConfig[]}
       jsonFileHint="src/app/_lib/content/json/results.json"
       onChangeData={onChangeData}
       slug="results"
