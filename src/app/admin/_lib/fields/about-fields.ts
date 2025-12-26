@@ -1,87 +1,67 @@
 // app/admin/_lib/fields/about-fields.ts
 import { type FieldConfig, repeatFields } from "./fields";
+import { makeHeaderRightAccentColumnFields } from "./section-header-fields-helper";
 
 // Header (SectionHeader)
-export const ABOUT_HEADER_FIELDS: FieldConfig[] = [
-  {
-    path: "header.eyebrow",
-    label: "Header eyebrow",
-    description: "Small label above the About heading, e.g. “ABOUT WSMATH”.",
-    type: "string",
-  },
-  {
-    path: "header.title",
-    label: "Header title",
-    description: "Main About title.",
-    type: "string",
-  },
-  {
-    path: "header.subtitle",
-    label: "Header subtitle",
-    description: "Short paragraph under the About title.",
-    type: "textarea",
-  },
-  {
-    path: "header.chips",
-    label: "Header chips (badges)",
-    description: "One chip per line shown under the header.",
-    type: "string[]",
-  },
-  {
-    path: "header.rightAccent.heading",
-    label: "Right accent – heading",
-    description: "Top line in the right summary card, e.g. “Who I teach”.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.badge",
-    label: "Right accent – badge",
-    description: "Small badge, e.g. “IBDP · A-Level · IGCSE”.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.mainValue",
-    label: "Right accent – main value",
-    description: "Big number/text, e.g. “Year 10–13”.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.mainLabel",
-    label: "Right accent – main label",
-    description: "Label under the main value, e.g. “students worldwide”.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.mainSize",
-    label: "Right accent – main size",
-    description: "Size token (sm or lg). Leave blank for default.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.columns[0].title",
-    label: "Right accent – left column title",
-    description: "e.g. “IBDP Math”.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.columns[0].items",
-    label: "Right accent – left column items",
-    description: "One line per item (e.g. AAHL, AIHL...).",
-    type: "string[]",
-  },
-  {
-    path: "header.rightAccent.columns[1].title",
-    label: "Right accent – right column title",
-    description: "e.g. “Other programmes”.",
-    type: "string",
-  },
-  {
-    path: "header.rightAccent.columns[1].items",
-    label: "Right accent – right column items",
-    description: "One line per item (e.g. A-Level, IGCSE...).",
-    type: "string[]",
-  },
-];
+export function makeAboutHeaderFields(count: number): FieldConfig[] {
+  return [
+    {
+      path: "header.eyebrow",
+      label: "Header eyebrow",
+      description: "Small label above the About heading, e.g. “ABOUT WSMATH”.",
+      type: "string",
+    },
+    {
+      path: "header.title",
+      label: "Header title",
+      description: "Main About title.",
+      type: "string",
+    },
+    {
+      path: "header.subtitle",
+      label: "Header subtitle",
+      description: "Short paragraph under the About title.",
+      type: "textarea",
+    },
+    {
+      path: "header.chips",
+      label: "Header chips (badges)",
+      description: "One chip per line shown under the header.",
+      type: "string[]",
+    },
+    {
+      path: "header.rightAccent.heading",
+      label: "Right accent – heading",
+      description: "Top line in the right summary card, e.g. “Who I teach”.",
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.badge",
+      label: "Right accent – badge",
+      description: "Small badge, e.g. “IBDP · A-Level · IGCSE”.",
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.mainValue",
+      label: "Right accent – main value",
+      description: "Big number/text, e.g. “Year 10–13”.",
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.mainLabel",
+      label: "Right accent – main label",
+      description: "Label under the main value, e.g. “students worldwide”.",
+      type: "string",
+    },
+    {
+      path: "header.rightAccent.mainSize",
+      label: "Right accent – main size",
+      description: "Size token (sm or lg). Leave blank for default.",
+      type: "string",
+    },
+    ...makeHeaderRightAccentColumnFields(count),
+  ];
+}
 
 // Hero image band + cards
 export const ABOUT_HERO_FIELDS: FieldConfig[] = [
@@ -217,9 +197,13 @@ export const ABOUT_CTA_FIELDS: FieldConfig[] = [
   },
 ];
 
-export const ABOUT_FIELDS: FieldConfig[] = [
-  ...ABOUT_HEADER_FIELDS,
-  ...ABOUT_HERO_FIELDS,
-  ...ABOUT_STATS_COURSES_FIELDS,
-  ...ABOUT_CTA_FIELDS,
-];
+export function makeAboutFields(opts: {
+  accentColumnCount: number;
+}): FieldConfig[] {
+    return [
+    ...makeAboutHeaderFields(opts.accentColumnCount),
+    ...ABOUT_HERO_FIELDS,
+    ...ABOUT_STATS_COURSES_FIELDS,
+    ...ABOUT_CTA_FIELDS,
+  ];
+}

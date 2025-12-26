@@ -4,17 +4,18 @@
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { AboutConfig } from "@/app/_lib/content/types/about.types";
 import {
-  ABOUT_HEADER_FIELDS,
+  makeAboutHeaderFields,
   ABOUT_HERO_FIELDS,
   ABOUT_STATS_COURSES_FIELDS,
   ABOUT_CTA_FIELDS,
-  ABOUT_FIELDS,
+  makeAboutFields,
 } from "@/app/admin/_lib/fields/about-fields";
 import { JsonEditor } from "./json-editor";
 import {
   getBaseFieldsAndSubTabs,
   type JsonEditorTabConfig,
 } from "@/app/admin/_lib/json-editor-helpers";
+import { makeEmptyRightAccentColumn } from "@/app/admin/_lib/fields/section-header-fields-helper";
 
 type AboutEditorProps<T extends AboutConfig> = {
   data: T;
@@ -22,6 +23,15 @@ type AboutEditorProps<T extends AboutConfig> = {
 };
 
 export function AboutEditor<T extends AboutConfig>({ data, onChangeData }: AboutEditorProps<T>) {
+  const accentColumnCount = Array.isArray(data.header.rightAccent?.columns) ? data.header.rightAccent.columns.length : 0;
+
+  const [accentColumnBaseFields, accentColumnSubTabs] = getBaseFieldsAndSubTabs(
+    makeAboutHeaderFields(accentColumnCount),
+    "header.rightAccent.columns",
+    "Right Accent Column",
+    "Edit this individual right accent column.",
+  );
+
   const [statsCoursesBaseFields, statsCoursesSubTabs] = getBaseFieldsAndSubTabs(
     ABOUT_STATS_COURSES_FIELDS,
     "coursesSection.groups",
@@ -33,7 +43,13 @@ export function AboutEditor<T extends AboutConfig>({ data, onChangeData }: About
     {
       key: "header",
       label: "Section header",
-      fields: ABOUT_HEADER_FIELDS,
+      fields: accentColumnBaseFields,
+      subTabs: accentColumnSubTabs,
+      subTabAdd: {
+        listPath: "header.rightAccent.columns",
+        buttonLabel: "Add right accent column",
+        defaultItem: makeEmptyRightAccentColumn(),
+      },
       panelTitle: "About – section header",
       panelDescription:
         "Edit the eyebrow, title, subtitle, chips, and right-hand summary card.",
@@ -65,12 +81,14 @@ export function AboutEditor<T extends AboutConfig>({ data, onChangeData }: About
     },
   ];
 
+  const dynamicFields = makeAboutFields({ accentColumnCount });
+
   return (
     <JsonEditor<T>
       title="About"
       description="Edit the About header, hero image band, stats, grouped courses, and CTA ribbon in separate tabs."
       data={data}
-      fields={ABOUT_FIELDS as FieldConfig[]}
+      fields={dynamicFields as FieldConfig[]}
       onChangeData={onChangeData}
       jsonFileHint="src/app/_lib/content/json/about.json"
       slug="about"
