@@ -7,9 +7,19 @@ export function ResultsCta({ data }: { data: ResultsConfig["resultsCta"] }) {
   const resultsCta = data;
 
   return (
-    <section className="mt-8 rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
-      <div className="flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
-        {/* Left: make it larger + take more width */}
+    <section className="relative mt-8 overflow-hidden rounded-2xl border border-neutral-200 bg-white p-8 shadow-sm">
+      {/* Prismatic backdrop (subtle, hero-like) */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        {/* faint grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(99,102,241,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(56,189,248,0.06)_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+        {/* soft prismatic spotlight */}
+        <div className="absolute -top-28 left-1/2 h-[46rem] w-[46rem] -translate-x-1/2 rounded-full bg-gradient-to-tr from-indigo-500/18 via-violet-500/18 to-sky-400/18 blur-3xl [mask-image:radial-gradient(ellipse_at_center,black,transparent_58%)]" />
+        {/* extra gentle wash */}
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/40 via-white/20 to-sky-50/40" />
+      </div>
+
+      <div className="relative flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
+        {/* Left */}
         <div className="flex-1 text-center md:text-left md:pr-2 lg:pr-6">
           <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 md:text-4xl">
             {resultsCta.heading}
@@ -37,7 +47,7 @@ export function ResultsCta({ data }: { data: ResultsConfig["resultsCta"] }) {
           )}
         </div>
 
-        {/* Right: keep image column slightly narrower */}
+        {/* Right */}
         <div className="relative mx-auto w-full shrink-0 md:mx-0 md:w-[42%] lg:w-[40%] max-w-[560px]">
           <div className="relative aspect-[8/7] overflow-hidden rounded-2xl">
             <Image
@@ -49,7 +59,7 @@ export function ResultsCta({ data }: { data: ResultsConfig["resultsCta"] }) {
               sizes="(min-width: 1024px) 360px, (min-width: 768px) 40vw, 92vw"
             />
 
-            {/* Floating CTA card (hero-style) */}
+            {/* Floating CTA card */}
             <div className="pointer-events-none absolute inset-x-4 bottom-3 z-10 sm:bottom-4">
               <div className="pointer-events-auto relative mx-auto w-full max-w-[560px] rounded-2xl border border-white/60 bg-white/75 px-4 py-3 shadow-lg backdrop-blur sm:px-5 sm:py-4">
                 <div
