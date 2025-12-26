@@ -116,6 +116,12 @@ export const PACKAGES_PRIVATE_FIELDS: FieldConfig[] = [
     type: "string",
   },
   {
+    path: "private.tag",
+    label: "Private – tag (right chip)",
+    description: 'Small chip on the right, e.g. “Customised coaching”.',
+    type: "string",
+  },
+  {
     path: "private.rateLabel",
     label: "Private – rate label",
     description: 'Caption above the price, e.g. “Typical rate”.',

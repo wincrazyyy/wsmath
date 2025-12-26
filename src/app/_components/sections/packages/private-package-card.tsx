@@ -67,9 +67,19 @@ export function PrivatePackageCard({
         ].join(" ")}
       />
 
-      <div className="relative z-10 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
-        {config.label}
+      <div className="relative z-10 flex items-center justify-between gap-2">
+        <div className="inline-flex w-fit items-center gap-2 rounded-full bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900 px-3 py-1 text-[11px] font-medium text-neutral-50">
+          {config.label}
+        </div>
+
+        {/* Optional right-side tag (only if you add config.tag like group) */}
+        {config.tag ? (
+          <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-700">
+            {config.tag}
+          </span>
+        ) : null}
       </div>
+
 
       {/* PRICE */}
       <div className="relative z-10 mt-4">

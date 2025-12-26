@@ -26,6 +26,7 @@ export type PrivateIntensiveConfig = {
 
 export type PrivateConfig = {
   label: string;
+  tag?: string;
   rateLabel: string;
   hourlyRate: string; // parsed as number
   title: string;

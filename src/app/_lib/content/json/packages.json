@@ -40,6 +40,7 @@
   },
   "private": {
     "label": "Premium 1-to-1",
+    "tag": "Customised coaching",
     "rateLabel": "Typical rate",
     "hourlyRate": "1500",
     "title": "Private coaching",
