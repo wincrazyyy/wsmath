@@ -1,17 +1,17 @@
 {
   "header": {
     "eyebrow": "ABOUT WSMATH",
-    "title": "Professional online math coaching",
+    "title": "Professional Online Math Coaching",
     "subtitle": "Premium, exam-focused coaching for IBDP / A-Level / IGCSE students worldwide.",
     "chips": [
-      "🧠 1-to-1 coaching · Zoom live lessons 💻",
-      "📚 By-topic past papers · Exam strategy 🎯",
-      "🚀 Based in Hong Kong · Teach worldwide 🌏"
+      "💻Hardware required: iPad, Apple Pencil, GDC",
+      "📱Software required: GoodNotes, Zoom",
+      "📚 By-topic and By-level Past Papers"
     ],
     "rightAccent": {
       "heading": "Who I teach",
       "badge": "IBDP · A-Level · IGCSE",
-      "mainValue": "Year 9–13",
+      "mainValue": "Year 10–13",
       "mainLabel": "students worldwide",
       "mainSize": "sm",
       "columns": [
@@ -19,8 +19,8 @@
           "title": "IBDP Math",
           "items": [
             "AAHL",
-            "AIHL",
             "AASL",
+            "AIHL",
             "AISL"
           ]
         },
@@ -37,7 +37,7 @@
   },
   "hero": {
     "imageSrc": "/about-hero.jpg",
-    "eyebrow": "Winson Siu • 專業教育家",
+    "eyebrow": "Winson Siu • 數學軍師",
     "area1": {
       "title": "What you get",
       "items": [

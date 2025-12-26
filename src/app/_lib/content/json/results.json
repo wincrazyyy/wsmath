@@ -545,7 +545,7 @@
       },
       {
         "tab": "IGCSE",
-        "subTab": "Cambridge Additional Math / Edexcel Further Pure Math",
+        "subTab": "Cambridge 0606 / Edexcel Further Pure Math",
         "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
         "students": [
           {
@@ -582,7 +582,7 @@
       },
       {
         "tab": "IGCSE",
-        "subTab": "Cambridge International Math / Edexcel Math",
+        "subTab": "Cambridge 0607, 0580 / Edexcel Math",
         "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM0)",
         "students": [
           {

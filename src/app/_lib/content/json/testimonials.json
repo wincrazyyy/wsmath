@@ -2,7 +2,7 @@
   "header": {
     "eyebrow": "STUDENT VOICES",
     "title": "What my students and parents say",
-    "subtitle": "Real results from IBDP, A Level and IGCSE students worldwide."
+    "subtitle": "Real results from IBDP, A-Level and IGCSE students worldwide."
   },
   "video": {
     "eyebrow": "Student voices",
@@ -50,7 +50,7 @@
       "name": "James Chow (2024)",
       "role": "IBDP AAHL — From 1 to 7",
       "university": "The University of Hong Kong",
-      "quote": "Siu Sir is an exceptional educator with a genuine passion for teaching. His thoughtful compilation of past paper questions, detailed booklets, and chapter notes made practice structured and effective. When I nearly gave up, Siu Sir’s belief in me was pivotal. He was flexible with extra lessons and answered questions outside class.",
+      "quote": "Siu Sir is an exceptional educator with a genuine passion for teaching. His thoughtful compilation of past paper questions, detailed booklets, and chapter notes made practice structured and effective. When I was nearly ready to give up, Siu Sir’s belief in me was pivotal. He was flexible with extra lessons and answered questions outside class.",
       "avatarSrc": "/avatars/carousel-1.png",
       "useDefaultAvatar": true
     },
@@ -58,7 +58,7 @@
       "name": "Sharon Deng (2023)",
       "role": "IBDP AASL — From 3 to 7",
       "university": "The University of Hong Kong",
-      "quote": "我个人认为数学本身是一门实践大于理论，并需时刻保持手感的科目。因此我与Winson老师让学生直接实操Past Paper的教学方式十分契合，且迅速总结出Past Papers的做题方式；课上的比对作业以及改错环节使我更愿意在课后抽出时间学习这个科目。",
+      "quote": "我个人认为数学本身是一门实践大于理论，并需时刻保持手感的科目。因此我与 Winson 老师让学生直接实操Past Paper的教学方式十分契合，且迅速总结出 Past Papers 的做题方式；课上的比对作业以及改错环节使我更愿意在课后抽出时间学习这个科目。",
       "avatarSrc": "/avatars/carousel-2.png",
       "useDefaultAvatar": true
     },
@@ -66,7 +66,7 @@
       "name": "Joy Angela Sun (2022)",
       "role": "IBDP AAHL — From 5 to 7",
       "university": "The Chinese University of Hong Kong",
-      "quote": "Winson’s teaching style is based on experience: his insistence on learning by practicing past papers is sensible and practical. He provides specific past paper questions for each topic separately, and his notes are very useful for final exam revisions. Winson is very patient and experienced. His assignments are based on each student’s ability and needs.",
+      "quote": "Winson’s teaching style is based on experience: his insistence on learning by practicing past papers is sensible and practical. He provides specific past paper questions for each topic, and his notes are very useful for final exam revision. Winson is very patient and experienced. His assignments are based on each student’s ability and needs.",
       "avatarSrc": "/avatars/carousel-3.png",
       "useDefaultAvatar": true
     },
@@ -74,7 +74,7 @@
       "name": "Cassie Luo (2023)",
       "role": "IBDP AASL — From 4 to 7",
       "university": "The University of Hong Kong",
-      "quote": "Winson老师是一位满怀责任心的数学老师。他会在课堂中先带领我学习及总结单元知识，接下来将挑选合适的题目以供我练习。如果期间有任何不解，老师都会针对性地进行详细的讲解。一节课中70%时间学生做题；30%时间老师讲课，这是Winson老师独特的教学方式。Winson老师亦会在课后为我整理好Past Paper Booklet，以便我课后进行复习及巩固。",
+      "quote": "Winson 老师是一位满怀责任心的数学老师。他会在课堂中先带领我学习及总结单元知识，接下来将挑选合适的题目以供我练习。如果期间有任何不解，老师都会针对性地进行详细的讲解。一节课中70%时间学生做题；30%时间老师讲课，这是 Winson 老师独特的教学方式。Winson 老师亦会在课后为我整理好 Past Paper Booklet，以便我课后进行复习及巩固。",
       "avatarSrc": "/avatars/carousel-4.png",
       "useDefaultAvatar": true
     },
@@ -82,20 +82,20 @@
       "name": "Vera Jing (2021)",
       "role": "IBDP AAHL — From 6 to 7",
       "university": "University College London",
-      "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. He is patient, organized, and supportive, and his notes and revision material greatly help in exam conditions!",
+      "quote": "Winson was the first and only Math tutor who supervised me throughout my IBDP. He is patient, organised, and supportive, and his notes and revision material are very helpful in exam conditions!",
       "avatarSrc": "",
       "useDefaultAvatar": true
     },
     {
-      "name": "Bill Zhang (2025)",
+      "name": "Bill Zhang (2024)",
       "role": "CAIE Math + Further Math — From F to A*",
-      "quote": "Winson老师的上课风格轻松无压力，且教书模式灵活变通，将複杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定製的By Topic Past Paper可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之馀的刷题效率。",
+      "quote": "Winson 老师的上课风格轻松无压力，且教书模式灵活变通，将複杂的题目简单化是老师的强项之一，独树一帜的拆题及解题步骤使我获益匪浅。为学生个人化定製的 By Topic Past Paper 可以大幅度且针对性地加强某一单元的熟练度，也提高了学生闲暇之馀的刷题效率。",
       "avatarSrc": "/avatars/carousel-6.png",
       "university": "University College London"
     },
     {
       "name": "Michelle Chan (2021)",
-      "role": "IAL Further Math — From F to A*",
+      "role": "IAL Math + Further Math — From F to A*",
       "quote": "Winson was always well prepared and gave many past paper questions for practice after every lesson. He’s also an easy-going guy with a true passion for tutoring. I highly recommend him for exam prep!!",
       "avatarSrc": "",
       "university": "University of Melbourne",
@@ -104,7 +104,7 @@
     {
       "name": "Kathy Ye (2024)",
       "role": "IBDP AASL — From 1 to 6",
-      "quote": "Winson非常高效的教学方式，让我找到了解题的窍门。Winson的课都是以网课形式，但其实根本不需要担心效率问题。我从第一节课开始就一直觉得上课非常有效率，Winson会根据我学习的情况，来决定我今天的课是预习还是巩固知识。他讲的知识点都很简短有力，非常简单易懂。",
+      "quote": "Winson 非常高效的教学方式，让我找到了解题的窍门。Winson 的课都是以网课形式，但其实根本不需要担心效率问题。我从第一节课开始就一直觉得上课非常有效率，Winson 会根据我学习的情况，来决定我今天的课是预习还是巩固知识。他讲的知识点都很简短有力，非常简单易懂。",
       "avatarSrc": "",
       "university": "The University of Hong Kong",
       "useDefaultAvatar": true
@@ -112,17 +112,18 @@
     {
       "name": "Jasmine Hung (2023)",
       "role": "IBDP AISL — From 4 to 6",
-      "quote": "Winson is a patient tutor and is well-prepared for every lesson, which maximizes the time spent in class. He provides many past paper questions and tips that have well-equipped me for my IBDP exams.  I got a 6 in Math AISL and couldn’t have done it without him.",
+      "quote": "Winson is a patient tutor and well-prepared for every lesson, maximising the time spent in class. He provides many past paper questions and tips that have well-equipped me for my IBDP exams. ",
       "avatarSrc": "/avatars/carousel-9.png",
       "university": "University of Westminster",
       "useDefaultAvatar": false
     },
     {
       "name": "Connie Feng (2021)",
-      "role": "IBDP AASL — From 4 to 6",
-      "quote": "Winson老师非常厉害！老师在我整个IBDP期间为我提供了很多帮助。通过他的数学补课，我得以从最初难堪的分数，提升至我个人十分满意的成绩！在往后的大学课程中，老师也都不遗余力地辅导我拿到了很好的成绩！IBDP Math不管是SL或者HL都可以放心的交给Winson老师辅导！🤩🤩",
+      "role": "IBDP AASL — From 2 to 5",
+      "quote": "Winson 老师非常厉害！老师在我整个 IBDP 期间为我提供了很多帮助。通过他的数学补课，我得以从最初难堪的分数，提升至我个人十分满意的成绩！在往后的大学课程中，老师也都不遗余力地辅导我拿到了很好的成绩！IBDP Math 不管是 SL 或者 HL 都可以放心的交给 Winson 老师辅导！🤩🤩",
       "avatarSrc": "",
-      "university": "The Hong Kong University of Science and Technology"
+      "university": "The Hong Kong University of Science and Technology",
+      "useDefaultAvatar": true
     },
     {
       "name": "Lucia Zhu (2018)",
@@ -135,7 +136,7 @@
     {
       "name": "Coco Cheng (2024)",
       "role": "CAIE Math — From D to A",
-      "quote": "我认为Winson教学方法简洁明了，令人头疼且复杂的数学概念，通过老师的讲解变得十分易于理解。我的疑问都得到了耐心的解答，并且给予了我很多实用的解题技巧及策略。通过他的辅导，我在数学领域的进步与日俱增，并最终在考试中取得了优异的成绩。我非常感激他的帮助，他是一位十分出色的数学老师！",
+      "quote": "我认为 Winson 教学方法简洁明了，令人头疼且复杂的数学概念，通过老师的讲解变得十分易于理解。我的疑问都得到了耐心的解答，并且给予了我很多实用的解题技巧及策略。通过他的辅导，我在数学领域的进步与日俱增，并最终在考试中取得了优异的成绩。我非常感激他的帮助，他是一位十分出色的数学老师！",
       "avatarSrc": "/avatars/carousel-12.png",
       "university": "University College London"
     },
@@ -157,14 +158,14 @@
     {
       "name": "Kelly Li (2023)",
       "role": "IGCSE 0607 — From F to A",
-      "quote": "我與Winson老師上了超過兩年的課。最大的原因是我能感受到老師對我的用心及衝勁。Winson老師備課嚴謹，用心製作筆記及題集，以此尋找最適合學生的學習方式。Winson老師對學生提問非常有耐性，即使講了五次十次我都聽不懂，他也能做到語氣不改地重複解答。Winson老師對我們來說更像是戰友和定心針。",
+      "quote": "我与 Winson 老师上了超过两年的课。最大的原因是我能感受到老师对我的用心及冲劲。老师备课严谨，用心制作笔记及题集，以此寻找最适合学生的学习方式。老师对学生提问非常有耐性，即使讲了五次十次我都听不懂，他也能做到语气不改地重复解答。Winson 老师对我们来说更像是战友和定心针。",
       "avatarSrc": "/avatars/carousel-15.png",
       "useDefaultAvatar": false
     },
     {
       "name": "Judy Wei (2021)",
       "role": "IBDP AAHL — From 2 to 5",
-      "quote": "Winson's tutoring helped me immensely during the period of the COVID online class. Especially for someone who wasn't an active learner, I could follow his path and finish all the assignments/past papers. The lesson notes he provided with detailed formulas and keywords have been a major source for revision material.",
+      "quote": "Winson's tutoring helped me immensely during the COVID-19 online class period. Especially for someone who wasn't an active learner, I could follow his path and finish all the assignments / past papers. The lesson notes he provided, with detailed formulas and keywords, have been a significant source of revision material.",
       "avatarSrc": "",
       "university": "The Chinese University of Hong Kong",
       "useDefaultAvatar": true
@@ -187,7 +188,7 @@
     },
     {
       "name": "Aidan Cheung (2019)",
-      "role": "IBDP Math HL — From 4 to 6",
+      "role": "IBDP Math SL — From 4 to 6",
       "quote": "Winson is a great Math Tutor who breaks down concepts easily and applies his learning to practical exam questions. He carefully procures exam questions in a neatly formatted workbook full of practice questions for every lesson.",
       "avatarSrc": "",
       "university": "The University of Warwick",
