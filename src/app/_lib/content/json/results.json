@@ -50,8 +50,8 @@
     },
     "resultGroups": [
       {
-        "tab": "IBDP Mathematics",
-        "subTab": "HL",
+        "tab": "IBDP",
+        "subTab": "HL / AAHL / AIHL",
         "programLabel": "IBDP · HL / AAHL / AIHL",
         "students": [
           {
@@ -267,8 +267,8 @@
         ]
       },
       {
-        "tab": "IBDP Mathematics",
-        "subTab": "SL",
+        "tab": "IBDP",
+        "subTab": "SL / AASL / AISL",
         "programLabel": "IBDP · SL / AASL / AISL",
         "students": [
           {
@@ -434,7 +434,7 @@
         ]
       },
       {
-        "tab": "A-Level Mathematics",
+        "tab": "A-Level",
         "subTab": "Further Math",
         "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
         "students": [
@@ -468,7 +468,7 @@
         ]
       },
       {
-        "tab": "A-Level Mathematics",
+        "tab": "A-Level",
         "subTab": "Math",
         "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
         "students": [
@@ -544,8 +544,8 @@
         ]
       },
       {
-        "tab": "IGCSE Mathematics",
-        "subTab": "Additional Math / Further Pure Math",
+        "tab": "IGCSE",
+        "subTab": "Cambridge Additional Math / Edexcel Further Pure Math",
         "programLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
         "students": [
           {
@@ -581,8 +581,8 @@
         ]
       },
       {
-        "tab": "IGCSE Mathematics",
-        "subTab": "International Math / Math",
+        "tab": "IGCSE",
+        "subTab": "Cambridge International Math / Edexcel Math",
         "programLabel": "IGCSE · Cambridge International Math (0607) / Cambridge Math (0580) / Edexcel Math (4PM0)",
         "students": [
           {
