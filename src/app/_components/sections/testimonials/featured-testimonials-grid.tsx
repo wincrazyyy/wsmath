@@ -10,12 +10,13 @@ type FeaturedTestimonialsGridProps = {
 
 export function FeaturedTestimonialsGrid({ items }: FeaturedTestimonialsGridProps) {
   return (
-    <ul className="mt-6 grid gap-6 sm:grid-cols-2">
+    <ul className="mt-6 grid items-stretch gap-6 sm:grid-cols-2">
       {items.map((t, idx) => (
         <li
           key={(t.name || `featured-${idx}`) + (t.quote?.slice(0, 16) ?? "")}
           className={[
-            "group relative rounded-2xl p-[1px]",
+            "group relative h-full rounded-2xl p-[1px]",
+            "flex", // ensures inner card can stretch
             "transition-transform duration-200 ease-out",
             "hover:-translate-y-1 hover:shadow-lg",
           ].join(" ")}
@@ -45,9 +46,11 @@ export function FeaturedTestimonialsGrid({ items }: FeaturedTestimonialsGridProp
           {/* card */}
           <div
             className={[
-              "relative rounded-[15px] border border-neutral-200 bg-white p-6 shadow-sm",
+              "relative h-full w-full rounded-[15px]",
+              "border border-neutral-200 bg-white p-6 shadow-sm",
               "transition-all duration-200",
               "group-hover:border-transparent group-hover:shadow-md",
+              "flex flex-col", // keeps height consistent + allows content layout
             ].join(" ")}
           >
             {/* top accent bar */}
