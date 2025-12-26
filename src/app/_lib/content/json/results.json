@@ -1,7 +1,7 @@
 {
   "header": {
     "eyebrow": "Proven Outcomes · Data-Driven Coaching",
-    "title": "Turning Mathematical Potential Into Top-Tier Achievement",
+    "title": "Results, with context.",
     "subtitle": "A precision-engineered learning system built for ambitious students aiming for the highest performance bands across international exams.",
     "chips": [
       "🔬 Methodical skill-building · Zero-guesswork learning 🎯",
@@ -11,7 +11,7 @@
     ],
     "rightAccent": {
       "heading": "Impact Overview",
-      "badge": "100% satisfaction",
+      "badge": "Strong grade growth across committed students (see breakdown below).",
       "mainValue": "2+",
       "mainLabel": "average grade-band improvement",
       "mainSize": "sm",
@@ -723,12 +723,12 @@
     ]
   },
   "resultsCta": {
-    "heading": "Start your IBDP Math coaching",
+    "heading": "Start your IBDP / A-Level / IGCSE coaching",
     "subheading": "Premium Zoom coaching with iPad + Apple Pencil + GoodNotes",
     "bullets": [
-      "Weekly plan + homework loop (tracked progress)",
-      "Topic-by-topic foundations → past-paper strategy → exam execution",
-      "18,000+ hours • 250+ students • across IBDP / A-Level / IGCSE"
+      "Weekly roadmap + correction loop (tracked progress)",
+      "Foundations by topic → past paper strategy → exam execution",
+      "18,000+ hours • 250+ students • 11,000 lessons taught"
     ],
     "note": "Fast replies. Send your curriculum, year level, and target grade to get started.",
     "logoSrc": "/cta-image.png"
