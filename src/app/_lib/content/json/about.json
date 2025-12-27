@@ -2,7 +2,7 @@
   "header": {
     "eyebrow": "ABOUT WSMATH",
     "title": "Premium Exam Coaching",
-    "subtitle": "IBDP, A-Level/IAL and IGCSE — a structured system focused on marks, not guesswork.",
+    "subtitle": "IBDP, A-Level / IAL and IGCSE — a structured system focused on marks, not guesswork.",
     "chips": [
       "💻Recommended setup: iPad + stylus and a GDC",
       "📱Software required: GoodNotes, Zoom",
@@ -10,8 +10,8 @@
     ],
     "rightAccent": {
       "heading": "Who I teach",
-      "badge": "IBDP · A-Level · IGCSE",
-      "mainValue": "Year 10–13",
+      "badge": "IBDP · A-Level / IAL · IGCSE",
+      "mainValue": "Ages 15–18",
       "mainLabel": "students worldwide",
       "mainSize": "sm",
       "columns": [

@@ -13,7 +13,7 @@
       "heading": "OUTCOME SNAPSHOT",
       "badge": "Very high satisfaction",
       "mainValue": "2+",
-      "mainLabel": "average grade uplift (Measured from PG/mock to final)",
+      "mainLabel": "average grade uplift (From PG/mock to final)",
       "mainSize": "sm",
       "columns": [
         {
@@ -434,7 +434,7 @@
         ]
       },
       {
-        "tab": "A-Level",
+        "tab": "A-Level / IAL",
         "subTab": "Further Math",
         "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
         "students": [
@@ -468,7 +468,7 @@
         ]
       },
       {
-        "tab": "A-Level",
+        "tab": "A-Level / IAL",
         "subTab": "Math",
         "programLabel": "A-Level Math · Edexcel (IAL YMA01, AL 9MA0) / Cambridge (CAIE 9709) / AQA (7357) / OCR (H240)",
         "students": [
@@ -689,7 +689,7 @@
   "schools": {
     "eyebrow": "Hong Kong and International Schools",
     "heading": "Schools our students come from",
-    "subheading": "A snapshot of schools we’ve supported across IBDP / A-Level / IGCSE.",
+    "subheading": "A snapshot of schools we’ve supported across IBDP, A-Level / IAL and IGCSE.",
     "items": [
       "Yew Chung International School",
       "St. Stephen's College",
@@ -712,6 +712,7 @@
       "ESF Discovery College",
       "ESF Renaissance College",
       "Chinese International School",
+      "Koren International School",
       "Canadian International School of Hong Kong",
       "Singapore International School (Hong Kong)",
       "French International School of Hong Kong",
