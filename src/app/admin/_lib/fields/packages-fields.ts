@@ -309,14 +309,6 @@ export const PACKAGES_IA_SUPPORT_FIELDS: FieldConfig[] = [
     type: "textarea",
   },
 
-  // CTA
-  {
-    path: "iaSupport.ctaLabel",
-    label: "IA Support – button label",
-    description: "CTA button label text.",
-    type: "string",
-  },
-
   // Lesson structure
   {
     path: "iaSupport.lessonStructureTitle",

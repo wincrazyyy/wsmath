@@ -68,7 +68,6 @@ export type IaSupportConfig = {
   eyebrow: string;
   title: string;
   description: string;
-  ctaLabel: string;
 
   lessonStructureTitle: string;
   lessonStructure: string[];
