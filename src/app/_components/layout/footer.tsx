@@ -26,7 +26,7 @@ export function SiteFooter() {
                   alt="WSMath"
                   width={24}
                   height={24}
-                  className="h-6 w-6 object-contain"
+                  className="h-8 w-8 object-contain"
                   priority={false}
                 />
               </div>

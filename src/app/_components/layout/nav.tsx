@@ -160,13 +160,15 @@ export function Nav() {
                 className="flex items-center gap-2"
                 aria-label="WSMath Home"
               >
-                <Image
-                  src="/icon.png"
-                  alt=""
-                  width={24}
-                  height={24}
-                  className="h-6 w-6"
-                />
+                <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                  <Image
+                    src="/icon.png"
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="h-8 w-8 object-contain"
+                  />
+                </div>
                 <span className="font-semibold tracking-tight">
                   <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                     WSMath
