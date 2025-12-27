@@ -38,8 +38,11 @@ export function AboutHero({ hero }: AboutHeroProps) {
               <ul className="mt-3 space-y-2 text-sm text-neutral-700">
                 {hero.area1.items.map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <span className="mt-2 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                    {item}
+                    <span
+                      aria-hidden
+                      className="mt-[0.45rem] h-2 w-2 shrink-0 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600"
+                    />
+                    <span className="leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -53,8 +56,11 @@ export function AboutHero({ hero }: AboutHeroProps) {
               <ul className="mt-3 space-y-2 text-sm text-neutral-700">
                 {hero.area2.items.map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <span className="mt-2 h-2 w-2 rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600" />
-                    {item}
+                    <span
+                      aria-hidden
+                      className="mt-[0.45rem] h-2 w-2 shrink-0 flex-none rounded-full bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600"
+                    />
+                    <span className="leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
