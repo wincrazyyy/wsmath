@@ -76,8 +76,9 @@ export function Nav() {
 
   const linkClass = (href: string) =>
     [
-      "group relative",
-      "px-2 py-1 text-sm",
+      "group relative inline-flex items-center justify-center",
+      "px-4 py-2",                // bigger click/hover area
+      "text-sm",
       "transition-colors duration-200",
       active === href ? "text-neutral-900 font-medium" : "text-neutral-600",
       "hover:text-neutral-900",
@@ -203,7 +204,7 @@ export function Nav() {
                     <span
                       aria-hidden
                       className={[
-                        "pointer-events-none absolute inset-x-1 -bottom-1 h-[2px] rounded-full",
+                        "pointer-events-none absolute inset-x-2 bottom-0 h-[2px] rounded-full", // was inset-x-1 -bottom-1
                         "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
                         "transition-opacity duration-200",
                         active === href ? "opacity-90" : "opacity-0 group-hover:opacity-90",
