@@ -1,25 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { NAV_SECTIONS } from "@/app/_components/layout/nav";
 
-type SectionItem = {
-  id: string;     // must match your section ids in the DOM
-  label: string;  // tooltip / aria label
-};
-
-const DEFAULT_SECTIONS: SectionItem[] = [
-  { id: "about", label: "About" },
-  { id: "packages", label: "Packages" },
-  { id: "testimonials", label: "Testimonials" },
-  { id: "results", label: "Results" },
-  { id: "faq", label: "FAQ" },
-];
+const DEFAULT_SECTIONS = NAV_SECTIONS.map((s) => ({
+  id: s.id,
+  label: s.label,
+}));
 
 export function SectionDots({
   sections = DEFAULT_SECTIONS,
   className = "",
 }: {
-  sections?: SectionItem[];
+  sections?: { id: string; label: string }[];
   className?: string;
 }) {
   const [active, setActive] = useState<string>(sections[0]?.id ?? "");

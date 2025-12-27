@@ -4,13 +4,21 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { WhatsAppButton } from "../ui/whatsapp-button";
 
-const LINKS = [
-  { href: "#about", label: "About" },
-  { href: "#packages", label: "Packages" },
-  { href: "#testimonials", label: "Testimonials" },
-  { href: "#results", label: "Results" },
-  { href: "#faq", label: "FAQ" },
+export type NavSection = {
+  id: string;
+  href: string;
+  label: string;
+};
+
+export const NAV_SECTIONS: NavSection[] = [
+  { id: "about", href: "#about", label: "About" },
+  { id: "packages", href: "#packages", label: "Packages" },
+  { id: "testimonials", href: "#testimonials", label: "Testimonials" },
+  { id: "results", href: "#results", label: "Results" },
+  { id: "faq", href: "#faq", label: "FAQ" },
 ];
+
+const LINKS = NAV_SECTIONS;
 
 const HIDE_AFTER_PX = 48; // scroll distance before nav fades out
 const REVEAL_ZONE_H = 20; // px height at top for hover-to-reveal
@@ -45,9 +53,8 @@ export function Nav() {
 
   // --- active section observer ---
   useEffect(() => {
-    const ids = ["about", "packages", "testimonials", "results"] as const;
-    const els = ids
-      .map((id) => document.getElementById(id))
+    const els = LINKS
+      .map((l) => document.getElementById(l.id))
       .filter((el): el is HTMLElement => !!el);
 
     const observer = new IntersectionObserver(
