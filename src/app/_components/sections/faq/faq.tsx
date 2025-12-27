@@ -45,7 +45,7 @@ export function Faq() {
                   </span>
                 </summary>
 
-                <p className="mt-3 text-sm leading-relaxed text-neutral-600">
+                <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-neutral-600">
                   {item.a}
                 </p>
               </details>
