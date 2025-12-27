@@ -8,7 +8,7 @@ import { FaqHeader } from "./faq-header";
 
 export function Faq() {
   const data = faqContent as FaqConfig;
-  const { header, top, items } = data as any; // if your FaqConfig isn't updated yet
+  const { header, top, items } = data as FaqConfig;
 
   return (
     <>
