@@ -9,20 +9,23 @@ import { WhatsAppButton } from "../../ui/whatsapp-button";
 import { rubik } from "@/app/_lib/fonts";
 
 function renderStyledTitle(title: string) {
-  // Split but keep spaces so spacing stays identical
   const parts = title.split(/(\s+)/);
+
+  const GRAD =
+    "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 " +
+    "bg-clip-text text-transparent [-webkit-text-fill-color:transparent]";
 
   return parts.map((part, i) => {
     if (/^\s+$/.test(part)) return <span key={`sp-${i}`}>{part}</span>;
     if (!part) return null;
 
-    const first = part.slice(0, 1); // keep original case (W, S)
+    const first = part.slice(0, 1);
     const rest = part.slice(1);
 
     return (
       <span key={`w-${i}`} className="inline-block">
-        <span className="text-[1.12em] align-baseline">{first}</span>
-        <span>{rest}</span>
+        <span className={`text-[1.12em] align-baseline ${GRAD}`}>{first}</span>
+        <span className={GRAD}>{rest}</span>
       </span>
     );
   });
@@ -171,9 +174,7 @@ export function Hero() {
               rubik.className,
             ].join(" ")}
           >
-            <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
-              {renderStyledTitle(hero.title)}
-            </span>
+            {renderStyledTitle(hero.title)}
           </h1>
           <p className="mt-4 text-lg text-neutral-700 md:text-xl">
             {hero.subtitle}
