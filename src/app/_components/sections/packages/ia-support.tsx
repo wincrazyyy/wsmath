@@ -8,15 +8,11 @@ type Props = {
   config: IaSupportConfig;
 };
 
-const SOLO_CARD_ID = "solo-lessons";
-const HIGHLIGHT_EVENT = "wsmath:highlight";
-
 export function IaSupport({ config }: Props) {
   const {
     eyebrow,
     title,
     description,
-    ctaLabel,
     lessonStructureTitle,
     lessonStructure,
     topicsTitle,
@@ -24,21 +20,6 @@ export function IaSupport({ config }: Props) {
     bookLabel,
     whatsappPrefillText,
   } = config;
-
-  function goToSoloAndHighlight() {
-    const el = document.getElementById(SOLO_CARD_ID);
-    if (!el) return;
-
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-
-    window.setTimeout(() => {
-      window.dispatchEvent(
-        new CustomEvent(HIGHLIGHT_EVENT, {
-          detail: { id: SOLO_CARD_ID, ms: 2600 },
-        })
-      );
-    }, 250);
-  }
 
   return (
     <div className="mt-8 flex h-full flex-col rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
@@ -54,13 +35,6 @@ export function IaSupport({ config }: Props) {
           <p className="mt-1 max-w-2xl text-sm text-neutral-600">{description}</p>
         </div>
 
-        <button
-          type="button"
-          onClick={goToSoloAndHighlight}
-          className="inline-flex w-fit items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-neutral-800 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0"
-        >
-          {ctaLabel}
-        </button>
       </div>
 
       {/* Top -> bottom layout */}
@@ -120,7 +94,6 @@ export function IaSupport({ config }: Props) {
         <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-4">
           <div className="text-sm font-semibold text-neutral-900">{topicsTitle}</div>
 
-          {/* Topics grid */}
           <div className="mt-3 grid auto-rows-fr gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(topics ?? []).map((t) => (
               <div
@@ -140,7 +113,6 @@ export function IaSupport({ config }: Props) {
                   ].join(" ")}
                 />
 
-                {/* Card content */}
                 <div
                   className={[
                     "relative h-full rounded-[11px] bg-white p-3 transition",
@@ -155,7 +127,6 @@ export function IaSupport({ config }: Props) {
                   <div className="mt-1 text-xs text-neutral-600 transition group-hover:text-neutral-700">
                     {t.desc}
                   </div>
-                  {/* spacer to keep cards consistent even if text is short */}
                   <div className="mt-auto" />
                 </div>
               </div>

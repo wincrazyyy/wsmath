@@ -2,10 +2,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
 import type { PrivateConfig } from "@/app/_lib/content/types/packages.types";
-import styles from "./private-package-card.module.css";
 import { BookButton } from "../../ui/book-button";
 
 interface PrivatePackageCardProps {
@@ -15,7 +12,6 @@ interface PrivatePackageCardProps {
   eightLessonBlockCost: number;
 }
 
-const HIGHLIGHT_EVENT = "wsmath:highlight";
 const SOLO_CARD_ID = "solo-lessons";
 
 export function PrivatePackageCard({
@@ -24,46 +20,26 @@ export function PrivatePackageCard({
   intensiveLessons,
   eightLessonBlockCost,
 }: PrivatePackageCardProps) {
-  const [highlight, setHighlight] = useState(false);
-
-  useEffect(() => {
-    const onHighlight = (e: Event) => {
-      const ce = e as CustomEvent<{ id?: string; ms?: number }>;
-      if (ce.detail?.id !== SOLO_CARD_ID) return;
-
-      setHighlight(true);
-      const ms = Math.max(900, ce.detail?.ms ?? 2600);
-      window.setTimeout(() => setHighlight(false), ms);
-    };
-
-    window.addEventListener(HIGHLIGHT_EVENT, onHighlight as EventListener);
-    return () =>
-      window.removeEventListener(HIGHLIGHT_EVENT, onHighlight as EventListener);
-  }, []);
-
   return (
     <article
       id={SOLO_CARD_ID}
       className={[
-        "relative flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md",
-        "ring-1 ring-transparent transition",
+        "group relative flex h-full flex-col rounded-2xl border border-neutral-200 bg-white/95 p-6 shadow-md",
+        "ring-1 ring-transparent transition-all duration-200 ease-out",
+        // normal hover lift
         "hover:-translate-y-1 hover:shadow-lg hover:ring-neutral-200",
-        highlight
-          ? [
-              "border-violet-300 ring-2 ring-violet-500/80",
-              "bg-violet-50/40",
-              "shadow-2xl shadow-violet-400/30",
-              styles.highlightPulse, // <-- add the module class here
-            ].join(" ")
-          : "",
+        // ✅ “highlight” look on hover (persistent while hovered)
+        "hover:border-violet-300 hover:ring-2 hover:ring-violet-500/80 hover:bg-violet-50/40",
+        "hover:shadow-2xl hover:shadow-violet-400/30",
       ].join(" ")}
     >
-      {/* stronger glow layer */}
+      {/* stronger glow layer (hover only, no popping timer) */}
       <div
         aria-hidden="true"
         className={[
-          "pointer-events-none absolute -inset-1 rounded-[22px] opacity-0 blur-xl transition-opacity duration-300",
-          highlight ? "opacity-100 bg-gradient-to-r from-indigo-400/35 via-violet-400/35 to-sky-400/35" : "",
+          "pointer-events-none absolute -inset-1 rounded-[22px] opacity-0 blur-xl transition-opacity duration-200",
+          "bg-gradient-to-r from-indigo-400/35 via-violet-400/35 to-sky-400/35",
+          "group-hover:opacity-100",
         ].join(" ")}
       />
 
@@ -72,14 +48,12 @@ export function PrivatePackageCard({
           {config.label}
         </div>
 
-        {/* Optional right-side tag (only if you add config.tag like group) */}
         {config.tag ? (
           <span className="rounded-full bg-neutral-100 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.15em] text-neutral-700">
             {config.tag}
           </span>
         ) : null}
       </div>
-
 
       {/* PRICE */}
       <div className="relative z-10 mt-4">
@@ -125,7 +99,7 @@ export function PrivatePackageCard({
         </ul>
       </div>
 
-      {/* image (between content and WhatsApp) */}
+      {/* image */}
       <div className="relative z-10 mt-6 flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 min-h-[140px]">
         <Image
           src={config.privateSrc}
