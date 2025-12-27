@@ -1,6 +1,7 @@
 // app/page.tsx
 import { SmoothScroll } from "@/app/_components/ui/smooth-scroll";
 import { BackgroundGlow } from "@/app/_components/layout/background-glow";
+import { SectionDots } from "@/app/_components/ui/section-dots";
 import { Nav } from "@/app/_components/layout/nav";
 import { Home } from "./_components/sections/home/home";
 import { About } from "@/app/_components/sections/about/about";
@@ -16,6 +17,7 @@ export default function Page() {
     <main className="min-h-dvh bg-white text-neutral-900 antialiased">
       <SmoothScroll />
       <BackgroundGlow />
+      <SectionDots />
       <div className="relative z-10">
         <header className="sticky top-0 z-40 w-full">
           <Nav />
