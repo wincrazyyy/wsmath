@@ -100,16 +100,17 @@ export function PrivatePackageCard({
       </div>
 
       {/* image */}
-      <div className="relative z-10 mt-6 flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 min-h-[140px]">
+      <div className="relative z-10 mt-6 overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 h-[260px]">
         <Image
           src={config.privateSrc}
           alt="Tutor pointing upward"
           fill
-          sizes="(max-width: 640px) 100vw, 560px"
+          sizes="560px"
           className="object-cover object-top"
           priority
         />
       </div>
+
 
       <div className="relative z-10 mt-auto pt-5">
         <BookButton
