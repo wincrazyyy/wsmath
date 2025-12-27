@@ -6,6 +6,29 @@ import { useEffect, useMemo, useState } from "react";
 import homeContent from "@/app/_lib/content/json/home.json";
 import { WhatsAppButton } from "../../ui/whatsapp-button";
 
+import { rubik } from "@/app/_lib/fonts";
+
+function renderStyledTitle(title: string) {
+  // Split but keep spaces so spacing stays identical
+  const parts = title.split(/(\s+)/);
+
+  return parts.map((part, i) => {
+    if (/^\s+$/.test(part)) return <span key={`sp-${i}`}>{part}</span>;
+    if (!part) return null;
+
+    const first = part.slice(0, 1); // keep original case (W, S)
+    const rest = part.slice(1);
+
+    return (
+      <span key={`w-${i}`} className="inline-block">
+        <span className="text-[1.12em] align-baseline">{first}</span>
+        <span>{rest}</span>
+      </span>
+    );
+  });
+}
+
+
 const hero = homeContent.hero;
 
 function toNumber(value: unknown, fallback = 0): number {
@@ -142,12 +165,16 @@ export function Hero() {
 
         {/* Text */}
         <div className="order-2 max-w-xl text-center lg:order-1 lg:text-left">
-          <h1 className="text-5xl font-extrabold leading-none tracking-tight md:text-6xl">
+          <h1
+            className={[
+              "text-5xl font-extrabold leading-none tracking-tight md:text-6xl",
+              rubik.className,
+            ].join(" ")}
+          >
             <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
-              {hero.title}
+              {renderStyledTitle(hero.title)}
             </span>
           </h1>
-
           <p className="mt-4 text-lg text-neutral-700 md:text-xl">
             {hero.subtitle}
           </p>
