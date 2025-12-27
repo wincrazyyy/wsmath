@@ -1,20 +1,15 @@
+// app/_components/ui/book-button.tsx
 import miscContent from "@/app/_lib/content/json/misc.json";
 
-type BookButtonVariant = "blue" | "green" | "plain";
+type BookButtonVariant = "blue" | "green" | "plain" | "footer";
 
 type BookButtonProps = {
-  /** Extra classes for the outer anchor */
   buttonClassName?: string;
   ariaLabel?: string;
-  /** Optional override – if omitted, uses misc.json WhatsApp settings */
   href?: string;
-  /** Button text (default: "Book a lesson") */
   label?: string;
-  /** Optional small note under the label (kept inside button) */
   subLabel?: string;
-  /** Color theme */
   variant?: BookButtonVariant;
-  /** Prefill text for WhatsApp message (default from misc.json) */
   prefillText?: string;
 };
 
@@ -55,6 +50,14 @@ const VARIANTS: Record<
     hoverShadow: "hover:shadow-black/15",
     focus: "focus-visible:ring-neutral-900",
   },
+  footer: {
+    bg: "bg-neutral-900 hover:bg-neutral-800",
+    glow: "bg-gradient-to-r from-transparent via-transparent to-transparent",
+    ring: "ring-transparent",
+    shadow: "shadow-none",
+    hoverShadow: "hover:shadow-none",
+    focus: "focus-visible:ring-neutral-900",
+  },
 };
 
 export function BookButton({
@@ -73,6 +76,8 @@ export function BookButton({
   const finalHref = href ?? defaultHref;
   const v = VARIANTS[variant];
 
+  const isFooter = variant === "footer";
+
   return (
     <a
       href={finalHref}
@@ -81,26 +86,32 @@ export function BookButton({
       aria-label={ariaLabel}
       className={[
         "group relative inline-flex w-full items-center justify-center gap-2",
-        "rounded-2xl px-5 py-3 text-sm font-semibold text-white",
-        v.bg,
-        "shadow-lg",
-        v.shadow,
-        "ring-1",
-        v.ring,
+        "text-sm font-semibold text-white",
         "transition-transform duration-200 ease-out",
-        "hover:-translate-y-0.5 hover:shadow-xl",
-        v.hoverShadow,
-        "active:translate-y-0",
+        "hover:-translate-y-0.5 active:translate-y-0",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        v.bg,
         v.focus,
+
+        // default button shell
+        !isFooter
+          ? ["rounded-2xl px-5 py-3", "shadow-lg", v.shadow, "ring-1", v.ring, v.hoverShadow].join(" ")
+          : [
+              // footer original shell
+              "rounded-xl px-4 py-2",
+              // (footer original didn’t have ring/glow)
+            ].join(" "),
+
         buttonClassName,
       ].join(" ")}
     >
+      {/* glow layer (disabled visually in footer variant) */}
       <span
         aria-hidden
         className={[
           "pointer-events-none absolute -inset-1 rounded-[18px] blur-xl opacity-0 transition-opacity duration-200 group-hover:opacity-100",
           v.glow,
+          isFooter ? "hidden" : "",
         ].join(" ")}
       />
 
@@ -113,12 +124,15 @@ export function BookButton({
         ) : null}
       </span>
 
-      <span
-        aria-hidden
-        className="relative translate-x-0 transition-transform duration-200 group-hover:translate-x-0.5"
-      >
-        →
-      </span>
+      {/* remove arrow for footer variant */}
+      {!isFooter && (
+        <span
+          aria-hidden
+          className="relative translate-x-0 transition-transform duration-200 group-hover:translate-x-0.5"
+        >
+          →
+        </span>
+      )}
     </a>
   );
 }

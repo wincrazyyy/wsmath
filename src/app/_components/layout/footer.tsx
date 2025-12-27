@@ -2,6 +2,7 @@ import Image from "next/image";
 import miscContent from "@/app/_lib/content/json/misc.json";
 import type { MiscConfig } from "@/app/_lib/content/types/misc.types";
 import { PrivacyPolicyModalAnchor } from "./privacy-policy-modal-anchor";
+import { BookButton } from "../ui/book-button";
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
@@ -185,16 +186,22 @@ export function SiteFooter() {
             <p className="text-sm font-semibold text-neutral-900">{footer.cta.title}</p>
             <p className="mt-4 text-sm text-neutral-600">{footer.cta.body}</p>
 
-            <div className="mt-4 flex flex-wrap gap-3">
-              <a
-                href={footer.cta.primary.href}
-                className="inline-flex items-center justify-center rounded-xl bg-neutral-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-neutral-800"
-              >
-                {footer.cta.primary.label}
-              </a>
+            <div className="mt-4 grid gap-3">
+              <BookButton
+                variant="footer"
+                label={footer.cta.primary.label}
+                ariaLabel={footer.cta.primary.label}
+                prefillText={whatsapp.prefillText}
+                buttonClassName="w-full rounded-xl px-4 py-2"
+              />
+
               <a
                 href={footer.cta.secondary.href}
-                className="inline-flex items-center justify-center rounded-xl border border-neutral-200 bg-white px-4 py-2 text-sm font-semibold text-neutral-900 transition hover:bg-neutral-50"
+                className={[
+                  "inline-flex w-full items-center justify-center",
+                  "rounded-xl border border-neutral-200 bg-white px-4 py-2",
+                  "text-sm font-semibold text-neutral-900 transition hover:bg-neutral-50",
+                ].join(" ")}
               >
                 {footer.cta.secondary.label}
               </a>
