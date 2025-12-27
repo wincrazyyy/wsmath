@@ -74,20 +74,13 @@ export function Nav() {
     document.body.style.overflow = open ? "hidden" : "";
   }, [open]);
 
-  const navLinkBase =
-  "relative -mx-1 rounded-lg px-1 py-1 text-sm transition-all duration-200 ease-out";
-
   const linkClass = (href: string) =>
     [
-      "group",
-      navLinkBase,
-      active === href
-        ? "text-neutral-900 font-medium"
-        : "text-neutral-600",
-      // stronger hover
-      "hover:text-neutral-900 hover:-translate-y-[1px]",
-      "hover:bg-white/60",
-      "hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]",
+      "group relative",
+      "px-2 py-1 text-sm",
+      "transition-colors duration-200",
+      active === href ? "text-neutral-900 font-medium" : "text-neutral-600",
+      "hover:text-neutral-900",
       "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
     ].join(" ");
 
@@ -192,28 +185,28 @@ export function Nav() {
               <div className="hidden items-center gap-6 md:flex">
                 {LINKS.map(({ href, label }) => (
                   <a key={href} href={href} className={linkClass(href)}>
-                    <span className="relative z-10">{label}</span>
-
-                    {/* underline sweep */}
-                    <span
-                      aria-hidden
-                      className={[
-                        "pointer-events-none absolute inset-x-1 -bottom-0.5 h-[2px] rounded-full",
-                        "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
-                        active === href ? "opacity-80" : "opacity-0",
-                        "transition-opacity duration-200",
-                        "group-hover:opacity-80",
-                      ].join(" ")}
-                    />
-
-                    {/* soft prismatic glow on hover */}
+                    {/* glow (hover + active) */}
                     <span
                       aria-hidden
                       className={[
                         "pointer-events-none absolute -inset-2 rounded-xl opacity-0 blur-xl",
-                        "bg-gradient-to-r from-indigo-500/15 via-violet-500/15 to-sky-500/15",
+                        "bg-gradient-to-r from-indigo-500/12 via-violet-500/12 to-sky-500/12",
                         "transition-opacity duration-200",
-                        "group-hover:opacity-100",
+                        active === href ? "opacity-100" : "group-hover:opacity-100",
+                      ].join(" ")}
+                    />
+
+                    {/* label */}
+                    <span className="relative">{label}</span>
+
+                    {/* underline (hover + active) */}
+                    <span
+                      aria-hidden
+                      className={[
+                        "pointer-events-none absolute inset-x-1 -bottom-1 h-[2px] rounded-full",
+                        "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                        "transition-opacity duration-200",
+                        active === href ? "opacity-90" : "opacity-0 group-hover:opacity-90",
                       ].join(" ")}
                     />
                   </a>
