@@ -74,10 +74,22 @@ export function Nav() {
     document.body.style.overflow = open ? "hidden" : "";
   }, [open]);
 
+  const navLinkBase =
+  "relative -mx-1 rounded-lg px-1 py-1 text-sm transition-all duration-200 ease-out";
+
   const linkClass = (href: string) =>
-    `transition ${
-      active === href ? "text-neutral-900 font-medium" : "text-neutral-600"
-    } hover:text-neutral-900`;
+    [
+      "group",
+      navLinkBase,
+      active === href
+        ? "text-neutral-900 font-medium"
+        : "text-neutral-600",
+      // stronger hover
+      "hover:text-neutral-900 hover:-translate-y-[1px]",
+      "hover:bg-white/60",
+      "hover:shadow-[0_10px_24px_rgba(15,23,42,0.08)]",
+      "focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+    ].join(" ");
 
   const goHomeNoHash = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -180,11 +192,35 @@ export function Nav() {
               <div className="hidden items-center gap-6 md:flex">
                 {LINKS.map(({ href, label }) => (
                   <a key={href} href={href} className={linkClass(href)}>
-                    {label}
+                    <span className="relative z-10">{label}</span>
+
+                    {/* underline sweep */}
+                    <span
+                      aria-hidden
+                      className={[
+                        "pointer-events-none absolute inset-x-1 -bottom-0.5 h-[2px] rounded-full",
+                        "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
+                        active === href ? "opacity-80" : "opacity-0",
+                        "transition-opacity duration-200",
+                        "group-hover:opacity-80",
+                      ].join(" ")}
+                    />
+
+                    {/* soft prismatic glow on hover */}
+                    <span
+                      aria-hidden
+                      className={[
+                        "pointer-events-none absolute -inset-2 rounded-xl opacity-0 blur-xl",
+                        "bg-gradient-to-r from-indigo-500/15 via-violet-500/15 to-sky-500/15",
+                        "transition-opacity duration-200",
+                        "group-hover:opacity-100",
+                      ].join(" ")}
+                    />
                   </a>
                 ))}
                 <WhatsAppButton width={160} height={44} imgClassName="h-10 w-auto" />
               </div>
+
 
               {/* Mobile open */}
               <button
@@ -226,8 +262,20 @@ export function Nav() {
                   className="flex items-center gap-2"
                   aria-label="WSMath Home"
                 >
-                  <Image src="/icon.svg" alt="" width={20} height={20} className="h-5 w-5" />
-                  <span className="font-semibold">WSMath</span>
+                  <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border border-neutral-200 bg-neutral-50">
+                    <Image
+                      src="/icon.png"
+                      alt=""
+                      width={24}
+                      height={24}
+                      className="h-8 w-8 object-contain"
+                    />
+                  </div>
+                  <span className="font-semibold tracking-tight">
+                    <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
+                      WSMath
+                    </span>
+                  </span>
                 </button>
 
                 <button
@@ -253,7 +301,11 @@ export function Nav() {
                     key={href}
                     href={href}
                     onClick={() => setOpen(false)}
-                    className="rounded-lg px-3 py-2 text-base text-neutral-700 hover:bg-neutral-50"
+                    className={[
+                      "rounded-xl px-3 py-2 text-base text-neutral-700 transition",
+                      "hover:bg-neutral-50 hover:-translate-y-[1px] hover:shadow-sm",
+                      "active:translate-y-0",
+                    ].join(" ")}
                   >
                     {label}
                   </a>
