@@ -595,7 +595,8 @@
             "name": "Jewel Lam",
             "year": 2024,
             "from": "E(4)",
-            "to": "A(8)"
+            "to": "A(8)",
+            "months": 6
           },
           {
             "name": "Nicole Li",
@@ -604,7 +605,20 @@
             "to": "A(8)"
           },
           {
+            "name": "Casey Chan",
+            "year": 2023,
+            "from": "D(5)",
+            "to": "B(7)",
+            "months": 3
+          },
+          {
             "name": "Cissie Ching",
+            "year": 2023,
+            "from": "F(3)",
+            "to": "A(8)"
+          },
+          {
+            "name": "Gordon Lo",
             "year": 2023,
             "from": "F(3)",
             "to": "A(8)"
@@ -613,12 +627,6 @@
             "name": "Kelly Li",
             "year": 2023,
             "from": "F(3)",
-            "to": "A(8)"
-          },
-          {
-            "name": "Gordon Lo",
-            "year": 2023,
-            "from": "E(4)",
             "to": "A(8)"
           },
           {
@@ -643,7 +651,8 @@
             "name": "Ken Chen",
             "year": 2022,
             "from": "C(6)",
-            "to": "A(8)"
+            "to": "A(8)",
+            "months": 3
           },
           {
             "name": "Catherine Li",
