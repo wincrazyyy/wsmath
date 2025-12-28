@@ -42,7 +42,7 @@ export function CoursesCovered({
       <div className="mt-4 rounded-3xl border border-neutral-200 bg-gradient-to-br from-indigo-50 via-sky-50 to-violet-50 p-[1px]">
         <div className="rounded-[1.35rem] bg-white/80 px-4 py-5 shadow-sm backdrop-blur-sm sm:px-6 sm:py-6">
           {coursesSection.intro && (
-            <p className="max-w-2xl text-xs text-neutral-600 sm:text-sm">
+            <p className="max-w-full text-xs text-neutral-600 sm:text-sm">
               {coursesSection.intro}
             </p>
           )}
