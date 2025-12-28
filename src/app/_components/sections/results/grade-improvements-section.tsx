@@ -61,12 +61,14 @@ function makeItems(list: Student[]): string[] {
   return list
     .slice()
     .sort((a, b) => b.year - a.year || a.name.localeCompare(b.name))
-    .map(
-      (s) =>
-        `${s.name} (${s.year})${
-          typeof s.months === "number" ? ` — ${s.months} months` : ""
-        }`,
-    );
+    .map((s) => {
+      const months =
+        typeof s.months === "number"
+          ? ` — ${s.months} ${s.months === 1 ? "month" : "months"}`
+          : "";
+
+      return `${s.name} (${s.year})${months}`;
+    });
 }
 
 function buildTop4Matrix4Cols(students: Student[], syllabusScale: string[]): MatrixRow[] {
