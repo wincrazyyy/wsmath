@@ -197,12 +197,11 @@ export function GradeImprovementsSection({
 
   // --- auto demo (randomly opens cells) ---
   // Demo pauses after any user interaction, then resumes after idle.
-  const IDLE_RESUME_MS = 14_000; // resumes after 14s of no interaction (tweak)
+  const IDLE_RESUME_MS = 10_000; // resumes after 10s of no interaction (tweak)
   const DEMO_START_DELAY_MS = 1_800;
   const DEMO_OPEN_MS = 3_200; // how long a cell stays open
-  const DEMO_GAP_MIN_MS = 8_500; // time between opens
-  const DEMO_GAP_MAX_MS = 12_500;
-
+  const DEMO_GAP_MIN_MS = 6_500; // time between opens
+  const DEMO_GAP_MAX_MS = 8_500;
   const [idle, setIdle] = useState(true);
   const idleTimerRef = useRef<number | null>(null);
 
