@@ -60,8 +60,8 @@
     "Fiona (2022) AAHL 3 → 6 (3 months)",
     "Sharon (2023) AASL 3 → 7 (1.5 months)",
     "Bill (2021) IAL Further Math F → A* (2 years)",
-    "Cissie (2023) IGCSE 0607 F → A (1 year)",
     "Emily (2018) IGCSE 0606 B → A* (2 months)",
+    "Cissie (2023) IGCSE 0607 F → A (1 year)",
     "Janis (2024) IGCSE 0580 C → A* (4 months)"
   ],
   "coursesSection": {
@@ -71,7 +71,7 @@
     "groups": [
       {
         "title": "IBDP Courses",
-        "caption": "AA / AI · HL / SL",
+        "caption": "AA / AI · HL / SL · IA",
         "emphasize": true,
         "courses": [
           "Math Analysis and Approaches HL",
@@ -98,7 +98,7 @@
           "Cambridge CAIE Math 9709",
           "AQA AL Further Math 7367",
           "AQA AL Math 7357",
-          "OCR Math H240"
+          "OCR AL Math H240"
         ],
         "cta": {
           "label": "Inquire about A-Level tutoring",
