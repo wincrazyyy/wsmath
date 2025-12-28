@@ -55,18 +55,18 @@
         "programLabel": "IBDP · HL / AAHL / AIHL",
         "students": [
           {
+            "name": "Marcus",
+            "year": 2025,
+            "from": 6,
+            "to": 7,
+            "months": 10
+          },
+          {
             "name": "Miriam",
             "year": 2025,
             "from": 6,
             "to": 7,
             "months": 3
-          },
-          {
-            "name": "Marcus",
-            "year": 2025,
-            "from": 4,
-            "to": 7,
-            "months": 10
           },
           {
             "name": "Josephine",
@@ -164,7 +164,7 @@
           {
             "name": "Tin",
             "year": 2022,
-            "from": 2,
+            "from": 1,
             "to": 5
           },
           {
@@ -207,7 +207,7 @@
           {
             "name": "Justin",
             "year": 2020,
-            "from": 2,
+            "from": 1,
             "to": 5
           },
           {
@@ -252,7 +252,7 @@
           {
             "name": "Evelyn",
             "year": 2018,
-            "from": 5,
+            "from": 6,
             "to": 6
           }
         ],
@@ -305,7 +305,7 @@
           {
             "name": "Ariel",
             "year": 2025,
-            "from": 2,
+            "from": 1,
             "to": 5
           },
           {
@@ -321,17 +321,17 @@
             "to": 6
           },
           {
-            "name": "Alan",
-            "year": 2024,
-            "from": 2,
-            "to": 5
-          },
-          {
             "name": "Netis",
             "year": 2024,
             "from": 2,
             "to": 5,
             "months": 4
+          },
+          {
+            "name": "Alan",
+            "year": 2024,
+            "from": 1,
+            "to": 5
           },
           {
             "name": "Annie",
@@ -375,7 +375,7 @@
           {
             "name": "Connie",
             "year": 2021,
-            "from": 2,
+            "from": 1,
             "to": 5
           },
           {
