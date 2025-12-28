@@ -36,14 +36,23 @@ export function Faq() {
                 key={item.q}
                 className="group rounded-xl border border-neutral-200 bg-white px-4 py-3 open:shadow-sm"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
-                  <span className="text-sm font-medium text-neutral-900">
-                    {item.q}
-                  </span>
-                  <span className="text-neutral-400 transition group-open:rotate-45">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+                  <span className="text-sm font-medium text-neutral-900">{item.q}</span>
+
+                  <span
+                    aria-hidden="true"
+                    className={[
+                      "grid h-6 w-6 flex-none place-items-center",
+                      "rounded-md border border-neutral-200 bg-white",
+                      "text-sm font-semibold leading-none text-neutral-500",
+                      "transition-transform duration-200",
+                      "group-open:rotate-45",
+                    ].join(" ")}
+                  >
                     +
                   </span>
                 </summary>
+
 
                 <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-neutral-600">
                   {item.a}
