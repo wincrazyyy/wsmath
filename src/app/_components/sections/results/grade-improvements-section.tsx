@@ -280,60 +280,72 @@ export function GradeImprovementsSection({
 
   return (
     <section className="space-y-5">
-      {/* Header + summary */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div>
+      {/* Header + summary (top → bottom) */}
+      <div className="space-y-4">
+        {/* Header on top */}
+        <div className="rounded-xl border border-slate-100 bg-white/70 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-indigo-500">
             {programLabel}
           </p>
-          <h2 className="mt-1 text-xl font-semibold text-slate-900">{header.title}</h2>
-          <p className="mt-1 text-sm text-slate-500">{header.description}</p>
+          <h2 className="mt-1 text-lg font-semibold text-slate-900">{header.title}</h2>
+
+          {/* keep consistent height across tabs */}
+          <p className="mt-1 text-sm text-slate-500 overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
+            {header.description}
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
-          <div className="flex flex-col justify-between rounded-xl bg-sky-50 ring-1 ring-sky-200 px-3 py-2">
-            <div className="text-[12px] uppercase tracking-wide text-sky-700 font-semibold">
-              {secondGrade
-                ? hashToGrade(summaryCards.second, secondGrade)
-                : summaryCards.second}
+        {/* Summary cards below */}
+        <div className="rounded-xl border border-slate-100 bg-white/70 p-3">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="flex min-h-[64px] flex-col justify-between rounded-xl bg-sky-50 ring-1 ring-sky-200 px-4 py-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-sky-700 whitespace-normal break-words leading-snug">
+                {secondGrade
+                  ? hashToGrade(summaryCards.second, secondGrade)
+                  : summaryCards.second}
+              </div>
+              <div className="flex items-baseline gap-2 text-lg font-semibold text-sky-800 leading-none">
+                {totalSecondOrAbove}
+                <span className="text-xs font-semibold text-sky-600 whitespace-nowrap">
+                  ({pct(totalSecondOrAbove)}%)
+                </span>
+              </div>
             </div>
-            <div className="text-lg font-semibold text-sky-800">
-              {totalSecondOrAbove}
-              <span className="ml-2 text-xs font-semibold text-sky-600">
-                ({pct(totalSecondOrAbove)}%)
-              </span>
-            </div>
-          </div>
 
-          <div className="flex flex-col justify-between rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-3 py-2">
-            <div className="text-[12px] uppercase tracking-wide text-indigo-700 font-semibold">
-              {topGrade ? hashToGrade(summaryCards.top, topGrade) : summaryCards.top}
+            <div className="flex min-h-[64px] flex-col justify-between rounded-xl bg-indigo-50 ring-1 ring-indigo-200 px-4 py-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-indigo-700 whitespace-normal break-words leading-snug">
+                {topGrade ? hashToGrade(summaryCards.top, topGrade) : summaryCards.top}
+              </div>
+              <div className="flex items-baseline gap-2 text-lg font-semibold text-indigo-800 leading-none">
+                {totalTop}
+                <span className="text-xs font-semibold text-indigo-600 whitespace-nowrap">
+                  ({pct(totalTop)}%)
+                </span>
+              </div>
             </div>
-            <div className="text-lg font-semibold text-indigo-800">
-              {totalTop}
-              <span className="ml-2 text-xs font-semibold text-indigo-600">({pct(totalTop)}%)</span>
-            </div>
-          </div>
 
-          <div className="flex flex-col justify-between rounded-xl bg-amber-50 ring-1 ring-amber-300 px-3 py-2">
-            <div className="text-[12px] uppercase tracking-wide text-amber-700 font-semibold">
-              {summaryCards.improvements}
+            <div className="flex min-h-[64px] flex-col justify-between rounded-xl bg-amber-50 ring-1 ring-amber-300 px-4 py-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-amber-700 whitespace-normal break-words leading-snug">
+                {summaryCards.improvements}
+              </div>
+              <div className="flex items-baseline gap-2 text-lg font-semibold text-amber-800 leading-none">
+                {improvements}
+                <span className="text-xs font-semibold text-amber-600 whitespace-nowrap">
+                  ({pct(improvements)}%)
+                </span>
+              </div>
             </div>
-            <div className="text-lg font-semibold text-amber-800">
-              {improvements}
-              <span className="ml-2 text-xs font-semibold text-amber-600">
-                ({pct(improvements)}%)
-              </span>
-            </div>
-          </div>
 
-          <div className="flex flex-col justify-between rounded-xl bg-rose-50 ring-1 ring-rose-300 px-3 py-2">
-            <div className="text-[12px] uppercase tracking-wide text-rose-700 font-semibold">
-              {summaryCards.bigJumps}
-            </div>
-            <div className="text-lg font-semibold text-rose-800">
-              {bigJumps}
-              <span className="ml-2 text-xs font-semibold text-rose-600">({pct(bigJumps)}%)</span>
+            <div className="flex min-h-[64px] flex-col justify-between rounded-xl bg-rose-50 ring-1 ring-rose-300 px-4 py-3">
+              <div className="text-[11px] font-semibold uppercase tracking-wide text-rose-700 whitespace-normal break-words leading-snug">
+                {summaryCards.bigJumps}
+              </div>
+              <div className="flex items-baseline gap-2 text-lg font-semibold text-rose-800 leading-none">
+                {bigJumps}
+                <span className="text-xs font-semibold text-rose-600 whitespace-nowrap">
+                  ({pct(bigJumps)}%)
+                </span>
+              </div>
             </div>
           </div>
         </div>
