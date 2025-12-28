@@ -29,6 +29,7 @@ export type PrivateConfig = {
   tag?: string;
   rateLabel: string;
   hourlyRate: string; // parsed as number
+  lessonMinutes: string; // parsed as number
   title: string;
   description: string;
   points: string[];

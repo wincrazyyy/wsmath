@@ -86,7 +86,7 @@ export function PrivatePackageCard({
         <p className="mt-1 text-sm text-neutral-700">
           {config.intensive.bodyPrefix}{" "}
           <span className="font-semibold">HKD {eightLessonBlockCost.toLocaleString()}</span>{" "}
-          for an {intensiveLessons}-lesson block (8 × 60 mins).
+          for an {intensiveLessons}-lesson block ({intensiveLessons} × {config.lessonMinutes} mins).
         </p>
 
         <ul className="mt-3 space-y-1.5 text-sm text-neutral-800">

@@ -31,7 +31,7 @@ export function Packages() {
 
   const private32Hours = privateRate * groupLessons;
   const groupRatePerLesson = Math.floor(Math.round(groupPrice / groupLessons) / 100) * 100;
-  const eightLessonBlockCost = privateRate * intensiveLessons;
+  const eightLessonBlockCost = privateRate * intensiveLessons * (toNumber(privateConfig.lessonMinutes, 60) / 60);
 
   return (
     <>

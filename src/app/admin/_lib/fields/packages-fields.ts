@@ -134,6 +134,12 @@ export const PACKAGES_PRIVATE_FIELDS: FieldConfig[] = [
     type: "string",
   },
   {
+    path: "private.lessonMinutes",
+    label: "Private – lesson duration (minutes)",
+    description: "Digits only, e.g. 60. Will be parsed as a number.",
+    type: "string",
+  },
+  {
     path: "private.title",
     label: "Private – title",
     description: 'Card title, e.g. “Private online coaching”.',
