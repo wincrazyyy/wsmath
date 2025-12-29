@@ -479,22 +479,16 @@
             "to": "A*"
           },
           {
+            "name": "Coco Cheng",
+            "year": 2025,
+            "from": "F",
+            "to": "A"
+          },
+          {
             "name": "Jenny Ngai",
             "year": 2024,
             "from": "D",
             "to": "B"
-          },
-          {
-            "name": "Jenny Huang",
-            "year": 2024,
-            "from": "B",
-            "to": "A*"
-          },
-          {
-            "name": "Coco Cheng",
-            "year": 2024,
-            "from": "F",
-            "to": "A"
           },
           {
             "name": "Ken Chen",
@@ -529,6 +523,12 @@
           {
             "name": "Michelle Chan",
             "year": 2021,
+            "from": "B",
+            "to": "A*"
+          },
+          {
+            "name": "Jenny Huang",
+            "year": 2020,
             "from": "B",
             "to": "A*"
           }
