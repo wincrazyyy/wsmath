@@ -1,18 +1,16 @@
+export type UploadKind = "image" | "video";
+
 export type ImageUploadTarget = {
   note?: string;
   mode?: "single" | "multi";
 
-  /**
-   * Optional templates to force where the uploaded file is saved
-   * and what value is written into JSON.
-   *
-   * Supported placeholders:
-   *  - {{index0}}: zero-based array index (e.g. 0,1,2)
-   *  - {{index1}}: one-based array index (e.g. 1,2,3)
-   */
-  forcedPublicPathTemplate?: string; // e.g. "/avatars/carousel-{{index1}}.png"
-  forcedFileNameTemplate?: string;   // e.g. "carousel-{{index1}}.png"
+  kind?: UploadKind;
+  accept?: string;
+
+  forcedPublicPathTemplate?: string;
+  forcedFileNameTemplate?: string;
 };
+
 
 export type ResolvedImageUploadTarget = {
   target: ImageUploadTarget;
