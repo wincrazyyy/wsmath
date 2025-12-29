@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { WhatsAppButton } from "../ui/whatsapp-button";
+import { BookButton } from "../ui/book-button";
 
 export type NavSection = {
   id: string;
@@ -219,7 +219,12 @@ export function Nav() {
                     />
                   </a>
                 ))}
-                <WhatsAppButton width={160} height={44} imgClassName="h-10 w-auto" />
+                <BookButton
+                  variant="nav"
+                  label="Book a lesson"
+                  ariaLabel="Book a lesson on WhatsApp"
+                  buttonClassName="w-[160px]"
+                />
               </div>
 
 
@@ -313,11 +318,11 @@ export function Nav() {
                 ))}
 
                 <div onClick={() => setOpen(false)}>
-                  <WhatsAppButton
-                    width={160}
-                    height={44}
-                    imgClassName="h-10 w-auto"
-                    priority={false}
+                  <BookButton
+                    variant="nav"
+                    label="Book a lesson"
+                    ariaLabel="Book a lesson on WhatsApp"
+                    buttonClassName="w-full"
                   />
                 </div>
               </div>

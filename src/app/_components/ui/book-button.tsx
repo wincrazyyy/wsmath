@@ -1,7 +1,9 @@
 // app/_components/ui/book-button.tsx
+"use client";
+
 import miscContent from "@/app/_lib/content/json/misc.json";
 
-type BookButtonVariant = "blue" | "green" | "plain" | "footer";
+type BookButtonVariant = "blue" | "green" | "plain" | "footer" | "nav";
 
 type BookButtonProps = {
   buttonClassName?: string;
@@ -15,17 +17,20 @@ type BookButtonProps = {
 
 const { whatsapp } = miscContent;
 
-const VARIANTS: Record<
-  BookButtonVariant,
-  {
-    bg: string;
-    glow: string;
-    ring: string;
-    shadow: string;
-    focus: string;
-    hoverShadow: string;
-  }
-> = {
+type VariantStyle = {
+  bg: string;
+  glow: string;
+  ring: string;
+  shadow: string;
+  hoverShadow: string;
+  focus: string;
+  shell: string;
+  text: string;
+  showGlow: boolean;
+  showArrow: boolean;
+};
+
+const VARIANTS: Record<BookButtonVariant, VariantStyle> = {
   blue: {
     bg: "bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600",
     glow: "bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-500/25",
@@ -33,6 +38,10 @@ const VARIANTS: Record<
     shadow: "shadow-violet-500/20",
     hoverShadow: "hover:shadow-violet-500/25",
     focus: "focus-visible:ring-violet-500",
+    shell: "rounded-2xl px-5 py-3 shadow-lg ring-1",
+    text: "text-white",
+    showGlow: true,
+    showArrow: true,
   },
   green: {
     bg: "bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600",
@@ -41,6 +50,10 @@ const VARIANTS: Record<
     shadow: "shadow-emerald-500/20",
     hoverShadow: "hover:shadow-emerald-500/25",
     focus: "focus-visible:ring-emerald-500",
+    shell: "rounded-2xl px-5 py-3 shadow-lg ring-1",
+    text: "text-white",
+    showGlow: true,
+    showArrow: true,
   },
   plain: {
     bg: "bg-gradient-to-r from-neutral-900 via-neutral-800 to-neutral-900",
@@ -49,7 +62,28 @@ const VARIANTS: Record<
     shadow: "shadow-black/10",
     hoverShadow: "hover:shadow-black/15",
     focus: "focus-visible:ring-neutral-900",
+    shell: "rounded-2xl px-5 py-3 shadow-lg ring-1",
+    text: "text-white",
+    showGlow: true,
+    showArrow: true,
   },
+  nav: {
+    bg: "bg-white/70 hover:bg-white/85 backdrop-blur supports-[backdrop-filter]:bg-white/60",
+    glow: "bg-gradient-to-r from-indigo-500/28 via-violet-500/28 to-sky-500/28",
+    ring: "ring-transparent",
+    shadow: "shadow-sm",
+    hoverShadow: "hover:shadow-md",
+    focus: "focus-visible:ring-indigo-400/60",
+    shell: [
+      "h-11 rounded-xl px-4",
+      "border border-neutral-200/80",
+      "relative",
+    ].join(" "),
+    text: "text-neutral-900",
+    showGlow: true,
+    showArrow: false,
+  },
+
   footer: {
     bg: "bg-neutral-900 hover:bg-neutral-800",
     glow: "bg-gradient-to-r from-transparent via-transparent to-transparent",
@@ -57,12 +91,16 @@ const VARIANTS: Record<
     shadow: "shadow-none",
     hoverShadow: "hover:shadow-none",
     focus: "focus-visible:ring-neutral-900",
+    shell: "rounded-xl px-4 py-2",
+    text: "text-white",
+    showGlow: false,
+    showArrow: false,
   },
 };
 
 export function BookButton({
   buttonClassName = "",
-  ariaLabel = "Chat on WhatsApp",
+  ariaLabel = "Book a lesson on WhatsApp",
   href,
   label = "Book a lesson",
   subLabel,
@@ -72,11 +110,22 @@ export function BookButton({
   const defaultHref = `https://wa.me/${whatsapp.phoneNumber}?text=${encodeURIComponent(
     prefillText
   )}`;
-
   const finalHref = href ?? defaultHref;
   const v = VARIANTS[variant];
 
-  const isFooter = variant === "footer";
+  const motion =
+    variant === "nav"
+      ? [
+          "transition-all duration-200 ease-out",
+          "hover:-translate-y-[1px] active:translate-y-0",
+        ].join(" ")
+      : "transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0";
+
+  // stronger glow even when idle (nav only)
+  const glowOpacity =
+    variant === "nav"
+      ? "opacity-60 group-hover:opacity-100"
+      : "opacity-0 group-hover:opacity-100";
 
   return (
     <a
@@ -85,54 +134,68 @@ export function BookButton({
       rel="noreferrer"
       aria-label={ariaLabel}
       className={[
-        "group relative inline-flex w-full items-center justify-center gap-2",
-        "text-sm font-semibold text-white",
-        "transition-transform duration-200 ease-out",
-        "hover:-translate-y-0.5 active:translate-y-0",
+        "group inline-flex items-center justify-center gap-2",
+        "text-sm font-semibold",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+        "relative",
+        motion,
         v.bg,
         v.focus,
-
-        // default button shell
-        !isFooter
-          ? ["rounded-2xl px-5 py-3", "shadow-lg", v.shadow, "ring-1", v.ring, v.hoverShadow].join(" ")
-          : [
-              // footer original shell
-              "rounded-xl px-4 py-2",
-              // (footer original didn’t have ring/glow)
-            ].join(" "),
-
+        v.text,
+        v.shell,
+        v.shadow,
+        v.hoverShadow,
         buttonClassName,
       ].join(" ")}
     >
-      {/* glow layer (disabled visually in footer variant) */}
-      <span
-        aria-hidden
-        className={[
-          "pointer-events-none absolute -inset-1 rounded-[18px] blur-xl opacity-0 transition-opacity duration-200 group-hover:opacity-100",
-          v.glow,
-          isFooter ? "hidden" : "",
-        ].join(" ")}
-      />
+      {/* nav-only gradient border highlight (falls back gracefully if mask unsupported) */}
+      {variant === "nav" ? (
+        <span
+          aria-hidden
+          className={[
+            "pointer-events-none absolute inset-0 rounded-xl p-[1px]",
+            "bg-gradient-to-r from-indigo-500/45 via-violet-500/45 to-sky-500/45",
+            "opacity-55 transition-opacity duration-200 group-hover:opacity-95",
+            // mask to make it a border only
+            "[mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)]",
+            "[mask-composite:exclude]",
+            "[-webkit-mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)]",
+            "[-webkit-mask-composite:xor]",
+          ].join(" ")}
+        />
+      ) : null}
+
+      {/* glow layer */}
+      {v.showGlow ? (
+        <span
+          aria-hidden
+          className={[
+            "pointer-events-none absolute -inset-3 rounded-[14px] blur-2xl",
+            "transition-opacity duration-200",
+            glowOpacity,
+            v.glow,
+          ].join(" ")}
+        />
+      ) : null}
 
       <span className="relative flex flex-col items-center leading-tight">
         <span>{label}</span>
         {subLabel ? (
-          <span className="mt-0.5 text-[11px] font-normal text-white/85">
+          <span className="mt-0.5 text-[11px] font-normal text-neutral-700/80">
             {subLabel}
           </span>
         ) : null}
       </span>
 
-      {/* remove arrow for footer variant */}
-      {!isFooter && (
+      {/* arrow stays off for nav/footer */}
+      {v.showArrow ? (
         <span
           aria-hidden
           className="relative translate-x-0 transition-transform duration-200 group-hover:translate-x-0.5"
         >
           →
         </span>
-      )}
+      ) : null}
     </a>
   );
 }
