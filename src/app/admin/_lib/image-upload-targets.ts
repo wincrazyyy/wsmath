@@ -38,6 +38,20 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
     note: "Upload multiple images for the group package leaflet pages. Upload all leaflet pages in JPG format.",
     mode: "multi",
   },
+  "testimonials.video.src": {
+    kind: "video",
+    accept: "video/mp4",
+    note: "Student voices video (.mp4). Will be saved as /video/student-voices.mp4",
+    forcedPublicPathTemplate: "/video/student-voices.mp4",
+    forcedFileNameTemplate: "student-voices.mp4",
+  },
+  "testimonials.video.poster": {
+    kind: "image",
+    accept: "image/*",
+    note: "Poster image for the student voices video.",
+    forcedPublicPathTemplate: "/video/student-voices-poster.jpg",
+    forcedFileNameTemplate: "student-voices-poster.jpg",
+  },
   "testimonials.featured[*].avatarSrc": {
     note: "Featured avatar. Will be saved as /avatars/featured-<id>.png (id = tab number).",
     forcedPublicPathTemplate: "/avatars/featured-{{index1}}.png",
