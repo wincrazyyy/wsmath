@@ -29,12 +29,12 @@
       "useDefaultAvatar": false
     },
     {
-      "name": "Jason Yeung (2025)",
-      "role": "IBDP AASL — From 4 to 7 [in 16 months]",
-      "university": "The University of Hong Kong",
-      "quote": "Mr. Siu is the best math teacher I have ever had. His explanations, particularly for calculus, are outstanding. His resources are comprehensive, offering targeted exercises and past papers dating back to the 2000s. He was also a great motivator, encouraging me to complete past papers and homework when my own drive was low.",
+      "name": "Kitty Lam (2020)",
+      "role": "IBDP Math SL — From 1 to 7",
+      "university": "Loughborough University",
+      "quote": "Winson’s explanations are clear and easy to understand. He patiently guides you through any concepts you find challenging. His uplifting and kind demeanor makes learning enjoyable, and he’s always willing to answer your questions even outside of lesson time.",
       "avatarSrc": "/avatars/featured-3.png",
-      "useDefaultAvatar": true
+      "useDefaultAvatar": false
     },
     {
       "name": "Cissie Ching (2025)",
@@ -141,11 +141,12 @@
       "university": "University College London"
     },
     {
-      "name": "Nicole Li (2024)",
-      "role": "IGCSE Math — From 4 to 8",
-      "quote": "Winson has helped me improve my math in just one year. He gave me many past papers on different topics, which have drastically improved my math scores. We go through many exercises and questions during our lessons, and I can learn a lot. I now have more confidence in math, thanks to Winson.",
+      "name": "Jason Yeung (2025)",
+      "role": "IBDP AASL — From 4 to 7 [in 16 months]",
+      "quote": "Mr. Siu is the best math teacher I have ever had. His explanations, particularly for calculus, are outstanding. His resources are comprehensive, offering targeted exercises and past papers dating back to the 2000s. He was also a great motivator, encouraging me to complete past papers and homework when my own drive was low.",
       "avatarSrc": "",
-      "useDefaultAvatar": true
+      "useDefaultAvatar": true,
+      "university": "The University of Hong Kong"
     },
     {
       "name": "Jasmine Yang (2023)",
@@ -210,12 +211,12 @@
       "useDefaultAvatar": true
     },
     {
-      "name": "Kitty Lam (2020)",
-      "role": "IBDP Math SL — From 1 to 7",
-      "quote": "Winson’s explanations are clear and easy to understand. He patiently guides you through any concepts you find challenging. His uplifting and kind demeanor makes learning enjoyable, and he’s always willing to answer your questions even outside of lesson time.",
+      "name": "Nicole Li (2024)",
+      "role": "IGCSE Math — From 4 to 8",
+      "quote": "Winson has helped me improve my math in just one year. He gave me many past papers on different topics, which have drastically improved my math scores. We go through many exercises and questions during our lessons, and I can learn a lot. I now have more confidence in math, thanks to Winson.",
       "avatarSrc": "/avatars/carousel-22.png",
-      "university": "Loughborough University",
-      "useDefaultAvatar": false
+      "university": "",
+      "useDefaultAvatar": true
     },
     {
       "name": "Lucy Han (2019)",
