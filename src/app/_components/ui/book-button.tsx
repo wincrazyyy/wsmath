@@ -114,17 +114,18 @@ export function BookButton({
   const v = VARIANTS[variant];
 
   const motion =
-    variant === "nav"
-      ? [
-          "transition-all duration-200 ease-out",
-          "hover:-translate-y-[1px] active:translate-y-0",
-        ].join(" ")
-      : "transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0";
+  variant === "nav"
+    ? [
+        "transition-all duration-200 ease-out",
+        "hover:-translate-y-[1px] hover:scale-[1.02]",
+        "active:translate-y-0 active:scale-[1.0]",
+      ].join(" ")
+    : "transition-transform duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0";
 
   // stronger glow even when idle (nav only)
   const glowOpacity =
     variant === "nav"
-      ? "opacity-60 group-hover:opacity-100"
+      ? "opacity-70 group-hover:opacity-100"
       : "opacity-0 group-hover:opacity-100";
 
   return (
@@ -137,7 +138,7 @@ export function BookButton({
         "group inline-flex items-center justify-center gap-2",
         "text-sm font-semibold",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
-        "relative",
+        "relative isolate overflow-hidden",
         motion,
         v.bg,
         v.focus,
@@ -154,9 +155,8 @@ export function BookButton({
           aria-hidden
           className={[
             "pointer-events-none absolute inset-0 rounded-xl p-[1px]",
-            "bg-gradient-to-r from-indigo-500/45 via-violet-500/45 to-sky-500/45",
-            "opacity-55 transition-opacity duration-200 group-hover:opacity-95",
-            // mask to make it a border only
+            "bg-gradient-to-r from-indigo-500/55 via-violet-500/55 to-sky-500/55",
+            "opacity-55 transition-opacity duration-200 group-hover:opacity-100",
             "[mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)]",
             "[mask-composite:exclude]",
             "[-webkit-mask:linear-gradient(#000_0_0)_content-box,linear-gradient(#000_0_0)]",
@@ -170,7 +170,7 @@ export function BookButton({
         <span
           aria-hidden
           className={[
-            "pointer-events-none absolute -inset-3 rounded-[14px] blur-2xl",
+            "pointer-events-none absolute -inset-4 rounded-[16px] blur-2xl",
             "transition-opacity duration-200",
             glowOpacity,
             v.glow,
@@ -178,7 +178,7 @@ export function BookButton({
         />
       ) : null}
 
-      <span className="relative flex flex-col items-center leading-tight">
+      <span className="relative z-10 flex flex-col items-center leading-tight">
         <span>{label}</span>
         {subLabel ? (
           <span className="mt-0.5 text-[11px] font-normal text-neutral-700/80">
@@ -186,6 +186,36 @@ export function BookButton({
           </span>
         ) : null}
       </span>
+
+      {variant === "nav" ? (
+        <span
+          aria-hidden
+          className={[
+            "pointer-events-none absolute inset-0 rounded-xl",
+            "opacity-0 group-hover:opacity-100 transition-opacity duration-200",
+          ].join(" ")}
+        >
+          {/* sheen streak */}
+          <span
+            aria-hidden
+            className={[
+              "absolute -inset-y-10 left-[-60%] w-[55%]",
+              "rotate-[18deg]",
+              "bg-gradient-to-r from-transparent via-white/55 to-transparent",
+              "blur-[2px]",
+              "transform-gpu",
+              "transition-transform duration-700 ease-out",
+              "group-hover:translate-x-[240%]",
+            ].join(" ")}
+          />
+          {/* subtle inner highlight */}
+          <span
+            aria-hidden
+            className="absolute inset-0 rounded-xl bg-white/25 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          />
+        </span>
+      ) : null}
+
 
       {/* arrow stays off for nav/footer */}
       {v.showArrow ? (
