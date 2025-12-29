@@ -436,7 +436,7 @@
       {
         "tab": "A-Level / IAL",
         "subTab": "Further Math",
-        "programLabel": "A-Level Further Math · Edexcel (IAL YFM01) / Cambridge (CAIE 9231) / AQA (7367)",
+        "programLabel": "A-Level Further Math · IAL YFM01 / GCE AL 9FM0 / CAIE 9231 / AQA 7367",
         "students": [
           {
             "name": "Bill Zhang",
@@ -470,7 +470,7 @@
       {
         "tab": "A-Level / IAL",
         "subTab": "Math",
-        "programLabel": "A-Level Math · IAL YMA01 / GCEAL 9MA0 / CAIE 9709 / AQA 7357 / OCR H240",
+        "programLabel": "A-Level Math · IAL YMA01 / GCE AL 9MA0 / CAIE 9709 / AQA 7357 / OCR H240",
         "students": [
           {
             "name": "Quinto Lam",
@@ -505,7 +505,7 @@
           {
             "name": "Sophie Rijnbeek",
             "year": 2023,
-            "from": "E",
+            "from": "D",
             "to": "B"
           },
           {
