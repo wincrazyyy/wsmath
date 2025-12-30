@@ -1,16 +1,18 @@
-export type UploadKind = "image" | "video";
-
 export type ImageUploadTarget = {
   note?: string;
   mode?: "single" | "multi";
 
-  kind?: UploadKind;
-  accept?: string;
-
-  forcedPublicPathTemplate?: string;
-  forcedFileNameTemplate?: string;
+  /**
+   * Optional templates to force where the uploaded file is saved
+   * and what value is written into JSON.
+   *
+   * Supported placeholders:
+   *  - {{index0}}: zero-based array index (e.g. 0,1,2)
+   *  - {{index1}}: one-based array index (e.g. 1,2,3)
+   */
+  forcedPublicPathTemplate?: string; // e.g. "/avatars/carousel-{{index1}}.png"
+  forcedFileNameTemplate?: string;   // e.g. "carousel-{{index1}}.png"
 };
-
 
 export type ResolvedImageUploadTarget = {
   target: ImageUploadTarget;
@@ -37,20 +39,6 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
   "packages.group.leaflet.pages": {
     note: "Upload multiple images for the group package leaflet pages. Upload all leaflet pages in JPG format.",
     mode: "multi",
-  },
-  "testimonials.video.src": {
-    kind: "video",
-    accept: "video/mp4",
-    note: "Student voices video (.mp4). Will be saved as /video/student-voices.mp4",
-    forcedPublicPathTemplate: "/video/student-voices.mp4",
-    forcedFileNameTemplate: "student-voices.mp4",
-  },
-  "testimonials.video.poster": {
-    kind: "image",
-    accept: "image/*",
-    note: "Poster image for the student voices video.",
-    forcedPublicPathTemplate: "/video/student-voices-poster.jpg",
-    forcedFileNameTemplate: "student-voices-poster.jpg",
   },
   "testimonials.featured[*].avatarSrc": {
     note: "Featured avatar. Will be saved as /avatars/featured-<id>.png (id = tab number).",
