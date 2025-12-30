@@ -26,14 +26,13 @@ export function StudentVoicesVideo() {
 
       <div className="mt-4 overflow-hidden rounded-xl border border-neutral-200 bg-black/90">
         <div className="relative aspect-video w-full">
-          <video
-            src={video.src}
-            poster={video.poster}
-            controls
-            className="h-full w-full object-cover object-center"
-          >
-            Your browser does not support the video tag.
-          </video>
+          <iframe
+            src={video.embedUrl}
+            title={video.heading}
+            className="h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
         </div>
       </div>
     </section>

@@ -19,8 +19,7 @@ export type StudentVoicesVideoConfig = {
   eyebrow: string;
   heading: string;
   subheading: string;
-  src: string;
-  poster: string;
+  embedUrl: string;
 };
 
 export type TestimonialsConfig = {

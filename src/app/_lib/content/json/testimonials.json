@@ -8,8 +8,7 @@
     "eyebrow": "Student voices",
     "heading": "Real students talking about their WSMath journey",
     "subheading": "Short clips from different students sharing how they improved with Winson’s coaching.",
-    "src": "/video/student-voices.mp4",
-    "poster": "/video/student-voices-poster.jpg"
+    "embedUrl": "https://www.youtube.com/embed/abc"
   },
   "featured": [
     {

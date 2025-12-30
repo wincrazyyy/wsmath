@@ -43,17 +43,9 @@ export const TESTIMONIALS_VIDEO_FIELDS: FieldConfig[] = [
     type: "textarea",
   },
   {
-    path: "video.src",
-    label: "Student voices – Video src",
-    description:
-      "Path to the mp4 file in /public (e.g. /video/student-voices.mp4).",
-    type: "string",
-  },
-  {
-    path: "video.poster",
-    label: "Student voices – Poster image",
-    description:
-      "Optional poster image for the video (e.g. /video/student-voices-poster.jpg).",
+    path: "video.embedUrl",
+    label: "Student voices – Embed URL",
+    description: "URL for embedding the student voices video (e.g. YouTube embed link).",
     type: "string",
   },
 ];
