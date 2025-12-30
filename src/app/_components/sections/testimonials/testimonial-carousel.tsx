@@ -27,29 +27,38 @@ export function TestimonialCarousel({
     [items]
   );
 
-  useEffect(() => {
-    let animationFrameId: number;
-    const speed = 0.5;
-
-    const step = () => {
+    useEffect(() => {
       const container = scrollRef.current;
-      if (container && !isPausedRef.current) {
-        container.scrollLeft += speed;
+      if (!container) return;
 
-        const loopWidth = container.scrollWidth / 2;
+      let raf = 0;
+      const speed = 0.5;
+      let pos = container.scrollLeft;
 
-        if (container.scrollLeft >= loopWidth) {
-          container.scrollLeft -= loopWidth;
+      const step = () => {
+        const el = scrollRef.current;
+        if (!el) return;
+
+        const loopWidth = el.scrollWidth / 2;
+
+        if (!isPausedRef.current && loopWidth > 0) {
+          pos += speed;
+
+          if (pos >= loopWidth) pos -= loopWidth;
+
+          // Safari may coerce to int internally, but pos keeps fractional progress.
+          el.scrollLeft = pos;
+        } else {
+          pos = el.scrollLeft;
         }
-      }
 
-      animationFrameId = requestAnimationFrame(step);
-    };
+        raf = requestAnimationFrame(step);
+      };
 
-    animationFrameId = requestAnimationFrame(step);
+      raf = requestAnimationFrame(step);
+      return () => cancelAnimationFrame(raf);
+    }, []);
 
-    return () => cancelAnimationFrame(animationFrameId);
-  }, []);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const container = scrollRef.current;
