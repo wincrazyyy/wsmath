@@ -148,7 +148,20 @@ export function Hero() {
                         / hrs
                       </span>
                     </div>
+
+                    {/* mobile labels */}
+                    <div className="mt-1 space-y-0.5 sm:hidden">
+                      <div className="text-xs font-semibold text-neutral-900">
+                        {hero.stat.label}
+                      </div>
+                      {hero.stat.subLabel && (
+                        <div className="text-[11px] leading-snug text-neutral-600">
+                          {hero.stat.subLabel}
+                        </div>
+                      )}
+                    </div>
                   </div>
+
                   {/* desktop (sm+) label stack */}
                   <div className="hidden space-y-0.5 sm:block">
                     <div className="text-sm font-semibold text-neutral-900 md:text-base">
