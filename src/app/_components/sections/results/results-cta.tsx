@@ -7,9 +7,9 @@ export function ResultsCta({ data }: { data: ResultsConfig["resultsCta"] }) {
   const resultsCta = data;
 
   return (
-    <section className="relative mt-8">
+    <section className="relative mt-8 overflow-x-clip">
       {/* animated border ring wrapper */}
-      <div className="relative rounded-2xl p-[1.5px]">
+      <div className="relative overflow-hidden rounded-2xl p-[1.5px]">
         {/* border-only animated ring (masked) */}
         <div
           aria-hidden
