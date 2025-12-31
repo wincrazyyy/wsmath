@@ -143,10 +143,6 @@ export function Hero() {
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                         {hoursText}
                       </span>
-                      {/* mobile-only suffix */}
-                      <span className="ml-1 text-base font-bold text-neutral-900 sm:hidden">
-                        / hrs
-                      </span>
                     </div>
 
                     {/* mobile labels */}
