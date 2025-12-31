@@ -34,7 +34,7 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     if (!container) return;
 
     let raf = 0;
-    const speed = 0.5;
+    const speed = 1.5;  
     let pos = container.scrollLeft;
 
     const step = () => {
