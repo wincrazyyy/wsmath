@@ -4,9 +4,17 @@
 import testimonialsContent from "@/app/_lib/content/json/testimonials.json";
 import type { TestimonialsConfig } from "@/app/_lib/content/types/testimonials.types";
 
+function toLoomEmbedUrl(url: string) {
+  // share -> embed
+  if (url.includes("loom.com/share/")) return url.replace("/share/", "/embed/");
+  return url; // already embed (or something else)
+}
+
 export function StudentVoicesVideo() {
   const data = testimonialsContent as TestimonialsConfig;
   const video = data.video;
+
+  const src = toLoomEmbedUrl(video.embedUrl);
 
   return (
     <section className="mt-8 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-5">
@@ -27,10 +35,10 @@ export function StudentVoicesVideo() {
       <div className="mt-4 overflow-hidden rounded-xl border border-neutral-200 bg-black/90">
         <div className="relative aspect-video w-full">
           <iframe
-            src={video.embedUrl}
+            src={src}
             title={video.heading}
             className="h-full w-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allow="autoplay; fullscreen; picture-in-picture"
             allowFullScreen
           />
         </div>
