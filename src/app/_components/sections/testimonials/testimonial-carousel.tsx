@@ -34,7 +34,7 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     if (!container) return;
 
     let raf = 0;
-    const speed = 1.5;  
+    const speed = 2;  
     let pos = container.scrollLeft;
 
     const step = () => {
@@ -161,7 +161,7 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     const el = scrollRef.current;
     if (!el) return;
 
-    // ✅ mouse only. Touch is handled by touch listeners above.
+    // mouse only. Touch is handled by touch listeners above.
     if (e.pointerType !== "mouse") return;
     if (e.button !== 0) return;
 
