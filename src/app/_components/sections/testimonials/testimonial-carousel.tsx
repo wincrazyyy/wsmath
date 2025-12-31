@@ -28,34 +28,87 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     [items]
   );
 
-  useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
-
-    let raf = 0;
-    const speed = 0.5;
-    let pos = container.scrollLeft;
-
-    const step = () => {
+    useEffect(() => {
       const el = scrollRef.current;
       if (!el) return;
 
-      const loopWidth = el.scrollWidth / 2;
+      const THRESH = 6;
 
-      if (!isPausedRef.current && loopWidth > 0) {
-        pos += speed;
-        if (pos >= loopWidth) pos -= loopWidth;
-        el.scrollLeft = pos;
-      } else {
-        pos = el.scrollLeft; // keep accumulator in sync after dragging
-      }
+      const onTouchStart = (ev: TouchEvent) => {
+        if (!ev.touches || ev.touches.length === 0) return;
 
-      raf = requestAnimationFrame(step);
-    };
+        isDraggingRef.current = true;
+        setIsDragging(true);
+        isPausedRef.current = true;
 
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+        axisRef.current = null;
+        startXRef.current = ev.touches[0].clientX;
+        startYRef.current = ev.touches[0].clientY;
+        scrollLeftRef.current = el.scrollLeft;
+      };
+
+      const onTouchMove = (ev: TouchEvent) => {
+        if (!isDraggingRef.current || !ev.touches || ev.touches.length === 0) return;
+
+        const x = ev.touches[0].clientX;
+        const y = ev.touches[0].clientY;
+
+        const dx = x - startXRef.current;
+        const dy = y - startYRef.current;
+
+        if (axisRef.current === null) {
+          const ax = Math.abs(dx);
+          const ay = Math.abs(dy);
+
+          if (ax < THRESH && ay < THRESH) return;
+
+          // Lock to horizontal only if clearly horizontal, otherwise let the page scroll
+          if (ax > ay + 2) axisRef.current = "x";
+          else {
+            // vertical intent: end our drag; don't prevent default
+            isDraggingRef.current = false;
+            setIsDragging(false);
+            isPausedRef.current = false;
+            axisRef.current = null;
+            return;
+          }
+        }
+
+        if (axisRef.current !== "x") return;
+
+        // IMPORTANT: needs passive:false listener to work on iOS Safari
+        ev.preventDefault();
+
+        const loopWidth = el.scrollWidth / 2;
+        if (loopWidth <= 0) return;
+
+        let next = scrollLeftRef.current - dx;
+
+        // Keep within [0, loopWidth)
+        next = ((next % loopWidth) + loopWidth) % loopWidth;
+
+        el.scrollLeft = next;
+      };
+
+      const onTouchEnd = () => {
+        isDraggingRef.current = false;
+        setIsDragging(false);
+        isPausedRef.current = false;
+        axisRef.current = null;
+      };
+
+      el.addEventListener("touchstart", onTouchStart, { passive: true });
+      el.addEventListener("touchmove", onTouchMove, { passive: false });
+      el.addEventListener("touchend", onTouchEnd);
+      el.addEventListener("touchcancel", onTouchEnd);
+
+      return () => {
+        el.removeEventListener("touchstart", onTouchStart);
+        el.removeEventListener("touchmove", onTouchMove as any);
+        el.removeEventListener("touchend", onTouchEnd);
+        el.removeEventListener("touchcancel", onTouchEnd);
+      };
+    }, []);
 
   const endDrag = (el?: HTMLDivElement | null) => {
     isDraggingRef.current = false;
