@@ -28,28 +28,36 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     [items]
   );
 
-  // Autoscroll (Safari-safe fractional accumulator)
+    // Autoscroll (time-based, consistent across Safari)
   useEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
     let raf = 0;
-    const speed = 2;  
+    const pxPerSec = 200;
     let pos = container.scrollLeft;
+    let lastT = performance.now();
 
-    const step = () => {
+    const step = (t: number) => {
       const el = scrollRef.current;
       if (!el) return;
 
       const loopWidth = el.scrollWidth / 2;
 
       if (!isPausedRef.current && loopWidth > 0) {
-        pos += speed;
-        if (pos >= loopWidth) pos -= loopWidth;
+        const dt = (t - lastT) / 1000;
+        lastT = t;
+
+        pos += pxPerSec * dt;
+
+        // wrap inside [0, loopWidth)
+        pos = ((pos % loopWidth) + loopWidth) % loopWidth;
+
         el.scrollLeft = pos;
       } else {
-        // keep accumulator synced after user interaction
+        // paused/dragging: keep everything in sync
         pos = el.scrollLeft;
+        lastT = t;
       }
 
       raf = requestAnimationFrame(step);
