@@ -28,87 +28,118 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     [items]
   );
 
-    useEffect(() => {
+  // Autoscroll (Safari-safe fractional accumulator)
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    let raf = 0;
+    const speed = 0.5;
+    let pos = container.scrollLeft;
+
+    const step = () => {
       const el = scrollRef.current;
       if (!el) return;
 
-      const THRESH = 6;
+      const loopWidth = el.scrollWidth / 2;
 
-      const onTouchStart = (ev: TouchEvent) => {
-        if (!ev.touches || ev.touches.length === 0) return;
+      if (!isPausedRef.current && loopWidth > 0) {
+        pos += speed;
+        if (pos >= loopWidth) pos -= loopWidth;
+        el.scrollLeft = pos;
+      } else {
+        // keep accumulator synced after user interaction
+        pos = el.scrollLeft;
+      }
 
-        isDraggingRef.current = true;
-        setIsDragging(true);
-        isPausedRef.current = true;
+      raf = requestAnimationFrame(step);
+    };
 
-        axisRef.current = null;
-        startXRef.current = ev.touches[0].clientX;
-        startYRef.current = ev.touches[0].clientY;
-        scrollLeftRef.current = el.scrollLeft;
-      };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
-      const onTouchMove = (ev: TouchEvent) => {
-        if (!isDraggingRef.current || !ev.touches || ev.touches.length === 0) return;
+  // iOS Safari touch drag (non-passive touchmove)
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
 
-        const x = ev.touches[0].clientX;
-        const y = ev.touches[0].clientY;
+    const THRESH = 6;
 
-        const dx = x - startXRef.current;
-        const dy = y - startYRef.current;
+    const onTouchStart = (ev: TouchEvent) => {
+      if (!ev.touches || ev.touches.length === 0) return;
 
-        if (axisRef.current === null) {
-          const ax = Math.abs(dx);
-          const ay = Math.abs(dy);
+      isDraggingRef.current = true;
+      setIsDragging(true);
+      isPausedRef.current = true;
 
-          if (ax < THRESH && ay < THRESH) return;
+      axisRef.current = null;
+      startXRef.current = ev.touches[0].clientX;
+      startYRef.current = ev.touches[0].clientY;
+      scrollLeftRef.current = el.scrollLeft;
+    };
 
-          // Lock to horizontal only if clearly horizontal, otherwise let the page scroll
-          if (ax > ay + 2) axisRef.current = "x";
-          else {
-            // vertical intent: end our drag; don't prevent default
-            isDraggingRef.current = false;
-            setIsDragging(false);
-            isPausedRef.current = false;
-            axisRef.current = null;
-            return;
-          }
+    const onTouchMove = (ev: TouchEvent) => {
+      if (!isDraggingRef.current || !ev.touches || ev.touches.length === 0) return;
+
+      const x = ev.touches[0].clientX;
+      const y = ev.touches[0].clientY;
+
+      const dx = x - startXRef.current;
+      const dy = y - startYRef.current;
+
+      if (axisRef.current === null) {
+        const ax = Math.abs(dx);
+        const ay = Math.abs(dy);
+
+        if (ax < THRESH && ay < THRESH) return;
+
+        if (ax > ay + 2) axisRef.current = "x";
+        else {
+          // vertical intent: stop our drag; don't prevent default
+          isDraggingRef.current = false;
+          setIsDragging(false);
+          isPausedRef.current = false;
+          axisRef.current = null;
+          return;
         }
+      }
 
-        if (axisRef.current !== "x") return;
+      if (axisRef.current !== "x") return;
 
-        // IMPORTANT: needs passive:false listener to work on iOS Safari
-        ev.preventDefault();
+      // IMPORTANT: works only with passive:false listener
+      ev.preventDefault();
 
-        const loopWidth = el.scrollWidth / 2;
-        if (loopWidth <= 0) return;
+      const loopWidth = el.scrollWidth / 2;
+      if (loopWidth <= 0) return;
 
-        let next = scrollLeftRef.current - dx;
+      let next = scrollLeftRef.current - dx;
 
-        // Keep within [0, loopWidth)
-        next = ((next % loopWidth) + loopWidth) % loopWidth;
+      // Keep within [0, loopWidth)
+      next = ((next % loopWidth) + loopWidth) % loopWidth;
 
-        el.scrollLeft = next;
-      };
+      el.scrollLeft = next;
+    };
 
-      const onTouchEnd = () => {
-        isDraggingRef.current = false;
-        setIsDragging(false);
-        isPausedRef.current = false;
-        axisRef.current = null;
-      };
+    const onTouchEnd = () => {
+      isDraggingRef.current = false;
+      setIsDragging(false);
+      isPausedRef.current = false;
+      axisRef.current = null;
+    };
 
-      el.addEventListener("touchstart", onTouchStart, { passive: true });
-      el.addEventListener("touchmove", onTouchMove, { passive: false });
-      el.addEventListener("touchend", onTouchEnd);
-      el.addEventListener("touchcancel", onTouchEnd);
+    el.addEventListener("touchstart", onTouchStart, { passive: true });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+    el.addEventListener("touchcancel", onTouchEnd);
 
-      return () => {
-        el.removeEventListener("touchstart", onTouchStart);
-        el.removeEventListener("touchmove", onTouchMove as any);
-        el.removeEventListener("touchend", onTouchEnd);
-        el.removeEventListener("touchcancel", onTouchEnd);
-      };
-    }, []);
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, []);
 
   const endDrag = (el?: HTMLDivElement | null) => {
     isDraggingRef.current = false;
@@ -125,12 +156,14 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     capturedPointerIdRef.current = null;
   };
 
+  // Desktop (mouse) drag via Pointer Events
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollRef.current;
     if (!el) return;
 
-    // Only left mouse button; touch/pen are fine.
-    if (e.pointerType === "mouse" && e.button !== 0) return;
+    // ✅ mouse only. Touch is handled by touch listeners above.
+    if (e.pointerType !== "mouse") return;
+    if (e.button !== 0) return;
 
     isDraggingRef.current = true;
     setIsDragging(true);
@@ -149,23 +182,19 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
     const dx = e.clientX - startXRef.current;
     const dy = e.clientY - startYRef.current;
 
-    // Decide intent once.
     if (axisRef.current === null) {
       const ax = Math.abs(dx);
       const ay = Math.abs(dy);
 
-      // small deadzone to avoid accidental locks
       if (ax < 4 && ay < 4) return;
 
       if (ax > ay + 2) {
         axisRef.current = "x";
-        // Capture only when we commit to horizontal dragging
         try {
           el.setPointerCapture(e.pointerId);
           capturedPointerIdRef.current = e.pointerId;
         } catch {}
       } else {
-        // vertical intent: stop our drag and let the page scroll
         endDrag(el);
         return;
       }
@@ -173,22 +202,18 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
 
     if (axisRef.current !== "x") return;
 
-    // prevent page from treating it as scroll / rubber-band
     e.preventDefault();
 
     const loopWidth = el.scrollWidth / 2;
     if (loopWidth <= 0) return;
 
-    // base - dx (drag right moves content right/scroll left, adjust to taste)
     let next = scrollLeftRef.current - dx;
-
-    // keep within [0, loopWidth)
     next = ((next % loopWidth) + loopWidth) % loopWidth;
 
     el.scrollLeft = next;
   };
 
-  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+  const handlePointerUp = () => {
     endDrag(scrollRef.current);
   };
 
@@ -213,11 +238,14 @@ export function TestimonialCarousel({ items }: { items: Testimonial[] }) {
           className={`relative z-10 flex gap-4 overflow-x-auto px-4 py-5 select-none overscroll-x-contain ${
             isDragging ? "cursor-grabbing" : "cursor-grab"
           } ${styles.scrollSmooth}`}
-          // IMPORTANT for iOS Safari: allow vertical page scroll, but let us handle horizontal.
+          // allow vertical page scroll, but let us handle horizontal drag
           style={{ touchAction: "pan-y" }}
         >
           {loopingItems.map((t, i) => (
-            <div key={`${t.name ?? "t"}-${i}`} className="w-[280px] md:w-[340px] flex-none">
+            <div
+              key={`${t.name ?? "t"}-${i}`}
+              className="w-[280px] flex-none md:w-[340px]"
+            >
               <Card t={t} />
             </div>
           ))}
@@ -240,14 +268,20 @@ function Card({ t }: { t: Testimonial }) {
         <div>
           <p className="font-medium leading-tight">{t.name}</p>
           {t.role && <p className="text-xs text-neutral-500">{t.role}</p>}
-          {t.university && <p className="text-xs text-neutral-500">{t.university}</p>}
+          {t.university && (
+            <p className="text-xs text-neutral-500">{t.university}</p>
+          )}
         </div>
       </div>
 
       <p className="mt-3 text-sm text-neutral-700">
-        <span aria-hidden className="mr-1 text-neutral-400">“</span>
+        <span aria-hidden className="mr-1 text-neutral-400">
+          “
+        </span>
         {t.quote}
-        <span aria-hidden className="ml-1 text-neutral-400">”</span>
+        <span aria-hidden className="ml-1 text-neutral-400">
+          ”
+        </span>
       </p>
     </div>
   );

@@ -1,8 +1,9 @@
+/* app/_components/sections/testimonials/testimonial-carousel.module.css */
+.scrollSmooth::-webkit-scrollbar {
+  display: none;
+}
 .scrollSmooth {
   -ms-overflow-style: none;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-}
-.scrollSmooth::-webkit-scrollbar {
-  display: none;
 }
