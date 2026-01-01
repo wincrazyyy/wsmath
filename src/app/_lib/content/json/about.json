@@ -79,7 +79,7 @@
           "Math Internal Assessment (IA)"
         ],
         "cta": {
-          "label": "Inquire about IBDP tutoring",
+          "label": "Enquire about IBDP tutoring",
           "prefillText": "Hi Winson Siu, I’m interested in IBDP Math tutoring. I am (name?) from (school?) in (year?) and need help with (AAHL / AASL / AIHL / AISL)."
         }
       },
@@ -99,7 +99,7 @@
           "OCR AL Math H240"
         ],
         "cta": {
-          "label": "Inquire about A-Level tutoring",
+          "label": "Enquire about A-Level tutoring",
           "prefillText": "Hi Winson Siu, I'm interested in A-Level Math tutoring. I am (name?) from (school?) in (year?) and need help with (Math / Further Math?)."
         }
       },
@@ -116,7 +116,7 @@
           "IB Middle Year Programme"
         ],
         "cta": {
-          "label": "Inquire about IGCSE tutoring",
+          "label": "Enquire about IGCSE tutoring",
           "prefillText": "Hi Winson Siu, I'm interested in IGCSE / IBMYP Math tutoring. I am (name?) from (school?) in (year?) and need help with (0606 / 0607 / 0580 / 4PM1 / 4PM0 / IBMYP)."
         }
       }
