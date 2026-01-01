@@ -5,13 +5,13 @@ import { geistSans, geistMono, rubik } from "./_lib/fonts";
 export const metadata: Metadata = {
   metadataBase: new URL("https://wsmath.com"),
   title: "WSMath",
-  description: "Professional Online Math Tutor",
+  description: "International Mathematics Exam Strategist",
 
   openGraph: {
     type: "website",
     url: "https://wsmath.com/",
     title: "WSMath",
-    description: "Professional Online Math Tutor",
+    description: "International Mathematics Exam Strategist",
     images: [
       {
         url: "/opengraph-image.png",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "WSMath",
-    description: "Professional Online Math Tutor",
+    description: "International Mathematics Exam Strategist",
     images: ["/opengraph-image.png"],
   },
 
