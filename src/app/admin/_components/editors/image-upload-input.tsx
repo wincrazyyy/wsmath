@@ -8,6 +8,7 @@ import type { ImageUploadTarget } from "@/app/admin/_lib/image-upload-targets";
 import { buildRepoPathFromPublic } from "@/app/admin/_lib/json-editor-helpers";
 import {
   queueImageUpload,
+  queueImageDelete,
   getPreviewUrlForPublicPath,
 } from "@/app/admin/_lib/pending-image-uploads";
 
@@ -17,7 +18,8 @@ type ImageUploadInputProps<T extends object> = {
   data: T;
   onChangeData: (next: T) => void;
   forcedPublicPath?: string; // e.g. "/avatars/carousel-3.png"
-  forcedFileName?: string;   // e.g. "carousel-3.png"
+  forcedFileName?: string; // e.g. "carousel-3.png"
+  allowDelete?: boolean;
 };
 
 export function ImageUploadInput<T extends object>({
@@ -27,6 +29,7 @@ export function ImageUploadInput<T extends object>({
   onChangeData,
   forcedPublicPath,
   forcedFileName,
+  allowDelete,
 }: ImageUploadInputProps<T>) {
   const [isUploading, setIsUploading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -36,27 +39,58 @@ export function ImageUploadInput<T extends object>({
   const jsonPublicPath =
     typeof raw === "string" && raw.trim().length > 0 ? raw.trim() : "";
 
-  const targetPublicPath = (forcedPublicPath ?? jsonPublicPath).trim();
+  /**
+   * filePublicPath = where the file is stored in /public
+   * - forcedPublicPath wins for indexed avatars etc.
+   * - otherwise use whatever JSON is currently pointing to
+   */
+  const filePublicPath = (forcedPublicPath ?? jsonPublicPath).trim();
 
-  const repoPath = targetPublicPath
-    ? buildRepoPathFromPublic(targetPublicPath)
-    : "";
+  const repoPath = filePublicPath ? buildRepoPathFromPublic(filePublicPath) : "";
 
-  const queuedPreview = targetPublicPath
-    ? getPreviewUrlForPublicPath(targetPublicPath)
+  /**
+   * Preview should follow what's currently referenced by JSON (what the site uses),
+   * unless there's a queued upload preview for the file path.
+   */
+  const queuedPreview = filePublicPath
+    ? getPreviewUrlForPublicPath(filePublicPath)
     : null;
 
-  const previewSrc = queuedPreview || targetPublicPath || "/placeholder.png";
+  const previewSrc = queuedPreview || jsonPublicPath || "/placeholder.png";
+
+  const canDelete = !!allowDelete && !!filePublicPath && !!repoPath;
+
+  const handleDelete = () => {
+    if (!canDelete) return;
+
+    const ok = window.confirm(
+      "Delete this image? It will be removed from the repo when you click Save all changes."
+    );
+    if (!ok) return;
+
+    // 1) Clear JSON field (stop referencing the file)
+    const next = structuredClone(data) as T;
+    setByPath(next, field.path, "");
+    onChangeData(next);
+
+    // 2) Queue delete for save-all
+    queueImageDelete({
+      repoPath,
+      publicPath: filePublicPath,
+    });
+
+    setStatus("success");
+    setError(null);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Frontend validation: PNG only
+    // Frontend validation: PNG only (matches your server validation)
     const name = file.name.toLowerCase();
     const type = file.type;
-    const looksLikePng =
-      type === "image/png" || name.endsWith(".png");
+    const looksLikePng = type === "image/png" || name.endsWith(".png");
 
     if (!looksLikePng) {
       setStatus("error");
@@ -65,10 +99,12 @@ export function ImageUploadInput<T extends object>({
       return;
     }
 
-    if (!targetPublicPath || !repoPath) {
+    // IMPORTANT: for uploads we need a known file path
+    // For forced-path fields (avatars), filePublicPath will exist even if JSON is empty.
+    if (!filePublicPath || !repoPath) {
       setStatus("error");
       setError(
-        "This image field has no target path. Set a JSON value (e.g. '/hero.png') or provide a forcedPublicPath for indexed fields.",
+        "This image field has no target path. Set a JSON value (e.g. '/hero.png') or configure forcedPublicPath for indexed fields."
       );
       e.target.value = "";
       return;
@@ -85,15 +121,15 @@ export function ImageUploadInput<T extends object>({
           ? new File([file], forcedFileName, { type: file.type })
           : file;
 
-      // 1) Update JSON state to the *targetPublicPath*
+      // 1) Update JSON state to point to the public path
       const next = structuredClone(data) as T;
-      setByPath(next, field.path, targetPublicPath);
+      setByPath(next, field.path, filePublicPath);
       onChangeData(next);
 
       // 2) Queue image for save-all
       queueImageUpload({
         repoPath,
-        publicPath: targetPublicPath,
+        publicPath: filePublicPath,
         file: finalFile,
       });
 
@@ -101,9 +137,7 @@ export function ImageUploadInput<T extends object>({
     } catch (err) {
       console.error("Image upload queue error:", err);
       setStatus("error");
-      setError(
-        err instanceof Error ? err.message : "Unknown upload error.",
-      );
+      setError(err instanceof Error ? err.message : "Unknown upload error.");
     } finally {
       setIsUploading(false);
       e.target.value = "";
@@ -122,6 +156,7 @@ export function ImageUploadInput<T extends object>({
             className="h-full w-full object-cover"
           />
         </div>
+
         <div className="min-w-0 text-xs text-neutral-600">
           <p className="font-medium text-neutral-800">
             JSON path:{" "}
@@ -129,50 +164,63 @@ export function ImageUploadInput<T extends object>({
               {field.path}
             </code>
           </p>
+
           <p className="mt-1 text-[11px] text-neutral-500">
-            Target public path:{" "}
+            File public path:{" "}
             <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
-              {targetPublicPath || "(not set)"}
+              {filePublicPath || "(not set)"}
             </code>
           </p>
+
           {target.note && (
-            <p className="mt-1 text-[11px] text-neutral-500">
-              {target.note}
-            </p>
+            <p className="mt-1 text-[11px] text-neutral-500">{target.note}</p>
           )}
+
           <p className="mt-1 text-[11px] text-neutral-500">
-            On save, this will overwrite file at{" "}
+            On save, this will write to{" "}
             <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
               {repoPath || "N/A"}
-            </code>{" "}
-            in the repo.
+            </code>
+            .
           </p>
         </div>
       </div>
 
-      {/* File input */}
-      <label className="inline-flex cursor-pointer items-center justify-center rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-3 py-2 text-xs font-medium text-neutral-700 hover:border-violet-300 hover:bg-violet-50">
-        <input
-          type="file"
-          accept="image/png"
-          className="hidden"
-          onChange={handleFileChange}
-          disabled={isUploading}
-        />
-        {isUploading ? "Preparing image…" : "Choose image (PNG)"}
-      </label>
+      {/* Controls */}
+      <div className="flex flex-wrap items-center gap-2">
+        {/* File input */}
+        <label className="inline-flex cursor-pointer items-center justify-center rounded-md border border-dashed border-neutral-300 bg-neutral-50 px-3 py-2 text-xs font-medium text-neutral-700 hover:border-violet-300 hover:bg-violet-50">
+          <input
+            type="file"
+            accept="image/png"
+            className="hidden"
+            onChange={handleFileChange}
+            disabled={isUploading}
+          />
+          {isUploading ? "Preparing image…" : "Choose image (PNG)"}
+        </label>
+
+        {/* Delete button */}
+        {canDelete && (
+          <button
+            type="button"
+            onClick={handleDelete}
+            className="inline-flex items-center justify-center rounded-md border border-rose-200 bg-white px-3 py-2 text-xs font-semibold text-rose-700 shadow-sm hover:bg-rose-50"
+          >
+            Delete image
+          </button>
+        )}
+      </div>
 
       {/* Status */}
       {status === "success" && (
         <p className="text-[11px] text-emerald-600">
-          Image queued. Remember to click &quot;Save all changes&quot; to
+          Change queued. Remember to click &quot;Save all changes&quot; to
           commit.
         </p>
       )}
       {status === "error" && (
-        <p className="text-[11px] text-red-600">
-          {error || "Failed to queue image."}
-        </p>
+        <p className="text-[11px] text-red-600">{error || "Failed."}</p>
       )}
     </div>
   );

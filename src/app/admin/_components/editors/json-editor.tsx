@@ -114,6 +114,7 @@ export function JsonEditor<T extends object>({
           onChangeData={onChangeData}
           forcedPublicPath={resolved?.forcedPublicPath}
           forcedFileName={resolved?.forcedFileName}
+          allowDelete={!!uploadTarget.allowDelete}
         />
       );
     }

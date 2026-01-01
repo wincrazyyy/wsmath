@@ -12,6 +12,9 @@ export type ImageUploadTarget = {
    */
   forcedPublicPathTemplate?: string; // e.g. "/avatars/carousel-{{index1}}.png"
   forcedFileNameTemplate?: string;   // e.g. "carousel-{{index1}}.png"
+
+  /** If true, UI shows a Delete button that also deletes from /public */
+  allowDelete?: boolean;
 };
 
 export type ResolvedImageUploadTarget = {
@@ -44,11 +47,13 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
     note: "Featured avatar. Will be saved as /avatars/featured-<id>.png (id = tab number).",
     forcedPublicPathTemplate: "/avatars/featured-{{index1}}.png",
     forcedFileNameTemplate: "featured-{{index1}}.png",
+    allowDelete: true,
   },
   "testimonials.carousel[*].avatarSrc": {
     note: "Carousel avatar. Will be saved as /avatars/carousel-<id>.png (id = tab number).",
     forcedPublicPathTemplate: "/avatars/carousel-{{index1}}.png",
     forcedFileNameTemplate: "carousel-{{index1}}.png",
+    allowDelete: true,
   },
   "testimonials.testimonialsCta.logoSrc": {
     note: "Used in the Testimonials CTA section. Upload a square-ish PNG image with transparent background.",

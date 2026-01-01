@@ -9,11 +9,11 @@ import {
   toStringArray,
   normalizeDirPublic,
   getBasePath,
-} from "../../_lib/json-editor-helpers";
+} from "@/app/admin/_lib/json-editor-helpers";
 import {
   queueImageUploads,
   getQueuedPreviewsForDir,
-} from "../../_lib/pending-image-uploads";
+} from "@/app/admin/_lib/pending-image-uploads";
 
 type MultiImageUploadInputProps<T extends object> = {
   field: FieldConfig;
@@ -42,6 +42,7 @@ export function MultiImageUploadInput<T extends object>({
 
   const dirPublic = normalizeDirPublic(pagesDirValue, "/leaflets");
   const dirRepo = `public${dirPublic}`;
+
   const baseFormat =
     typeof pagesFormatValue === "string" && pagesFormatValue.trim().length > 0
       ? pagesFormatValue.trim()
@@ -53,12 +54,11 @@ export function MultiImageUploadInput<T extends object>({
 
     const selectedFiles = Array.from(files);
 
-    // Frontend validation: all PNGs only
+    // Frontend validation: PNG only (matches your server validation)
     const invalid = selectedFiles.filter((file) => {
       const name = file.name.toLowerCase();
       const type = file.type;
-      const looksLikePng =
-        type === "image/png" || name.endsWith(".png");
+      const looksLikePng = type === "image/png" || name.endsWith(".png");
       return !looksLikePng;
     });
 
@@ -88,24 +88,16 @@ export function MultiImageUploadInput<T extends object>({
 
     try {
       const uploadedPublicPaths: string[] = [];
-      const queuedEntries: {
-        repoPath: string;
-        publicPath: string;
-        file: File;
-      }[] = [];
+      const queuedEntries: { repoPath: string; publicPath: string; file: File }[] =
+        [];
 
       // Preserve selection order; filenames follow pagesFormat if provided
       for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
+        const file = selectedFiles[i]!;
 
-        let fileName: string;
-        if (baseFormat) {
-          // e.g. "group-leaflet-page-" + 1 + ".png"
-          fileName = `${baseFormat}${i + 1}.png`;
-        } else {
-          // fallback: use original filename
-          fileName = file.name;
-        }
+        const fileName = baseFormat
+          ? `${baseFormat}${i + 1}.png` // e.g. "group-leaflet-page-1.png"
+          : file.name;
 
         const repoPath = `${dirRepo}/${fileName}`;
         const publicPath = `${dirPublic}/${fileName}`;
@@ -126,9 +118,7 @@ export function MultiImageUploadInput<T extends object>({
     } catch (err) {
       console.error("Multi image upload error:", err);
       setStatus("error");
-      setError(
-        err instanceof Error ? err.message : "Unknown upload error.",
-      );
+      setError(err instanceof Error ? err.message : "Unknown upload error.");
     } finally {
       setIsUploading(false);
       e.target.value = "";
@@ -138,10 +128,8 @@ export function MultiImageUploadInput<T extends object>({
   // Thumbnails to show:
   // - if there are queued previews for this folder, show those
   // - otherwise, show whatever JSON currently has in pages[]
-  const queuedThumbs =
-    dirPublic ? getQueuedPreviewsForDir(dirPublic) : [];
-  const thumbnails =
-    queuedThumbs.length > 0 ? queuedThumbs : currentPages;
+  const queuedThumbs = dirPublic ? getQueuedPreviewsForDir(dirPublic) : [];
+  const thumbnails = queuedThumbs.length > 0 ? queuedThumbs : currentPages;
 
   return (
     <div className="space-y-3">
@@ -168,16 +156,17 @@ export function MultiImageUploadInput<T extends object>({
         <p className="font-medium text-neutral-800">
           Current pages:{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
-            {currentPages.length} file
-            {currentPages.length === 1 ? "" : "s"}
+            {currentPages.length} file{currentPages.length === 1 ? "" : "s"}
           </code>
         </p>
+
         <p className="mt-1 text-[11px] text-neutral-500">
           Folder (pagesDir):{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
             {dirPublic}
           </code>
         </p>
+
         {baseFormat && (
           <p className="mt-1 text-[11px] text-neutral-500">
             File format prefix (pagesFormat):{" "}
@@ -186,11 +175,11 @@ export function MultiImageUploadInput<T extends object>({
             </code>
           </p>
         )}
+
         {target.note && (
-          <p className="mt-1 text-[11px] text-neutral-500">
-            {target.note}
-          </p>
+          <p className="mt-1 text-[11px] text-neutral-500">{target.note}</p>
         )}
+
         <p className="mt-1 text-[11px] text-neutral-500">
           On save, this will overwrite the list at{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5 text-[11px]">
@@ -216,8 +205,7 @@ export function MultiImageUploadInput<T extends object>({
       {/* Status */}
       {status === "success" && (
         <p className="text-[11px] text-emerald-600">
-          Pages queued. Remember to click &quot;Save all changes&quot; to
-          commit.
+          Pages queued. Remember to click &quot;Save all changes&quot; to commit.
         </p>
       )}
       {status === "error" && (
