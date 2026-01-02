@@ -22,6 +22,7 @@ import { MiscEditor } from "../editors/misc-editor";
 import {
   getQueuedImageUploads,
   clearQueuedImageUploads,
+  type QueuedImageUpload,
 } from "../../_lib/pending-image-uploads";
 
 import type { TabKey } from "@/app/admin/_lib/admin-tabs-config";
@@ -47,6 +48,13 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
   return btoa(binary);
 }
 
+// Type guard for the queue union
+function isUpload(
+  item: QueuedImageUpload,
+): item is Extract<QueuedImageUpload, { kind: "upload" }> {
+  return item.kind === "upload";
+}
+
 export function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<TabKey>("home");
 
@@ -58,8 +66,7 @@ export function AdminDashboard() {
     useState<TestimonialsContent>(testimonialsContent);
   const [resultsData, setResultsData] =
     useState<ResultsContent>(resultsContent);
-  const [faqData, setFaqData] =
-    useState<FaqContent>(faqContent);
+  const [faqData, setFaqData] = useState<FaqContent>(faqContent);
   const [miscData, setMiscData] = useState<MiscContent>(miscContent);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -124,17 +131,26 @@ export function AdminDashboard() {
         { slug: "misc", content: miscData },
       ];
 
-      // 2) Read queued image uploads from memory
+      // 2) Read queued image ops from memory (upload/delete)
       const queued = getQueuedImageUploads();
 
-      // 3) Convert each File -> base64
+      // 3) Convert queue -> API payload (uploads become base64, deletes become delete:true)
       const images = await Promise.all(
         queued.map(async (item) => {
+          if (item.kind === "delete") {
+            return {
+              targetPath: item.repoPath, // e.g. "public/avatars/x.png"
+              delete: true,
+            };
+          }
+
+          // upload
           const arrayBuffer = await item.file.arrayBuffer();
           const contentBase64 = arrayBufferToBase64(arrayBuffer);
+
           return {
             targetPath: item.repoPath, // e.g. "public/hero.png"
-            contentBase64, // PNG content (no data URI prefix)
+            contentBase64,
           };
         }),
       );
@@ -145,7 +161,7 @@ export function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           updates,
-          images,
+          images: images.length > 0 ? images : undefined,
         }),
       });
 
@@ -181,19 +197,13 @@ export function AdminDashboard() {
   const renderActiveEditor = () => {
     if (activeTab === "home") {
       return (
-        <HomeEditor<HomeContent>
-          data={homeData}
-          onChangeData={handleHomeChange}
-        />
+        <HomeEditor<HomeContent> data={homeData} onChangeData={handleHomeChange} />
       );
     }
 
     if (activeTab === "about") {
       return (
-        <AboutEditor<AboutContent>
-          data={aboutData}
-          onChangeData={handleAboutChange}
-        />
+        <AboutEditor<AboutContent> data={aboutData} onChangeData={handleAboutChange} />
       );
     }
 
@@ -208,47 +218,30 @@ export function AdminDashboard() {
 
     if (activeTab === "testimonials") {
       return (
-        <TestimonialsEditor
-          data={testimonialsData}
-          onChangeData={handleTestimonialsChange}
-        />
+        <TestimonialsEditor data={testimonialsData} onChangeData={handleTestimonialsChange} />
       );
     }
 
     if (activeTab === "results") {
-      return (
-        <ResultsEditor
-          data={resultsData}
-          onChangeData={handleResultsChange}
-        />
-      );
+      return <ResultsEditor data={resultsData} onChangeData={handleResultsChange} />;
     }
 
     if (activeTab === "faq") {
-      return (
-        <FaqEditor
-          data={faqData}
-          onChangeData={handleFaqChange}
-        />
-      );
+      return <FaqEditor data={faqData} onChangeData={handleFaqChange} />;
     }
 
     // misc
-    return (
-      <MiscEditor<MiscContent>
-        data={miscData}
-        onChangeData={handleMiscChange}
-      />
-    );
+    return <MiscEditor<MiscContent> data={miscData} onChangeData={handleMiscChange} />;
   };
 
-  const hasQueuedImages = getQueuedImageUploads().length > 0;
+  // unsaved changes: json dirty OR any queued image ops (upload/delete)
+  const queuedNow = getQueuedImageUploads();
+  const hasQueuedImages = queuedNow.length > 0;
   const hasUnsavedChanges = hasJsonChanges || hasQueuedImages;
 
   return (
     <main className="min-h-screen bg-neutral-50">
       <div className="mx-auto max-w-5xl px-4 py-8">
-        {/* Save header */}
         <AdminDashboardHeader
           isSaving={isSaving}
           hasUnsavedChanges={hasUnsavedChanges}
@@ -257,10 +250,8 @@ export function AdminDashboard() {
           onSaveAll={handleSaveAll}
         />
 
-        {/* Top nav tabs */}
         <AdminTabs activeTab={activeTab} onChangeTab={setActiveTab} />
 
-        {/* Active editor */}
         <div className="mt-6">{renderActiveEditor()}</div>
       </div>
     </main>
