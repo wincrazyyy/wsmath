@@ -309,7 +309,10 @@ export function JsonEditor<T extends object>({
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
 
-  function parseIndexFromSubKey(subKey: string, listPath: string): number | null {
+  function parseIndexFromSubKey(
+    subKey: string,
+    listPath: string,
+  ): number | null {
     const re = new RegExp(`^${escapeRegExp(listPath)}\\[(\\d+)\\]$`);
     const m = subKey.match(re);
     if (!m) return null;
@@ -352,14 +355,13 @@ export function JsonEditor<T extends object>({
 
   // ----- Sub-tab strip UX helpers (scroll + prev/next) -----
 
-  const subTabStripRef = useRef<HTMLDivElement | null>(null);
   const activeSubBtnRef = useRef<HTMLButtonElement | null>(null);
 
   const activeSubIndex = subTabs.findIndex((s) => s.key === activeSubKey);
   const activeSubNumber = activeSubIndex >= 0 ? activeSubIndex + 1 : 1;
 
   useEffect(() => {
-    // Smooth scroll active subtab into view when it changes
+    // Smooth scroll active subtab into view when it changes (desktop strip)
     if (activeSubBtnRef.current) {
       activeSubBtnRef.current.scrollIntoView({
         behavior: "smooth",
@@ -392,7 +394,9 @@ export function JsonEditor<T extends object>({
       <h2 className="text-lg font-semibold tracking-tight text-neutral-900">
         {title}
       </h2>
-      {description && <p className="mt-1 text-sm text-neutral-600">{description}</p>}
+      {description && (
+        <p className="mt-1 text-sm text-neutral-600">{description}</p>
+      )}
 
       {/* Parent tabs ONLY */}
       {hasTabs && (
@@ -410,7 +414,8 @@ export function JsonEditor<T extends object>({
                       setActiveSubTabByParent((prev) => {
                         const prevKey = prev[tab.key];
                         const exists =
-                          prevKey && tab.subTabs!.some((s) => s.key === prevKey);
+                          prevKey &&
+                          tab.subTabs!.some((s) => s.key === prevKey);
                         return {
                           ...prev,
                           [tab.key]: exists ? prevKey : tab.subTabs![0].key,
@@ -437,9 +442,13 @@ export function JsonEditor<T extends object>({
         <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-semibold text-neutral-900">{panelTitle}</h3>
+              <h3 className="text-base font-semibold text-neutral-900">
+                {panelTitle}
+              </h3>
               {panelDescription && (
-                <p className="mt-1 text-xs text-neutral-500">{panelDescription}</p>
+                <p className="mt-1 text-xs text-neutral-500">
+                  {panelDescription}
+                </p>
               )}
             </div>
             {jsonFileHint && (
@@ -458,7 +467,6 @@ export function JsonEditor<T extends object>({
           {/* Sub-tabs */}
           {subTabs.length > 0 && (
             <div className="mt-6 border-t border-neutral-200 pt-5">
-              {/* Make this row WRAP cleanly instead of overflowing */}
               <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                   <h4 className="text-base font-semibold text-neutral-900">
@@ -471,9 +479,8 @@ export function JsonEditor<T extends object>({
                   )}
                 </div>
 
-                {/* Controls: scrollable strip + add/delete */}
+                {/* Controls: mobile dropdown + desktop strip (no visible scrollbar) + add/delete */}
                 <div className="flex min-w-0 flex-wrap items-center gap-2">
-                  {/* Subtab strip */}
                   <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
                     <div className="shrink-0 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
                       Sub Tabs
@@ -495,9 +502,38 @@ export function JsonEditor<T extends object>({
                       ‹
                     </button>
 
+                    {/* Mobile: dropdown */}
+                    <div className="min-w-0 flex-1 lg:hidden">
+                      <label className="sr-only" htmlFor="subtab-select">
+                        Select item
+                      </label>
+                      <select
+                        id="subtab-select"
+                        value={activeSubKey ?? ""}
+                        onChange={(e) => {
+                          const key = e.target.value;
+                          if (!activeTab) return;
+                          setActiveSubTabByParent((prev) => ({
+                            ...prev,
+                            [activeTab.key]: key,
+                          }));
+                        }}
+                        className="w-full rounded-md border border-neutral-200 bg-white px-2 py-1.5 text-xs font-semibold text-neutral-800 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-200"
+                      >
+                        {subTabs.map((sub) => (
+                          <option key={sub.key} value={sub.key}>
+                            {sub.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Desktop: scroll strip, scrollbar hidden */}
                     <div
-                      ref={subTabStripRef}
-                      className="min-w-0 flex-1 overflow-x-auto"
+                      className={[
+                        "hidden min-w-0 flex-1 overflow-x-auto lg:block",
+                        "[scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+                      ].join(" ")}
                     >
                       <div className="flex w-max items-center gap-1 rounded-lg bg-neutral-100 p-1">
                         {subTabs.map((sub) => {
@@ -509,12 +545,13 @@ export function JsonEditor<T extends object>({
                                 if (isActive) activeSubBtnRef.current = el;
                               }}
                               type="button"
-                              onClick={() =>
+                              onClick={() => {
+                                if (!activeTab) return;
                                 setActiveSubTabByParent((prev) => ({
                                   ...prev,
-                                  [activeTab!.key]: sub.key,
-                                }))
-                              }
+                                  [activeTab.key]: sub.key,
+                                }));
+                              }}
                               className={`min-w-[2.25rem] snap-center rounded-md px-3 py-1.5 text-xs font-semibold transition ${
                                 isActive
                                   ? "bg-neutral-900 text-white shadow"
@@ -531,10 +568,14 @@ export function JsonEditor<T extends object>({
                     <button
                       type="button"
                       onClick={goNext}
-                      disabled={subTabs.length <= 1 || activeSubIndex >= subTabs.length - 1}
+                      disabled={
+                        subTabs.length <= 1 ||
+                        activeSubIndex >= subTabs.length - 1
+                      }
                       className={[
                         "shrink-0 rounded-md border px-2 py-1 text-xs font-semibold transition",
-                        subTabs.length <= 1 || activeSubIndex >= subTabs.length - 1
+                        subTabs.length <= 1 ||
+                        activeSubIndex >= subTabs.length - 1
                           ? "border-neutral-200 bg-neutral-100 text-neutral-400 cursor-not-allowed"
                           : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
                       ].join(" ")}
@@ -586,7 +627,9 @@ export function JsonEditor<T extends object>({
             <div className="mt-6 border-t border-neutral-200 pt-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-base font-semibold text-neutral-900">Items</h4>
+                  <h4 className="text-base font-semibold text-neutral-900">
+                    Items
+                  </h4>
                   <p className="mt-1 text-xs text-neutral-500">
                     No items yet. Click Add to create one.
                   </p>
@@ -612,9 +655,13 @@ export function JsonEditor<T extends object>({
             >
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-neutral-900">{field.label}</h3>
+                  <h3 className="text-sm font-semibold text-neutral-900">
+                    {field.label}
+                  </h3>
                   {field.description && (
-                    <p className="mt-1 text-xs text-neutral-600">{field.description}</p>
+                    <p className="mt-1 text-xs text-neutral-600">
+                      {field.description}
+                    </p>
                   )}
                 </div>
                 <code className="rounded bg-neutral-100 px-2 py-1 text-[11px] text-neutral-600">
