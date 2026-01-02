@@ -1,7 +1,7 @@
 // app/admin/_components/editors/json-editor.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FieldConfig } from "@/app/admin/_lib/fields/fields";
 import { getByPath, setByPath } from "@/app/admin/_lib/json-path";
 import {
@@ -52,7 +52,7 @@ export function JsonEditor<T extends object>({
   // ----- state for parent + sub-tabs -----
 
   const [activeTabKey, setActiveTabKey] = useState<string | undefined>(
-    hasTabs ? tabs![0].key : undefined
+    hasTabs ? tabs![0].key : undefined,
   );
 
   const [activeSubTabByParent, setActiveSubTabByParent] = useState<
@@ -89,7 +89,8 @@ export function JsonEditor<T extends object>({
   const renderFieldInput = (field: FieldConfig) => {
     const keyWithSlug = slug ? `${slug}.${field.path}` : field.path;
     const resolved: ResolvedImageUploadTarget | null =
-      resolveImageUploadTarget(keyWithSlug) ?? resolveImageUploadTarget(field.path);
+      resolveImageUploadTarget(keyWithSlug) ??
+      resolveImageUploadTarget(field.path);
 
     const uploadTarget: ImageUploadTarget | undefined = resolved?.target;
 
@@ -162,7 +163,7 @@ export function JsonEditor<T extends object>({
           onChange={(e) => {
             const text = e.target.value;
             setDraftByPath((prev) => ({ ...prev, [field.path]: text }));
-            handleChange(field, text); // still updates JSON array (empties filtered)
+            handleChange(field, text);
           }}
           onBlur={() => {
             setDraftByPath((prev) => {
@@ -175,13 +176,14 @@ export function JsonEditor<T extends object>({
       );
     }
 
-
     if (field.type === "table") {
-      return <TableInput<T>
-        field={field}
-        data={data}
-        onChangeData={onChangeData}
-      />;
+      return (
+        <TableInput<T>
+          field={field}
+          data={data}
+          onChangeData={onChangeData}
+        />
+      );
     }
 
     if (field.type === "boolean") {
@@ -204,14 +206,18 @@ export function JsonEditor<T extends object>({
       );
     }
 
+    return null;
   };
 
   const renderFieldsGrid = (list: FieldConfig[]) => {
-  if (!list || list.length === 0) return null;
+    if (!list || list.length === 0) return null;
 
     const isFullWidth = (field: FieldConfig) => {
-      // Anything that renders a complex editor (TableInput, etc.) should span full width
-      return field.type !== "string" && field.type !== "textarea" && field.type !== "string[]";
+      return (
+        field.type !== "string" &&
+        field.type !== "textarea" &&
+        field.type !== "string[]"
+      );
     };
 
     return (
@@ -244,7 +250,6 @@ export function JsonEditor<T extends object>({
     );
   };
 
-
   // ----- choose active tab + subtab -----
 
   const activeTab: JsonEditorTabConfig | undefined = hasTabs
@@ -269,13 +274,11 @@ export function JsonEditor<T extends object>({
   // Add sub tab optional
   const addCfg = hasTabs ? activeTab?.subTabAdd : undefined;
 
-  const panelTitle = hasTabs
-    ? activeTab?.panelTitle ?? title
-    : title;
+  const panelTitle = hasTabs ? activeTab?.panelTitle ?? title : title;
 
   const panelDescription = hasTabs
     ? activeTab?.panelDescription ?? (description ?? "")
-    : (description ?? "");
+    : description ?? "";
 
   function handleAddSubTab() {
     if (!activeTab || !addCfg) return;
@@ -285,7 +288,8 @@ export function JsonEditor<T extends object>({
     const raw = getByPath(next, addCfg.listPath);
     const arr = Array.isArray(raw) ? [...raw] : [];
 
-    if (typeof addCfg.maxItems === "number" && arr.length >= addCfg.maxItems) return;
+    if (typeof addCfg.maxItems === "number" && arr.length >= addCfg.maxItems)
+      return;
 
     arr.push(structuredClone(addCfg.defaultItem));
     setByPath(next, addCfg.listPath, arr);
@@ -314,38 +318,73 @@ export function JsonEditor<T extends object>({
   }
 
   function handleDeleteSubTab() {
-      if (!activeTab || !addCfg) return;
-      if (!activeSubKey) return;
+    if (!activeTab || !addCfg) return;
+    if (!activeSubKey) return;
 
-      const idx = parseIndexFromSubKey(activeSubKey, addCfg.listPath);
-      if (idx === null) return;
+    const idx = parseIndexFromSubKey(activeSubKey, addCfg.listPath);
+    if (idx === null) return;
 
-      const ok = window.confirm("Delete this item? This cannot be undone.");
-      if (!ok) return;
+    const ok = window.confirm("Delete this item? This cannot be undone.");
+    if (!ok) return;
 
-      const next = structuredClone(data) as T;
+    const next = structuredClone(data) as T;
 
-      const raw = getByPath(next, addCfg.listPath);
-      const arr = Array.isArray(raw) ? [...raw] : [];
+    const raw = getByPath(next, addCfg.listPath);
+    const arr = Array.isArray(raw) ? [...raw] : [];
 
-      if (idx < 0 || idx >= arr.length) return;
+    if (idx < 0 || idx >= arr.length) return;
 
-      arr.splice(idx, 1);
-      setByPath(next, addCfg.listPath, arr);
+    arr.splice(idx, 1);
+    setByPath(next, addCfg.listPath, arr);
 
-      onChangeData(next);
+    onChangeData(next);
 
-      // Choose next active subtab key
-      const nextKey =
-        arr.length === 0
-          ? undefined
-          : `${addCfg.listPath}[${Math.min(idx, arr.length - 1)}]`;
+    const nextKey =
+      arr.length === 0
+        ? undefined
+        : `${addCfg.listPath}[${Math.min(idx, arr.length - 1)}]`;
 
-      setActiveSubTabByParent((prev) => ({
-        ...prev,
-        [activeTab.key]: nextKey,
-      }));
+    setActiveSubTabByParent((prev) => ({
+      ...prev,
+      [activeTab.key]: nextKey,
+    }));
+  }
+
+  // ----- Sub-tab strip UX helpers (scroll + prev/next) -----
+
+  const subTabStripRef = useRef<HTMLDivElement | null>(null);
+  const activeSubBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  const activeSubIndex = subTabs.findIndex((s) => s.key === activeSubKey);
+  const activeSubNumber = activeSubIndex >= 0 ? activeSubIndex + 1 : 1;
+
+  useEffect(() => {
+    // Smooth scroll active subtab into view when it changes
+    if (activeSubBtnRef.current) {
+      activeSubBtnRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
     }
+  }, [activeSubKey]);
+
+  const goPrev = () => {
+    if (!activeTab || subTabs.length === 0) return;
+    const idx = Math.max(0, (activeSubIndex >= 0 ? activeSubIndex : 0) - 1);
+    const key = subTabs[idx]!.key;
+    setActiveSubTabByParent((prev) => ({ ...prev, [activeTab.key]: key }));
+  };
+
+  const goNext = () => {
+    if (!activeTab || subTabs.length === 0) return;
+    const idx = Math.min(
+      subTabs.length - 1,
+      (activeSubIndex >= 0 ? activeSubIndex : 0) + 1,
+    );
+    const key = subTabs[idx]!.key;
+    setActiveSubTabByParent((prev) => ({ ...prev, [activeTab.key]: key }));
+  };
 
   return (
     <div className="mt-6">
@@ -353,11 +392,9 @@ export function JsonEditor<T extends object>({
       <h2 className="text-lg font-semibold tracking-tight text-neutral-900">
         {title}
       </h2>
-      {description && (
-        <p className="mt-1 text-sm text-neutral-600">{description}</p>
-      )}
+      {description && <p className="mt-1 text-sm text-neutral-600">{description}</p>}
 
-      {/* Parent tabs ONLY (sub-tabs moved inside the panel card) */}
+      {/* Parent tabs ONLY */}
       {hasTabs && (
         <div className="mt-6">
           <div className="inline-flex rounded-full border border-neutral-200 bg-white p-1 text-xs font-medium">
@@ -372,7 +409,8 @@ export function JsonEditor<T extends object>({
                     if (tab.subTabs?.length) {
                       setActiveSubTabByParent((prev) => {
                         const prevKey = prev[tab.key];
-                        const exists = prevKey && tab.subTabs!.some((s) => s.key === prevKey);
+                        const exists =
+                          prevKey && tab.subTabs!.some((s) => s.key === prevKey);
                         return {
                           ...prev,
                           [tab.key]: exists ? prevKey : tab.subTabs![0].key,
@@ -399,13 +437,9 @@ export function JsonEditor<T extends object>({
         <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-semibold text-neutral-900">
-                {panelTitle}
-              </h3>
+              <h3 className="text-base font-semibold text-neutral-900">{panelTitle}</h3>
               {panelDescription && (
-                <p className="mt-1 text-xs text-neutral-500">
-                  {panelDescription}
-                </p>
+                <p className="mt-1 text-xs text-neutral-500">{panelDescription}</p>
               )}
             </div>
             {jsonFileHint && (
@@ -421,35 +455,59 @@ export function JsonEditor<T extends object>({
           {/* Base fields always visible */}
           {renderFieldsGrid(baseFields)}
 
-          {/* Sub-tabs sit "in the middle" and only swap the section below */}
+          {/* Sub-tabs */}
           {subTabs.length > 0 && (
-            <>
-              <div className="mt-6 border-t border-neutral-200 pt-5">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <h4 className="text-base font-semibold text-neutral-900">
-                      {activeSubTab?.panelTitle ?? "Items"}
-                    </h4>
-                    {activeSubTab?.panelDescription && (
-                      <p className="mt-1 text-xs text-neutral-500">
-                        {activeSubTab.panelDescription}
-                      </p>
-                    )}
-                  </div>
+            <div className="mt-6 border-t border-neutral-200 pt-5">
+              {/* Make this row WRAP cleanly instead of overflowing */}
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <h4 className="text-base font-semibold text-neutral-900">
+                    {activeSubTab?.panelTitle ?? "Items"}
+                  </h4>
+                  {activeSubTab?.panelDescription && (
+                    <p className="mt-1 text-xs text-neutral-500">
+                      {activeSubTab.panelDescription}
+                    </p>
+                  )}
+                </div>
 
-                  <div className="flex items-center gap-2">
-                    {/* existing subtab pills */}
-                    <div className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
-                      <div className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
-                        Sub Tabs
-                      </div>
+                {/* Controls: scrollable strip + add/delete */}
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  {/* Subtab strip */}
+                  <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-2 shadow-sm">
+                    <div className="shrink-0 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                      Sub Tabs
+                    </div>
 
-                      <div className="ml-auto flex items-center gap-1 rounded-lg bg-neutral-100 p-1">
+                    <button
+                      type="button"
+                      onClick={goPrev}
+                      disabled={subTabs.length <= 1 || activeSubIndex <= 0}
+                      className={[
+                        "shrink-0 rounded-md border px-2 py-1 text-xs font-semibold transition",
+                        subTabs.length <= 1 || activeSubIndex <= 0
+                          ? "border-neutral-200 bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                          : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
+                      ].join(" ")}
+                      aria-label="Previous item"
+                      title="Previous"
+                    >
+                      ‹
+                    </button>
+
+                    <div
+                      ref={subTabStripRef}
+                      className="min-w-0 flex-1 overflow-x-auto"
+                    >
+                      <div className="flex w-max items-center gap-1 rounded-lg bg-neutral-100 p-1">
                         {subTabs.map((sub) => {
                           const isActive = sub.key === activeSubKey;
                           return (
                             <button
                               key={sub.key}
+                              ref={(el) => {
+                                if (isActive) activeSubBtnRef.current = el;
+                              }}
                               type="button"
                               onClick={() =>
                                 setActiveSubTabByParent((prev) => ({
@@ -457,7 +515,7 @@ export function JsonEditor<T extends object>({
                                   [activeTab!.key]: sub.key,
                                 }))
                               }
-                              className={`min-w-[2.25rem] rounded-md px-3 py-1.5 text-xs font-semibold transition ${
+                              className={`min-w-[2.25rem] snap-center rounded-md px-3 py-1.5 text-xs font-semibold transition ${
                                 isActive
                                   ? "bg-neutral-900 text-white shadow"
                                   : "text-neutral-700 hover:bg-white"
@@ -470,38 +528,58 @@ export function JsonEditor<T extends object>({
                       </div>
                     </div>
 
-                    {/* Add / Delete buttons if enabled for this tab */}
-                    {addCfg && (
-                      <>
-                        <button
-                          type="button"
-                          onClick={handleAddSubTab}
-                          className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-800 shadow-sm hover:bg-neutral-50"
-                        >
-                          + {addCfg.buttonLabel ?? "Add"}
-                        </button>
+                    <button
+                      type="button"
+                      onClick={goNext}
+                      disabled={subTabs.length <= 1 || activeSubIndex >= subTabs.length - 1}
+                      className={[
+                        "shrink-0 rounded-md border px-2 py-1 text-xs font-semibold transition",
+                        subTabs.length <= 1 || activeSubIndex >= subTabs.length - 1
+                          ? "border-neutral-200 bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                          : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
+                      ].join(" ")}
+                      aria-label="Next item"
+                      title="Next"
+                    >
+                      ›
+                    </button>
 
-                        <button
-                          type="button"
-                          onClick={handleDeleteSubTab}
-                          disabled={subTabs.length === 0 || !activeSubKey}
-                          className={[
-                            "rounded-lg border px-3 py-2 text-xs font-semibold shadow-sm transition",
-                            subTabs.length === 0 || !activeSubKey
-                              ? "border-neutral-200 bg-neutral-100 text-neutral-400 cursor-not-allowed"
-                              : "border-rose-200 bg-white text-rose-700 hover:bg-rose-50",
-                          ].join(" ")}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
+                    <div className="shrink-0 text-[11px] font-medium text-neutral-500">
+                      {activeSubNumber}/{subTabs.length}
+                    </div>
                   </div>
-                </div>
 
-                {renderFieldsGrid(subFields)}
+                  {/* Add / Delete */}
+                  {addCfg && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={handleAddSubTab}
+                        className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-xs font-semibold text-neutral-800 shadow-sm hover:bg-neutral-50"
+                      >
+                        + {addCfg.buttonLabel ?? "Add"}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleDeleteSubTab}
+                        disabled={subTabs.length === 0 || !activeSubKey}
+                        className={[
+                          "rounded-lg border px-3 py-2 text-xs font-semibold shadow-sm transition",
+                          subTabs.length === 0 || !activeSubKey
+                            ? "border-neutral-200 bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                            : "border-rose-200 bg-white text-rose-700 hover:bg-rose-50",
+                        ].join(" ")}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
-            </>
+
+              {renderFieldsGrid(subFields)}
+            </div>
           )}
 
           {subTabs.length === 0 && addCfg && (
@@ -525,7 +603,7 @@ export function JsonEditor<T extends object>({
           )}
         </div>
       ) : (
-        // Non-tabbed layout: one card per field
+        // Non-tabbed layout
         <div className="mt-6 grid gap-6">
           {fields.map((field) => (
             <section
@@ -534,13 +612,9 @@ export function JsonEditor<T extends object>({
             >
               <div className="flex items-center justify-between gap-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-neutral-900">
-                    {field.label}
-                  </h3>
+                  <h3 className="text-sm font-semibold text-neutral-900">{field.label}</h3>
                   {field.description && (
-                    <p className="mt-1 text-xs text-neutral-600">
-                      {field.description}
-                    </p>
+                    <p className="mt-1 text-xs text-neutral-600">{field.description}</p>
                   )}
                 </div>
                 <code className="rounded bg-neutral-100 px-2 py-1 text-[11px] text-neutral-600">
