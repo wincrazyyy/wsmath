@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WSMath
 
-## Getting Started
+WSMath is an online portfolio website for an international mathematics exam strategist. It’s designed to present tutoring services in a clear, premium way, while making it easy to maintain and update content over time.
 
-First, run the development server:
+The site is built with **Next.js** and **Tailwind CSS**, with a focus on:
+- **Sleek, responsive design** (works well on mobile, tablet, and desktop)
+- **SEO-friendly structure** to help potential clients discover the site
+- **Clear service positioning** for international curricula (e.g. IBDP, A-Level, IGCSE)
+- **Fast content updates** via a custom CMS, built for simple day-to-day editing
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Custom CMS (Content Management)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To keep content management simple, WSMath includes a lightweight custom CMS so updates (copy, testimonials, packages, images, etc.) don’t require digging through the whole codebase.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The CMS uses a **Zero Trust login** approach to reduce exposure and keep admin access locked down.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## What this website is for
 
-## Learn More
+- Introduce the tutor / brand professionally
+- Showcase course options and outcomes
+- Highlight student results and testimonials
+- Provide an easy way for clients to enquire and book lessons
+- Keep everything easy to update without rebuilding the site’s structure each time
 
-To learn more about Next.js, take a look at the following resources:
+## Tech stack (high level)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Next.js**
+- **Tailwind CSS**
+- Custom CMS with **Zero Trust login**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you’re maintaining this project: keep content updates inside the CMS workflow, and treat the public site as a polished, read-only marketing surface.
