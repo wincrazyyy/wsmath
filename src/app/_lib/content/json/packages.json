@@ -105,55 +105,51 @@
     "whatsappPrefillText": "Hi Winson Siu, I am interested in joining the group course. I am (name?) from (school?) in (year?)."
   },
   "iaSupport": {
-    "eyebrow": "Supported by a PhD-level mathematics team",
-    "title": "IBDP Math IA Guidance",
-    "description": "A structured, topic-driven guidance format to help students produce a unique and high-quality Math IA.",
-    "lessonStructureTitle": "Lesson structure",
+    "eyebrow": "Supported by a Pure Mathematics PhD",
+    "title": "IBDP Maths IA Instructional Course",
+    "description": "1-to-1 Maths IA guidance (topic selection to final draft): unique, well-written, higher-scoring IAs — 80+ success students (2020–2025).",
+    "lessonStructureTitle": "Course Features",
     "lessonStructure": [
-      "Customises Math IA topics to align with individual student interests.",
-      "Integrates knowledge beyond the standard curriculum for enhanced grades.",
-      "Guides students to produce high-quality, unique essays efficiently within lesson time.",
-      "Achieved successful outcomes for over 80 students from 2020 to 2025.",
-      "Effectively boosts Predicted Grades and makes a positive impression on school teachers.",
-      "Minimised the need for extra work outside of lessons."
+      "Tailored IA topics",
+      "Unique research question",
+      "Higher predicted grades",
+      "Beyond-syllabus insight",
+      "Stronger drafts each lesson",
+      "Faster writing, less stress"
     ],
-    "topicsTitle": "Available topic directions",
+    "topicsTitle": "Expertise in various themes",
     "topics": [
       {
-        "title": "Ancient Math in Modern Times",
-        "desc": "Uncover how modern techniques breathe new life into solving ancient mathematical puzzles."
+        "title": "Ancient Math",
+        "desc": "Modern methods for classic problems."
       },
       {
-        "title": "Artistic Math",
-        "desc": "Unleash creativity through mathematical patterns and designs, blending art with equations."
+        "title": "Engineering Math",
+        "desc": "Sound, waves & Fourier series."
       },
       {
-        "title": "Astronomy and Mathematics",
-        "desc": "Delve into the celestial realm, using math to model the complex interactions of planets and stars."
+        "title": "Everyday Geometry",
+        "desc": "Shapes, area & volume in real objects."
       },
       {
-        "title": "Environmental Math",
-        "desc": "Tackle environmental challenges and natural phenomena with insightful mathematical analysis."
+        "title": "Math & Art",
+        "desc": "Patterns, symmetry & design."
       },
       {
-        "title": "Geometry in Everyday Life",
-        "desc": "Investigate common objects through a mathematical lens, revealing hidden geometrical wonders."
+        "title": "Math in Society",
+        "desc": "Prediction and data-driven models."
       },
       {
-        "title": "Math in Engineering",
-        "desc": "From designing roller coasters to solving structural problems, discover the application of math in engineering."
+        "title": "Math in the Environment",
+        "desc": "Data-driven statistics, modelling & regression analysis."
       },
       {
-        "title": "Mathematics in Society",
-        "desc": "Explore socio-economic issues through mathematical methodologies, understanding the world in numbers."
+        "title": "Problem-Solving",
+        "desc": "Optimisation in everyday decisions."
       },
       {
-        "title": "Practical Problem-Solving",
-        "desc": "Apply math to everyday scenarios, from game strategies to efficient division of resources."
-      },
-      {
-        "title": "Sports and Mathematics",
-        "desc": "Explore the relationship between athletic performance and mathematical principles, like optimizing sports equipment."
+        "title": "Sports Maths",
+        "desc": "Performance analysis, results prediction & optimisation."
       }
     ],
     "bookLabel": "Enquire about Math IA support",
