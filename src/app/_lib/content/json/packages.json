@@ -105,26 +105,26 @@
     "whatsappPrefillText": "Hi Winson Siu, I am interested in joining the group course. I am (name?) from (school?) in (year?)."
   },
   "iaSupport": {
-    "eyebrow": "Supported by a Pure Mathematics PhD",
+    "eyebrow": "Supported by a PhD in Pure Mathematics",
     "title": "IBDP Maths IA Instructional Course",
-    "description": "1-to-1 Maths IA guidance (topic selection to final draft): unique, well-written, higher-scoring IAs — 80+ success students (2020–2025).",
+    "description": "1-to-1 Maths IA coaching, from topic selection to final draft — unique, well-written, higher-scoring IAs. 80+ students supported (2020–2025).",
     "lessonStructureTitle": "Course Features",
     "lessonStructure": [
       "Tailored IA topics",
-      "Unique research question",
+      "Unique research questions",
       "Higher predicted grades",
-      "Beyond-syllabus insight",
-      "Stronger drafts each lesson",
+      "Beyond-the-syllabus insight",
+      "Stronger drafts after every lesson",
       "Faster writing, less stress"
     ],
-    "topicsTitle": "Expertise in various themes",
+    "topicsTitle": "Expertise across a range of themes",
     "topics": [
       {
-        "title": "Ancient Math",
+        "title": "Ancient Mathematics",
         "desc": "Modern methods for classic problems."
       },
       {
-        "title": "Engineering Math",
+        "title": "Engineering Mathematics",
         "desc": "Sound, waves & Fourier series."
       },
       {
@@ -132,15 +132,15 @@
         "desc": "Shapes, area & volume in real objects."
       },
       {
-        "title": "Math & Art",
+        "title": "Mathematics & Art",
         "desc": "Patterns, symmetry & design."
       },
       {
-        "title": "Math in Society",
+        "title": "Mathematics in Society",
         "desc": "Prediction and data-driven models."
       },
       {
-        "title": "Math in the Environment",
+        "title": "Mathematics in the Environment",
         "desc": "Data-driven statistics, modelling & regression analysis."
       },
       {
@@ -148,7 +148,7 @@
         "desc": "Optimisation in everyday decisions."
       },
       {
-        "title": "Sports Maths",
+        "title": "Sports Mathematics",
         "desc": "Performance analysis, results prediction & optimisation."
       }
     ],
