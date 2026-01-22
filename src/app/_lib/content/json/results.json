@@ -599,6 +599,13 @@
         "programLabel": "IGCSE · Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
         "students": [
           {
+            "name": "Cherish Chiu",
+            "year": 2025,
+            "from": "B(7)",
+            "to": "A*(9)",
+            "months": 2
+          },
+          {
             "name": "Jewel Lam",
             "year": 2024,
             "from": "E(4)",
