@@ -231,13 +231,16 @@ export function TableInput<T extends object>({
       });
   }, [rows, query, columns]);
 
-  function commit(nextRows: Row[]) {
+  function commit(nextRows: Row[], opts?: { sortNow?: boolean }) {
     const sortBy = field.table?.sortBy ?? [];
-    const sorted =
-      sortBy.length > 0 ? sortRowsStable(nextRows, sortBy, numericKeys) : nextRows;
+
+    const finalRows =
+      opts?.sortNow && sortBy.length > 0
+        ? sortRowsStable(nextRows, sortBy, numericKeys)
+        : nextRows;
 
     const next = structuredClone(data) as T;
-    setByPath(next, rowsPath, sorted);
+    setByPath(next, rowsPath, finalRows);
     onChangeData(next);
   }
 
@@ -248,29 +251,11 @@ export function TableInput<T extends object>({
     if (didNormalizeRef.current) return;
 
     const sortBy = field.table?.sortBy ?? [];
-    if (sortBy.length === 0) {
-      didNormalizeRef.current = true;
-      return;
-    }
-
-    const sorted = sortRowsStable(rows, sortBy, numericKeys);
-
-    const sameOrder =
-      sorted.length === rows.length &&
-      sorted.every((r, i) => {
-        const a = rows[i];
-        if (!a) return false;
-        const keys = new Set([...Object.keys(a), ...Object.keys(r)]);
-        for (const k of keys) {
-          if (a[k] !== r[k]) return false;
-        }
-        return true;
-      });
-
     didNormalizeRef.current = true;
 
-    if (!sameOrder) commit(sorted);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (sortBy.length === 0) return;
+
+    commit(rows, { sortNow: true });
   }, []);
 
   function updateCell(rowIndex: number, key: string, raw: string) {
@@ -286,13 +271,13 @@ export function TableInput<T extends object>({
     }
 
     next[rowIndex] = { ...current, [key]: v };
-    commit(next);
+    commit(next, { sortNow: false });
   }
 
   function removeRow(rowIndex: number) {
     const next = rows.slice();
     next.splice(rowIndex, 1);
-    commit(next);
+    commit(next, { sortNow: false });
   }
 
   function addRow() {
@@ -304,13 +289,13 @@ export function TableInput<T extends object>({
   }
 
   function replaceFromBulk() {
-    commit(parseBulk(bulkText, columns, numericKeys));
+    commit(parseBulk(bulkText, columns, numericKeys), { sortNow: true });
     setBulkText("");
     setBulkOpen(false);
   }
 
   function appendFromBulk() {
-    commit([...rows, ...parseBulk(bulkText, columns, numericKeys)]);
+    commit([...rows, ...parseBulk(bulkText, columns, numericKeys)], { sortNow: true });
     setBulkText("");
     setBulkOpen(false);
   }
