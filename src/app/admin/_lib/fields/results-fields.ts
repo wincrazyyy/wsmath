@@ -270,7 +270,7 @@ export const RESULTS_CTA_FIELDS: FieldConfig[] = [
     path: "resultsCta.logoSrc",
     label: "Results CTA – Logo image path",
     description:
-      "Path to the logo image in /public (e.g. /icon.svg).",
+      "Path to the horizontal image, e.g. /cta-image.png.",
     type: "string",
   },
 ];

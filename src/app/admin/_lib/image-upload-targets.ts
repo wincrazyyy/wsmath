@@ -58,6 +58,9 @@ export const IMAGE_UPLOAD_TARGETS: Record<string, ImageUploadTarget> = {
   "testimonials.testimonialsCta.logoSrc": {
     note: "Used in the Testimonials CTA section. Upload a square-ish PNG image with transparent background.",
   },
+  "results.resultsCta.logoSrc": {
+    note: "Used in the Results CTA section. Upload a horizontal JPG image banner.",
+  },
 };
 
 function escapeRegExp(s: string): string {

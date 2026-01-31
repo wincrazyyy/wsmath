@@ -18,7 +18,7 @@ type QueuedUpload = Extract<QueuedImageUpload, { kind: "upload" }>;
 
 const queue: QueuedImageUpload[] = [];
 
-// ✅ Type guard: makes TS understand narrowing after filter()
+// Type guard: makes TS understand narrowing after filter()
 function isUpload(q: QueuedImageUpload): q is QueuedUpload {
   return q.kind === "upload";
 }
