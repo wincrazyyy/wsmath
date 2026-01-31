@@ -32,7 +32,7 @@ export function IaSupport({ config }: Props) {
           <h3 className="mt-1 text-lg font-semibold tracking-tight text-neutral-900">
             {title}
           </h3>
-          <p className="mt-1 max-w-2xl text-sm text-neutral-600">{description}</p>
+          <p className="mt-1 text-sm text-neutral-600">{description}</p>
         </div>
 
       </div>
