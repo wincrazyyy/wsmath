@@ -140,8 +140,8 @@ export function Hero() {
                 {/* MOBILE: single row, compact height. DESKTOP: your existing layout. */}
                 <div className="relative flex items-center justify-center gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4">
                   {/* number pill */}
-                  <div className="shrink-0 rounded-xl bg-white/70 px-2.5 py-1 ring-1 ring-black/5 sm:px-4 sm:py-2">
-                    <div className="text-2xl font-extrabold leading-none tracking-tight tabular-nums sm:text-3xl md:text-4xl">
+                  <div className="shrink-0 rounded-xl bg-white/70 px-2.5 py-1 ring-1 ring-black/5 sm:px-4">
+                    <div className="text-2xl font-extrabold leading-none tracking-tight tabular-nums sm:text-3xl md:text-3xl">
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                         {hoursText}
                       </span>
@@ -162,11 +162,11 @@ export function Hero() {
 
                   {/* DESKTOP (sm+) label stack (unchanged) */}
                   <div className="hidden space-y-0.5 sm:block">
-                    <div className="text-sm font-semibold text-neutral-900 md:text-base">
+                    <div className="text-sm font-semibold text-neutral-900 md:text-sm">
                       {hero.stat.label}
                     </div>
                     {hero.stat.subLabel && (
-                      <div className="text-xs text-neutral-600 md:text-sm">
+                      <div className="text-xs text-neutral-600 md:text-xs">
                         {hero.stat.subLabel}
                       </div>
                     )}
