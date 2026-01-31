@@ -121,44 +121,46 @@ export function Hero() {
             sizes="(min-width: 1024px) 48vw, (min-width: 768px) 70vw, 100vw"
           />
 
-          {/* Floating stat card (fade + float up, count-up number) */}
           {hero.stat?.value && (
             <div
               className={[
-                "pointer-events-none absolute inset-x-4 bottom-3 z-10", // bottom-4 -> bottom-3
+                "pointer-events-none absolute z-10",
+                "inset-x-3 bottom-2 sm:inset-x-4 sm:bottom-3",
                 "transition-all duration-700 ease-out",
                 entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3",
               ].join(" ")}
             >
-              <div className="relative mx-auto w-full max-w-[620px] rounded-2xl border border-white/60 bg-white/75 px-4 py-2.5 shadow-lg backdrop-blur sm:px-5 sm:py-4">
-                {/* subtle glow (smaller on mobile) */}
+              <div className="relative mx-auto w-full max-w-[620px] rounded-2xl border border-white/60 bg-white/70 px-3 py-2 shadow-lg backdrop-blur sm:px-5 sm:py-4">
+                {/* softer + smaller glow on mobile */}
                 <div
                   aria-hidden
-                  className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-indigo-500/25 via-violet-500/25 to-sky-400/25 blur-xl sm:-inset-1 sm:blur-2xl"
+                  className="absolute -inset-0.5 rounded-3xl bg-gradient-to-r from-indigo-500/20 via-violet-500/20 to-sky-400/20 blur-lg sm:-inset-1 sm:blur-2xl"
                 />
 
-                <div className="relative flex flex-col items-center gap-2 text-center sm:flex-row sm:items-center sm:justify-center sm:gap-4 sm:text-left">
-                  <div className="shrink-0 rounded-xl bg-white/70 px-3 py-1.5 ring-1 ring-black/5 sm:px-4 sm:py-2">
+                {/* MOBILE: single row, compact height. DESKTOP: your existing layout. */}
+                <div className="relative flex items-center justify-center gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4">
+                  {/* number pill */}
+                  <div className="shrink-0 rounded-xl bg-white/70 px-2.5 py-1 ring-1 ring-black/5 sm:px-4 sm:py-2">
                     <div className="text-2xl font-extrabold leading-none tracking-tight tabular-nums sm:text-3xl md:text-4xl">
                       <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-600 bg-clip-text text-transparent">
                         {hoursText}
                       </span>
                     </div>
-
-                    {/* mobile labels */}
-                    <div className="mt-1 space-y-0.5 sm:hidden">
-                      <div className="text-xs font-semibold text-neutral-900">
-                        {hero.stat.label}
-                      </div>
-                      {hero.stat.subLabel && (
-                        <div className="text-[11px] leading-snug text-neutral-600">
-                          {hero.stat.subLabel}
-                        </div>
-                      )}
-                    </div>
                   </div>
 
-                  {/* desktop (sm+) label stack */}
+                  {/* MOBILE labels: inline + tight */}
+                  <div className="min-w-0 text-left sm:hidden">
+                    <div className="text-[11px] font-semibold leading-tight text-neutral-900">
+                      {hero.stat.label}
+                    </div>
+                    {hero.stat.subLabel && (
+                      <div className="mt-1 text-[10px] leading-tight text-neutral-600">
+                        {hero.stat.subLabel}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* DESKTOP (sm+) label stack (unchanged) */}
                   <div className="hidden space-y-0.5 sm:block">
                     <div className="text-sm font-semibold text-neutral-900 md:text-base">
                       {hero.stat.label}
@@ -174,7 +176,6 @@ export function Hero() {
             </div>
           )}
         </div>
-
         {/* Text */}
         <div className="order-2 max-w-xl text-center lg:order-1 lg:text-left">
           <h1
