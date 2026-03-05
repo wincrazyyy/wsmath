@@ -446,6 +446,12 @@
         "programLabel": "A-Level Further Math · IAL YFM01 / GCE AL 9FM0 / CAIE 9231 / AQA 7367",
         "students": [
           {
+            "name": "Yuki Lam",
+            "year": 2026,
+            "from": "F",
+            "to": "A*"
+          },
+          {
             "name": "Bill Zhang",
             "year": 2024,
             "from": "F",
@@ -479,6 +485,12 @@
         "subTab": "Math",
         "programLabel": "A-Level Math · IAL YMA01 / GCE AL 9MA0 / CAIE 9709 / AQA 7357 / OCR H240",
         "students": [
+          {
+            "name": "Yuki Lam",
+            "year": 2026,
+            "from": "B",
+            "to": "A*"
+          },
           {
             "name": "Quinto Lam",
             "year": 2025,
