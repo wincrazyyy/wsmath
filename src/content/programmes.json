@@ -1,0 +1,68 @@
+[
+  {
+    "id": "hl",
+    "family": "IBDP",
+    "label": "IBDP · HL",
+    "tabLabel": "IBDP · HL",
+    "sub": "AAHL / AIHL",
+    "gradeScaleId": "ibdp",
+    "order": 0,
+    "fullLabel": "IBDP · HL / AAHL / AIHL",
+    "totalCount": 31
+  },
+  {
+    "id": "sl",
+    "family": "IBDP",
+    "label": "IBDP · SL",
+    "tabLabel": "IBDP · SL",
+    "sub": "AASL / AISL",
+    "gradeScaleId": "ibdp",
+    "order": 1,
+    "fullLabel": "IBDP · SL / AASL / AISL",
+    "totalCount": 25
+  },
+  {
+    "id": "alfm",
+    "family": "A-Level / IAL",
+    "label": "A-Level Further Math",
+    "tabLabel": "A-L Further Math",
+    "sub": "IAL YFM01 / GCE AL 9FM0 / CAIE 9231 / AQA 7367",
+    "gradeScaleId": "alevel",
+    "order": 2,
+    "fullLabel": "A-Level Further Math · IAL YFM01 / GCE AL 9FM0 / CAIE 9231 / AQA 7367",
+    "totalCount": 4
+  },
+  {
+    "id": "alm",
+    "family": "A-Level / IAL",
+    "label": "A-Level Math",
+    "tabLabel": "A-L Math",
+    "sub": "IAL YMA01 / GCE AL 9MA0 / CAIE 9709 / AQA 7357 / OCR H240",
+    "gradeScaleId": "alevel",
+    "order": 3,
+    "fullLabel": "A-Level Math · IAL YMA01 / GCE AL 9MA0 / CAIE 9709 / AQA 7357 / OCR H240",
+    "totalCount": 11
+  },
+  {
+    "id": "igadd",
+    "family": "IGCSE",
+    "label": "IGCSE · Additional",
+    "tabLabel": "IGCSE · Additional",
+    "sub": "Cambridge Additional Math 0606 / Edexcel Further Pure Math 4PM1",
+    "gradeScaleId": "igcse",
+    "order": 4,
+    "fullLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
+    "totalCount": 4
+  },
+  {
+    "id": "igm",
+    "family": "IGCSE",
+    "label": "IGCSE · Math",
+    "tabLabel": "IGCSE · Math",
+    "sub": "Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
+    "gradeScaleId": "igcse",
+    "order": 5,
+    "fullLabel": "IGCSE · Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
+    "totalCount": 18
+  }
+]

@@ -1,0 +1,153 @@
+/* ============================================================
+   HERO — "The Counterpoint, Re-measured" + the 20,000 ensemble
+   Section family: .mvt-hero / .mvt-cp-*  (hero builder owns every selector
+   in this file; shared vocabulary — .mvt-wrap, .mvt-rev, .mvt-plate-cta,
+   .mvt-mu, .mvt-eyebrow, .mvt-num — comes from globals.css).
+
+   Two storeys. Upper: the right-aligned eyebrow pair over the giant stacked
+   nameplate. The storeys are closed by ONE full-width horizon rule that
+   terminates INTO a full-height vertical seam at a single mid-right joint —
+   the hero's only drawn ornament. The CJK inscription runs vertically down
+   the seam's right side for the composition's whole height. Lower storey:
+   three objects bottom-packed on one implied baseline —
+   portrait | 20,000 ensemble | facts + CTA counterweight.
+   ============================================================ */
+
+.mvt-hero{background:var(--lac-ground);
+  padding-block:clamp(30px,1.9vw,48px) calc(40px + 4 * var(--step))}
+
+/* columns: content | gap | 2px seam | gap | inscription
+   rows:    upper   | gap | 2px horizon | gap | lower */
+.mvt-cp{display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(20px,2vw,52px) 2px clamp(22px,2.3vw,58px) auto;
+  grid-template-rows:auto clamp(18px,1.15vw,26px) 2px clamp(18px,1.15vw,26px) auto}
+
+.mvt-cp-upper{grid-column:1;grid-row:1;display:flex;flex-direction:column;
+  gap:clamp(16px,1.05vw,24px);padding-top:2px}
+.mvt-cp-mast{align-self:flex-end;display:flex;flex-direction:column;align-items:flex-end;
+  gap:6px;text-align:right}
+.mvt-cp-eyebrow{font-size:clamp(11.5px,0.5vw,13px)}
+.mvt-cp-place{color:var(--ink-2)}
+
+/* the site display scale (--d0's 204 ceiling), never a private super-scale;
+   18.5svh is the fold insurance — a short window degrades the name, not the
+   composition. The 44px floor keeps WINSON (one unbreakable 6-glyph word)
+   inside every wrap the pad can produce. */
+.mvt-cp-h1{margin:0;font-family:var(--f-display);font-weight:700;color:var(--ink);
+  text-transform:uppercase;
+  font-size:clamp(44px,min(9.3vw,18.5svh),204px);letter-spacing:-.042em;line-height:.84;
+  text-shadow:0 1px 0 rgba(4,1,16,.85),0 -1px 0 rgba(255,255,255,.05)}
+
+.mvt-cp-vrule{grid-column:3;grid-row:1/6;width:2px;
+  background:linear-gradient(180deg,var(--brass-hi) 0,var(--brass) 16%,var(--brass) 84%,var(--brass-deep) 100%);
+  box-shadow:1px 0 0 rgba(4,1,16,.55)}
+.mvt-cp-hrule{grid-column:1/4;grid-row:3;height:2px;
+  background:linear-gradient(90deg,var(--brass-deep) 0,var(--brass) 14%,var(--brass) 90%,var(--brass-hi) 100%);
+  box-shadow:0 1px 0 rgba(4,1,16,.55)}
+
+/* the rules draw on: the vertical seam first (top down), then the horizontal
+   grows out of the corner they share. The hidden state is gated on `.js`
+   (globals.css sets the body flag before first paint) so a reader without
+   JavaScript never gets a hero missing its only ornament. */
+.js .mvt-cp-vrule.mvt-rev{opacity:0;transform:scaleY(0);transform-origin:top center;
+  transition:transform var(--t-draw) var(--ease-draw) 140ms,opacity 220ms linear 140ms}
+.js .mvt-cp-hrule.mvt-rev{opacity:0;transform:scaleX(0);transform-origin:right center;
+  transition:transform var(--t-draw) var(--ease-draw) 520ms,opacity 220ms linear 520ms}
+.mvt-cp-vrule.mvt-rev.is-in,.mvt-cp-hrule.mvt-rev.is-in{opacity:1;transform:none}
+
+.mvt-cp-col{grid-column:5;grid-row:1/6;display:flex;padding-top:2px}
+/* the inscription is a monument or it is nothing: sized so the 9-glyph column
+   runs ~94–100% of the composition's height and its ink dies within ~40px of
+   the shared baseline — the seam and the inscription end together. The
+   .mvt-root prefix keeps the size out of reach of the global :lang() rules. */
+.mvt-root .mvt-cp-cjk{writing-mode:vertical-rl;text-orientation:upright;
+  font-family:var(--f-hant);font-weight:600;font-style:normal;color:var(--brass);
+  font-size:clamp(28px,3vw,72px);line-height:1.08;letter-spacing:.4em}
+
+.mvt-cp-lower{grid-column:1;grid-row:5;display:flex;align-items:stretch;
+  justify-content:space-between;gap:clamp(28px,3vw,72px)}
+
+/* a fixed 13:10 plate, crop only, brass hairline seam — never absolute-filled
+   into leftover grid space. align-self:flex-end so the frame always hugs the
+   image AND its bottom always sits on the implied baseline: where the 20,000
+   ensemble grows taller than the plate (credential lines wrapping ~1024), a
+   stretched cross-axis would drag the brass ring past the image as an empty
+   frame. Seated on the baseline, all three objects share the one line. */
+.mvt-cp-photo{flex:0 0 auto;align-self:flex-end;margin:0;
+  width:clamp(260px,min(24vw,47svh),610px);border-radius:3px;overflow:hidden;
+  box-shadow:0 0 0 1px var(--brass),0 0 0 2px rgba(4,1,16,.65),
+    22px 26px 48px -12px var(--lac-void)}
+/* height:auto neutralises the intrinsic height attribute so the 13:10 crop,
+   not the file's 3:2, sets the plate. */
+.mvt-cp-photo img{display:block;width:100%;height:auto;aspect-ratio:13/10;
+  object-fit:cover;object-position:12% 50%}
+
+/* the closing rail: stretch to the portrait's height, two stations — the scope
+   line seated under the joint, then the facts + CTA bottom-packed as ONE
+   counterweight mass on the implied baseline. */
+.mvt-cp-close{flex:0 1 auto;min-width:0;display:flex;flex-direction:column;
+  align-items:flex-end;text-align:right;justify-content:space-between;gap:14px}
+.mvt-cp-scope{color:var(--brass);font-size:clamp(11.5px,0.62vw,15px)}
+.mvt-cp-anchor{display:flex;flex-direction:column;align-items:flex-end;gap:clamp(16px,1vw,24px)}
+.mvt-cp-facts{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.mvt-cp-fact{margin:0;color:var(--ink-2);font-size:calc(17px + var(--step) * 2);line-height:1.5}
+.mvt-cp-close .mvt-plate-cta{min-height:52px;padding:0 26px}
+
+/* the 20,000 ensemble — the third object on the implied baseline. It fills the
+   lower storey's bounded air between the portrait and the closing rail with
+   INFORMATION, not ornament: the hours figure (outcome gold, the page's one
+   large gold flood in the hero), its label pair, and the three credential
+   lines, all bottom-packed so portrait bottom = ensemble bottom = CTA bottom.
+   Hierarchy: name 204px ivory serif first, 20,000 ~112px gold second — the
+   numeral keeps the channel's condensed gothic voice (--f-ui 600 / 88%), so it
+   reads as an instrument figure, never a second nameplate. */
+.mvt-cp-ens{flex:1 1 auto;min-width:0;align-self:stretch;display:flex;flex-direction:column;
+  align-items:flex-start;justify-content:flex-end;padding-bottom:2px}
+.mvt-cp-count{display:block;font-family:var(--f-ui);font-weight:600;font-stretch:88%;
+  color:var(--au-lit);font-size:clamp(58px,4.4vw,112px);letter-spacing:-.03em;line-height:.85;
+  text-shadow:0 1px 0 rgba(4,1,16,.85)}
+.mvt-cp-hours{display:flex;flex-direction:column;gap:5px;color:var(--ink-2);
+  margin:clamp(10px,0.7vw,16px) 0 0}
+.mvt-cp-hours strong{font-weight:400;font-size:clamp(17px,1.05vw,24px);line-height:1.35}
+.mvt-cp-cred{display:flex;flex-direction:column;gap:9px;margin:clamp(18px,1.4vw,30px) 0 0;
+  padding:0;list-style:none}
+.mvt-cp-cred li{display:flex;align-items:flex-start;gap:12px;color:var(--ink-2);
+  font-size:clamp(15px,0.66vw,17px);line-height:1.5}
+.mvt-cp-cred i{display:block;width:8px;height:8px;transform:rotate(45deg);
+  background:var(--brass-cast);flex:none;margin-top:calc(.75em - 4px);
+  box-shadow:0 0 0 1px rgba(4,1,16,.5)}
+.mvt-cp-cred li b{font-weight:400;color:var(--brass)}
+
+/* the closing cluster sits in the viewport's bottom band at common folds, where
+   the shared scroll-reveal's 92% line would leave it invisible until the first
+   scroll — so it reveals ON LOAD instead, viewport-independent. fill-mode
+   backwards: after the animation the natural styles rule, so the CTA's hover
+   transform keeps working. Gated on `.js` for the same reason as the rules. */
+@keyframes mvt-cp-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.js .mvt-cp-scope,.js .mvt-cp-facts,.js .mvt-cp-close .mvt-plate-cta,.js .mvt-cp-ens{
+  animation:mvt-cp-in 620ms var(--ease-reveal) backwards}
+.js .mvt-cp-scope{animation-delay:340ms}
+.js .mvt-cp-ens{animation-delay:400ms}
+.js .mvt-cp-facts{animation-delay:460ms}
+.js .mvt-cp-close .mvt-plate-cta{animation-delay:600ms}
+
+@media (max-width:820px){
+  .mvt-cp-lower{flex-direction:column;align-items:stretch;gap:22px}
+  .mvt-cp-photo{width:100%}
+  .mvt-cp-ens{align-self:auto;justify-content:flex-start;padding-bottom:0}
+  .mvt-cp-close{align-items:flex-start;text-align:left;justify-content:flex-start;gap:18px}
+  .mvt-cp-anchor,.mvt-cp-facts{align-items:flex-start}
+  .mvt-cp-close .mvt-plate-cta{align-self:stretch;justify-content:center}
+  .mvt-root .mvt-cp-cjk{font-size:clamp(22px,3.4vw,34px);letter-spacing:.3em}
+}
+@media (max-width:480px){
+  .mvt-cp-eyebrow{letter-spacing:.18em}
+}
+@media (prefers-reduced-motion:reduce){
+  /* the global RM override zeroes durations, not delays — without this the
+     closing cluster would hold its backwards fill (opacity 0) through the
+     stagger delays and pop in late, and the rules would wait 140/520ms. */
+  .js .mvt-cp-vrule.mvt-rev,.js .mvt-cp-hrule.mvt-rev{transition-delay:0ms}
+  .js .mvt-cp-scope,.js .mvt-cp-facts,.js .mvt-cp-ens,
+  .js .mvt-cp-close .mvt-plate-cta{animation-delay:0ms}
+}

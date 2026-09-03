@@ -31,6 +31,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -38,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# static export output — never commit (CLAUDE.md non-negotiable #5)
+/out/
+
+# the owner's source sales PDFs — input material, used once. The durable
+# artifacts are public/courses/*.webp and the JSON that describes them; nothing
+# in the build, the schema or the page reads a PDF. At
+# 27.6 MB they are dead weight on a repo whose entire deploy trigger is a push.
+# Re-generate the pages with `scripts/extract-outline-pages.ts`.
+/courses/
+
+# local working notes
+/docs/other/
+/CLAUDE.local.md

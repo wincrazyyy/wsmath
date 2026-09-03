@@ -1,0 +1,120 @@
+/* ══ about — "Premium Exam Coaching" ═══════════════════════════════════════
+   Transcribed from the locked artifact (scratchpad/v6-3-2.html, CSS 841–927).
+
+   Donor: v5.5 #wsd5-about. The heading and both content groups run down the
+   LEFT column; the figure sits on the RIGHT with the who-panel beneath it; the
+   seven result pills run full-width under the grid. Material stays v5.2: paper
+   inlays in wells, a raised photo plate, a debossed chip. v6.3.2: the two paper
+   sheets sit SIDE BY SIDE under the heading so the ruling is inhabited, and the
+   photo plate frames the image evenly (its caption bar is deleted). No red
+   anywhere; gold appears only as outcome strikes.
+
+   OWNERSHIP NOTE — `.mvt-paper` is the one class here the artifact also puts on
+   another section's markup (the FAQ answer sheets are `.mvt-ans.mvt-paper`), so
+   EVERY rule for it is scoped under `.mvt-about-papers`. The FAQ builder made
+   `.mvt-ans` self-sufficient (it re-declares ground, ruling, padding and shadow
+   at (0,2,0)); an unnamespaced `.mvt-paper` base would still have leaked the one
+   property `.mvt-ans` does not restate — `height:100%` — into a collapsing
+   `grid-template-rows` accordion on the composed page. Scoping removes that
+   coupling entirely. `.mvt-paper :focus-visible` in globals.css keeps working:
+   the class stays on both elements. See notes/about.md §3.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.mvt-about-grid{display:grid;grid-template-columns:60fr 40fr;gap:clamp(28px,3vw,56px);align-items:stretch}
+.mvt-about-main{display:flex;flex-direction:column;gap:clamp(20px,2vw,34px)}
+.mvt-about-head{display:flex;flex-direction:column;gap:16px}
+.mvt-about-head .mvt-hair{margin-top:-2px}
+.mvt-about-head .mvt-lead{color:var(--ink-2);max-width:52ch}
+.mvt-about-papers{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,1.5vw,28px);
+  align-items:stretch;flex:1 1 auto}
+.mvt-about-side{display:flex;flex-direction:column;gap:20px}
+
+/* the raised photo plate — 12px of lacquer all round, no caption bar */
+.mvt-photo{padding:12px;overflow:hidden}
+.mvt-photo figure{position:relative;aspect-ratio:16/11;border-radius:14px 3px 14px 3px;overflow:hidden;
+  background:var(--lac-well);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+.mvt-photo img{width:100%;height:100%;object-fit:cover}
+
+/* the debossed setup chip — scoped: `.mvt-chip`/`.mvt-chipwrap` are generic enough
+   names that another section could reach for them later, and in v6.3.2 they appear
+   in exactly one place (the who-panel). */
+.mvt-who .mvt-chipwrap{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.mvt-who .mvt-chip{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:999px;
+  background:linear-gradient(163deg,var(--lac-lit),var(--lac-face));color:var(--ink);
+  box-shadow:inset 0 1px 0 color-mix(in oklab,var(--brass) 50%,transparent),
+    0 0 0 1px color-mix(in oklab,var(--brass) 60%,transparent),0 3px 6px rgba(4,1,16,.4)}
+
+/* who I teach — a shallow well that takes up the slack under the photo */
+.mvt-who{display:flex;flex-direction:column;gap:14px;justify-content:space-between;
+  padding:clamp(18px,1.6vw,26px) clamp(18px,1.8vw,30px);flex:1 1 auto}
+.mvt-who > .mvt-mu{color:var(--brass);padding-bottom:12px;
+  border-bottom:1px solid color-mix(in oklab,var(--brass) 46%,transparent)}
+.mvt-who-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;color:var(--ink-2);font-size:15px}
+.mvt-who-row b{color:var(--ink);font-weight:400;font-family:var(--f-display);
+  font-size:clamp(19px,1.4vw,26px);line-height:1.3}
+.mvt-who dl{display:grid;grid-template-columns:auto 1fr;align-items:baseline;
+  gap:8px clamp(14px,1.4vw,26px);margin:0}
+.mvt-who dt{color:var(--brass);font-family:var(--f-ui);font-size:11.5px;font-weight:600;font-stretch:82%;
+  letter-spacing:.24em;text-transform:uppercase}
+/* the value cell is a mono code run (`.mvt-code` = .9em of the dd's 15px, leading
+   1.6 → 21.6px). Its leading is set to the code's own — 0.9 × 1.6 = 1.44em — so a
+   code list that wraps (390px) sets on the mono's rhythm and the dt/dd rows hug
+   their content. The artifact reads 1.6 here but renders in QUIRKS mode (it has no
+   doctype — `document.compatMode === "BackCompat"`), where the block strut is
+   dropped and the row collapses to the span's 21.6px anyway; declaring 1.44
+   reproduces the approved render in standards mode instead of inheriting a 24px
+   strut the design never showed. See notes/about.md §2. */
+.mvt-who dd{margin:0;color:var(--ink-2);font-size:15px;line-height:1.44}
+.mvt-who dd b{color:var(--ink);font-weight:400}
+.mvt-who .mvt-chipwrap{padding-top:4px}
+
+/* paper inlays — the light in a dark page. v6.3.2: the sheets are half-column
+   and the items are set in the page's serif body register (the testimonial
+   blockquotes' voice), line-height locked to the 30px ruling pitch, so the text
+   inhabits the ruled lines instead of a condensed gothic floating over
+   two-thirds of blank paper. */
+.mvt-about-papers .mvt-inlay{padding:10px;flex:1 1 auto}
+.mvt-about-papers .mvt-paper{position:relative;background:var(--paper);color:var(--paper-ink);border-radius:2px;
+  padding:clamp(20px,2vw,40px) clamp(20px,2.2vw,44px) clamp(14px,1.6vw,30px);height:100%;
+  background-image:repeating-linear-gradient(transparent 0 29px,color-mix(in oklab,var(--paper-ink) 9%,transparent) 29px 30px);
+  box-shadow:0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(32,31,42,.14),
+    inset 0 2px 6px -3px rgba(32,31,42,.35);
+  display:flex;flex-direction:column}
+.mvt-about-papers .mvt-paper h3{color:var(--brass-ink);margin-bottom:10px}
+.mvt-about-papers .mvt-paper ul{display:flex;flex-direction:column;flex:1 1 auto}
+.mvt-about-papers .mvt-paper li{position:relative;flex:1 1 auto;display:flex;align-items:center;padding:10px 0;
+  font-family:var(--f-display);font-size:clamp(16.5px,1.15vw,20px);line-height:30px;
+  color:var(--paper-ink);font-variant-numeric:oldstyle-nums proportional-nums;
+  border-bottom:1px solid color-mix(in oklab,var(--paper-ink) 14%,transparent)}
+.mvt-about-papers .mvt-paper li:last-child{border-bottom:0}
+
+/* result pills — v6.3.2: the champlevé slabs (--au-deep grounds, the least-golden
+   gold on the page) are replaced by dark lacquer wells in the hero facts' register:
+   record text in ink, every outcome struck in bright --au-lit, brass hairline seams.
+   Count-aware ledger grid over 12 columns — spans always sum each row to 12
+   (>=1680: 3·3·3·3 / 4·4·4 = rows of 4+3; below: 4·4·4 / 6·6 / 6·6 = rows of
+   3+2+2; <=1024 the pills stack) — so no record count can strand an orphan. */
+.mvt-pills{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;
+  margin-top:clamp(26px,2.4vw,44px)}
+.mvt-pills li{grid-column:span 3;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;
+  padding:15px 20px;font-size:15px;line-height:1.4;border-radius:4px 12px 4px 12px;
+  box-shadow:inset 8px 9px 14px -4px var(--lac-void),
+    inset -6px -6px 14px -6px color-mix(in oklab,var(--lac-lit) 56%,transparent),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 52%,transparent),
+    0 0 0 1px color-mix(in oklab,var(--brass) 34%,transparent),
+    0 1px 0 rgba(255,255,255,.05)}
+.mvt-pills li:nth-child(n+5){grid-column:span 4}
+.mvt-pills b{flex:1 1 auto;font-weight:400;color:var(--ink)}
+.mvt-pills > li > span{color:var(--ink-2)}
+
+@media (max-width:1679px){
+  .mvt-pills li:nth-child(n){grid-column:span 4}
+  .mvt-pills li:nth-child(n+4){grid-column:span 6}
+}
+@media (max-width:1024px){
+  .mvt-about-grid{grid-template-columns:1fr}
+  .mvt-pills li:nth-child(n){grid-column:1/-1}
+}
+@media (max-width:640px){
+  .mvt-about-papers{grid-template-columns:1fr}
+}

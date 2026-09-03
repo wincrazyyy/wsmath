@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { geistSans, geistMono, rubik } from "./_lib/fonts";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wsmath.com"),
-  title: "WSMath",
+  title: "WSMath — Winson Siu · International Mathematics Exam Strategist",
   description: "International Mathematics Exam Strategist",
 
   openGraph: {
     type: "website",
     url: "https://wsmath.com/",
-    title: "WSMath",
+    title: "WSMath — Winson Siu · International Mathematics Exam Strategist",
     description: "International Mathematics Exam Strategist",
     images: [
       {
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "WSMath",
+    title: "WSMath — Winson Siu · International Mathematics Exam Strategist",
     description: "International Mathematics Exam Strategist",
     images: ["/opengraph-image.png"],
   },
@@ -34,6 +33,21 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  colorScheme: "dark",
+  themeColor: "#1c0848",
+};
+
+/**
+ * The reveal system hides `.mvt-rev` only once `body.js` is present, so a
+ * reader without JavaScript never meets a blank page. Setting the class from
+ * an inline script that is the first child of <body> means the flag lands
+ * before the browser paints anything below it — no flash of revealed content.
+ */
+const JS_FLAG = "document.body.classList.add('js')";
+
 export default function RootLayout({
   children,
 }: {
@@ -41,9 +55,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${rubik.variable} antialiased`}
-      >
+      {/* `suppressHydrationWarning` is scoped to <body>'s own attributes: the
+          inline script below adds `js` before React hydrates, and without this
+          React reports the extra class as a mismatch. Children still hydrate
+          under the normal checks. */}
+      <body suppressHydrationWarning>
+        <script dangerouslySetInnerHTML={{ __html: JS_FLAG }} />
         {children}
       </body>
     </html>

@@ -1,0 +1,101 @@
+/* ── the fixed pair: WhatsApp coin + "Your plan" panel ─────────────────────
+   Artifact CSS 625–683, MODIFIED for the client-required REPLACEMENT
+   behaviour (spec/issues.md §c): the panel takes the coin's corner
+   (bottom:24 right:24, z 90) and the coin fades/scales out while the panel is
+   visible; the coin returns ~120ms after the panel parks or hides. At no
+   scroll position are both visible. The --coin-w lane in .mvt-wrap and
+   .mvt-trough stays reserved even while the coin is hidden. */
+
+/* floating brass coin */
+.mvt-coin{position:fixed;right:24px;bottom:24px;z-index:90;width:56px;height:56px;border-radius:50%;
+  display:grid;place-items:center;background:var(--brass-radial);
+  box-shadow:0 0 0 1px rgba(4,1,16,.62),inset 0 1px 0 rgba(255,255,255,.6),
+    0 6px 10px rgba(4,1,16,.5),0 18px 40px -10px var(--lac-void);
+  /* return path: fade back in, delayed 120ms so coin and panel never overlap */
+  transition:opacity 220ms var(--ease-settle) 120ms,transform 220ms var(--ease-settle) 120ms,
+    visibility 0s linear 120ms}
+.mvt-coin span{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;
+  background:var(--lac-void);box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.mvt-coin svg{width:22px;height:22px;fill:var(--wa)}
+.mvt-coin.is-hidden{opacity:0;transform:scale(.6);visibility:hidden;pointer-events:none;
+  /* exit path: immediate cross-fade while the panel rises */
+  transition:opacity 220ms var(--ease-settle),transform 220ms var(--ease-settle),
+    visibility 0s linear 220ms}
+@media (max-width:1024px){
+  .mvt-coin{width:48px;height:48px;right:12px;bottom:16px}
+  .mvt-coin span{width:34px;height:34px}
+  .mvt-coin svg{width:18px;height:18px}
+}
+
+/* the "Your plan" panel — PREMIUM contents only: plan name, price, one
+   WhatsApp CTA whose prefill names the chosen plan. No struck anchor, no
+   SAVE-% theatre — scarcity red stays confined to the ribbon. It IS the
+   corner object while visible, so it holds the coin's own anchor and z. */
+.mvt-bb{position:fixed;right:24px;bottom:24px;z-index:90;width:min(330px,calc(100vw - 48px));
+  padding:clamp(16px,1.4vw,22px) clamp(18px,1.6vw,24px);display:flex;flex-direction:column;gap:10px;
+  opacity:0;visibility:hidden;transform:translateY(16px);
+  transition:opacity 320ms var(--ease-settle),transform 320ms var(--ease-settle),
+    visibility 0s linear 320ms,outline-color 200ms linear;
+  outline:2px solid transparent;outline-offset:3px}
+.mvt-bb.is-live:not(.is-parked){opacity:1;visibility:visible;transform:none;
+  transition:opacity 320ms var(--ease-settle),transform 320ms var(--ease-settle),
+    visibility 0s,outline-color 200ms linear}
+.mvt-bb.is-swap{outline-color:var(--brass)}
+.mvt-bb > .mvt-mu{color:var(--brass);display:flex;align-items:center;gap:10px}
+.mvt-bb > .mvt-mu::after{content:"";flex:1 1 auto;height:1px;
+  background:linear-gradient(90deg,color-mix(in oklab,var(--brass) 62%,transparent),transparent)}
+.mvt-bb-name{font-family:var(--f-display);font-size:clamp(17px,1.2vw,21px);font-weight:600;
+  line-height:1.25;color:var(--ink);text-wrap:balance}
+.mvt-bb-price{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px}
+.mvt-bb-price b{font-family:var(--f-display);font-size:clamp(26px,2vw,34px);font-weight:600;line-height:1}
+.mvt-bb-inner{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mvt-bb .mvt-plate-cta{justify-content:center;margin-top:4px}
+@media (max-width:1279px){
+  /* full-width bottom bar — the coin's lane reservation existed only to
+     coexist with the coin, and under replacement they never coexist */
+  .mvt-bb{right:0;left:0;bottom:0;width:auto;border-radius:14px 14px 0 0;
+    flex-direction:row;align-items:center;gap:14px;padding:10px clamp(14px,2.4vw,24px);
+    transform:translateY(110%)}
+  .mvt-bb.is-live:not(.is-parked){transform:none}
+  .mvt-bb > .mvt-mu{display:none}
+  .mvt-bb-inner{display:flex;align-items:baseline;gap:12px;flex:1 1 auto;min-width:0;flex-wrap:nowrap}
+  .mvt-bb-name{font-size:14px;line-height:1.3;flex:1 1 auto;min-width:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mvt-bb-price{flex:0 0 auto;flex-wrap:nowrap}
+  .mvt-bb-price b{font-size:19px}
+  .mvt-bb .mvt-plate-cta{margin-top:0;flex:0 0 auto;min-height:40px;padding:0 16px}
+}
+@media (max-width:560px){
+  .mvt-bb-price .mvt-small{display:none}
+}
+/* The sheds above are all WIDTH sheds, so a landscape phone — 844×390, the
+   SHORTEST viewport there is — gets the tallest bar: 74px of bar under a 64px
+   nav is 35% of the screen permanently chrome. The per-unit line is the 14px
+   the row spends on its second metric, and it is the right one to lose when
+   the constraint is height rather than width. */
+@media (max-height:480px){
+  .mvt-bb-price .mvt-small{display:none}
+  .mvt-bb{padding-block:6px}
+}
+/* Below ~480px the row budget (price + CTA + padding) leaves the name a third
+   of its string. Shedding it was right when there was ONE group plan and one
+   long name; with four paths the NAME is the thing the bar exists to say —
+   "from HKD 16,800 · GET IN TOUCH" with nothing naming which of four plans that
+   is names nothing at all. The row cannot hold name and price side by side at
+   this width, so the pair stacks: 140 + 14 + 186 + 28 = 368 ≤ 390. The ≤560
+   unit shed and the ≤480-height shed already keep the bar short. */
+@media (max-width:479px){
+  .mvt-bb-inner{flex-direction:column;align-items:flex-start;gap:2px;flex-wrap:nowrap}
+  /* `align-items:flex-start` sizes a column child to its own max-content, and
+     `min-width:0` constrains nothing across a column's cross axis — so the two
+     long board names (189px and 200px) painted straight over the GET IN TOUCH
+     plate on a 157px column, because both the bar and its inner compute
+     `overflow:visible`. The arithmetic behind this shed was checked at 390 and
+     390 only; 360 is a shipping width and 200px is not 140px. `align-self`
+     hands the name the column's real width back, and the ≤1279 ellipsis it
+     already carries is released to wrap to a second line instead — a name is
+     what the bar exists to say, so it gets two lines before it gets a clip. */
+  .mvt-bb-name{flex:0 0 auto;align-self:stretch;font-size:12px;line-height:1.25;
+    white-space:normal;overflow:hidden;
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+}

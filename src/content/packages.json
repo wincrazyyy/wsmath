@@ -1,0 +1,413 @@
+[
+  {
+    "id": "private",
+    "kind": "private",
+    "tagline": "Customised coaching",
+    "title": "IBDP Private coaching",
+    "price": {
+      "now": "{{money pricing.privateHourlyRate}}",
+      "per": "/ {{programme.sessionMinutes}} min · typical rate"
+    },
+    "description": "For students who want maximum customisation, tight accountability, and fast score improvements.",
+    "bullets": [
+      {
+        "id": "deep-dive-school-tests",
+        "text": "Deep dive into school tests, Math IA preparation, and mock exams."
+      },
+      {
+        "id": "personalised-drills",
+        "text": "Fully personalised by-topic drills and homework, adjusted weekly."
+      },
+      {
+        "id": "weekly-tracking",
+        "text": "Weekly performance tracking with targeted correction of weak topics."
+      },
+      {
+        "id": "level-7-pacing",
+        "text": "Ideal if you’re pushing for Level 7 and want strict pacing."
+      }
+    ],
+    "includedTitle": "{{programme.intensiveLessonCount}}-lesson intensive · ~{{money pricing.intensiveBlockCost}} ({{programme.intensiveLessonCount}} × {{programme.sessionMinutes}} mins)",
+    "included": [
+      {
+        "id": "priority-correspondence",
+        "text": "Priority online correspondence."
+      },
+      {
+        "id": "unlimited-past-paper-practice",
+        "text": "Unlimited tailor-made past-paper practice with step-by-step solutions."
+      },
+      {
+        "id": "intensive-lessons",
+        "text": "{{programme.intensiveLessonCount}} online lessons of {{programme.sessionMinutes}} minutes with custom time allocation."
+      },
+      {
+        "id": "topic-summary-and-mock-prediction",
+        "text": "Detailed summary by topic and school mock exam prediction."
+      },
+      {
+        "id": "ia-setup-and-guidance",
+        "text": "IBDP Math IA topic setup & guidance until completion."
+      },
+      {
+        "id": "improvement-with-consistency",
+        "text": "Many students see strong improvement with consistent attendance and a disciplined weekly workload. Outcomes vary by starting level and timeline."
+      },
+      {
+        "id": "referral-rebate",
+        "text": "Referral rebate of up to {{money pricing.referralRebateMax}} per student referred."
+      }
+    ],
+    "coverage": {
+      "label": "Every board covered",
+      "value": "{{content.courseCount}} courses across {{programme.curriculaLabel}}"
+    },
+    "footTag": "Private coaching · Personalised strategy",
+    "ctaKey": "private"
+  },
+  {
+    "id": "ibdp",
+    "kind": "board",
+    "tag": "Most popular",
+    "tagline": "Live Zoom group course",
+    "title": "IBDP Mathematics",
+    "price": {
+      "now": "from {{money pricing.coursePrice}}",
+      "was": "was {{money pricing.courseListPrice}}",
+      "per": "· {{programme.ibdpLessonCount}} live lessons"
+    },
+    "description": "Four separate courses — Analysis & Approaches and Applications & Interpretation, each at SL and HL. Every one runs {{programme.ibdpLessonCount}} live {{setup.platform}} lessons on Sunday, with unlimited replays.",
+    "bullets": [
+      {
+        "id": "replays",
+        "text": "Unlimited replays of every live {{setup.platform}} lesson."
+      },
+      {
+        "id": "notes-drills",
+        "text": "Course notes for fast revision, and curated past-paper drills across all five core topics."
+      },
+      {
+        "id": "gdc",
+        "text": "Market-exclusive GDC technique, taught paper by paper."
+      }
+    ],
+    "included": [],
+    "footTag": "Live Zoom · Sundays · Replays included",
+    "variants": [
+      {
+        "id": "aasl",
+        "code": "AASL",
+        "courseId": "math-analysis-and-approaches-sl",
+        "title": "Math Analysis and Approaches SL",
+        "delivery": "live",
+        "meta": "Sundays 10:00–10:50 · {{programme.ibdpLessonCount}} live {{setup.platform}} lessons",
+        "price": "{{money pricing.coursePrice}}",
+        "tier": "standard",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersIbdp}} past papers"
+          },
+          {
+            "id": "video",
+            "text": "{{programme.ibdpBonusVideoHoursStandard}} hrs bonus video"
+          },
+          {
+            "id": "qa",
+            "text": "Live answers in class"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/ibdp/aasl.webp",
+          "alt": "AASL course outline — Sunday schedule, five core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      },
+      {
+        "id": "aahl",
+        "code": "AAHL",
+        "courseId": "math-analysis-and-approaches-hl",
+        "title": "Math Analysis and Approaches HL",
+        "delivery": "live",
+        "meta": "Sundays 11:00–11:50 · {{programme.ibdpLessonCount}} live {{setup.platform}} lessons",
+        "price": "{{money pricing.coursePriceHigher}}",
+        "tier": "higher",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersIbdp}} past papers"
+          },
+          {
+            "id": "video",
+            "text": "{{programme.ibdpBonusVideoHoursAdvanced}} hrs bonus video"
+          },
+          {
+            "id": "p3",
+            "text": "Market-exclusive Paper 3 teaching"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/ibdp/aahl.webp",
+          "alt": "AAHL course outline — Sunday schedule, five core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      },
+      {
+        "id": "aisl",
+        "code": "AISL",
+        "courseId": "math-applications-and-interpretation-sl",
+        "title": "Math Applications and Interpretation SL",
+        "delivery": "live",
+        "meta": "Sundays 12:00–12:50 · {{programme.ibdpLessonCount}} live {{setup.platform}} lessons",
+        "price": "{{money pricing.coursePrice}}",
+        "tier": "standard",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersIbdp}} past papers"
+          },
+          {
+            "id": "video",
+            "text": "{{programme.ibdpBonusVideoHoursStandard}} hrs bonus video"
+          },
+          {
+            "id": "qa",
+            "text": "Live answers in class"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/ibdp/aisl.webp",
+          "alt": "AISL course outline — Sunday schedule, five core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      },
+      {
+        "id": "aihl",
+        "code": "AIHL",
+        "courseId": "math-applications-and-interpretation-hl",
+        "title": "Math Applications and Interpretation HL",
+        "delivery": "live",
+        "meta": "Sundays 13:00–13:50 · {{programme.ibdpLessonCount}} live {{setup.platform}} lessons",
+        "price": "{{money pricing.coursePriceHigher}}",
+        "tier": "higher",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersIbdp}} past papers"
+          },
+          {
+            "id": "video",
+            "text": "{{programme.ibdpBonusVideoHoursAdvanced}} hrs bonus video"
+          },
+          {
+            "id": "p3",
+            "text": "Market-exclusive Paper 3 teaching"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/ibdp/aihl.webp",
+          "alt": "AIHL course outline — Sunday schedule, five core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      }
+    ],
+    "outline": {
+      "label": "IBDP course outline",
+      "caption": "Course outline · one page per course. Topics, schedule and price for AASL, AAHL, AISL and AIHL.",
+      "autoAdvanceSeconds": 6
+    },
+    "ctaKey": "ibdp"
+  },
+  {
+    "id": "ial",
+    "kind": "board",
+    "tagline": "Pearson Edexcel · Live Zoom group course",
+    "title": "International A-Level Mathematics",
+    "price": {
+      "now": "{{money pricing.coursePrice}}",
+      "was": "was {{money pricing.courseListPrice}}",
+      "per": "· {{programme.ialLessonCount}} live lessons"
+    },
+    "description": "One course covering all six units — Pure Math 1–4, Statistics 1 and Mechanics 1 — across {{programme.ialLessonCount}} live {{setup.platform}} lessons on Sunday, with unlimited replays.",
+    "bullets": [
+      {
+        "id": "replays",
+        "text": "Unlimited replays of every live {{setup.platform}} lesson."
+      },
+      {
+        "id": "notes-drills",
+        "text": "Course notes for fast revision, and curated past-paper drills across all six units."
+      },
+      {
+        "id": "astar",
+        "text": "Market-exclusive A* strategy and GDC technique."
+      }
+    ],
+    "included": [],
+    "footTag": "Live Zoom · Sundays · A* strategy",
+    "variants": [
+      {
+        "id": "ial-math",
+        "code": "YMA01",
+        "courseId": "edexcel-ial-math-yma01",
+        "title": "Edexcel IAL Mathematics",
+        "delivery": "live",
+        "meta": "Sundays 15:00–15:50 · {{programme.ialLessonCount}} live {{setup.platform}} lessons",
+        "price": "{{money pricing.coursePrice}}",
+        "tier": "standard",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersIal}} past papers"
+          },
+          {
+            "id": "units",
+            "text": "P1 · P2 · P3 · P4 · S1 · M1"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/ial/ial-math.webp",
+          "alt": "Edexcel International A-Level Mathematics course outline — Sunday schedule, six units, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      }
+    ],
+    "outline": {
+      "label": "International A-Level course outline",
+      "caption": "Course outline · Pure Math 1–4, Statistics 1 and Mechanics 1, with the Sunday schedule and price.",
+      "autoAdvanceSeconds": 6
+    },
+    "ctaKey": "ial"
+  },
+  {
+    "id": "igcse",
+    "kind": "board",
+    "tagline": "Video courses + live Zoom",
+    "title": "International GCSE Mathematics",
+    "price": {
+      "now": "from {{money pricing.coursePrice}}",
+      "was": "was {{money pricing.courseListPrice}}",
+      "per": "· video + live options"
+    },
+    "description": "The bridge into IBDP and IAL. 0607 and 0606 are self-paced video courses; 4MA1 runs live on Sunday. Every one upgrades free to the IBDP or IAL video course later.",
+    "bullets": [
+      {
+        "id": "notes-drills",
+        "text": "Course notes for fast revision, and curated past-paper drills across every core topic."
+      },
+      {
+        "id": "upgrade",
+        "text": "Free upgrade to the IBDP or IAL video course when you move up."
+      },
+      {
+        "id": "calculator",
+        "text": "Advanced calculator technique, taught paper by paper."
+      }
+    ],
+    "included": [],
+    "footTag": "Video + live · Free IBDP/IAL upgrade",
+    "variants": [
+      {
+        "id": "0607",
+        "code": "0607",
+        "courseId": "cambridge-international-math-0607",
+        "title": "Cambridge International Math",
+        "delivery": "video",
+        "meta": "Self-paced · {{programme.videoHours0607}} hrs of teaching video",
+        "price": "{{money pricing.coursePrice}}",
+        "tier": "standard",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersCambridgeIgcse}} past papers"
+          },
+          {
+            "id": "p6",
+            "text": "Market-exclusive Paper 6 teaching"
+          },
+          {
+            "id": "gdc",
+            "text": "GDC technique"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/igcse/0607.webp",
+          "alt": "Cambridge IGCSE International Mathematics 0607 course outline — core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      },
+      {
+        "id": "0606",
+        "code": "0606",
+        "courseId": "cambridge-additional-math-0606",
+        "title": "Cambridge Additional Math",
+        "delivery": "video",
+        "meta": "Self-paced · {{programme.videoHours0606}} hrs of teaching video",
+        "price": "{{money pricing.coursePriceHigher}}",
+        "tier": "higher",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersCambridgeIgcse}} past papers"
+          },
+          {
+            "id": "bundle",
+            "text": "Includes all {{programme.videoHours0607}} hrs of the 0607 videos"
+          },
+          {
+            "id": "bridge",
+            "text": "Bridges straight into IBDP AAHL"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/igcse/0606.webp",
+          "alt": "Cambridge IGCSE Additional Mathematics 0606 course outline — core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      },
+      {
+        "id": "4ma1",
+        "code": "4MA1",
+        "courseId": "edexcel-igcse-math-a-4ma1",
+        "title": "Edexcel Math A",
+        "delivery": "live",
+        "meta": "Sundays 14:00–14:50 · {{programme.edexcelIgcseLessonCount}} live {{setup.platform}} lessons",
+        "price": "{{money pricing.coursePrice}}",
+        "tier": "standard",
+        "badges": [
+          {
+            "id": "papers",
+            "text": "{{stats.pastPapersEdexcelIgcse}} past papers"
+          },
+          {
+            "id": "replays",
+            "text": "{{setup.platform}} replays included"
+          },
+          {
+            "id": "qa",
+            "text": "Live answers in class"
+          }
+        ],
+        "outlinePage": {
+          "src": "/courses/igcse/4ma1.webp",
+          "alt": "Edexcel International GCSE Mathematics A 4MA1 course outline — Sunday schedule, core topics, package contents and price.",
+          "width": 1500,
+          "height": 2123
+        }
+      }
+    ],
+    "outline": {
+      "label": "International GCSE course outline",
+      "caption": "Course outline · 0607, 0606 and 4MA1 — topics, delivery and price for each.",
+      "autoAdvanceSeconds": 6
+    },
+    "ctaKey": "igcse"
+  }
+]

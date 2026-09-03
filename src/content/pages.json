@@ -1,0 +1,819 @@
+{
+  "sectionMarks": [
+    {
+      "id": "about",
+      "label": "About WSMath"
+    },
+    {
+      "id": "packages",
+      "label": "Packages"
+    },
+    {
+      "id": "results",
+      "label": "Results"
+    },
+    {
+      "id": "voices",
+      "label": "Testimonials"
+    },
+    {
+      "id": "faq",
+      "label": "FAQs"
+    },
+    {
+      "id": "footer",
+      "label": "Contact"
+    }
+  ],
+  "nav": {
+    "brandLabel": "WSMath",
+    "menuLabel": "Primary",
+    "ctaLabel": "Get in touch",
+    "ctaKey": "nav",
+    "skipLabel": "Skip to content"
+  },
+  "hero": {
+    "eyebrow": "{{brand.taglineEn}}",
+    "place": "{{contact.timezoneLabel}}",
+    "nameLine1": "Winson",
+    "nameLine2": "Siu",
+    "inscription": "{{brand.taglineZh}}",
+    "portrait": {
+      "src": "/hero.webp",
+      "alt": "Winson Siu — portrait",
+      "width": 1600,
+      "height": 1067
+    },
+    "band": {
+      "statLabel": "1-to-1 tutoring hours",
+      "statSublabel": "since {{stats.teachingSinceLabel}}",
+      "proof": [
+        {
+          "id": "students-lessons-years",
+          "parts": [
+            {
+              "id": "students",
+              "text": "{{plus stats.studentsCoached}} students coached (1-to-1) ",
+              "strong": false
+            },
+            {
+              "id": "sep-1",
+              "text": "•",
+              "strong": true
+            },
+            {
+              "id": "lessons",
+              "text": " {{plus stats.lessonsTaught}} lessons ",
+              "strong": false
+            },
+            {
+              "id": "sep-2",
+              "text": "•",
+              "strong": true
+            },
+            {
+              "id": "years",
+              "text": " {{stats.yearsExperience}} yrs",
+              "strong": false
+            }
+          ]
+        },
+        {
+          "id": "degree",
+          "parts": [
+            {
+              "id": "degree-uni",
+              "text": "CityUHK ",
+              "strong": false
+            },
+            {
+              "id": "sep-1",
+              "text": "•",
+              "strong": true
+            },
+            {
+              "id": "degree-course",
+              "text": " BBA QFRM (Math Minor) ",
+              "strong": false
+            },
+            {
+              "id": "sep-2",
+              "text": "•",
+              "strong": true
+            },
+            {
+              "id": "degree-honours",
+              "text": " First Class Honours",
+              "strong": false
+            }
+          ]
+        },
+        {
+          "id": "hkal",
+          "parts": [
+            {
+              "id": "hkal-line",
+              "text": "HK A-Level Examination Pure Mathematics A (Top 4.8%)",
+              "strong": false
+            }
+          ]
+        }
+      ]
+    },
+    "scope": "{{programme.curriculaDots}}",
+    "facts": [
+      {
+        "id": "records-schools",
+        "text": "{{content.studentRecordCount}} result records · {{content.schoolCount}} schools"
+      },
+      {
+        "id": "question-bank",
+        "text": "Question bank {{stats.questionBankYears}}"
+      }
+    ],
+    "ctaLabel": "Get in touch",
+    "ctaKey": "nav"
+  },
+  "about": {
+    "eyebrow": "About WSMath",
+    "title": "Premium Exam Coaching",
+    "lede": "{{programme.curriculaLabel}} — a structured system focused on marks, not guesswork.",
+    "whatYouGet": {
+      "title": "What you get",
+      "items": [
+        {
+          "id": "diagnostic-first-planning",
+          "lead": "Diagnostic-first planning:",
+          "text": "a week-by-week roadmap based on your exact bottlenecks."
+        },
+        {
+          "id": "markscheme-execution",
+          "lead": "Markscheme execution:",
+          "text": "how to write solutions that consistently score."
+        },
+        {
+          "id": "deliberate-practice",
+          "lead": "Deliberate practice:",
+          "text": "targeted sets, review, and error-proof routines."
+        }
+      ]
+    },
+    "howITeach": {
+      "title": "How I teach",
+      "items": [
+        {
+          "id": "live-lessons",
+          "text": "Live {{setup.platform}} lessons with interactive problem-solving and clean digital working."
+        },
+        {
+          "id": "correction-loops",
+          "text": "Post-lesson homework and correction loops to eliminate recurring errors."
+        },
+        {
+          "id": "language-of-delivery",
+          "text": "Lessons are primarily delivered in Cantonese/Mandarin; English delivery is available on request. Exam writing is trained in English."
+        }
+      ]
+    },
+    "figure": {
+      "src": "/about-hero.webp",
+      "alt": "Winson Siu teaching over Zoom with iPad",
+      "height": 842,
+      "width": 1200
+    },
+    "whoBlock": {
+      "label": "Who I teach",
+      "ageLead": "Ages 15–18",
+      "ageRest": "students worldwide",
+      "rows": [
+        {
+          "id": "ibdp-math",
+          "dt": "IBDP Math",
+          "dd": "AAHL, AASL, AIHL, AISL"
+        },
+        {
+          "id": "other-programmes",
+          "dt": "Other programmes",
+          "dd": "A-Level / IAL, IGCSE, IBMYP"
+        }
+      ],
+      "chip": "Best setup: {{setup.equipmentList}}"
+    },
+    "journeys": {
+      "items": [
+        {
+          "id": "james-2024",
+          "name": "James",
+          "year": "2024",
+          "course": "IBDP AAHL",
+          "from": "1",
+          "to": "7",
+          "duration": "2 years"
+        },
+        {
+          "id": "fiona-2022",
+          "name": "Fiona",
+          "year": "2022",
+          "course": "IBDP AAHL",
+          "from": "3",
+          "to": "6",
+          "duration": "3 months"
+        },
+        {
+          "id": "sharon-2023",
+          "name": "Sharon",
+          "year": "2023",
+          "course": "IBDP AASL",
+          "from": "3",
+          "to": "7",
+          "duration": "1.5 months"
+        },
+        {
+          "id": "cy-2021",
+          "name": "CY",
+          "year": "2021",
+          "course": "IAL Further Math",
+          "from": "F",
+          "to": "A*",
+          "duration": "2 years"
+        },
+        {
+          "id": "emily-2018",
+          "name": "Emily",
+          "year": "2018",
+          "course": "IGCSE 0606",
+          "from": "B",
+          "to": "A*",
+          "duration": "2 months"
+        },
+        {
+          "id": "kelly-2023",
+          "name": "Kelly",
+          "year": "2023",
+          "course": "IGCSE 0607",
+          "from": "F",
+          "to": "A",
+          "duration": "10 months"
+        },
+        {
+          "id": "janis-2024",
+          "name": "Janis",
+          "year": "2024",
+          "course": "IGCSE 0580",
+          "from": "C",
+          "to": "A*",
+          "duration": "4 months"
+        }
+      ]
+    }
+  },
+  "courses": {
+    "eyebrow": "IBDP · A-Level · IGCSE",
+    "title": "Courses covered",
+    "sub": "A structured question bank, organised by topic and year, runs through every course below. {{content.boardCourseCount}} of them are taught as scheduled group courses; all {{content.courseCount}} are available 1-to-1.",
+    "groupMarkLabel": "Also sold as a scheduled group course.",
+    "displayCodes": [
+      {
+        "id": "math-analysis-and-approaches-hl",
+        "code": "AAHL"
+      },
+      {
+        "id": "math-analysis-and-approaches-sl",
+        "code": "AASL"
+      },
+      {
+        "id": "math-applications-and-interpretation-hl",
+        "code": "AIHL"
+      },
+      {
+        "id": "math-applications-and-interpretation-sl",
+        "code": "AISL"
+      },
+      {
+        "id": "math-internal-assessment-ia",
+        "code": "IA"
+      },
+      {
+        "id": "ib-middle-year-programme",
+        "code": "IBMYP"
+      }
+    ]
+  },
+  "ribbon": {
+    "ariaLabel": "Availability",
+    "title": "Limited 1-to-1 availability — enquire for placement and a recommended plan.",
+    "body": "Premium, outcomes-driven coaching for {{programme.curriculaLabel}}.",
+    "waLabel": "WhatsApp",
+    "ctaLabel": "Get in touch",
+    "ctaKey": "about-ribbon"
+  },
+  "packagesPage": {
+    "eyebrow": "Group Courses · Private Coaching",
+    "title": "Choose the path that fits your goal",
+    "sub": "Three scheduled group courses — IBDP, International A-Level and International GCSE — or fully tailored 1-to-1 coaching.",
+    "chips": [
+      {
+        "id": "score-improvement",
+        "text": "Score improvement · Level 7 / A* targets"
+      },
+      {
+        "id": "by-topic-mastery",
+        "text": "By-topic mastery · Past paper execution"
+      },
+      {
+        "id": "private-coaching",
+        "text": "Private coaching · Personalised strategy"
+      },
+      {
+        "id": "hong-kong-based",
+        "text": "Hong Kong-based · Online worldwide"
+      }
+    ],
+    "ledger": {
+      "title": "IBDP Mathematics group course",
+      "rows": [
+        {
+          "id": "was",
+          "dt": "Was",
+          "dd": "{{money pricing.courseListPrice}}"
+        },
+        {
+          "id": "now",
+          "dt": "Now",
+          "dd": "from {{money pricing.coursePrice}}"
+        },
+        {
+          "id": "lessons",
+          "dt": "Lessons",
+          "dd": "{{programme.ibdpLessonCount}} × {{programme.courseSessionMinutes}} min"
+        }
+      ]
+    },
+    "snapshot": {
+      "label": "Since {{stats.oneToOneSince}}",
+      "value": "{{plus stats.studentsCoached}}",
+      "sub": "students coached 1-on-1"
+    },
+    "snapList": [
+      {
+        "id": "hl-six-plus",
+        "dt": "Math HL 6+ rate",
+        "dd": "{{outcomes.hlSixPlusRate}}"
+      },
+      {
+        "id": "sl-six-plus",
+        "dt": "Math SL 6+ rate",
+        "dd": "{{outcomes.slSixPlusRate}}"
+      }
+    ],
+    "cmp": {
+      "heading": {
+        "id": "cmp-heading",
+        "parts": [
+          {
+            "id": "lead",
+            "text": "{{plus programme.ibdpTeachingHours}} hours of live teaching. The same hours 1-to-1 would be ",
+            "strong": false
+          },
+          {
+            "id": "private-total",
+            "text": "{{money pricing.ibdpPrivateEquivalent}}",
+            "strong": true
+          },
+          {
+            "id": "vs",
+            "text": " — the group course is ",
+            "strong": false
+          },
+          {
+            "id": "course-price",
+            "text": "{{money pricing.coursePrice}}",
+            "strong": true
+          },
+          {
+            "id": "stop",
+            "text": ".",
+            "strong": false
+          }
+        ]
+      },
+      "cells": [
+        {
+          "id": "standard-rate",
+          "label": "Standard 1-to-1 rate",
+          "fig": "{{money pricing.ibdpPrivateEquivalent}}",
+          "sub": "{{plus programme.ibdpTeachingHours}} hours at {{money pricing.privateHourlyRate}} / hour"
+        },
+        {
+          "id": "course-investment",
+          "label": "Group course investment",
+          "fig": "{{money pricing.coursePrice}}",
+          "sub": "{{programme.ibdpLessonCount}} lessons × {{programme.courseSessionMinutes}} min"
+        }
+      ]
+    },
+    "rateLabel": "Typical rate",
+    "deliveryLabels": {
+      "live": "Live",
+      "video": "Video"
+    },
+    "outline": {
+      "openLabel": "View the course outline · {count} pages",
+      "openLabelSingle": "View the course outline",
+      "closeLabel": "Close",
+      "previousLabel": "Previous course",
+      "nextLabel": "Next course",
+      "pauseLabel": "Pause",
+      "playLabel": "Play",
+      "fullSizeLabel": "Open at full size"
+    },
+    "iaFootTag": "Hong Kong-based · Online worldwide",
+    "ctaLabel": "Get in touch",
+    "plan": {
+      "label": "Your plan",
+      "pickShow": "Show in your plan",
+      "pickActive": "In your plan",
+      "ctaLabel": "Get in touch",
+      "defaultPackageId": "ibdp"
+    }
+  },
+  "results": {
+    "eyebrow": "Proven Outcomes · Data-Driven Coaching",
+    "title": "Results, with context.",
+    "sub": "A precision-engineered learning system built for ambitious students aiming for the highest performance bands across international exams.",
+    "uplift": {
+      "value": "{{outcomes.avgUplift}}",
+      "note": "{{outcomes.satisfaction}}",
+      "label": "average grade uplift (From PG/mock to final)"
+    },
+    "snapList": [
+      {
+        "id": "consistent-progress",
+        "dt": "Consistent progress",
+        "dd": "{{outcomes.improvedOneBand}}"
+      },
+      {
+        "id": "top-bands",
+        "dt": "Top bands",
+        "dd": "{{outcomes.topBandsLabel}}"
+      },
+      {
+        "id": "fast-initial-gains",
+        "dt": "Fast initial gains",
+        "dd": "{{outcomes.typicalTimeToGain}}"
+      }
+    ],
+    "gradeHead": {
+      "title": "Grade improvements",
+      "sub": "How students move from school predictions to final exam results.",
+      "scaleLeft": "{{content.studentRecordCount}} records across {{content.programmeCount}} groups",
+      "scaleRight": "{{content.publishedRecordCount}} of them are published individually below"
+    },
+    "tabsLabel": "Result groups",
+    "tabsCountLabel": "n = ",
+    "stream": {
+      "fromLabel": "From PG / mock",
+      "toLabel": "Final",
+      "readLabel": "Drawn records",
+      "readIdle": "Hover a ribbon to read its record.",
+      "drawnTemplate": "{group} · n = {n} · {k} published records drawn"
+    },
+    "matrix": {
+      "caption": "Grade improvements — number of published records in each grade-jump band, by final grade, for the selected course group",
+      "colLabel": "Final grade",
+      "binLabels": [
+        {
+          "id": "bin-0-1",
+          "text": "0–1 grade improvement"
+        },
+        {
+          "id": "bin-2",
+          "text": "2 grade improvement"
+        },
+        {
+          "id": "bin-3",
+          "text": "3 grade improvement"
+        },
+        {
+          "id": "bin-4-plus",
+          "text": "4+ grade improvement"
+        }
+      ],
+      "readoutLabel": "Published records",
+      "readoutIdle": "Hover or select a cell to read the students in that band.",
+      "readoutIdleStream": "The stream above draws the same {{content.publishedRecordCount}} published records, one ribbon each.",
+      "note": "👆 Hover on each cell to see the students."
+    },
+    "legend": [
+      {
+        "id": "top-band",
+        "metric": "topBand",
+        "emoji": "⭐",
+        "label": "Final grade =7"
+      },
+      {
+        "id": "second-band",
+        "metric": "secondBand",
+        "emoji": "📘",
+        "label": "Final grade ≥6"
+      },
+      {
+        "id": "big-jumps",
+        "metric": "bigJumps",
+        "emoji": "🚀",
+        "label": "Major jumps (≥2 grades)"
+      },
+      {
+        "id": "any-improvement",
+        "metric": "anyImprovement",
+        "emoji": "📈",
+        "label": "Grade boost (≥1 grades)"
+      }
+    ],
+    "legendScope": "Over the {{content.publishedRecordCount}} published records",
+    "chips": [
+      {
+        "id": "structured-skill-building",
+        "text": "Structured skill-building · Clear weekly progression"
+      },
+      {
+        "id": "exam-execution",
+        "text": "Exam execution · Markscheme-aligned thinking"
+      },
+      {
+        "id": "efficient-practice",
+        "text": "Efficient practice · High-yield question selection"
+      },
+      {
+        "id": "clear-reasoning",
+        "text": "Clear reasoning · Stronger mathematical writing"
+      }
+    ],
+    "schoolsHead": {
+      "eyebrow": "Hong Kong and International Schools",
+      "title": "Schools our students come from",
+      "prov": "A snapshot of schools we’ve supported across {{programme.curriculaLabel}}."
+    },
+    "cta": {
+      "title": "Start your IBDP / A-Level / IGCSE coaching",
+      "body": "Premium {{setup.platform}} coaching with {{setup.equipmentList}}",
+      "rows": [
+        {
+          "id": "cta-roadmap",
+          "text": "Weekly roadmap + correction loop (tracked progress)"
+        },
+        {
+          "id": "cta-foundations",
+          "text": "Foundations by topic → past paper strategy → exam execution"
+        },
+        {
+          "id": "cta-numbers",
+          "text": "{{plus stats.tutoringHours}} hours • {{plus stats.studentsCoached}} students • {{num stats.lessonsTaught}} lessons taught"
+        }
+      ],
+      "prov": "Fast replies. Send your curriculum, year level, and target grade to get started.",
+      "trio": "(name?) · (school?) · (year?)",
+      "art": {
+        "src": "/cta-image.webp",
+        "alt": "Winson Siu",
+        "width": 533,
+        "height": 700
+      },
+      "ctaLabel": "Get in touch",
+      "ctaKey": "results"
+    }
+  },
+  "voices": {
+    "eyebrow": "Student Voices",
+    "title": "What my students and parents say",
+    "lede": "Real results from {{programme.curriculaLabel}} students worldwide.",
+    "video": {
+      "provider": "loom",
+      "url": "https://www.loom.com/share/dc71ae4ab4ee4ea5a318319141a79e65",
+      "stamp": "Video · replays available",
+      "heading": "Real students talking about their WSMath journey",
+      "body": "Short clips from different students sharing how they improved with Winson’s coaching.",
+      "clips": [
+        {
+          "id": "clip-alice-gao",
+          "testimonialId": "alice-gao-2022",
+          "name": "Alice Gao",
+          "course": "IBDP AAHL · 2022",
+          "grade": "6 → 7",
+          "image": {
+            "src": "/avatars/alice-gao-2022.webp",
+            "alt": "Alice Gao",
+            "width": 540,
+            "height": 720
+          }
+        },
+        {
+          "id": "clip-cy-ting",
+          "testimonialId": "cy-ting-2021",
+          "name": "CY Ting",
+          "course": "Edexcel IAL · 2021",
+          "grade": "F → A*",
+          "image": {
+            "src": "/avatars/cy-ting-2021.webp",
+            "alt": "CY Ting",
+            "width": 480,
+            "height": 720
+          }
+        },
+        {
+          "id": "clip-kitty-lam",
+          "testimonialId": "kitty-lam-2020",
+          "name": "Kitty Lam",
+          "course": "IBDP Math SL · 2020",
+          "grade": "1 → 7",
+          "image": {
+            "src": "/avatars/kitty-lam-2020.webp",
+            "alt": "Kitty Lam",
+            "width": 576,
+            "height": 720
+          }
+        },
+        {
+          "id": "clip-cissie-ching",
+          "testimonialId": "cissie-ching-2025",
+          "name": "Cissie Ching",
+          "course": "IBDP AISL · 2025",
+          "grade": "1 → 6",
+          "image": {
+            "src": "/avatars/cissie-ching-2025.webp",
+            "alt": "Cissie Ching",
+            "width": 456,
+            "height": 720
+          }
+        }
+      ],
+      "ctaKey": "video"
+    },
+    "trough": {
+      "label": "Twelve more, in four written languages",
+      "sheetIds": [
+        "james-chow-2024",
+        "sharon-deng-2023",
+        "joy-angela-sun-2022",
+        "bill-zhang-2024",
+        "michelle-chan-2021",
+        "jason-yeung-2025",
+        "kelly-li-2023",
+        "cherish-chiu-2025",
+        "lucy-han-2019",
+        "vera-jing-2021",
+        "coco-cheng-2024",
+        "vivian-chen-2018"
+      ],
+      "universityShortNames": [
+        {
+          "id": "hku",
+          "full": "The University of Hong Kong",
+          "short": "HKU"
+        },
+        {
+          "id": "cuhk",
+          "full": "The Chinese University of Hong Kong",
+          "short": "CUHK"
+        },
+        {
+          "id": "ucl",
+          "full": "University College London",
+          "short": "UCL"
+        },
+        {
+          "id": "hkust",
+          "full": "The Hong Kong University of Science and Technology",
+          "short": "HKUST"
+        }
+      ],
+      "pauseLabel": "Pause",
+      "playLabel": "Play"
+    }
+  },
+  "faqPage": {
+    "eyebrow": "Questions answered",
+    "title": "FAQs",
+    "sub": "Eight questions on placement, language of delivery, weekly hours, trials and what to prepare.",
+    "ctaKey": "faq"
+  },
+  "footer": {
+    "socialsLabel": "Social",
+    "columns": [
+      {
+        "id": "programmes",
+        "title": "Programmes",
+        "links": [
+          {
+            "id": "one-to-one-coaching",
+            "label": "1-to-1 Coaching",
+            "kind": "anchor",
+            "href": "#packages"
+          },
+          {
+            "id": "group-classes",
+            "label": "Group Classes",
+            "kind": "anchor",
+            "href": "#packages"
+          },
+          {
+            "id": "results-case-studies",
+            "label": "Results & Case Studies",
+            "kind": "anchor",
+            "href": "#results"
+          },
+          {
+            "id": "student-testimonials",
+            "label": "Student Testimonials",
+            "kind": "anchor",
+            "href": "#voices"
+          }
+        ]
+      },
+      {
+        "id": "resources",
+        "title": "Resources",
+        "links": [
+          {
+            "id": "about-wsmath",
+            "label": "About WSMath",
+            "kind": "anchor",
+            "href": "#about"
+          },
+          {
+            "id": "faqs",
+            "label": "FAQs",
+            "kind": "anchor",
+            "href": "#faq"
+          },
+          {
+            "id": "contact",
+            "label": "Contact",
+            "kind": "whatsapp"
+          },
+          {
+            "id": "privacy-policy",
+            "label": "Privacy Policy",
+            "kind": "modal"
+          }
+        ]
+      }
+    ],
+    "getInTouch": {
+      "title": "Get in touch",
+      "body": "For availability, pricing, and course placement, reach out to schedule an initial consultation.",
+      "ctaLabel": "Get in touch",
+      "ctaKey": "footer"
+    },
+    "meta": [
+      {
+        "id": "time-zone",
+        "label": "Time zone:",
+        "value": "{{contact.timezoneLabel}}"
+      },
+      {
+        "id": "platform",
+        "label": "Platform:",
+        "value": "{{setup.platform}} · iPad + Apple Pencil recommended"
+      }
+    ],
+    "bottom": {
+      "rights": "All rights reserved.",
+      "disclaimer": "WSMath is a premium tutoring brand. Results vary by student commitment and starting level."
+    }
+  },
+  "legal": {
+    "privacy": {
+      "modalTitle": "Privacy Policy",
+      "lastUpdatedLabel": "Last updated:",
+      "lastUpdated": "2025-12-22",
+      "intro": "This Privacy Policy explains how WSMath handles information when you visit our website or contact us.",
+      "sections": [
+        {
+          "id": "what-we-collect",
+          "heading": "What we collect",
+          "body": "If you contact us (e.g. via WhatsApp), we may receive information you provide such as your name, contact details, school year, and message content."
+        },
+        {
+          "id": "how-we-use-information",
+          "heading": "How we use information",
+          "body": "We use information to respond to enquiries, schedule lessons, and provide tutoring services."
+        },
+        {
+          "id": "sharing",
+          "heading": "Sharing",
+          "body": "We do not sell your information. We may use service providers required to operate the website (e.g. hosting), and only when necessary."
+        },
+        {
+          "id": "retention-requests",
+          "heading": "Retention & requests",
+          "body": "We keep enquiry details only as long as needed for communication and service delivery. You may request access to or deletion of your messages by contacting us."
+        }
+      ],
+      "footerHintPrefix": "Click outside or press",
+      "footerHintKey": "Esc",
+      "footerHintSuffix": "to close.",
+      "closeButton": "Close"
+    }
+  }
+}

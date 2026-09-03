@@ -1,0 +1,152 @@
+[
+  {
+    "id": "yew-chung-international-school",
+    "name": "Yew Chung International School",
+    "order": 0
+  },
+  {
+    "id": "st-stephens-college",
+    "name": "St. Stephen's College",
+    "order": 1
+  },
+  {
+    "id": "po-leung-kuk-choi-kai-yau-school",
+    "name": "Po Leung Kuk Choi Kai Yau School",
+    "order": 2
+  },
+  {
+    "id": "diocesan-boys-school",
+    "name": "Diocesan Boys' School",
+    "order": 3
+  },
+  {
+    "id": "diocesan-girls-school",
+    "name": "Diocesan Girls' School",
+    "order": 4
+  },
+  {
+    "id": "st-pauls-co-educational-college",
+    "name": "St. Paul's Co-educational College",
+    "order": 5
+  },
+  {
+    "id": "st-pauls-convent-school",
+    "name": "St. Paul’s Convent School",
+    "order": 6
+  },
+  {
+    "id": "wong-kam-fai-secondary-school",
+    "name": "Wong Kam Fai Secondary School",
+    "order": 7
+  },
+  {
+    "id": "li-po-chun-united-world-college",
+    "name": "Li Po Chun United World College",
+    "order": 8
+  },
+  {
+    "id": "g-t-ellen-yeung-college",
+    "name": "G.T. (Ellen Yeung) College",
+    "order": 9
+  },
+  {
+    "id": "german-swiss-international-school",
+    "name": "German Swiss International School",
+    "order": 10
+  },
+  {
+    "id": "the-isf-academy",
+    "name": "The ISF Academy",
+    "order": 11
+  },
+  {
+    "id": "victoria-shanghai-academy",
+    "name": "Victoria Shanghai Academy",
+    "order": 12
+  },
+  {
+    "id": "malvern-college",
+    "name": "Malvern College",
+    "order": 13
+  },
+  {
+    "id": "kiangsu-chekiang-college",
+    "name": "Kiangsu-Chekiang College",
+    "order": 14
+  },
+  {
+    "id": "esf-king-george-v-school",
+    "name": "ESF King George V School",
+    "order": 15
+  },
+  {
+    "id": "esf-sha-tin-college",
+    "name": "ESF Sha Tin College",
+    "order": 16
+  },
+  {
+    "id": "esf-island-school",
+    "name": "ESF Island School",
+    "order": 17
+  },
+  {
+    "id": "esf-west-island-school",
+    "name": "ESF West Island School",
+    "order": 18
+  },
+  {
+    "id": "esf-discovery-college",
+    "name": "ESF Discovery College",
+    "order": 19
+  },
+  {
+    "id": "esf-renaissance-college",
+    "name": "ESF Renaissance College",
+    "order": 20
+  },
+  {
+    "id": "chinese-international-school",
+    "name": "Chinese International School",
+    "order": 21
+  },
+  {
+    "id": "canadian-international-school",
+    "name": "Canadian International School",
+    "order": 22
+  },
+  {
+    "id": "singapore-international-school",
+    "name": "Singapore International School",
+    "order": 23
+  },
+  {
+    "id": "french-international-school",
+    "name": "French International School",
+    "order": 24
+  },
+  {
+    "id": "australian-international-school",
+    "name": "Australian International School",
+    "order": 25
+  },
+  {
+    "id": "korean-international-school",
+    "name": "Korean International School",
+    "order": 26
+  },
+  {
+    "id": "american-school",
+    "name": "American School",
+    "order": 27
+  },
+  {
+    "id": "international-college",
+    "name": "International College",
+    "order": 28
+  },
+  {
+    "id": "harrow-international-school",
+    "name": "Harrow International School",
+    "order": 29
+  }
+]

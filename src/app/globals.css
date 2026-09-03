@@ -1,28 +1,341 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   THE MOVEMENT, GILDED — WSMath v6.3.2
+   Design tokens + shared vocabulary, transcribed from the locked
+   artifact (scratchpad/v6-3-2.html, CSS lines 398–1467).
+
+   EVERY PALETTE COLOUR LIVES HERE, AS A TOKEN on `.mvt-root`.
+   Section stylesheets reference var(--…) and never declare a palette
+   colour. One dark theme only — no prefers-color-scheme anywhere; the
+   only media queries are width and reduced-motion.
+
+   Ownership: this file is FOUNDATION-owned. Shared vocabulary
+   (.mvt-wrap, .mvt-well, .mvt-raise, .mvt-cham, .mvt-rule, .mvt-knurl,
+   .mvt-plate-cta, .mvt-head, .mvt-rev, .mvt-mu, .mvt-num, …) lives
+   here and only here. Section builders: every selector you add must be
+   namespaced to your own section family; request shared changes in
+   notes/<your-role>.md.
+
+   Standing prohibitions (artifact header, enforce in review):
+   · --au-lit is NEVER text on paper (1.33:1) — outcome ink on paper is --au-deep
+   · --au is never a rule or bezel colour; --brass-deep never a text colour or ground
+   · --ink-3 never sits on any gold ground; --wa never on brass (glyph always on --lac-void)
+   · pure #000 / #fff are never painted
+   ============================================================ */
+
+/* the page commits to one dark theme: the body itself is painted, so no viewer
+   ground can ever show through around or behind the sheet */
+body{margin:0;background:#1c0848;color:#f7f3e9}
+
+/* ── tokens ───────────────────────────────────────────────────────────────── */
+.mvt-root{
+  --lac-void:#07031b; --lac-well:#110134; --lac-ground:#1c0848;
+  --lac-face:#28165b; --lac-lit:#35256f;  --lac-rise:#443584;
+
+  /* OUTCOME GOLD — student outcomes only; never a rule or bezel. */
+  --au-abyss:#1d1501; --au-nil:#2d2304; --au-deep:#493805;
+  --au-mid:#715713; --au:#b0870f; --au-lit:#fad035;
+  --am-deep:#4c3996; --am:#7864d7; --am-lit:#ada2ff;
+  --ca-deep:#8d182c; --ca:#cc3148; --ca-lit:#fb8083;
+
+  --brass-ink:#7e5312; --brass-deep:#9b722c; --brass:#e6bf5d; --brass-hi:#f6e8b3;
+  --ink:#f7f3e9; --ink-2:#cac8d8; --ink-3:#9e9cb0;
+  --paper:#f5f2e9; --paper-ink:#201f2a;
+  --wa:#25D366;
+
+  --brass-cast:linear-gradient(100deg,#7e5312 0%,#9b722c 18%,#e6bf5d 42%,#f6e8b3 50%,#e6bf5d 58%,#9b722c 80%,#7e5312 100%);
+  /* the CTA carries TEXT, so its cast is a shallower pour whose darkest stop is
+     #a87f36: --lac-void on #a87f36 = 5.54:1. Applied ONLY to .mvt-plate-cta. */
+  --brass-cast-cta:linear-gradient(100deg,#a87f36 0%,#c9a349 18%,#e6bf5d 42%,#f6e8b3 50%,#e6bf5d 58%,#c9a349 80%,#a87f36 100%);
+  --brass-cast-text:linear-gradient(100deg,#9b722c 0%,#e6bf5d 34%,#f6e8b3 50%,#e6bf5d 66%,#9b722c 100%);
+  --brass-radial:radial-gradient(79% 79% at 42% 0%,#f6e8b3,#e6bf5d 46%,#9b722c 100%);
+
+  /* system stacks ONLY — this design ships no webfont; do not add one */
+  --f-display:Constantia,"Sitka Heading",Cambria,"Iowan Old Style",Charter,Georgia,ui-serif,serif;
+  --f-ui:Bahnschrift,"Segoe UI Variable Display","Franklin Gothic Medium",Corbel,Avenir,system-ui,sans-serif;
+  --f-data:Consolas,"Cascadia Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --f-hant:"Microsoft JhengHei","PingFang HK","Noto Sans HK","Segoe UI",sans-serif;
+  --f-hans:"Microsoft YaHei","PingFang SC","Noto Sans SC","Segoe UI",sans-serif;
+
+  --coin-w:86px;   /* the fixed coin's reserved lane: right offset + diameter + 6px clearance.
+                      LOAD-BEARING PAGE-WIDE: .mvt-wrap right padding and .mvt-trough
+                      margin-right honour it — the lane stays reserved even while the
+                      coin is hidden behind the plan panel. EXCEPT below 640, where
+                      .mvt-wrap gives the lane back (see the ≤640 block) because 66px
+                      of a 390px viewport is a seventh of the measure; the trough keeps
+                      it at every width. */
+  --step:clamp(0px,(100vw - 1600px) * 0.0055,5px);
+  --pad:clamp(18px,3.6vw,92px);
+  --inset:clamp(20px,1.9vw,34px);
+  --wrap:1960px;
+  --sec:clamp(76px,5.6vw,150px);
+
+  --ease-reveal:cubic-bezier(.16,1,.3,1);
+  --ease-rise:cubic-bezier(.22,1,.36,1);
+  --ease-settle:cubic-bezier(.33,1,.68,1);
+  --ease-draw:cubic-bezier(.7,-.05,.25,.97);
+  --t-reveal:760ms; --t-rise:620ms; --t-settle:320ms; --t-draw:900ms;
+
+  color-scheme:dark;
+  position:relative;
+  overflow-x:clip;
+  background:var(--lac-ground);
+  color:var(--ink);
+  font-family:var(--f-ui);
+  font-size:calc(17px + var(--step));
+  line-height:1.62;
+  letter-spacing:.004em;
+  -webkit-font-smoothing:antialiased;
+}
+/* grain — one tiled 256px turbulence, overlay, low alpha. z-index 60 of the
+   ladder: 2 matrix sticky head · 60 grain · 80 nav · 90 bb + coin · 200 skip */
+.mvt-root::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:60;opacity:.055;
+  mix-blend-mode:overlay;background-size:256px 256px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.mvt-root *,.mvt-root *::before,.mvt-root *::after{box-sizing:border-box}
+.mvt-root :where(p,h1,h2,h3,h4,ul,ol,blockquote,figure,table,dl,dd){margin:0;padding:0}
+.mvt-root :where(ul,ol){list-style:none}
+.mvt-root :where(img){max-width:100%;display:block;height:auto}
+.mvt-root :where(button){font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+.mvt-root :where(a){color:inherit;text-decoration:none}
+.mvt-li{display:block;width:100%}
+
+/* CJK language rules — REPAIRED from the artifact (spec/issues.md §a).
+   Language rules set FAMILY only, NEVER font-size: the artifact's
+   `font-size:1.05em` here at specificity (0,2,0) beat every card register and
+   is the root cause of the testimonial sizing bug. Each register declares its
+   own CJK size relative to its own base (voices builder owns those rules).
+   `yue` (Cantonese, used by testimonials.json) always rides the Hant stack. */
+.mvt-root :lang(zh-Hant),.mvt-root :lang(yue){font-family:var(--f-hant);font-style:normal;font-variant:normal}
+.mvt-root :lang(zh-Hans){font-family:var(--f-hans);font-style:normal;font-variant:normal}
+/* generic flowing body copy on lacquer keeps the gentle optical bump */
+.mvt-root .mvt-body:is(:lang(zh-Hant),:lang(zh-Hans),:lang(yue)){font-size:1.05em;line-height:1.9}
+
+.mvt-root :focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:2px}
+.mvt-plate-cta:focus-visible,.mvt-coin:focus-visible{outline-color:var(--lac-void)}
+.mvt-paper :focus-visible{outline-color:var(--paper-ink)}
+
+.mvt-visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+/* 13px of block padding, not 12: at 12 the plate measures 43.4px and misses the
+   44px floor by six tenths of a pixel. It is only ever seen on focus, so the
+   extra pixel a side costs nothing. */
+.mvt-skip{position:absolute;left:-9999px;top:0;z-index:200;background:var(--brass);
+  color:var(--lac-void);padding:13px 20px;font-family:var(--f-ui);font-weight:600;
+  text-transform:uppercase;letter-spacing:.18em;font-size:12px}
+.mvt-skip:focus{left:12px;top:12px}
+
+/* ── layout ───────────────────────────────────────────────────────────────── */
+/* --coin-w reserves the fixed WhatsApp coin's lane so no running text ever
+   passes beneath it. The lane is only wider than --pad below ~2400px, so at
+   2560 the layout is unchanged. */
+.mvt-wrap{width:100%;max-width:calc(var(--wrap) + var(--pad) * 2);margin-inline:auto;
+  padding-inline:var(--pad) max(var(--pad),var(--coin-w))}
+.mvt-sec{position:relative;background:var(--lac-ground);padding-block:var(--sec);scroll-margin-top:92px}
+.mvt-root [id^="mvt-s-"]{scroll-margin-top:92px}
+.mvt-sec--tight{padding-block:clamp(38px,3vw,80px)}
+.mvt-edge{height:2px;width:100%;background:linear-gradient(#ffffff14 0 1px,#07031b 1px 2px)}
+
+/* ── type ─────────────────────────────────────────────────────────────────── */
+.mvt-d0{font-family:var(--f-display);font-size:clamp(72px,9.9vw,204px);font-weight:700;
+  letter-spacing:-.042em;line-height:.86;text-wrap:balance}
+.mvt-h2{font-family:var(--f-display);font-size:clamp(46px,5.4vw,96px);font-weight:700;
+  letter-spacing:-.032em;line-height:.94;text-wrap:balance}
+.mvt-h3{font-family:var(--f-display);font-size:clamp(28px,2.7vw,46px);font-weight:600;
+  letter-spacing:-.018em;line-height:1.1;text-wrap:balance}
+.mvt-lead{font-family:var(--f-display);font-size:clamp(19px,1.4vw,26px);font-weight:400;line-height:1.55}
+.mvt-body{font-size:calc(17px + var(--step));line-height:1.62;letter-spacing:.004em;text-wrap:pretty}
+.mvt-small{font-size:15px;line-height:1.58;letter-spacing:.006em}
+.mvt-mu{font-family:var(--f-ui);font-size:11.5px;font-weight:600;font-stretch:82%;
+  letter-spacing:.24em;line-height:1.25;text-transform:uppercase}
+.mvt-eyebrow{font-family:var(--f-ui);font-size:11.5px;font-weight:600;font-stretch:82%;
+  letter-spacing:.24em;line-height:1.25;text-transform:uppercase;color:var(--brass)}
+.mvt-num{font-variant-numeric:lining-nums tabular-nums}
+.mvt-code{font-family:var(--f-data);font-size:.9em;letter-spacing:.01em}
+.mvt-quote{font-variant-numeric:oldstyle-nums proportional-nums}
+.mvt-dim{color:var(--ink-2)}
+.mvt-nb{white-space:nowrap}   /* keeps 1-to-1 from breaking across the hyphen */
+.mvt-brass{color:var(--brass)}
+.mvt-aulit{color:var(--au-lit)}
+.mvt-arrow{color:var(--au-lit);font-family:var(--f-ui)}
+.mvt-castxt{background-image:var(--brass-cast-text);-webkit-background-clip:text;background-clip:text;
+  color:transparent;-webkit-text-fill-color:transparent}
+
+/* ── surfaces ─────────────────────────────────────────────────────────────── */
+.mvt-raise{
+  position:relative;
+  background:linear-gradient(163deg,var(--lac-lit) 4.9%,var(--lac-face) 47%,var(--lac-ground) 96%);
+  border-radius:26px 4px 26px 4px;
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklab,var(--brass) 58%,transparent),
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    inset 0 -1px 0 0 var(--lac-void),
+    0 1px 1px rgba(4,1,16,.38), 0 3px 2px rgba(4,1,16,.20), 0 8px 6px rgba(4,1,16,.12),
+    22px 26px 48px -8px var(--lac-void),
+    -16px -18px 40px -10px color-mix(in oklab,var(--lac-rise) 72%,transparent),
+    0 4px 26px color-mix(in oklab,var(--am) 10%,transparent);
+}
+.mvt-well{
+  position:relative;
+  background:linear-gradient(158deg,var(--lac-well) 0%,var(--lac-ground) 100%);
+  border-radius:4px 18px 4px 18px;
+  box-shadow:
+    inset 18px 20px 38px -6px var(--lac-void),
+    inset -14px -14px 30px -8px color-mix(in oklab,var(--lac-lit) 62%,transparent),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 42%,transparent),
+    0 1px 0 rgba(255,255,255,.05);
+}
+.mvt-well--shallow{box-shadow:
+    inset 8px 9px 14px -4px var(--lac-void),
+    inset -6px -6px 14px -6px color-mix(in oklab,var(--lac-lit) 56%,transparent),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 52%,transparent),
+    0 1px 0 rgba(255,255,255,.05);}
+.mvt-well--am{background:linear-gradient(158deg,color-mix(in oklab,var(--am-deep) 78%,var(--lac-void)) 0%,var(--am-deep) 100%);
+  box-shadow:
+    inset 16px 18px 34px -6px rgba(9,4,32,.85),
+    inset -12px -12px 26px -8px color-mix(in oklab,var(--am) 46%,transparent),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 48%,transparent),
+    0 1px 0 rgba(255,255,255,.06);}
+.mvt-well--ca{background:linear-gradient(158deg,color-mix(in oklab,var(--ca-deep) 74%,var(--lac-void)) 0%,var(--ca-deep) 100%);
+  box-shadow:
+    inset 22px 24px 46px -6px rgba(20,2,8,.9),
+    inset -12px -12px 26px -8px color-mix(in oklab,var(--ca) 34%,transparent),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 40%,transparent),
+    0 1px 0 rgba(255,255,255,.05);}
+
+/* champlevé — a recess cut through the lacquer and flooded with jewel enamel.
+   The outcome flood is GOLD; the theme-chip variant floods amethyst. */
+.mvt-cham{
+  background:var(--au-deep);border-radius:3px;color:var(--ink);
+  box-shadow:inset 0 2px 4px color-mix(in oklab,var(--au-abyss) 80%,transparent),inset 0 -1px 0 rgba(255,255,255,.10),
+    0 0 0 1px color-mix(in oklab,var(--brass) 84%,transparent),0 1px 0 rgba(255,255,255,.06);
+}
+.mvt-cham--am{background:var(--am-deep);
+  box-shadow:inset 0 2px 4px rgba(9,4,32,.55),inset 0 -1px 0 rgba(255,255,255,.10),
+    0 0 0 1px color-mix(in oklab,var(--brass) 84%,transparent),0 1px 0 rgba(255,255,255,.06);}
+
+/* brass rules and plates */
+.mvt-rule{height:12px;opacity:.95;
+  background-image:var(--brass-cast),repeating-linear-gradient(90deg,var(--brass) 0 1px,transparent 1px 13px);
+  background-size:100% 1px,100% 6px;background-repeat:no-repeat,repeat-x;background-position:0 0,0 0}
+.mvt-hair{height:1px;background:linear-gradient(90deg,transparent,color-mix(in oklab,var(--brass) 62%,transparent) 10%,color-mix(in oklab,var(--brass) 62%,transparent) 90%,transparent)}
+/* a milled KNURL — the texture of a crown, not the index comb */
+.mvt-knurl{height:12px;border-radius:2px;background-color:rgba(4,1,16,.30);
+  background-image:repeating-linear-gradient(58deg,
+    color-mix(in oklab,var(--brass) 58%,transparent) 0 1px,transparent 1px 6px);
+  box-shadow:inset 0 1px 0 color-mix(in oklab,var(--brass) 30%,transparent),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 44%,transparent)}
+.mvt-plate-cta{
+  display:inline-flex;align-items:center;gap:10px;min-height:46px;padding:0 22px;
+  background:var(--brass-cast-cta);color:var(--lac-void);border-radius:14px 3px 14px 3px;
+  font-family:var(--f-ui);font-size:11.5px;font-weight:600;font-stretch:82%;
+  letter-spacing:.24em;text-transform:uppercase;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(60,38,4,.6),
+    0 0 0 1px rgba(4,1,16,.62),0 2px 2px rgba(4,1,16,.4),0 8px 18px -6px var(--lac-void);
+  transition:transform var(--t-settle) var(--ease-settle),box-shadow var(--t-settle) var(--ease-settle);
+}
+.mvt-plate-cta:hover{transform:translateY(-1px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -1px 0 rgba(60,38,4,.6),
+    0 0 0 1px rgba(4,1,16,.62),0 3px 3px rgba(4,1,16,.42),0 14px 26px -8px var(--lac-void)}
+.mvt-plate-cta:active{transform:scale(.97);
+  box-shadow:inset 0 2px 4px rgba(60,38,4,.55),0 0 0 1px rgba(4,1,16,.62)}
+.mvt-coin-dot{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;
+  background:var(--lac-void);box-shadow:inset 0 1px 0 rgba(255,255,255,.12);flex:none}
+.mvt-coin-dot svg{width:15px;height:15px;fill:var(--wa)}
+
+/* ── section header pattern ───────────────────────────────────────────────── */
+.mvt-head{display:grid;grid-template-columns:auto minmax(300px,1fr);align-items:baseline;
+  column-gap:clamp(20px,2.6vw,68px);row-gap:16px;margin-bottom:clamp(34px,3.2vw,64px)}
+.mvt-head > .mvt-eyebrow{grid-column:1/-1;grid-row:1}
+.mvt-head > .mvt-h2{grid-column:1;grid-row:2}
+.mvt-head > .mvt-head-sub{grid-column:2;grid-row:2}
+.mvt-head > .mvt-rule{grid-column:1/-1;grid-row:3;height:14px;align-self:end}
+/* in a section header the chips are LABELS, not panels — each pill hugs its
+   text instead of sitting one-third full in a half-width box */
+.mvt-head > .mvt-reschips{grid-column:1/-1;grid-row:4;display:flex;flex-wrap:wrap;
+  gap:10px 14px;margin-top:6px}
+/* NOT width:max-content — a definite max-content width makes the pill's
+   min-content contribution its full max-content, which blows the header's 1fr
+   track out past the wrap at 375. Flex items already shrink-to-fit. */
+.mvt-head > .mvt-reschips > li{flex:0 1 auto;min-width:0;max-width:100%}
+.mvt-head > *{min-width:0}
+/* A header with no supporting line must NOT keep the second track and fill it
+   with a stretched rule — that renders a huge ink-free recessed rectangle.
+   Single track; the scale sits under the heading like every other section's. */
+.mvt-head:not(:has(.mvt-head-sub)){grid-template-columns:minmax(0,1fr)}
+.mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-column:1/-1;grid-row:3;height:14px;align-self:end}
+.mvt-head-sub{color:var(--ink-2);text-wrap:pretty}
+/* the header slot is a recess with the brass scale on its lower lip */
+.mvt-head > .mvt-rule{background-color:rgba(4,1,16,.30);border-radius:2px;
+  background-position:0 100%,0 100%;
+  box-shadow:inset 0 2px 5px rgba(4,1,16,.55),inset 0 -1px 0 color-mix(in oklab,var(--brass) 38%,transparent)}
+
+/* ── debossed label chips — shared by the packages header and results ─────── */
+.mvt-reschips{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.4vw,24px);
+  margin-top:clamp(18px,1.8vw,32px)}
+.mvt-reschips li{padding:14px 18px;text-wrap:pretty;color:var(--ink);font-size:14px;letter-spacing:.05em;
+  text-transform:uppercase;font-family:var(--f-ui);font-weight:600;font-stretch:88%;line-height:1.5;
+  background:var(--lac-well);border-radius:3px;
+  box-shadow:inset 0 2px 4px rgba(4,1,16,.62),inset 0 -1px 0 rgba(255,255,255,.09),
+    0 0 0 1px color-mix(in oklab,var(--brass) 56%,transparent)}
+
+/* ── motion — scroll-triggered reveals ────────────────────────────────────
+   The hidden state is gated on `body.js` (set by the inline script in
+   layout.tsx before first paint), so a reader without JavaScript gets the
+   finished page, never a blank one. `.is-in` is added by the boot in
+   layout/mvt-root.tsx. Section builders gating their own reveal variants
+   (hero rules etc.) must gate the hidden state on `.js` the same way. */
+/* ORDER IS LOAD-BEARING: every hidden state is declared BEFORE every settled
+   state. The `.js ` prefix raises each hidden rule to (0,2,0) — the same
+   specificity as `.mvt-rev.is-in` — so source order alone decides the winner.
+   With the hidden rules last (as they were until integration), a `--s` element
+   faded in but kept its 14px offset forever. Do not interleave these two
+   groups; add new variants to the hidden group above, settled group below. */
+.js .mvt-rev{opacity:0;transform:translateY(24px);
+  transition:opacity var(--t-reveal) var(--ease-reveal),transform var(--t-reveal) var(--ease-reveal)}
+.js .mvt-rev--s{transform:translateY(14px);transition-duration:520ms}
+.js .mvt-rev--rule{transform:scaleX(0);transform-origin:left center;
+  transition:transform var(--t-draw) var(--ease-draw)}
+.js .mvt-rev--paper{opacity:0;clip-path:inset(8%);
+  transition:opacity 820ms var(--ease-reveal),clip-path 820ms var(--ease-reveal)}
+.mvt-rev.is-in{opacity:1;transform:none}
+.mvt-rev--rule.is-in{transform:none;opacity:1}
+.mvt-rev--paper.is-in{opacity:1;clip-path:inset(0)}
+
+/* ── shared responsive ────────────────────────────────────────────────────── */
+@media (max-width:1180px){
+  .mvt-reschips{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:1024px){
+  .mvt-root{--coin-w:66px}
+  .mvt-head{grid-template-columns:1fr}
+  .mvt-head > .mvt-h2{grid-column:1;grid-row:2}
+  .mvt-head > .mvt-head-sub{grid-column:1;grid-row:3;padding-bottom:0}
+  .mvt-head > .mvt-rule,.mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-column:1;grid-row:4;height:12px;align-self:auto}
+}
+@media (max-width:640px){
+  .mvt-root{--sec:clamp(56px,10vw,88px)}
+  .mvt-reschips{grid-template-columns:1fr}
+  /* THE COIN'S LANE IS NOT AFFORDABLE ON A PHONE. Above 640 the reservation is
+     cheap — 86px of a 1960px rail — and it buys the guarantee that no running
+     text passes under the fixed coin. At 390 the same rule spends 66px against
+     an 18px left gutter: the measure drops to 78% of the viewport, every band
+     sits 48px off-centre, and a dead strip runs down the right edge of the
+     whole page. What it buys back is the bottom-right 60×64px of the viewport
+     — and under the client-required replacement (spec/issues.md §c) the coin
+     is not even on screen for the packages→FAQ span, which is most of the
+     scroll. Gutters go symmetric here; the lane still governs `.mvt-trough`,
+     whose sheets really do travel through the corner. */
+  .mvt-wrap{padding-inline:var(--pad)}
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html { scroll-padding-top: 80px; }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── reduced motion — the page renders complete, with no animation ────────── */
+@media (prefers-reduced-motion: reduce){
+  .mvt-root *,.mvt-root *::before,.mvt-root *::after{
+    animation-duration:1ms!important;animation-iteration-count:1!important;
+    transition-duration:1ms!important;scroll-behavior:auto!important}
 }

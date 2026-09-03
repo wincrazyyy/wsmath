@@ -1,0 +1,319 @@
+/* ============================================================
+   OUTLINE DIALOG — a board card's course outline, one page per course
+   Section family: .mvt-lf-*
+
+   The artifact has no dialog (its slip is a static <figure>), so
+   nothing here is transcribed. It is built from the same material
+   vocabulary the slip is built from: the card's slip is a shallow
+   well holding a lac-void frame with a brass hairline and one
+   bright page — this is that object, lifted out and enlarged.
+
+   Palette colours are NEVER declared here — only var(--…) from
+   globals.css. `.mvt-raise`, `.mvt-knurl`, `.mvt-mu`, `.mvt-code`,
+   `.mvt-num` and `.mvt-visually-hidden` come from globals.css and
+   are not redefined; `.mvt-slip*` belongs to packages.css and is
+   only ever *positioned* here, never restyled.
+
+   The panel is portalled into `.mvt-root` (see outline-dialog.tsx),
+   so every token below resolves and the global reduced-motion rule
+   still reaches it.
+   ============================================================ */
+
+/* ── the trigger on the card ──────────────────────────────────────────────
+   The button wraps `.mvt-slip-frame` and takes over its flex role, so the
+   frame keeps filling the slip exactly as it did before it had a trigger. */
+.mvt-lf-trigger{position:relative;display:flex;flex:1 1 auto;min-height:0;border-radius:3px;
+  cursor:zoom-in;transition:box-shadow var(--t-settle) var(--ease-settle)}
+.mvt-lf-trigger > .mvt-slip-frame{flex:1 1 auto;min-width:0}
+/* The affordance is a small machined plate in the corner — the same lac-void
+   tile the dialog's page turners are made of — and NOT a scrim across the
+   bottom of the frame. A gradient band would darken a third of the outline
+   crop permanently, and the card's crop is the artifact's. Above 1800 the frame
+   stops being a crop and shows the whole page, so packages.css takes the plate
+   out of the corner and sets it below the frame — see `.mvt-pack--board`. */
+.mvt-lf-hint{position:absolute;left:10px;bottom:10px;z-index:1;
+  display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:3px;
+  color:var(--brass);background:var(--lac-void);
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 52%,transparent),0 2px 10px rgba(4,1,16,.6);
+  transition:color var(--t-settle) var(--ease-settle),background var(--t-settle) var(--ease-settle)}
+.mvt-lf-hint svg{width:11px;height:11px;flex:none;rotate:-90deg;
+  fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mvt-lf-trigger:hover{box-shadow:0 0 0 1px color-mix(in oklab,var(--brass) 74%,transparent)}
+.mvt-lf-trigger:hover .mvt-lf-hint{color:var(--brass-hi);background:var(--lac-well)}
+
+/* Above 1800 a board card's frame stops being a crop and shows the whole page
+   (packages.css `.mvt-pack--board`), so the plate comes out of the corner and
+   sits under the frame instead. At 397px of frame a 290px hint lands across the
+   page's own foot, which on all eight of these documents is the
+   `課程定價 HK$60,000 → $16,800` block: covering a crop's dead margin and
+   covering the struck price are not the same act. The focus ring and the hover
+   ring still wrap frame and plate together, because both are one trigger. */
+@media (min-width:1800px){
+  .mvt-pack--board .mvt-lf-trigger{flex-direction:column;gap:10px}
+  .mvt-pack--board .mvt-lf-hint{position:static;align-self:flex-start}
+}
+
+/* ── the panel ────────────────────────────────────────────────────────────
+   The width is derived from the height the viewport can give the stage, so
+   the vitrine comes out the shape of the page and the reader never looks at
+   a band of empty ground. When the viewport is too narrow for that width the
+   100vw term wins, the grid row shrinks below the page's ratio, and
+   `object-fit:contain` lands the page in the middle of the recess — which is
+   the one case where the vitrine shows around it, and reads as depth. */
+.mvt-lf-overlay{position:fixed;inset:0;z-index:120;background:rgba(4,1,16,.82)}
+.mvt-lf-panel{
+  --lf-ar:.70655;       /* page width ÷ height; set inline from the first course's page */
+  --lf-inset:clamp(14px,1.3vw,24px);
+  --lf-gap:clamp(10px,1vw,16px);
+  /* 1400, not 1180: the retired leaflets were 1050×1400 (3:4) and these are A4
+     at 1500×2123 (1:1.415), so the old cap gave a materially smaller page. At a
+     2560×1440 review viewport the panel is 833×1353 and the source page renders
+     at 0.54x, its ~26px body type landing at ~14px. `svh`, not `vh`, so a mobile
+     URL bar cannot overflow the panel. */
+  --lf-h:min(94svh,1400px);
+  /* Everything the stage does NOT get. The head is one 36px control tall (the
+     close button); the foot now also holds the CTA plate, so it is 46. The
+     budget is derived, not guessed — an over-estimate would shrink the page for
+     nothing and an under-estimate would letterbox it. */
+  --lf-head:36px;
+  /* rail(30) + row-gap(10) + the taller of transport(36) and CTA(46).
+     `--lf-chrome` is subtracted from the panel's height to derive its width, so
+     it must be an UPPER bound on the chrome: under-state it and the stage's
+     aspect-derived height exceeds its grid row and paints over the foot. That
+     is what a 46px budget did — measured at 1440x820, where the panel comes out
+     477px wide, its 1fr rail column resolves to 46px, four 48px course codes
+     wrap to four lines, and the foot lands 138px tall over a 623px stage. A
+     rail labelled with exam-board codes cannot share a row with the transport,
+     the counter and a CTA plate at any panel width this formula produces below
+     a ~1065px viewport, so it takes a row of its own at every width. */
+  --lf-foot:86px;
+  --lf-chrome:calc(var(--lf-head) + var(--lf-foot) + var(--lf-gap) * 2 + var(--lf-inset) * 2);
+  position:fixed;z-index:130;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:min(calc((var(--lf-h) - var(--lf-chrome)) * var(--lf-ar) + var(--lf-inset) * 2),
+            1180px,calc(100vw - 24px));
+  /* The width above is derived entirely from the viewport's HEIGHT, so a short
+     viewport drives it towards zero while the foot's contents keep their
+     min-content width — the panel box collapses and its children render outside
+     the lacquer frame. The sheet escape below catches the phone-shaped cases;
+     this floor catches everything between them (a 1440x650 window derives a
+     337px panel against a foot that needs ~465px). 480px is the two-row foot's
+     min-content run plus the inset, and it never exceeds the 100vw term. */
+  min-width:min(480px,calc(100vw - 24px));
+  max-height:var(--lf-h);
+  padding:var(--lf-inset);
+  display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:var(--lf-gap);
+}
+/* A one-course board (IAL) suppresses the transport, the rail and the counter,
+   so its foot really is one CTA tall. Restating the budget for that case keeps
+   the derived width exact rather than 40px short — the page is the product, and
+   a page shrunk to make room for controls that are not rendered is a defect the
+   reader can see. `data-pages` is authored by the component from `variants`. */
+.mvt-lf-panel[data-pages="1"]{--lf-foot:46px}
+/* The panel carries `.mvt-raise` for its surface, and `.mvt-raise` also declares
+   `position:relative` at the same specificity as the rule above — so today the
+   `fixed` only wins because component CSS is emitted after globals.css. This
+   second rule wins on specificity instead and always matches (the panel is
+   portalled into `.mvt-root`), so the panel cannot silently become
+   `position:relative` if CSS emission order ever changes. If the portal ever
+   fell back to <body> the rule above still applies, exactly as it does now. */
+.mvt-root .mvt-lf-panel{position:fixed}
+
+.mvt-lf-head{display:flex;align-items:center;gap:14px}
+.mvt-lf-head > .mvt-knurl{flex:1 1 40px;min-width:40px}
+/* the same debossed slot the plan picks use, at the head's smaller step */
+.mvt-lf-close{flex:none;display:inline-flex;align-items:center;min-height:36px;padding:0 16px;
+  border-radius:3px;color:var(--ink-2);background:var(--lac-well);
+  box-shadow:inset 0 2px 4px rgba(4,1,16,.7),inset 0 -1px 0 color-mix(in oklab,var(--brass) 40%,transparent);
+  transition:color var(--t-settle) var(--ease-settle)}
+.mvt-lf-close:hover{color:var(--brass-hi)}
+
+/* ── the stage — the slip's frame, enlarged ───────────────────────────────── */
+/* `height:100%` alongside the ratio, not instead of it: the ratio is what makes
+   the stage's max-content height page-shaped, which is what the width formula is
+   derived from, but a definite height is what keeps the stage inside its grid
+   row on the two viewports where the formula's other terms win — a panel clamped
+   by `100vw - 24px`, and any browser that rounds the derived width down. The
+   page then contains inside a stage marginally taller than itself instead of
+   overflowing onto the foot. */
+.mvt-lf-stage{position:relative;width:100%;height:100%;min-height:0;aspect-ratio:var(--lf-ar);
+  overflow:hidden;border-radius:3px;background:var(--lac-void);
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 44%,transparent)}
+/* The mounted window paints in page order, so the NEXT sheet is painted over
+   the current one. Explicit stacking and hit-testing, so that stays a fact
+   about pixels and never becomes a fact about clicks — the day anything
+   focusable or clickable goes inside a sheet, an invisible box over the visible
+   page would otherwise capture it. Raising the current sheet is also correct
+   *during* the 300ms cross-fade: both are semi-transparent, and the one
+   arriving should be on top. */
+.mvt-lf-sheet{position:absolute;inset:0;z-index:0;opacity:0;pointer-events:none;
+  transition:opacity 300ms var(--ease-settle)}
+.mvt-lf-sheet[data-current="true"]{z-index:1;opacity:1;pointer-events:auto}
+.mvt-lf-sheet img{width:100%;height:100%;object-fit:contain;object-position:50% 50%}
+
+/* ── the full-size plate ─────────────────────────────────────────────────────
+   The `.mvt-lf-hint` machined plate, moved into the stage's bottom corner —
+   clear of the arrows, which are vertically centred and 64px tall, so either
+   bottom corner clears them equally. Bottom-LEFT, not the spec's bottom-right:
+   all eight of these pages carry their `課程定價 HK$60,000 → $16,800` block in
+   the bottom-right, and a control parked over the struck price in a viewer
+   opened to read the price is self-defeating. What it covers instead is the
+   `報名或聯絡我們` QR block — the one element on these pages that leads out of
+   the site's only instrumented funnel (spec 2.1), so the substitution is a
+   small win rather than a neutral move.
+   ONE control, a sibling of the sheets rather than one per sheet: a link inside
+   an `aria-hidden` sheet is the `aria-hidden-focus` violation outright, and a
+   full-bleed anchor in the sheet painted on top would open the wrong page. */
+.mvt-lf-full{position:absolute;left:10px;bottom:10px;z-index:2;
+  display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 12px;border-radius:3px;
+  color:var(--brass);background:var(--lac-void);
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 52%,transparent),0 2px 10px rgba(4,1,16,.6);
+  transition:color var(--t-settle) var(--ease-settle),background var(--t-settle) var(--ease-settle)}
+.mvt-lf-full:hover{color:var(--brass-hi);background:var(--lac-well)}
+.mvt-lf-full svg{width:13px;height:13px;flex:none;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* The page turners are solid, not a scrim: they sit on top of nine different
+   artworks, several of them near-white, and a translucent tile disappears into
+   the bright ones. A machined lac-void plate with a brass hairline reads the
+   same over every page. */
+.mvt-lf-arrow{position:absolute;top:50%;z-index:2;translate:0 -50%;
+  display:flex;align-items:center;justify-content:center;width:44px;height:64px;border-radius:3px;
+  color:var(--brass);background:var(--lac-void);
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 52%,transparent),0 2px 10px rgba(4,1,16,.6);
+  transition:color var(--t-settle) var(--ease-settle),background var(--t-settle) var(--ease-settle)}
+.mvt-lf-arrow:hover{color:var(--brass-hi);background:var(--lac-well)}
+.mvt-lf-arrow--prev{left:10px}
+.mvt-lf-arrow--next{right:10px}
+.mvt-lf-arrow svg{width:18px;height:18px;
+  fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mvt-lf-arrow--prev svg{rotate:90deg}
+.mvt-lf-arrow--next svg{rotate:-90deg}
+
+/* ── the foot — course rail over transport, counter, CTA ─────────────────────
+   Two rows, not four columns. The rail's labels are exam-board codes, not page
+   ordinals, so it needs 4 x 48px + gaps = 210px of run; the panel's width is
+   derived from the viewport's HEIGHT, so on every laptop-height viewport the
+   remaining `1fr` column is far narrower than that and the codes wrap. A row of
+   its own is also the truer reading: the rail is the course selector, and the
+   transport / counter / CTA are the viewer's own controls. */
+.mvt-lf-foot{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+  column-gap:12px;row-gap:10px;
+  grid-template-areas:"rail rail rail" "toggle count cta"}
+.mvt-lf-cta{grid-area:cta;min-height:46px;justify-self:end}
+/* nothing else in the foot — the plate carries the panel on its own */
+.mvt-lf-panel[data-pages="1"] .mvt-lf-foot{grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"cta"}
+.mvt-lf-panel[data-pages="1"] .mvt-lf-cta{justify-self:center}
+.mvt-lf-toggle{grid-area:toggle;display:inline-flex;align-items:center;gap:9px;min-height:36px;padding:0 14px;
+  border-radius:3px;color:var(--ink-2);background:var(--lac-well);
+  box-shadow:inset 0 2px 4px rgba(4,1,16,.7),inset 0 -1px 0 color-mix(in oklab,var(--brass) 40%,transparent);
+  transition:color var(--t-settle) var(--ease-settle)}
+.mvt-lf-toggle:hover{color:var(--brass-hi)}
+.mvt-lf-toggle svg{width:11px;height:11px;flex:none;fill:currentColor}
+
+.mvt-lf-rail{grid-area:rail;display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+/* wide enough for an exam-board code, not a page ordinal: the rail IS the
+   course selector, so it says AASL / AAHL / AISL / AIHL, not 1 / 2 / 3 / 4 */
+.mvt-lf-dot{display:inline-flex;align-items:center;justify-content:center;min-width:48px;width:auto;
+  height:30px;padding:0 9px;
+  border-radius:3px;color:var(--ink-3);background:var(--lac-well);letter-spacing:0;
+  box-shadow:inset 0 1px 3px rgba(4,1,16,.7),inset 0 -1px 0 color-mix(in oklab,var(--brass) 30%,transparent);
+  transition:color var(--t-settle) var(--ease-settle),box-shadow var(--t-settle) var(--ease-settle)}
+.mvt-lf-dot:hover{color:var(--brass-hi)}
+/* the page you are on is cast, not lit — the CTA's shallower pour, because it
+   carries text (--lac-void on brass-cast-cta's darkest stop is 5.5:1) */
+.mvt-lf-dot[aria-current="page"]{color:var(--lac-void);background:var(--brass-cast-cta);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 0 0 1px rgba(4,1,16,.62)}
+
+.mvt-lf-count{grid-area:count;justify-self:center;color:var(--ink-2);letter-spacing:.12em;white-space:nowrap}
+
+/* ── responsive ──────────────────────────────────────────────────────────────
+   ONE block at 767, not a 760 foot block layered under a 767 panel block: a
+   foot that reflows at one width inside a panel that reflows at another is an
+   unforced second breakpoint, and two blocks declaring different area maps make
+   the winner a function of emission order.
+
+   The block is keyed on width OR height, and the height arm is not a nicety: a
+   phone in landscape is 844x390 — WIDE and SHORT — so it missed a width-only
+   sheet query and fell into the degenerate branch of the width formula, which
+   is driven by height alone. The panel came out 167px wide with 21 descendants
+   painting outside it. Any viewport too short to give the stage a page-shaped
+   run gets the sheet, whatever its width; 600px also catches the 1024x600
+   tablet, where the one-row-per-pair foot was colliding its own controls. */
+@media (max-width:767px),(max-height:600px){
+  /* At 390 the width formula would give a 366px panel whose 342px stage renders
+     the source page at 0.23x — a grey smudge. A full-screen sheet at least
+     spends the whole viewport on it; `object-fit:contain` keeps the shape. */
+  .mvt-lf-panel{top:0;left:0;transform:none;border-radius:0;
+    width:100vw;height:100dvh;max-height:100dvh;
+    padding:calc(var(--lf-inset) + env(safe-area-inset-top)) var(--lf-inset)
+            calc(var(--lf-inset) + env(safe-area-inset-bottom))}
+  .mvt-lf-stage{aspect-ratio:auto;height:100%}
+
+  /* the rail takes the full run, the transport pair sits under it, the CTA
+     takes the last row. `--lf-foot` is NOT restated: below 767 the panel's
+     `width` and `height` are literals, and `--lf-foot` feeds only
+     `--lf-chrome`, which feeds only that `width`. A number that drives nothing
+     is worse than absent. */
+  .mvt-lf-foot{grid-template-columns:1fr 1fr;
+    grid-template-areas:"rail rail" "toggle count" "cta cta";row-gap:10px}
+  .mvt-lf-toggle{justify-self:start}
+  .mvt-lf-count{justify-self:end}
+  /* both selectors, because the single-page rule above is more specific and a
+     sheet's CTA is full-bleed whatever the page count */
+  .mvt-lf-cta,
+  .mvt-lf-panel[data-pages="1"] .mvt-lf-cta{justify-self:stretch;justify-content:center}
+
+  /* 306px of slip at 390 against a 284px label — the plate wraps, never clips */
+  .mvt-lf-hint{max-width:calc(100% - 20px);flex-wrap:wrap}
+
+  /* ── the page turners stop being plates ──────────────────────────────────
+     The panel's width is derived from the page's own ratio, so the painted
+     image always fills the stage's full width and the arrows always land ON
+     the document rather than beside it. On a desktop vitrine that costs a
+     margin; on a phone a 38x56 opaque tile covers a heading and three body
+     lines of a dense A4 syllabus, and the syllabus is the product. The plate
+     is dropped for a shadowed glyph: the covered area falls from ~2100px² to
+     the glyph's ~320px², the halo keeps it legible over both a near-white
+     page and the lac-void letterbox, and the button keeps a 44px box. */
+  .mvt-lf-arrow{width:44px;height:44px;background:transparent;box-shadow:none;
+    color:var(--brass-hi);
+    filter:drop-shadow(0 0 2px rgba(4,1,16,.95)) drop-shadow(0 1px 4px rgba(4,1,16,.8))}
+  .mvt-lf-arrow:hover{background:transparent;color:var(--au-lit)}
+
+  /* ── 44px tap targets, at zero layout cost ───────────────────────────────
+     Every control in the viewer is authored below the 44px comfort bar (the
+     rail chips at 30, the transport at 36, the full-size plate at 34) and all
+     of them are load-bearing on a phone, where the dialog is the sales
+     material for three of the four paths. Growing the plates would spend
+     ~40px of chrome on a page that is already only 0.24x — so the HIT box
+     grows and the plate does not, via an out-of-flow pseudo-element. */
+  .mvt-lf-dot,.mvt-lf-toggle,.mvt-lf-close{position:relative}
+  .mvt-lf-dot::after{content:"";position:absolute;left:0;right:0;top:-7px;bottom:-7px}
+  .mvt-lf-toggle::after,.mvt-lf-close::after{content:"";position:absolute;inset:-4px}
+  .mvt-lf-full::after{content:"";position:absolute;left:0;right:0;top:-5px;bottom:-5px}
+
+  /* The escape hatch to the native-size file is the phone reader's only route
+     to the per-topic syllabus — the one thing on these pages that is NOT
+     already on the card as a `.mvt-lineup` row, and the part that lands at
+     ~6px at this scale. It gets a full control's height and the brighter
+     brass so it is not the quietest thing under a gold CTA plate. */
+  .mvt-lf-full{min-height:44px;color:var(--brass-hi);
+    box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 78%,transparent),
+      0 2px 12px rgba(4,1,16,.75)}
+}
+@media (max-width:640px){
+  /* the course codes have to fit a phone: the gap gives, the target does not.
+     The row gap stays wide enough that two rows of chips cannot overlap each
+     other's extended hit boxes. */
+  .mvt-lf-rail{gap:16px 4px}
+  /* `left`, not `right`: setting the opposite edge here while the base rule
+     sets `left` would give an absolutely positioned box both insets and stretch
+     the plate across the whole stage. */
+  .mvt-lf-full{left:8px;bottom:8px}
+  /* one line inside the 46px band `.mvt-slip-frame` keeps clear for it: at 390
+     the frame is 306px and the label alone measures ~284px at the micro-caps
+     default, so the tracking and the step give rather than the band */
+  .mvt-lf-hint{font-size:10px;letter-spacing:.12em;padding:6px 10px;gap:6px}
+  .mvt-lf-hint svg{width:10px;height:10px}
+}

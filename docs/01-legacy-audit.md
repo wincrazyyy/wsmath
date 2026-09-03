@@ -1,0 +1,303 @@
+# 01 — Legacy Audit
+
+What exists today, how it behaves, and every defect worth not repeating.
+
+---
+
+## 1. Shape of the repo
+
+```
+src/app/
+  page.tsx                    the entire public site — one page, six sections
+  layout.tsx                  root layout + the only metadata export in the repo
+  globals.css                 27 lines: Tailwind import, CSS vars, scroll-padding
+  favicon.ico                 app-router file convention → generates a real route
+  _lib/
+    fonts.ts                  Geist, Geist_Mono, Rubik (Geist* are unused)
+    content/json/*.json       7 files, 1,509 lines — ALL site content
+    content/types/*.types.ts  7 hand-written mirror types
+  _components/
+    layout/                   nav, footer, background-glow, privacy modal
+    sections/{home,about,packages,results,testimonials,faq}/
+    ui/                       book-button, floating-cta, whatsapp-button,
+                              section-dots, smooth-scroll, section/{header,reveal}
+  admin/
+    page.tsx, layout.tsx      no auth guard of any kind
+    _components/dashboard/    shell, tab strip, save button
+    _components/editors/      7 per-file editors + json-editor + table-input + 2 image inputs
+    _components/ui/
+    _lib/fields/*.ts          the hand-rolled form DSL (~1,500 lines)
+    _lib/{json-path,json-editor-helpers,image-upload-targets,pending-image-uploads}.ts
+  api/update-content/route.ts 349 lines — the GitHub commit endpoint
+public/                       29 files, 55 MB
+out/                          91 build artefacts, COMMITTED TO GIT
+```
+
+**Dependencies:** `next`, `react`, `react-dom`. That is all. No component library, no icon
+library, no animation library, no HTTP client. Every icon on the site is a hand-inlined SVG.
+
+**Routes:** `/` and `/admin`. Nothing else. Confirmed against `out/`.
+
+**Anchors:** `#content` (home — note: *not* `#home`), `#about`, `#packages`, `#testimonials`,
+`#results`, `#faq`. Plus two pseudo-anchors, `#privacy` and `#contact`, which match no element and
+are intercepted by string comparison in `footer.tsx`.
+
+---
+
+## 2. How content flows today
+
+```
+7 JSON files ──(import ... from "*.json", resolveJsonModule)──> components
+      │                                                              │
+      │                                                     build-time inline
+      │
+      └──(the SAME import)──> /admin useState ──> POST ──> GitHub commit ──> rebuild
+```
+
+There is **no loader, no barrel, no validation, no runtime**. Every consumer does:
+
+```ts
+import aboutContent from "@/app/_lib/content/json/about.json";
+const about = aboutContent as AboutConfig;   // unchecked assertion
+```
+
+Because content is inlined at build time, **a content commit changes nothing a visitor sees until
+something rebuilds**. The CMS commits only `src/app/_lib/content/json/*.json` and `public/*` — it
+never regenerates `out/`. Since `out/` is what is served, the CMS and the live site have been
+fully decoupled since 2026-07-24.
+
+### The five module-scope loaders (a real bug class)
+
+These components bypass their own prop chain and re-import JSON at module scope, freezing content
+at module-eval time and making them untestable:
+
+| File | What it does |
+| --- | --- |
+| `about/cta-ribbon.tsx:6` | Re-imports `about.json` to read `ctaRibbon` — a key `AboutConfig` doesn't declare |
+| `packages/group-leaflet-viewer.tsx:5-15` | Re-imports `packages.json` while its parent already has it as a prop; carries a fallback literal that *contradicts* the real value |
+| `testimonials/student-voices-video.tsx` | Re-imports `testimonials.json` |
+| `ui/book-button.tsx:18` | `const { whatsapp } = miscContent` at module scope |
+| `ui/whatsapp-button.tsx:18` | Same |
+
+---
+
+## 3. The admin CMS
+
+### 3.1 The editing model
+
+A tab **is** the JSON filename **is** the save slug **is** a `useState` slot. Seven of them:
+`home`, `about`, `packages`, `testimonials`, `results`, `faq`, `misc`.
+
+Each editor builds a `JsonEditorTabConfig[]` from static `FieldConfig[]` modules and hands it to
+one generic 694-line `JsonEditor<T>`:
+
+```ts
+type FieldConfig = {
+  path: string;                                          // "carousel[3].quote"
+  label: string;
+  description?: string;
+  type: "string" | "textarea" | "string[]" | "table" | "boolean";
+  table?: TableConfig;
+  checkboxLabel?: string;
+};
+```
+
+`path` is a **stringly-typed JSON pointer with zero compile-time relationship to the data**.
+`json-path.ts` parses it at runtime; `setByPath` auto-vivifies missing containers. A typo therefore
+creates a permanent orphan key in the committed JSON, silently.
+
+Every keystroke does `structuredClone(entire file)` → `setByPath` → parent `setState` → full
+re-render **including** `JSON.stringify(data, null, 2)` for a raw preview pane. `results.json` is
+19.5 KB / 536 leaves, so typing in that tab is measurably laggy.
+
+### 3.2 Hardcoded cardinality — the defining flaw
+
+Array editors are generated by `repeatFields(basePath, label, count, makeItemFields)` with `count`
+**hardcoded in the field config**, not derived from the data:
+
+| Collection | Hardcoded count | Where |
+| --- | --- | --- |
+| `results.gradeImprovements.resultGroups` | 6 | `results-fields.ts:173-180` |
+| `testimonials.featured` | 4 | `testimonials-fields.ts:102-106` |
+| `about.coursesSection.groups` | 3 | `about-fields.ts:176-181` |
+| `misc.privacyPolicy.sections` | 4 (hand-written `.0`–`.3`) | `misc-fields.ts:47-95` |
+| `misc.footer.columns[].links` | 2 × 4 (hand-written) | `misc-fields.ts:188-248` |
+| `misc.footer.cta.meta` | 2 | `misc-fields.ts` |
+
+Adding a 7th programme group requires editing the JSON, the `.types.ts` **and** a `repeatFields`
+call. The comment in `misc-fields.ts` says the quiet part out loud:
+`(fixed indices, since you currently have 4)`.
+
+Only `faq.items`, `testimonials.carousel` and `header.rightAccent.columns` have add/delete —
+and none of them, anywhere in the admin, has **reorder**.
+
+Downstream, `results-grade-tabs.tsx:38-50` hardcodes `grid-cols-3` for the top-level tabs, so a
+4th curriculum breaks the layout. `section-header.tsx:202` hardcodes `grid-cols-2` for accent
+columns while `results.json` supplies three — the third silently wraps to an orphan row.
+
+### 3.3 The image upload path — traced end to end
+
+This is the "isn't seamless" complaint, precisely:
+
+1. User picks a file. The client accepts **PNG only** (`accept="image/png"` + a `looksLikePng` guard).
+2. For indexed avatars, the destination filename is computed from the **array index**:
+   `/avatars/carousel-{{index1}}.png`. The `File` is re-wrapped: `new File([file], "carousel-3.png")`.
+3. The JSON field is set to that public path.
+4. The entry is pushed onto a **module-level mutable array** (`pending-image-uploads.ts:19`) with a
+   `URL.createObjectURL` preview. Not React state — so nothing re-renders, and `hasUnsavedChanges`
+   is only correct by accident.
+5. Nothing uploads. The widget prints *"Change queued. Remember to click Save all changes."*
+6. On save, every queued `File` is base64-encoded in a **blocking per-byte `String.fromCharCode`
+   loop on the main thread**, and all files plus all seven JSON blobs go in **one** JSON body.
+7. The server validates and commits. Then Cloudflare rebuilds. Only then does the image exist.
+
+**Failures in this path:**
+
+- **PNG-only contradicts the actual content.** `about.hero.imageSrc` is `/about-hero.jpg` and
+  `packages.private.privateSrc` is `/private-package.jpg`. The client targets the *current* JSON
+  value as the destination, so it writes PNG bytes to a `.jpg` path, and the server's magic-byte
+  check then throws `Uploaded file bytes do not match extension .jpg`. **These two fields are
+  impossible to update through the admin** — which is why the owner has been swapping
+  `about-hero.jpg` by hand via git.
+- **Multi-upload hardcodes `.png`** while the live leaflets are `.jpg`, and **replaces the whole
+  `pages[]` array**. Picking 3 files destroys a 9-page leaflet and orphans the other 6 files
+  forever (multi mode has no delete path). Git history shows exactly this churn across six commits.
+- **Index-coupled filenames are the most dangerous latent bug in the system.** Deleting carousel
+  item #3 shifts every later item down one, but their avatar files stay put. The next upload for
+  an item then overwrites *a different person's photo*, and `allowDelete: true` deletes someone
+  else's file. There is no reorder feature to recover with.
+- The preview `<img>` uses the JSON path while the upload target uses the forced path, so the
+  widget **can show image A while overwriting file B**.
+- `previewSrc` falls back to `/placeholder.png`, which does not exist.
+
+### 3.4 Everything the admin does not have
+
+No auth. No validation beyond "is it a PNG". No per-file dirty state. No undo, reset or revert.
+No `beforeunload` guard. No draft persistence — a refresh discards everything. No preview (the
+"View website ↗" link opens the last *deployed* site). No reorder. No URL-addressable tabs.
+No `<label htmlFor>` on any input in the entire panel. No conflict detection — the editor's
+baseline is the JSON bundled at *build* time, so two tabs silently clobber each other.
+
+Plus one active misfeature: `table-input.tsx:248-259` runs a sort-and-commit in a mount effect,
+so **merely clicking the Results tab marks the whole CMS dirty** and arms a save that rewrites all
+seven files.
+
+---
+
+## 4. The write path (`api/update-content/route.ts`)
+
+```
+POST { updates: [{slug, content} × 7], images?: [{targetPath, contentBase64|delete}] }
+
+  GET   /git/refs/heads/{branch}     → current HEAD sha
+  GET   /git/commits/{sha}           → base tree sha
+  POST  /git/blobs (utf-8)           → one per JSON file      ← sequential
+  POST  /git/blobs (base64)          → one per image          ← sequential
+  POST  /git/trees  { base_tree, tree: [...] }                ← sha:null = delete
+  POST  /git/commits { message, tree, parents:[HEAD] }
+  PATCH /git/refs/heads/{branch} { sha, force: false }
+```
+
+**Env:** `GITHUB_REPO_OWNER`, `GITHUB_REPO_NAME`, `GITHUB_TOKEN`, `GITHUB_BRANCH` (default `main`),
+`CONTENT_BASE_PATH` (default `src/app/_lib/content`, auto-suffixed with `/json`).
+None are in the repo; they exist only in a Cloudflare dashboard.
+
+The **algorithm is good** — this dance is the only way to get N files including binaries into one
+atomic commit, and `base_tree` + `sha: null` are the right tricks. Keep it if git storage survives.
+
+**The defects:**
+
+| Severity | Defect |
+| --- | --- |
+| high | Route is not emitted at all under `output: 'export'` — the endpoint does not exist |
+| high | Zero authentication |
+| high | `slug` unvalidated → arbitrary `*.json` write → build-time RCE |
+| high | Non-atomic failure: blobs/tree/commit are created *before* the ref PATCH. `force: false` means a concurrent push leaves dangling objects and the client keeps its queue |
+| high | No optimistic concurrency — the client's baseline is build-time JSON, not HEAD |
+| medium | Raw GitHub error bodies forwarded verbatim to the browser (info-disclosure oracle) |
+| medium | All 7 files rewritten every save, so `hasMultiple` is always true and two of three commit-message branches are dead code |
+| medium | Sequential blob creation — a 7-JSON + 9-image save is ~20 serialised round-trips |
+| medium | No `User-Agent` header (GitHub documents it as required) |
+| medium | No request-size cap. History proves the risk: `66d9802` shrank `hero.png` from **26 MB** to 659 KB |
+
+---
+
+## 5. Content defects (published, visible)
+
+| Defect | Detail |
+| --- | --- |
+| **Grade scale mismatch** | 3 IGCSE students carry `from: "B(6)"`, not on that group's scale. Substring matching returns 0, so improvements of 2–3 grades render as 8–9 and land in the "4+" column. |
+| **Cross-file drift** | `about.json` stats vs `results.json`: Janis 2024/4mo vs 2019/3mo. Testimonial roles vs results: Vivian Chen, Lucia Zhu, Connie Feng, Coco Cheng, Michelle Chan, Jason Yeung all disagree. Lucy Han's testimonial cites HKDSE — a programme that does not exist in `results.json`. |
+| **Contradictory headline stats** | "since Sep 2017" (home) vs "Since 2018" (packages) vs "8 yrs" (home, stale in 2026). |
+| **Broken image references** | `carousel-1..4.png` referenced, absent from disk. |
+| **Leaflet auto-advance = 1 second** | `autoAdvanceSeconds: "1"` for a 9-page leaflet. The code's own fallback is 5 and the admin help text says "e.g. 5". Almost certainly a leftover test value. |
+| **Copy coupled to numbers it doesn't own** | `"32+ hours 1-to-1 ≈"` and `"for 32+ structured group sessions."` hardcode 32, which is actually `group.lessons`. |
+| **Pricing unit inconsistency** | `private32Hours = rate × 32` labelled "32+ HOURS", but `lessons` counts 90-minute sessions, so 32 lessons is 48 hours. The very next line *does* apply the minutes→hours conversion. |
+| **Dead config** | `IMAGE_UPLOAD_TARGETS["testimonials.testimonialsCta.logoSrc"]` — no such key exists. `results-editor.tsx` groups by `gradeImprovements.heatmapKeys` — no such key exists, so a whole sub-tab UI is permanently inert. |
+| **Punctuation drift** | Mixed straight/curly apostrophes (including inside a WhatsApp prefill), mixed apostrophes in the schools list, a trailing space in a testimonial quote. |
+| **Yuki Lam recorded with year 2026** | A future cohort. Confirm whether it should be published. |
+
+Full resolution checklist: `docs/07-content-conflicts.md`.
+
+---
+
+## 6. Code defects worth not repeating
+
+| Severity | Defect | Location |
+| --- | --- | --- |
+| high | Rules-of-hooks violation: early `return null` before two `useState` calls | `results-grade-improvements.tsx:50-56` |
+| high | Substring grade matching with a silent `0` fallback | `grade-improvements-section.tsx:16-22` |
+| high | Unchecked `as SomeConfig` on every content import; types are *narrower* than the data | all consumers |
+| medium | Content used as React keys (stat string, pill string, school name, bullet text, FAQ question) — duplicates break reconciliation | 9 call sites |
+| medium | Numbers stored as strings, with **four** separate `toNumber()` copies with different fallbacks | `packages.tsx:15`, `hero.tsx:37`, `group-leaflet-viewer.tsx:17` |
+| medium | Save/discount arithmetic computed **three** times independently | `packages.tsx`, `pricing-comparison-strip.tsx`, `group-package-card.tsx` |
+| medium | `toLocaleString()` with no locale × 14, while hero pins `en-GB` → hydration mismatch risk | packages + results components |
+| medium | Chip carousel rotates every 4000 ms with no pause and no reduced-motion guard | `section-header.tsx:53-61` |
+| medium | An undiscoverable "auto demo" randomly opens matrix cells every 6.5–8.5 s, no reduced-motion guard | `grade-improvements-section.tsx:198-280` |
+| medium | Footer link `href` is half-data, half-magic-constant: `#privacy` → modal, `#contact` → wa.me, by string comparison | `footer.tsx:139-167` |
+| medium | `footer.social.links` is a *closed* `{facebook, instagram, xhs}` object, each with a bespoke inline SVG | `misc.types.ts:48-55` |
+| medium | `buildTop4Matrix4Cols()` runs every render; the `useMemo` depending on it therefore never hits | `grade-improvements-section.tsx:167-196` |
+| medium | Unescaped `arrayKey` interpolated into a `RegExp` (dots act as wildcards) | `json-editor-helpers.ts:86` |
+| medium | CSV bulk-paste splits naively on `,` — shreds any row containing a comma (IA topic descriptions do) | `table-input.tsx:62-65` |
+| low | `renderStyledTitle()` fragments the `<h1>` into per-word spans for a faux drop-cap | `hero.tsx` |
+| low | Duplicate `alt="Tutor pointing upward"` on two different photos | `about-hero.tsx:59`, `private-package-card.tsx:106` |
+| low | Dead code: `PriceRow`, `AboutCtaConfig`, `isUpload`, stale `as any` with a stale comment | 4 files |
+
+### Accessibility gaps
+
+- FAQ uses raw `<details>/<summary>` with no `aria-expanded` plumbing and no exclusivity.
+- The results matrix is a `<table>` with a single `<tr>` whose cells contain independent stacks —
+  a layout table with no row headers.
+- The carousel duplicates its DOM, so screen readers announce all 24 testimonials twice. No pause
+  control, no `aria-live`, no reduced-motion handling.
+- `TestimonialAvatar` puts `aria-label` on a plain `<div>`.
+- **No input in the entire admin panel has a programmatic label.** Labels are `<h4>` siblings.
+- `<html lang="en">` while 14 of 28 testimonial quotes are Chinese or Cantonese. Screen readers
+  read them with an English voice.
+
+### SEO gaps
+
+No `robots.txt`. No `sitemap.xml`. **No JSON-LD of any kind.** No canonical, no alternates, no
+`themeColor`/viewport export, no manifest. `/admin` is statically exported to a publicly fetchable
+`out/admin/index.html` with **no `robots: { index: false }`**.
+
+For a local tutoring business with 8 perfect FAQ pairs, 28 reviews, a physical address and two
+priced courses sitting unused in the content, this is the single biggest organic-discovery gap.
+
+---
+
+## 7. How it got here (git archaeology)
+
+| Date | Commit | What happened |
+| --- | --- | --- |
+| 2025-12-05 | `f8d2b71` | Save endpoint added as a real Cloudflare Pages Function, `functions/api/update-content.js`, using the simple Contents API |
+| 2025-12-05 | `eaad3ba` | *"version for next-on-pages"* — Pages Function deleted, replaced by a Next route handler with `runtime = "edge"`. `@cloudflare/next-on-pages` was never a dependency; it was the build command in the Cloudflare dashboard |
+| 2026-01→07 | ~25 commits | *"Batch update content via WSMath admin"* — the CMS working as designed |
+| 2026-07-24 | `e81904e` | **Last CMS-authored commit** |
+| 2026-07-24 | `f2683d7` | `output: 'export'` added; `--turbopack` removed from `build` |
+| 2026-07-24 | `f962c07` | `/out/` removed from `.gitignore`; 91 build files committed |
+| 2026-07-24 | `b17968b` | `images.unoptimized` + `trailingSlash` added; `NextConfig` type annotation dropped |
+| 2026-07-24 → | 6 × *"fix"* | Hand-edits to content JSON, each also regenerating `out/` |
+
+The story is coherent: Cloudflare's Next.js integration went away, the only escape hatch was a
+static export, and the static export silently took the CMS with it.

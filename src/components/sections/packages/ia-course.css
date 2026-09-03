@@ -1,0 +1,75 @@
+/* ============================================================
+   IA COURSE — row 4 of the packages section (#mvt-s-packages)
+   Section family: .mvt-ia*, .mvt-themes*
+   Transcribed from the locked artifact, CSS lines 1066–1078, plus
+   the two responsive rules the artifact lumps into shared media
+   blocks (line 1388 `.mvt-ia-grid` at ≤1024, line 1403
+   `.mvt-themes li` at ≤820).
+
+   Palette colours are NEVER declared here — only var(--…) from
+   globals.css. Shared vocabulary (.mvt-well, .mvt-cham,
+   .mvt-cham--am, .mvt-knurl, .mvt-plate-cta, .mvt-eyebrow,
+   .mvt-h3, .mvt-body, .mvt-mu, .mvt-li, .mvt-rev) comes from
+   globals.css and is not redefined here; `.mvt-pack-foot` and its
+   knurl rule belong to packages.css and are reused as-is.
+
+   The reveal repair for the globals.css `.mvt-rev--s` cascade bug
+   is NOT duplicated here: this block renders inside
+   #mvt-s-packages, so packages.css's scoped repair already covers
+   it. Both disappear when globals.css is reordered — see
+   notes/packages.md §1.
+   ============================================================ */
+
+.mvt-ia{margin-top:clamp(24px,2.4vw,48px);display:flex;flex-direction:column;gap:clamp(18px,1.8vw,32px)}
+
+/* the intro keeps a reading measure of its own — the grid below is full-bleed */
+.mvt-ia-intro{max-width:1020px}
+/* artifact 1834/1835 set these as inline styles; they are layout, so they live here */
+.mvt-ia-intro > .mvt-h3,
+.mvt-ia-intro > .mvt-body{margin-top:12px}
+
+.mvt-ia-grid{display:grid;grid-template-columns:38fr 62fr;gap:clamp(20px,2.2vw,44px);align-items:start}
+
+.mvt-ia-feat{padding:clamp(18px,1.6vw,30px) clamp(20px,1.8vw,34px)}
+/* the label is ruled off in brass — the feature rows below are ruled in ink */
+.mvt-ia-feat > .mvt-mu{padding-bottom:12px;
+  border-bottom:1px solid color-mix(in oklab,var(--brass) 46%,transparent)}
+.mvt-ia-feat li{padding:12px 0;font-size:15.5px;color:var(--ink-2);
+  border-bottom:1px solid color-mix(in oklab,var(--ink) 12%,transparent)}
+.mvt-ia-feat li:last-child{border-bottom:0}
+
+/* eight amethyst champlevé chips — three to a row, never narrower than 220px */
+.mvt-themes{display:flex;flex-wrap:wrap;gap:12px}
+.mvt-themes li{padding:15px 18px;flex:1 1 30%;min-width:220px}
+.mvt-themes b{display:block;font-family:var(--f-display);font-size:19px;font-weight:600;color:var(--ink);
+  text-wrap:balance;line-height:1.25;margin-bottom:5px}
+/* `display:block` is a FIDELITY REPAIR, not a design change. The artifact ships
+   with no doctype, so it renders in quirks mode, where a line box holding only
+   inline elements ignores the block's strut. Its <em> therefore sits in a
+   21.03px line box; in any standards-mode document the same inline sits in the
+   chip's own 35.64px strut and every chip comes out 14.6px taller. Making the
+   description a block box gives it its own line box at its own line-height,
+   which reproduces the artifact exactly (chips measure 79.8px / 100.8px at
+   2560, to 0.05px) — and `text-wrap:pretty`, which does nothing on an inline,
+   starts working as the author plainly intended.
+   NOTE FOR EVERY BUILDER: this quirk bites anywhere an inline child declares a
+   SMALLER line-height than the block that holds it and that block has no bare
+   text of its own. See notes/packages-extras.md §2.
+
+   `text-wrap` is pinned to `wrap` for the same reason. The artifact writes
+   `text-wrap:pretty` here, but on an inline the property never applied — the
+   anonymous block above it did the line breaking, at the initial value. Making
+   the em a block would switch it on for the first time and move real wrap
+   points: `pretty` pulls a word down to avoid a short last line, and in
+   `(Prediction and data-driven models.)` it pays for that by breaking
+   `data-driven` at its own hyphen. Pinning it keeps the approved wraps. */
+.mvt-themes em{display:block;font-style:italic;font-size:14.5px;line-height:1.45;color:var(--ink);
+  text-wrap:wrap}
+
+/* ── responsive ──────────────────────────────────────────────────────────── */
+@media (max-width:1024px){
+  .mvt-ia-grid{grid-template-columns:1fr}
+}
+@media (max-width:820px){
+  .mvt-themes li{flex:1 1 100%}
+}

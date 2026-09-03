@@ -1,0 +1,76 @@
+{
+  "eyebrow": "Supported by a PhD in Pure Mathematics",
+  "title": "IBDP Maths IA Instructional Course",
+  "description": "1-to-1 Maths IA coaching, from topic selection to final draft — unique, well-written, higher-scoring IAs. {{plus stats.iaStudents}} students supported ({{stats.iaYearRange}}).",
+  "featuresLabel": "Course features",
+  "features": [
+    {
+      "id": "tailored-ia-topics",
+      "text": "Tailored IA topics"
+    },
+    {
+      "id": "unique-research-questions",
+      "text": "Unique research questions"
+    },
+    {
+      "id": "higher-predicted-grades",
+      "text": "Higher predicted grades"
+    },
+    {
+      "id": "beyond-the-syllabus-insight",
+      "text": "Beyond-the-syllabus insight"
+    },
+    {
+      "id": "stronger-drafts-after-every-lesson",
+      "text": "Stronger drafts after every lesson"
+    },
+    {
+      "id": "faster-writing-less-stress",
+      "text": "Faster writing, less stress"
+    }
+  ],
+  "themesLabel": "Themes",
+  "themes": [
+    {
+      "id": "ancient-mathematics",
+      "title": "Ancient Mathematics",
+      "description": "Modern methods for classic problems."
+    },
+    {
+      "id": "engineering-mathematics",
+      "title": "Engineering Mathematics",
+      "description": "Sound, waves & Fourier series."
+    },
+    {
+      "id": "everyday-geometry",
+      "title": "Everyday Geometry",
+      "description": "Shapes, area & volume in real objects."
+    },
+    {
+      "id": "mathematics-art",
+      "title": "Mathematics & Art",
+      "description": "Patterns, symmetry & design."
+    },
+    {
+      "id": "mathematics-in-society",
+      "title": "Mathematics in Society",
+      "description": "Prediction and data-driven models."
+    },
+    {
+      "id": "mathematics-in-the-environment",
+      "title": "Mathematics in the Environment",
+      "description": "Data-driven statistics, modelling & regression analysis."
+    },
+    {
+      "id": "problem-solving",
+      "title": "Problem-Solving",
+      "description": "Optimisation in everyday decisions."
+    },
+    {
+      "id": "sports-mathematics",
+      "title": "Sports Mathematics",
+      "description": "Performance analysis, results prediction & optimisation."
+    }
+  ],
+  "ctaKey": "ia"
+}

@@ -1,0 +1,4410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "settings": {
+      "$ref": "#/$defs/Settings"
+    },
+    "pages": {
+      "$ref": "#/$defs/Pages"
+    },
+    "gradeScales": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GradeScale"
+      }
+    },
+    "programmes": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Programme"
+      }
+    },
+    "students": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Student"
+      }
+    },
+    "testimonials": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Testimonial"
+      }
+    },
+    "packages": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Package"
+      }
+    },
+    "courseGroups": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CourseGroup"
+      }
+    },
+    "faqs": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Faq"
+      }
+    },
+    "schools": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/School"
+      }
+    },
+    "iaCourse": {
+      "$ref": "#/$defs/IaCourse"
+    },
+    "whatsappPrefills": {
+      "$ref": "#/$defs/WhatsappPrefills"
+    }
+  },
+  "required": [
+    "settings",
+    "pages",
+    "gradeScales",
+    "programmes",
+    "students",
+    "testimonials",
+    "packages",
+    "courseGroups",
+    "faqs",
+    "schools",
+    "iaCourse",
+    "whatsappPrefills"
+  ],
+  "additionalProperties": false,
+  "title": "WSMath content",
+  "description": "Every editable word, number and image on wsmath.com. One property per file in src/content/.",
+  "$defs": {
+    "Settings": {
+      "type": "object",
+      "properties": {
+        "brand": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Brand name",
+              "description": "The business name, e.g. WSMath.",
+              "x-widget": "text"
+            },
+            "copyrightHolder": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Copyright holder",
+              "description": "The name on the © line in the footer, e.g. Winson Siu. Kept separate from the brand name because a rights notice names a legal person, not a trading name. docs/07-content-conflicts.md has this open with the owner.",
+              "x-widget": "text"
+            },
+            "tutorName": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Tutor name",
+              "description": "Full name as it should appear everywhere, e.g. Winson Siu.",
+              "x-widget": "text"
+            },
+            "tutorNameZh": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Tutor name (Chinese)",
+              "description": "Chinese name or title, e.g. 數學軍師.",
+              "x-widget": "text"
+            },
+            "taglineEn": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Tagline (English)",
+              "description": "One line describing what you do, e.g. International Mathematics Exam Strategist.",
+              "x-widget": "text"
+            },
+            "taglineZh": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Tagline (Chinese)",
+              "description": "The same line in Chinese, e.g. 國際數學科考試軍師.",
+              "x-widget": "text"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Short description",
+              "description": "One sentence used in the footer and in search results, e.g. Structured learning, exam strategy, measurable progress.",
+              "x-widget": "textarea"
+            },
+            "logo": {
+              "title": "Logo",
+              "description": "The square mark shown in the footer, e.g. /icon.png.",
+              "x-widget": "image",
+              "$ref": "#/$defs/MediaRef"
+            },
+            "ogImage": {
+              "title": "Share image",
+              "description": "Shown when a link to the site is pasted into WhatsApp or a social post. 1200×630 works best.",
+              "x-widget": "image",
+              "$ref": "#/$defs/MediaRef"
+            }
+          },
+          "required": [
+            "name",
+            "copyrightHolder",
+            "tutorName",
+            "tutorNameZh",
+            "taglineEn",
+            "taglineZh",
+            "description",
+            "logo",
+            "ogImage"
+          ],
+          "additionalProperties": false,
+          "title": "Brand",
+          "description": "Names and marks. Changing these changes them everywhere."
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "whatsappPhone": {
+              "type": "string",
+              "pattern": "^\\d{8,15}$",
+              "title": "WhatsApp number",
+              "description": "Digits only, including the country code and no + sign, e.g. 85269447214. Used to build every wa.me link on the site.",
+              "x-widget": "phone"
+            },
+            "timezoneLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Time zone",
+              "description": "Shown in the footer, e.g. Hong Kong / Global online.",
+              "x-widget": "text"
+            },
+            "centreAddress": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Centre address",
+              "description": "Where face-to-face lessons happen, e.g. Times Square, Causeway Bay. Also used by search engines.",
+              "x-widget": "text"
+            }
+          },
+          "required": [
+            "whatsappPhone",
+            "timezoneLabel",
+            "centreAddress"
+          ],
+          "additionalProperties": false,
+          "title": "Contact"
+        },
+        "socials": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SocialLink"
+          },
+          "title": "Social profiles",
+          "description": "Add, remove or reorder. Each one shows as an icon in the footer.",
+          "x-widget": "collection"
+        },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "tutoringHours": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "1-to-1 tutoring hours",
+              "description": "Digits only, e.g. 20000. The + and the comma are added automatically.",
+              "x-widget": "number"
+            },
+            "studentsCoached": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Students coached",
+              "description": "Digits only, e.g. 250.",
+              "x-widget": "number"
+            },
+            "lessonsTaught": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Lessons taught",
+              "description": "Digits only, e.g. 11000.",
+              "x-widget": "number"
+            },
+            "teachingSince": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}$",
+              "title": "Teaching since",
+              "description": "Year and month you started, as YYYY-MM, e.g. 2017-09. Years of experience is calculated from this, so it can never go stale.",
+              "x-widget": "text"
+            },
+            "oneToOneSince": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "1-to-1 engagements since",
+              "description": "Year the 1-to-1 practice started, e.g. 2018. Distinct from 'Teaching since' — the packages snapshot quotes this one. docs/07-content-conflicts.md §A2 has the two dates open with the owner; until they are reconciled both are editable here rather than typed into copy.",
+              "x-widget": "number"
+            },
+            "iaStudents": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Maths IA students supported",
+              "description": "Digits only, e.g. 80.",
+              "x-widget": "number"
+            },
+            "iaYearRange": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Maths IA years",
+              "description": "The span those IA students cover, e.g. 2020–2025.",
+              "x-widget": "text"
+            },
+            "questionBankYears": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Question bank years",
+              "description": "The span the past-paper bank covers, e.g. 2008–2025.",
+              "x-widget": "text"
+            },
+            "pastPapersIbdp": {
+              "type": "string",
+              "minLength": 1,
+              "title": "IBDP past-paper years",
+              "description": "The span of past papers in the IBDP courses, e.g. 2008–2026. Shown on every IBDP course row.",
+              "x-widget": "text"
+            },
+            "pastPapersIal": {
+              "type": "string",
+              "minLength": 1,
+              "title": "International A-Level past-paper years",
+              "description": "The span of past papers in the IAL course, e.g. 2014–2026.",
+              "x-widget": "text"
+            },
+            "pastPapersCambridgeIgcse": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Cambridge IGCSE past-paper years",
+              "description": "The span of past papers in the 0607 and 0606 courses, e.g. 2014–2026.",
+              "x-widget": "text"
+            },
+            "pastPapersEdexcelIgcse": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Edexcel International GCSE past-paper years",
+              "description": "The span of past papers in the 4MA1 course, e.g. 2018–2025.",
+              "x-widget": "text"
+            }
+          },
+          "required": [
+            "tutoringHours",
+            "studentsCoached",
+            "lessonsTaught",
+            "teachingSince",
+            "oneToOneSince",
+            "iaStudents",
+            "iaYearRange",
+            "questionBankYears",
+            "pastPapersIbdp",
+            "pastPapersIal",
+            "pastPapersCambridgeIgcse",
+            "pastPapersEdexcelIgcse"
+          ],
+          "additionalProperties": false,
+          "title": "Headline numbers",
+          "description": "Edit once here. Every sentence on the site that mentions these numbers updates with it."
+        },
+        "pricing": {
+          "type": "object",
+          "properties": {
+            "currency": {
+              "type": "string",
+              "const": "HKD",
+              "title": "Currency",
+              "description": "Currency code shown before every price.",
+              "x-widget": "text"
+            },
+            "locale": {
+              "default": "en-HK",
+              "title": "Number format",
+              "description": "Locale used to group digits, e.g. en-HK gives 19,800. Pinned so every visitor sees the same figure.",
+              "x-widget": "text",
+              "type": "string"
+            },
+            "privateHourlyRate": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "1-to-1 hourly rate",
+              "description": "Digits only, e.g. 1500. Will be parsed as a number.",
+              "x-widget": "number"
+            },
+            "coursePrice": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Course price",
+              "description": "Digits only, e.g. 16800. What most board courses cost — AASL, AISL, the IAL course, 0607 and 4MA1. The headline figure on the cards and the one the value comparison uses.",
+              "x-widget": "number"
+            },
+            "coursePriceHigher": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Course price, higher tier",
+              "description": "Digits only, e.g. 19800. What the harder courses cost — AAHL, AIHL and 0606.",
+              "x-widget": "number"
+            },
+            "courseListPrice": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Course list price",
+              "description": "Digits only, e.g. 60000. The undiscounted price, shown struck through above the real one. The saving and the discount percentage are calculated from it.",
+              "x-widget": "number"
+            },
+            "referralRebateMax": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Maximum referral rebate",
+              "description": "Digits only, e.g. 3000.",
+              "x-widget": "number"
+            }
+          },
+          "required": [
+            "currency",
+            "locale",
+            "privateHourlyRate",
+            "coursePrice",
+            "coursePriceHigher",
+            "courseListPrice",
+            "referralRebateMax"
+          ],
+          "additionalProperties": false,
+          "title": "Prices",
+          "description": "Every price on the page comes from here. The savings, the per-lesson rate and the comparison bars are all calculated from the figures here."
+        },
+        "programme": {
+          "type": "object",
+          "properties": {
+            "sessionMinutes": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "1-to-1 lesson length (minutes)",
+              "description": "Digits only, e.g. 90. Used to convert 1-to-1 lessons into hours.",
+              "x-widget": "number"
+            },
+            "courseSessionMinutes": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Group lesson length (minutes)",
+              "description": "Digits only, e.g. 50. How long one live group lesson runs. Used to turn lesson counts into teaching hours, so the 1-to-1 comparison compares like with like.",
+              "x-widget": "number"
+            },
+            "ibdpLessonCount": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Lessons in an IBDP course",
+              "description": "Digits only, e.g. 28. Applies to all four IBDP courses. The per-lesson rate and the value comparison use it.",
+              "x-widget": "number"
+            },
+            "ialLessonCount": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Lessons in the International A-Level course",
+              "description": "Digits only, e.g. 32.",
+              "x-widget": "number"
+            },
+            "edexcelIgcseLessonCount": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Lessons in the Edexcel International GCSE course",
+              "description": "Digits only, e.g. 24. This is the 4MA1 course only — 0607 and 0606 are video courses with no live lessons.",
+              "x-widget": "number"
+            },
+            "ibdpBonusVideoHoursStandard": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Bonus video hours, IBDP SL",
+              "description": "Digits only, e.g. 32. Teaching video given on top of the live lessons in AASL and AISL.",
+              "x-widget": "number"
+            },
+            "ibdpBonusVideoHoursAdvanced": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Bonus video hours, IBDP HL",
+              "description": "Digits only, e.g. 64. Teaching video given on top of the live lessons in AAHL and AIHL.",
+              "x-widget": "number"
+            },
+            "videoHours0607": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Length of the 0607 video course (hours)",
+              "description": "Digits only, e.g. 32. 0607 is a video course, so this is the whole product. The 0606 card also quotes it, because 0606 bundles these videos in.",
+              "x-widget": "number"
+            },
+            "videoHours0606": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Length of the 0606 video course (hours)",
+              "description": "Digits only, e.g. 32. 0606's own teaching video, separate from the 0607 videos it bundles.",
+              "x-widget": "number"
+            },
+            "intensiveLessonCount": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "Lessons in the intensive block",
+              "description": "Digits only, e.g. 8. Used to compute the block cost.",
+              "x-widget": "number"
+            },
+            "curricula": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Curriculum",
+                "description": "One curriculum, e.g. IBDP.",
+                "x-widget": "text"
+              },
+              "title": "Curricula taught",
+              "description": "One per line, e.g. IBDP, A-Level / IAL, IGCSE. Every sentence listing them is built from this.",
+              "x-widget": "collection"
+            }
+          },
+          "required": [
+            "sessionMinutes",
+            "courseSessionMinutes",
+            "ibdpLessonCount",
+            "ialLessonCount",
+            "edexcelIgcseLessonCount",
+            "ibdpBonusVideoHoursStandard",
+            "ibdpBonusVideoHoursAdvanced",
+            "videoHours0607",
+            "videoHours0606",
+            "intensiveLessonCount",
+            "curricula"
+          ],
+          "additionalProperties": false,
+          "title": "Programme shape",
+          "description": "Lesson counts and lengths. Every sentence on the site that quotes one is built from these."
+        },
+        "setup": {
+          "type": "object",
+          "properties": {
+            "platform": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Lesson platform",
+              "description": "Where live lessons happen, e.g. Zoom.",
+              "x-widget": "text"
+            },
+            "equipment": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Item",
+                "description": "One piece of kit, e.g. iPad.",
+                "x-widget": "text"
+              },
+              "title": "Recommended equipment",
+              "description": "One item per line, e.g. iPad, Apple Pencil, GoodNotes. Joined with + wherever the kit is listed.",
+              "x-widget": "collection"
+            }
+          },
+          "required": [
+            "platform",
+            "equipment"
+          ],
+          "additionalProperties": false,
+          "title": "Lesson setup"
+        },
+        "outcomes": {
+          "type": "object",
+          "properties": {
+            "hlSixPlusRate": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Math HL 6+ rate",
+              "description": "As you want it written, e.g. 65%+.",
+              "x-widget": "text"
+            },
+            "slSixPlusRate": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Math SL 6+ rate",
+              "description": "As you want it written, e.g. 65%+.",
+              "x-widget": "text"
+            },
+            "avgUplift": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Average grade uplift",
+              "description": "As you want it written, e.g. 2+.",
+              "x-widget": "text"
+            },
+            "improvedOneBand": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Improved at least one band",
+              "description": "As you want it written, e.g. 90%+ improved ≥1 band.",
+              "x-widget": "text"
+            },
+            "typicalTimeToGain": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Typical time to first gain",
+              "description": "As you want it written, e.g. Often within 8–12 weeks.",
+              "x-widget": "text"
+            },
+            "satisfaction": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Satisfaction",
+              "description": "As you want it written, e.g. Very high satisfaction.",
+              "x-widget": "text"
+            },
+            "topBandsLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Top bands",
+              "description": "How the top outcomes read, e.g. 6–7 / A–A* outcomes.",
+              "x-widget": "text"
+            }
+          },
+          "required": [
+            "hlSixPlusRate",
+            "slSixPlusRate",
+            "avgUplift",
+            "improvedOneBand",
+            "typicalTimeToGain",
+            "satisfaction",
+            "topBandsLabel"
+          ],
+          "additionalProperties": false,
+          "title": "Outcome claims",
+          "description": "Marketing claims shown in the results snapshot. Keep them true — they are the strongest thing on the page."
+        },
+        "seo": {
+          "type": "object",
+          "properties": {
+            "siteUrl": {
+              "type": "string",
+              "format": "uri",
+              "title": "Site address",
+              "description": "The live address, e.g. https://wsmath.com. No trailing slash.",
+              "x-widget": "url"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Page title",
+              "description": "Shown in the browser tab and as the headline in search results.",
+              "x-widget": "text"
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Search description",
+              "description": "One or two sentences shown under the title in search results.",
+              "x-widget": "textarea"
+            }
+          },
+          "required": [
+            "siteUrl",
+            "title",
+            "description"
+          ],
+          "additionalProperties": false,
+          "title": "Search and sharing"
+        },
+        "builder": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Credit prefix",
+              "description": "Text before the name, e.g. Built by.",
+              "x-widget": "text"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Builder name",
+              "description": "Who built the site, e.g. XiniDev.",
+              "x-widget": "text"
+            },
+            "siteUrl": {
+              "type": "string",
+              "format": "uri",
+              "title": "Builder site",
+              "description": "Link on the builder credit.",
+              "x-widget": "url"
+            },
+            "githubUrl": {
+              "type": "string",
+              "format": "uri",
+              "title": "Builder GitHub",
+              "description": "Optional. Second link on the builder credit, e.g. a GitHub profile.",
+              "x-widget": "url"
+            },
+            "stack": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Stack",
+              "description": "What it is built with, shown after the name, e.g. Next.js + Tailwind.",
+              "x-widget": "text"
+            }
+          },
+          "required": [
+            "label",
+            "name",
+            "siteUrl",
+            "stack"
+          ],
+          "additionalProperties": false,
+          "title": "Builder credit"
+        },
+        "navSections": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/NavSection"
+          },
+          "title": "Navigation",
+          "description": "The links in the top bar, in order. Each one jumps to a section; the 01/02/03 numbering follows the order automatically.",
+          "x-widget": "collection"
+        }
+      },
+      "required": [
+        "brand",
+        "contact",
+        "socials",
+        "stats",
+        "pricing",
+        "programme",
+        "setup",
+        "outcomes",
+        "seo",
+        "builder",
+        "navSections"
+      ],
+      "additionalProperties": false,
+      "title": "Settings",
+      "description": "Business facts referenced across the whole site. Change a number here and every sentence that mentions it changes with it."
+    },
+    "MediaRef": {
+      "type": "object",
+      "properties": {
+        "src": {
+          "type": "string",
+          "pattern": "^\\/",
+          "title": "Image path",
+          "description": "Path to the file in /public, e.g. /avatars/alice-gao-2022.webp.",
+          "x-widget": "image"
+        },
+        "alt": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Alt text",
+          "description": "Describe what the image shows, for screen readers and for when the image fails to load. Every image needs its own — never reuse one description for two photos.",
+          "x-widget": "text"
+        },
+        "width": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Intrinsic width (px)",
+          "description": "The file's real pixel width. Reserves space so the page does not jump while loading.",
+          "x-widget": "number"
+        },
+        "height": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Intrinsic height (px)",
+          "description": "The file's real pixel height.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "src",
+        "alt"
+      ],
+      "additionalProperties": false,
+      "title": "Image",
+      "description": "An image, its alt text and its intrinsic size."
+    },
+    "SocialLink": {
+      "type": "object",
+      "properties": {
+        "platform": {
+          "type": "string",
+          "enum": [
+            "facebook",
+            "instagram",
+            "xiaohongshu",
+            "youtube",
+            "tiktok",
+            "wechat"
+          ],
+          "title": "Platform",
+          "description": "Which network this link points at. Drives the icon.",
+          "x-widget": "select"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "title": "Profile URL",
+          "description": "Full link to the profile or page, including https://.",
+          "x-widget": "url"
+        }
+      },
+      "required": [
+        "platform",
+        "url"
+      ],
+      "additionalProperties": false,
+      "title": "Social profile"
+    },
+    "NavSection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Section anchor",
+          "description": "The id of the section this links to, e.g. about. Must match a section on the page.",
+          "x-widget": "id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Menu label",
+          "description": "What the navigation shows, e.g. About. The 01/02/03 number is added automatically.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "additionalProperties": false,
+      "title": "Navigation entry"
+    },
+    "Pages": {
+      "type": "object",
+      "properties": {
+        "sectionMarks": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SectionMark"
+          },
+          "title": "Menu links",
+          "description": "The top-bar links, in order. Each points at a section of the page.",
+          "x-widget": "collection"
+        },
+        "nav": {
+          "type": "object",
+          "properties": {
+            "brandLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Brand label",
+              "description": "The small caps wordmark beside the logo, e.g. WSMath.",
+              "x-widget": "text"
+            },
+            "menuLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Menu description",
+              "description": "Read out by screen readers for the whole bar, e.g. Primary.",
+              "x-widget": "text"
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Button label",
+              "description": "The brass button in the top bar, e.g. Get in touch.",
+              "x-widget": "text"
+            },
+            "ctaKey": {
+              "$ref": "#/$defs/CtaKey"
+            },
+            "skipLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Skip link",
+              "description": "The keyboard skip link at the very top, e.g. Skip to content.",
+              "x-widget": "text"
+            }
+          },
+          "required": [
+            "brandLabel",
+            "menuLabel",
+            "ctaLabel",
+            "ctaKey",
+            "skipLabel"
+          ],
+          "additionalProperties": false,
+          "title": "Top bar"
+        },
+        "hero": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "The line above the name, e.g. {{brand.taglineEn}}.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "place": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Location line",
+              "description": "Under the eyebrow, e.g. {{contact.timezoneLabel}}.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "nameLine1": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Name, first line",
+              "description": "e.g. Winson. Shown in capitals.",
+              "x-widget": "text"
+            },
+            "nameLine2": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Name, second line",
+              "description": "e.g. Siu. Shown in capitals.",
+              "x-widget": "text"
+            },
+            "inscription": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Chinese inscription",
+              "description": "The vertical Chinese line beside the name, e.g. {{brand.taglineZh}}.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "portrait": {
+              "title": "Portrait",
+              "description": "Path to the hero image in /public, e.g. /hero.webp. Loaded first, so keep the file small.",
+              "x-widget": "image",
+              "$ref": "#/$defs/MediaRef"
+            },
+            "band": {
+              "type": "object",
+              "properties": {
+                "statLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Headline stat label",
+                  "description": "e.g. 1-to-1 tutoring hours.",
+                  "x-widget": "text"
+                },
+                "statSublabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Headline stat note",
+                  "description": "e.g. since {{stats.teachingSinceLabel}}.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "proof": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/EmphasisLine"
+                  },
+                  "title": "Proof lines",
+                  "description": "The credential lines under the headline number. Split each line where the bold starts and stops.",
+                  "x-widget": "collection"
+                }
+              },
+              "required": [
+                "statLabel",
+                "statSublabel",
+                "proof"
+              ],
+              "additionalProperties": false,
+              "title": "Hero band"
+            },
+            "scope": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Scope line",
+              "description": "The small caps curricula line, e.g. {{programme.curriculaDots}}.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "facts": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*$",
+                    "title": "ID",
+                    "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                    "x-widget": "id"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Fact",
+                    "description": "One short fact line, e.g. 93 result records · 30 schools.",
+                    "x-widget": "textarea",
+                    "x-tokens": true
+                  }
+                },
+                "required": [
+                  "id",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              "title": "Fact lines",
+              "description": "The short fact lines above the WhatsApp button.",
+              "x-widget": "collection"
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Button label",
+              "description": "The hero WhatsApp button, e.g. Get in touch.",
+              "x-widget": "text"
+            },
+            "ctaKey": {
+              "$ref": "#/$defs/CtaKey"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "place",
+            "nameLine1",
+            "nameLine2",
+            "inscription",
+            "portrait",
+            "band",
+            "scope",
+            "facts",
+            "ctaLabel",
+            "ctaKey"
+          ],
+          "additionalProperties": false,
+          "title": "Hero"
+        },
+        "about": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "e.g. About WSMath.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "e.g. Premium Exam Coaching.",
+              "x-widget": "text"
+            },
+            "lede": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Lede",
+              "description": "The sentence under the heading.",
+              "x-widget": "textarea",
+              "x-tokens": true
+            },
+            "whatYouGet": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Heading",
+                  "description": "e.g. What you get.",
+                  "x-widget": "text"
+                },
+                "items": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/LeadItem"
+                  },
+                  "title": "Points",
+                  "description": "One ruled line each on the paper sheet.",
+                  "x-widget": "collection"
+                }
+              },
+              "required": [
+                "title",
+                "items"
+              ],
+              "additionalProperties": false,
+              "title": "What you get"
+            },
+            "howITeach": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Heading",
+                  "description": "e.g. How I teach.",
+                  "x-widget": "text"
+                },
+                "items": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/LeadItem"
+                  },
+                  "title": "Points",
+                  "description": "One ruled line each on the paper sheet.",
+                  "x-widget": "collection"
+                }
+              },
+              "required": [
+                "title",
+                "items"
+              ],
+              "additionalProperties": false,
+              "title": "How I teach"
+            },
+            "figure": {
+              "title": "Photograph",
+              "description": "The teaching photograph on the raised plate.",
+              "x-widget": "image",
+              "$ref": "#/$defs/MediaRef"
+            },
+            "whoBlock": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Label",
+                  "description": "The small caps label, e.g. Who I teach.",
+                  "x-widget": "text"
+                },
+                "ageLead": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Age range",
+                  "description": "The large serif part, e.g. Ages 15–18.",
+                  "x-widget": "text"
+                },
+                "ageRest": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Beside the ages",
+                  "description": "The rest of the line, e.g. students worldwide.",
+                  "x-widget": "text"
+                },
+                "rows": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/DefinitionItem"
+                  },
+                  "title": "Programme rows",
+                  "description": "Label on the left, course codes on the right, e.g. IBDP Math → AAHL, AASL, AIHL, AISL.",
+                  "x-widget": "collection"
+                },
+                "chip": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Setup chip",
+                  "description": "The kit line in the rounded chip, e.g. Best setup: {{setup.equipmentList}}.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                }
+              },
+              "required": [
+                "label",
+                "ageLead",
+                "ageRest",
+                "rows",
+                "chip"
+              ],
+              "additionalProperties": false,
+              "title": "Who I teach"
+            },
+            "journeys": {
+              "type": "object",
+              "properties": {
+                "items": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/JourneyItem"
+                  },
+                  "title": "Journeys",
+                  "description": "The seven short journeys shown as pills under the grid. These restate records from the results section — keep them in step or the two will disagree.",
+                  "x-widget": "collection"
+                }
+              },
+              "required": [
+                "items"
+              ],
+              "additionalProperties": false,
+              "title": "Journeys"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "title",
+            "lede",
+            "whatYouGet",
+            "howITeach",
+            "figure",
+            "whoBlock",
+            "journeys"
+          ],
+          "additionalProperties": false,
+          "title": "About"
+        },
+        "courses": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "e.g. IBDP · A-Level · IGCSE.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "e.g. Courses covered.",
+              "x-widget": "text"
+            },
+            "sub": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Supporting line",
+              "description": "The sentence beside the heading.",
+              "x-widget": "textarea",
+              "x-tokens": true
+            },
+            "groupMarkLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Group-course marker",
+              "description": "The sentence the diamond beside a course name stands for, e.g. Also sold as a scheduled group course. Read out by screen readers on every marked row, and printed once as the legend under the trays.",
+              "x-widget": "text"
+            },
+            "displayCodes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/CourseCode"
+              },
+              "title": "Display codes",
+              "description": "Short codes for courses that have none in the Course groups document (the IBDP courses and IBMYP). Courses with a real exam-board code show that code automatically.",
+              "x-widget": "collection"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "title",
+            "sub",
+            "groupMarkLabel",
+            "displayCodes"
+          ],
+          "additionalProperties": false,
+          "title": "Courses covered"
+        },
+        "ribbon": {
+          "type": "object",
+          "properties": {
+            "ariaLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Landmark name",
+              "description": "Never shown. Names the band for screen readers moving between landmarks, e.g. Availability.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "The big line in the carmine band.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Body",
+              "description": "The line under it.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "waLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Small label",
+              "description": "The small caps label above the button, e.g. WhatsApp.",
+              "x-widget": "text"
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Button label",
+              "description": "e.g. Get in touch.",
+              "x-widget": "text"
+            },
+            "ctaKey": {
+              "$ref": "#/$defs/CtaKey"
+            }
+          },
+          "required": [
+            "ariaLabel",
+            "title",
+            "body",
+            "waLabel",
+            "ctaLabel",
+            "ctaKey"
+          ],
+          "additionalProperties": false,
+          "title": "Availability ribbon"
+        },
+        "packagesPage": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "e.g. IBDP Coaching Packages.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "e.g. Choose the path that fits your goal.",
+              "x-widget": "text"
+            },
+            "sub": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Supporting line",
+              "description": "The sentence beside the heading.",
+              "x-widget": "textarea",
+              "x-tokens": true
+            },
+            "chips": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*$",
+                    "title": "ID",
+                    "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                    "x-widget": "id"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Chip",
+                    "description": "One short label chip.",
+                    "x-widget": "textarea"
+                  }
+                },
+                "required": [
+                  "id",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              "title": "Label chips",
+              "description": "The debossed label chips under the heading.",
+              "x-widget": "collection"
+            },
+            "ledger": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Ledger heading",
+                  "description": "The small caps line above the ledger, e.g. IBDP Mathematics group course.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "rows": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/DefinitionItem"
+                  },
+                  "title": "Ledger rows",
+                  "description": "The valuation ledger, e.g. Was → {{money pricing.courseListPrice}}.",
+                  "x-widget": "collection"
+                }
+              },
+              "required": [
+                "title",
+                "rows"
+              ],
+              "additionalProperties": false,
+              "title": "Valuation ledger"
+            },
+            "snapshot": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Small caps label",
+                  "description": "e.g. Since {{stats.oneToOneSince}}.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Headline figure",
+                  "description": "e.g. {{plus stats.studentsCoached}}.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "sub": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Under the figure",
+                  "description": "e.g. students coached 1-on-1.",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "label",
+                "value",
+                "sub"
+              ],
+              "additionalProperties": false,
+              "title": "Outcome snapshot"
+            },
+            "snapList": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/DefinitionItem"
+              },
+              "title": "Snapshot rows",
+              "description": "The label/value rows under the headline figure.",
+              "x-widget": "collection"
+            },
+            "cmp": {
+              "type": "object",
+              "properties": {
+                "heading": {
+                  "$ref": "#/$defs/EmphasisLine"
+                },
+                "cells": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/CmpCell"
+                  },
+                  "title": "Comparison cells",
+                  "description": "The two wells: standard 1-to-1 cost vs the group course investment.",
+                  "x-widget": "collection"
+                }
+              },
+              "required": [
+                "heading",
+                "cells"
+              ],
+              "additionalProperties": false,
+              "title": "Value comparison"
+            },
+            "rateLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Rate label",
+              "description": "The small caps label before the private price, e.g. Typical rate.",
+              "x-widget": "text"
+            },
+            "deliveryLabels": {
+              "type": "object",
+              "properties": {
+                "live": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Live badge",
+                  "description": "The word on a scheduled course's badge, e.g. Live.",
+                  "x-widget": "text"
+                },
+                "video": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Video badge",
+                  "description": "The word on a self-paced course's badge, e.g. Video.",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "live",
+                "video"
+              ],
+              "additionalProperties": false,
+              "title": "Delivery badges"
+            },
+            "outline": {
+              "$ref": "#/$defs/OutlineCopy"
+            },
+            "iaFootTag": {
+              "type": "string",
+              "minLength": 1,
+              "title": "IA block foot tag",
+              "description": "The small caps line in the IA course's foot.",
+              "x-widget": "text"
+            },
+            "ctaLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Button label",
+              "description": "The label on the package WhatsApp buttons, e.g. Get in touch.",
+              "x-widget": "text"
+            },
+            "plan": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Panel label",
+                  "description": "The floating panel's title, e.g. Your plan.",
+                  "x-widget": "text"
+                },
+                "pickShow": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Pick label",
+                  "description": "The button before a plan is chosen, e.g. Show in your plan.",
+                  "x-widget": "text"
+                },
+                "pickActive": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Picked label",
+                  "description": "The button once the plan is chosen, e.g. In your plan.",
+                  "x-widget": "text"
+                },
+                "ctaLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Panel button label",
+                  "description": "The WhatsApp button in the floating panel, e.g. Get in touch.",
+                  "x-widget": "text"
+                },
+                "defaultPackageId": {
+                  "type": "string",
+                  "pattern": "^[a-z0-9][a-z0-9-]*$",
+                  "title": "Preselected plan",
+                  "description": "The ID of the package the floating panel starts on, e.g. ibdp. It must be a package that has a price.",
+                  "x-widget": "id"
+                }
+              },
+              "required": [
+                "label",
+                "pickShow",
+                "pickActive",
+                "ctaLabel",
+                "defaultPackageId"
+              ],
+              "additionalProperties": false,
+              "title": "Your plan panel"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "title",
+            "sub",
+            "chips",
+            "ledger",
+            "snapshot",
+            "snapList",
+            "cmp",
+            "rateLabel",
+            "deliveryLabels",
+            "outline",
+            "iaFootTag",
+            "ctaLabel",
+            "plan"
+          ],
+          "additionalProperties": false,
+          "title": "Packages"
+        },
+        "results": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "e.g. Proven Outcomes · Data-Driven Coaching.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "e.g. Results, with context.",
+              "x-widget": "text"
+            },
+            "sub": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Supporting line",
+              "description": "The sentence beside the heading.",
+              "x-widget": "textarea",
+              "x-tokens": true
+            },
+            "uplift": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Headline figure",
+                  "description": "e.g. {{outcomes.avgUplift}}.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Small caps note",
+                  "description": "e.g. {{outcomes.satisfaction}}.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Headline label",
+                  "description": "e.g. average grade uplift (From PG/mock to final).",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "value",
+                "note",
+                "label"
+              ],
+              "additionalProperties": false,
+              "title": "Outcome snapshot"
+            },
+            "snapList": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/DefinitionItem"
+              },
+              "title": "Snapshot rows",
+              "description": "The label/value wells under the heading.",
+              "x-widget": "collection"
+            },
+            "gradeHead": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Heading",
+                  "description": "e.g. Grade improvements.",
+                  "x-widget": "text"
+                },
+                "sub": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "First line",
+                  "description": "e.g. How students move from school predictions to final exam results.",
+                  "x-widget": "text"
+                },
+                "scaleLeft": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Count line",
+                  "description": "e.g. {{content.studentRecordCount}} records across {{content.programmeCount}} groups.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "scaleRight": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Published line",
+                  "description": "e.g. {{content.publishedRecordCount}} of them are published individually below.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                }
+              },
+              "required": [
+                "title",
+                "sub",
+                "scaleLeft",
+                "scaleRight"
+              ],
+              "additionalProperties": false,
+              "title": "Grade improvements heading"
+            },
+            "tabsLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Tab strip description",
+              "description": "Read out before the group tabs, e.g. Result groups.",
+              "x-widget": "text"
+            },
+            "tabsCountLabel": {
+              "type": "string",
+              "title": "Tab count prefix",
+              "description": "Printed before each tab's record count, e.g. n = . Keep the trailing space.",
+              "x-widget": "text"
+            },
+            "stream": {
+              "type": "object",
+              "properties": {
+                "fromLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Left gutter caption",
+                  "description": "e.g. From PG / mock.",
+                  "x-widget": "text"
+                },
+                "toLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Right gutter caption",
+                  "description": "e.g. Final.",
+                  "x-widget": "text"
+                },
+                "readLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Read-out label",
+                  "description": "e.g. Drawn records.",
+                  "x-widget": "text"
+                },
+                "readIdle": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Read-out prompt",
+                  "description": "e.g. Hover a ribbon to read its record.",
+                  "x-widget": "text"
+                },
+                "drawnTemplate": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Read-out summary",
+                  "description": "Shown when nothing is hovered. Write {group} for the group name, {n} for its size and {k} for the drawn count, e.g. {group} · n = {n} · {k} published records drawn.",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "fromLabel",
+                "toLabel",
+                "readLabel",
+                "readIdle",
+                "drawnTemplate"
+              ],
+              "additionalProperties": false,
+              "title": "The stream"
+            },
+            "matrix": {
+              "type": "object",
+              "properties": {
+                "caption": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Table caption",
+                  "description": "Describes the table for screen readers, e.g. Grade improvements — number of published records in each grade-jump band, by final grade, for the selected course group.",
+                  "x-widget": "textarea"
+                },
+                "colLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "First column heading",
+                  "description": "e.g. Final grade.",
+                  "x-widget": "text"
+                },
+                "binLabels": {
+                  "minItems": 4,
+                  "maxItems": 4,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9][a-z0-9-]*$",
+                        "title": "ID",
+                        "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                        "x-widget": "id"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "Column heading",
+                        "description": "One bin, e.g. 2 grade improvement.",
+                        "x-widget": "textarea"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "title": "Column headings",
+                  "description": "Exactly four: 0–1, 2, 3 and 4+ grade improvements, in that order.",
+                  "x-widget": "collection"
+                },
+                "readoutLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Read-out label",
+                  "description": "e.g. Published records.",
+                  "x-widget": "text"
+                },
+                "readoutIdle": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Read-out prompt",
+                  "description": "Shown before any cell is chosen.",
+                  "x-widget": "textarea",
+                  "x-tokens": true
+                },
+                "readoutIdleStream": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Read-out prompt — stream sentence",
+                  "description": "The second half of the prompt, printed only where the rising stream is on screen. Phones do not draw the stream, so anything referring to it belongs here and not above.",
+                  "x-widget": "textarea",
+                  "x-tokens": true
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Helper note",
+                  "description": "The small line under the table, e.g. 👆 Hover on each cell to see the students.",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "caption",
+                "colLabel",
+                "binLabels",
+                "readoutLabel",
+                "readoutIdle",
+                "readoutIdleStream",
+                "note"
+              ],
+              "additionalProperties": false,
+              "title": "Improvement matrix"
+            },
+            "legend": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/SummaryCard"
+              },
+              "title": "Summary counts",
+              "description": "Each row counts something across the published records. The number and percentage are calculated, never typed.",
+              "x-widget": "collection"
+            },
+            "legendScope": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Summary scope",
+              "description": "The line under the counts, e.g. Over the {{content.publishedRecordCount}} published records.",
+              "x-widget": "text",
+              "x-tokens": true
+            },
+            "chips": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*$",
+                    "title": "ID",
+                    "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                    "x-widget": "id"
+                  },
+                  "text": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Chip",
+                    "description": "One short label chip.",
+                    "x-widget": "textarea"
+                  }
+                },
+                "required": [
+                  "id",
+                  "text"
+                ],
+                "additionalProperties": false
+              },
+              "title": "Label chips",
+              "description": "The debossed label chips under the summary counts.",
+              "x-widget": "collection"
+            },
+            "schoolsHead": {
+              "$ref": "#/$defs/SectionHead"
+            },
+            "cta": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Heading",
+                  "description": "e.g. Start your IBDP / A-Level / IGCSE coaching.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "body": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Body",
+                  "description": "The line under the heading.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "rows": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[a-z0-9][a-z0-9-]*$",
+                        "title": "ID",
+                        "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                        "x-widget": "id"
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1,
+                        "title": "Point",
+                        "description": "One benefit per line.",
+                        "x-widget": "textarea",
+                        "x-tokens": true
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "title": "Points",
+                  "description": "Shown as short lines above the WhatsApp button.",
+                  "x-widget": "collection"
+                },
+                "prov": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Note",
+                  "description": "Tiny note under the points (e.g. response time / what to send).",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "trio": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Prompt trio",
+                  "description": "The small caps prompt beside the button, e.g. (name?) · (school?) · (year?).",
+                  "x-widget": "text"
+                },
+                "art": {
+                  "description": "The image in the small well beside the call to action.",
+                  "x-widget": "image",
+                  "$ref": "#/$defs/MediaRef"
+                },
+                "ctaLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Button label",
+                  "description": "e.g. Get in touch.",
+                  "x-widget": "text"
+                },
+                "ctaKey": {
+                  "$ref": "#/$defs/CtaKey"
+                }
+              },
+              "required": [
+                "title",
+                "body",
+                "rows",
+                "prov",
+                "trio",
+                "art",
+                "ctaLabel",
+                "ctaKey"
+              ],
+              "additionalProperties": false,
+              "title": "Results call to action"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "title",
+            "sub",
+            "uplift",
+            "snapList",
+            "gradeHead",
+            "tabsLabel",
+            "tabsCountLabel",
+            "stream",
+            "matrix",
+            "legend",
+            "legendScope",
+            "chips",
+            "schoolsHead",
+            "cta"
+          ],
+          "additionalProperties": false,
+          "title": "Results"
+        },
+        "voices": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "e.g. Student Voices.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "e.g. What my students and parents say.",
+              "x-widget": "text"
+            },
+            "lede": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Supporting line",
+              "description": "The sentence beside the heading.",
+              "x-widget": "textarea",
+              "x-tokens": true
+            },
+            "video": {
+              "type": "object",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": [
+                    "loom",
+                    "stream",
+                    "youtube"
+                  ],
+                  "title": "Video host",
+                  "description": "Where the video lives. Paste the normal share link below — the embed link is worked out for you.",
+                  "x-widget": "select"
+                },
+                "url": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Video link",
+                  "description": "Paste the share link exactly as the host gives it.",
+                  "x-widget": "text"
+                },
+                "stamp": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Corner stamp",
+                  "description": "The small caps line under the player, e.g. Video · replays available.",
+                  "x-widget": "text"
+                },
+                "heading": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Heading beside the video",
+                  "description": "e.g. Real students talking about their WSMath journey.",
+                  "x-widget": "text"
+                },
+                "body": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Body beside the video",
+                  "description": "The paragraph under that heading.",
+                  "x-widget": "textarea",
+                  "x-tokens": true
+                },
+                "clips": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/VideoClip"
+                  },
+                  "title": "Clips",
+                  "description": "The students in the video, in order.",
+                  "x-widget": "collection"
+                },
+                "ctaKey": {
+                  "$ref": "#/$defs/CtaKey"
+                }
+              },
+              "required": [
+                "provider",
+                "url",
+                "stamp",
+                "heading",
+                "body",
+                "clips",
+                "ctaKey"
+              ],
+              "additionalProperties": false,
+              "title": "Student video"
+            },
+            "trough": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Label",
+                  "description": "The line above the drifting row, e.g. Twelve more, in four written languages.",
+                  "x-widget": "text"
+                },
+                "sheetIds": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*$",
+                    "title": "Testimonial",
+                    "description": "The ID of a testimonial from the Testimonials document.",
+                    "x-widget": "id"
+                  },
+                  "title": "Sheets shown",
+                  "description": "Which testimonials drift through the row, in order. Pick from the carousel testimonials — the quotes themselves live in the Testimonials document.",
+                  "x-widget": "collection"
+                },
+                "universityShortNames": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/UniversityShortName"
+                  },
+                  "title": "University short names",
+                  "description": "Universities shortened on the small sheets. Any university not listed here is shown in full.",
+                  "x-widget": "collection"
+                },
+                "pauseLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Pause button",
+                  "description": "e.g. Pause.",
+                  "x-widget": "text"
+                },
+                "playLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Play button",
+                  "description": "e.g. Play.",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "label",
+                "sheetIds",
+                "universityShortNames",
+                "pauseLabel",
+                "playLabel"
+              ],
+              "additionalProperties": false,
+              "title": "The drifting row"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "title",
+            "lede",
+            "video",
+            "trough"
+          ],
+          "additionalProperties": false,
+          "title": "Student voices"
+        },
+        "faqPage": {
+          "type": "object",
+          "properties": {
+            "eyebrow": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Eyebrow",
+              "description": "e.g. Questions answered.",
+              "x-widget": "text"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Heading",
+              "description": "e.g. FAQs.",
+              "x-widget": "text"
+            },
+            "sub": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Supporting line",
+              "description": "The sentence beside the heading.",
+              "x-widget": "textarea",
+              "x-tokens": true
+            },
+            "ctaKey": {
+              "$ref": "#/$defs/CtaKey"
+            }
+          },
+          "required": [
+            "eyebrow",
+            "title",
+            "sub",
+            "ctaKey"
+          ],
+          "additionalProperties": false,
+          "title": "FAQ"
+        },
+        "footer": {
+          "type": "object",
+          "properties": {
+            "socialsLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Social links description",
+              "description": "Read out before the icons, e.g. Social.",
+              "x-widget": "text"
+            },
+            "columns": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FooterColumn"
+              },
+              "title": "Link columns",
+              "description": "The columns of links in the footer.",
+              "x-widget": "collection"
+            },
+            "getInTouch": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Heading",
+                  "description": "e.g. Get in touch.",
+                  "x-widget": "text"
+                },
+                "body": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Body",
+                  "description": "Short paragraph under the heading. Keep it concise and action-oriented.",
+                  "x-widget": "textarea",
+                  "x-tokens": true
+                },
+                "ctaLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Button label",
+                  "description": "e.g. Get in touch.",
+                  "x-widget": "text"
+                },
+                "ctaKey": {
+                  "$ref": "#/$defs/CtaKey"
+                }
+              },
+              "required": [
+                "title",
+                "body",
+                "ctaLabel",
+                "ctaKey"
+              ],
+              "additionalProperties": false,
+              "title": "Get in touch"
+            },
+            "meta": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/FooterMeta"
+              },
+              "title": "Practical details",
+              "description": "The lines under the WhatsApp button.",
+              "x-widget": "collection"
+            },
+            "bottom": {
+              "type": "object",
+              "properties": {
+                "rights": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Rights line",
+                  "description": "e.g. All rights reserved.",
+                  "x-widget": "text"
+                },
+                "disclaimer": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Disclaimer",
+                  "description": "Small note after the rights line. Keep it short and professional.",
+                  "x-widget": "textarea"
+                }
+              },
+              "required": [
+                "rights",
+                "disclaimer"
+              ],
+              "additionalProperties": false,
+              "title": "Bottom bar"
+            }
+          },
+          "required": [
+            "socialsLabel",
+            "columns",
+            "getInTouch",
+            "meta",
+            "bottom"
+          ],
+          "additionalProperties": false,
+          "title": "Footer"
+        },
+        "legal": {
+          "type": "object",
+          "properties": {
+            "privacy": {
+              "type": "object",
+              "properties": {
+                "modalTitle": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Title",
+                  "description": "Shown at the top of the privacy panel, e.g. Privacy Policy.",
+                  "x-widget": "text"
+                },
+                "lastUpdatedLabel": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Last-updated label",
+                  "description": "e.g. Last updated:.",
+                  "x-widget": "text"
+                },
+                "lastUpdated": {
+                  "type": "string",
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "title": "Last updated",
+                  "description": "The date the policy last changed, as YYYY-MM-DD.",
+                  "x-widget": "text"
+                },
+                "intro": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Intro",
+                  "description": "The paragraph before the sections.",
+                  "x-widget": "textarea"
+                },
+                "sections": {
+                  "minItems": 1,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/PrivacySection"
+                  },
+                  "title": "Sections",
+                  "description": "Add, remove or reorder.",
+                  "x-widget": "collection"
+                },
+                "footerHintPrefix": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Close hint, before the key",
+                  "description": "e.g. Click outside or press.",
+                  "x-widget": "text"
+                },
+                "footerHintKey": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Close hint, the key",
+                  "description": "e.g. Esc.",
+                  "x-widget": "text"
+                },
+                "footerHintSuffix": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Close hint, after the key",
+                  "description": "e.g. to close.",
+                  "x-widget": "text"
+                },
+                "closeButton": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Close button",
+                  "description": "e.g. Close.",
+                  "x-widget": "text"
+                }
+              },
+              "required": [
+                "modalTitle",
+                "lastUpdatedLabel",
+                "lastUpdated",
+                "intro",
+                "sections",
+                "footerHintPrefix",
+                "footerHintKey",
+                "footerHintSuffix",
+                "closeButton"
+              ],
+              "additionalProperties": false,
+              "title": "Privacy policy"
+            }
+          },
+          "required": [
+            "privacy"
+          ],
+          "additionalProperties": false,
+          "title": "Legal"
+        }
+      },
+      "required": [
+        "sectionMarks",
+        "nav",
+        "hero",
+        "about",
+        "courses",
+        "ribbon",
+        "packagesPage",
+        "results",
+        "voices",
+        "faqPage",
+        "footer",
+        "legal"
+      ],
+      "additionalProperties": false,
+      "title": "Page copy",
+      "description": "The wording of each section. Numbers, prices and names come from Settings — write {{token.path}} rather than typing them again."
+    },
+    "SectionMark": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Section anchor",
+          "description": "The section this link jumps to, e.g. results.",
+          "x-widget": "id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Menu label",
+          "description": "What the top-bar link says, e.g. Results.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "additionalProperties": false,
+      "title": "Menu link"
+    },
+    "CtaKey": {
+      "type": "string",
+      "enum": [
+        "nav",
+        "about-ribbon",
+        "results",
+        "private",
+        "ibdp",
+        "ial",
+        "igcse",
+        "ia",
+        "video",
+        "faq",
+        "footer"
+      ],
+      "title": "WhatsApp message",
+      "description": "Which prefilled WhatsApp message this button sends. The wording lives in the WhatsApp messages document.",
+      "x-widget": "select"
+    },
+    "EmphasisLine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "parts": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EmphasisPart"
+          },
+          "title": "Line",
+          "description": "Split the line where the bold starts and stops. Each run is either bold or not.",
+          "x-widget": "collection"
+        }
+      },
+      "required": [
+        "id",
+        "parts"
+      ],
+      "additionalProperties": false,
+      "title": "Line with bold"
+    },
+    "EmphasisPart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "text": {
+          "type": "string",
+          "title": "Text",
+          "description": "One run of the line.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "strong": {
+          "type": "boolean",
+          "title": "Bold",
+          "description": "On: this run is set in bold.",
+          "x-widget": "switch"
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "strong"
+      ],
+      "additionalProperties": false,
+      "title": "Text run"
+    },
+    "LeadItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "lead": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Bold lead",
+          "description": "Optional. The bold phrase that opens the point, e.g. Diagnostic-first planning:.",
+          "x-widget": "text"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Point",
+          "description": "The rest of the point.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "id",
+        "text"
+      ],
+      "additionalProperties": false,
+      "title": "Point"
+    },
+    "DefinitionItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "dt": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Label",
+          "description": "The short label, e.g. Consistent progress.",
+          "x-widget": "text"
+        },
+        "dd": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Value",
+          "description": "The value beside it, e.g. 90%+ improved ≥1 band.",
+          "x-widget": "text",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "id",
+        "dt",
+        "dd"
+      ],
+      "additionalProperties": false,
+      "title": "Label / value row"
+    },
+    "JourneyItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Student",
+          "description": "First name as published, e.g. James.",
+          "x-widget": "text"
+        },
+        "year": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Year",
+          "description": "The exam year, e.g. 2024.",
+          "x-widget": "text"
+        },
+        "course": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Course",
+          "description": "e.g. IBDP AAHL.",
+          "x-widget": "text"
+        },
+        "from": {
+          "type": "string",
+          "minLength": 1,
+          "title": "From",
+          "description": "Starting grade, e.g. 1.",
+          "x-widget": "text"
+        },
+        "to": {
+          "type": "string",
+          "minLength": 1,
+          "title": "To",
+          "description": "Final grade, e.g. 7.",
+          "x-widget": "text"
+        },
+        "duration": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Duration",
+          "description": "e.g. 2 years.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "year",
+        "course",
+        "from",
+        "to",
+        "duration"
+      ],
+      "additionalProperties": false,
+      "title": "Journey"
+    },
+    "CourseCode": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Course",
+          "description": "The course this code belongs to — the ID from the Course groups document.",
+          "x-widget": "id"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Display code",
+          "description": "The short code shown in the tray, e.g. AAHL or IBMYP.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "code"
+      ],
+      "additionalProperties": false,
+      "title": "Course display code"
+    },
+    "CmpCell": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Label",
+          "description": "The small caps label, e.g. Standard 1-to-1 rate.",
+          "x-widget": "text"
+        },
+        "fig": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Figure",
+          "description": "The large figure, e.g. {{money pricing.ibdpPrivateEquivalent}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "sub": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Small line",
+          "description": "Under the figure, e.g. {{plus programme.ibdpTeachingHours}} hours 1-to-1.",
+          "x-widget": "text",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "fig",
+        "sub"
+      ],
+      "additionalProperties": false,
+      "title": "Comparison cell"
+    },
+    "OutlineCopy": {
+      "type": "object",
+      "properties": {
+        "openLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Open label",
+          "description": "Write {count} where the number of pages goes, e.g. View the course outline · {count} pages.",
+          "x-widget": "text"
+        },
+        "openLabelSingle": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Open label, one page",
+          "description": "Used when an outline has a single page, e.g. View the course outline.",
+          "x-widget": "text"
+        },
+        "closeLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Close label",
+          "description": "The button that shuts the viewer, e.g. Close.",
+          "x-widget": "text"
+        },
+        "previousLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Previous label",
+          "description": "Never shown. Names the back arrow, e.g. Previous course.",
+          "x-widget": "text"
+        },
+        "nextLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Next label",
+          "description": "Never shown. Names the forward arrow, e.g. Next course.",
+          "x-widget": "text"
+        },
+        "pauseLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Pause label",
+          "description": "Stops the pages turning on their own, e.g. Pause.",
+          "x-widget": "text"
+        },
+        "playLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Play label",
+          "description": "Starts them turning again, e.g. Play.",
+          "x-widget": "text"
+        },
+        "fullSizeLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Full-size label",
+          "description": "Shown on the small plate in the corner of the page, e.g. Open at full size.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "openLabel",
+        "openLabelSingle",
+        "closeLabel",
+        "previousLabel",
+        "nextLabel",
+        "pauseLabel",
+        "playLabel",
+        "fullSizeLabel"
+      ],
+      "additionalProperties": false,
+      "title": "Course outline viewer"
+    },
+    "SummaryCard": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "metric": {
+          "type": "string",
+          "enum": [
+            "topBand",
+            "secondBand",
+            "bigJumps",
+            "anyImprovement"
+          ],
+          "title": "What it counts",
+          "description": "Top band: finished on the highest grade. Second band: finished on the top two. Big jumps: moved 2 grades or more. Any improvement: moved at least 1.",
+          "x-widget": "select"
+        },
+        "emoji": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Emoji",
+          "description": "The emoji beside the label, e.g. ⭐.",
+          "x-widget": "text"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Card label",
+          "description": "e.g. Final grade =7.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "metric",
+        "emoji",
+        "label"
+      ],
+      "additionalProperties": false,
+      "title": "Summary card"
+    },
+    "SectionHead": {
+      "type": "object",
+      "properties": {
+        "eyebrow": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Eyebrow",
+          "description": "Optional small line above the heading.",
+          "x-widget": "text"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Heading",
+          "description": "The heading itself.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "prov": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Provenance note",
+          "description": "Optional. Small note beside the heading explaining where the numbers come from.",
+          "x-widget": "text",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "title"
+      ],
+      "additionalProperties": false,
+      "title": "Block heading"
+    },
+    "VideoClip": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "testimonialId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Linked testimonial",
+          "description": "Optional. The ID of the testimonial this clip belongs to.",
+          "x-widget": "id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Name",
+          "description": "e.g. Alice Gao.",
+          "x-widget": "text"
+        },
+        "course": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Course and year",
+          "description": "e.g. IBDP AAHL · 2022.",
+          "x-widget": "text"
+        },
+        "grade": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Grade change",
+          "description": "e.g. 6 → 7. Use the arrow, not a hyphen.",
+          "x-widget": "text"
+        },
+        "image": {
+          "title": "Still",
+          "description": "The thumbnail for this clip.",
+          "x-widget": "image",
+          "$ref": "#/$defs/MediaRef"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "course",
+        "grade",
+        "image"
+      ],
+      "additionalProperties": false,
+      "title": "Video clip"
+    },
+    "UniversityShortName": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "full": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Full name",
+          "description": "As written in the testimonial, e.g. The University of Hong Kong.",
+          "x-widget": "text"
+        },
+        "short": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Short name",
+          "description": "Shown on the small sheets, e.g. HKU.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "full",
+        "short"
+      ],
+      "additionalProperties": false,
+      "title": "University short name"
+    },
+    "FooterColumn": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Column heading",
+          "description": "e.g. Programmes.",
+          "x-widget": "text"
+        },
+        "links": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FooterLink"
+          },
+          "title": "Links",
+          "description": "Add, remove or reorder.",
+          "x-widget": "collection"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "links"
+      ],
+      "additionalProperties": false,
+      "title": "Footer column"
+    },
+    "FooterLink": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Label",
+          "description": "What the link says.",
+          "x-widget": "text"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "anchor",
+            "modal",
+            "whatsapp",
+            "external"
+          ],
+          "title": "Link type",
+          "description": "Anchor: jumps to a section on this page. Modal: opens the privacy policy. WhatsApp: starts a chat. External: opens another site.",
+          "x-widget": "select"
+        },
+        "href": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Destination",
+          "description": "For an anchor, the section id with a hash, e.g. #packages. For an external link, the full address. Leave blank for modal and WhatsApp.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "kind"
+      ],
+      "additionalProperties": false,
+      "title": "Footer link"
+    },
+    "FooterMeta": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Label",
+          "description": "e.g. Time zone:.",
+          "x-widget": "text"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Value",
+          "description": "e.g. Hong Kong / Global online.",
+          "x-widget": "text",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "value"
+      ],
+      "additionalProperties": false,
+      "title": "Footer detail"
+    },
+    "PrivacySection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "ID",
+          "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+          "x-widget": "id"
+        },
+        "heading": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Heading",
+          "description": "e.g. What we collect.",
+          "x-widget": "text"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Body",
+          "description": "The paragraph. Leave a blank line between paragraphs.",
+          "x-widget": "markdown"
+        }
+      },
+      "required": [
+        "id",
+        "heading",
+        "body"
+      ],
+      "additionalProperties": false,
+      "title": "Privacy section"
+    },
+    "GradeScale": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Scale ID",
+          "description": "Permanent identifier, e.g. ibdp, alevel, igcse. Programmes point at it.",
+          "x-widget": "id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Scale name",
+          "description": "What this scale is called, e.g. IBDP 1–7.",
+          "x-widget": "text"
+        },
+        "railOffset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Rail offset",
+          "description": "How many empty rungs sit below this scale on the shared 9-rung rail. Nine minus the number of bands, so the top grade of every scale lines up: IBDP and A-Level use 2, IGCSE uses 0.",
+          "x-widget": "number"
+        },
+        "bands": {
+          "minItems": 2,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GradeBand"
+          },
+          "title": "Grades",
+          "description": "Lowest grade first, highest last. Add, remove or reorder — the rail redraws itself.",
+          "x-widget": "collection"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "railOffset",
+        "bands"
+      ],
+      "additionalProperties": false,
+      "title": "Grade scale"
+    },
+    "GradeBand": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Recorded grade",
+          "description": "Exactly as it is written on the record, e.g. 7, A*, or B(7). Student results are matched against this, letter for letter.",
+          "x-widget": "text"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Short label",
+          "description": "How it prints on the rail, e.g. B. Usually the grade without the bracketed number.",
+          "x-widget": "text"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Rung",
+          "description": "Position on the scale, counting up from the lowest grade at 0. One rung = one grade step.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "value",
+        "label",
+        "order"
+      ],
+      "additionalProperties": false,
+      "title": "Grade band"
+    },
+    "Programme": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Programme ID",
+          "description": "Permanent identifier, e.g. ibdp-hl. Student records point at it.",
+          "x-widget": "id"
+        },
+        "family": {
+          "type": "string",
+          "enum": [
+            "IBDP",
+            "A-Level / IAL",
+            "IGCSE"
+          ],
+          "title": "Curriculum",
+          "description": "Which curriculum this programme belongs to.",
+          "x-widget": "select"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Programme name",
+          "description": "Full name used in the matrix, e.g. IBDP · HL.",
+          "x-widget": "text"
+        },
+        "fullLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Programme name in full",
+          "description": "Name including every detail, e.g. IBDP · HL / AAHL / AIHL. Used where there is room for it.",
+          "x-widget": "text"
+        },
+        "tabLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Folder tab label",
+          "description": "Short name on the ledger tab, e.g. A-L Further Math. Keep it short — space is tight.",
+          "x-widget": "text"
+        },
+        "sub": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Specification line",
+          "description": "The exam-board codes this programme covers, e.g. IAL YFM01 / GCE AL 9FM0 / CAIE 9231 / AQA 7367. Transcribe these exactly — a wrong code is a wrong claim.",
+          "x-widget": "text"
+        },
+        "gradeScaleId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Grade scale",
+          "description": "The ID of the grade scale this programme is marked on, e.g. ibdp.",
+          "x-widget": "id"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Order",
+          "description": "Position in the matrix and the ledger tabs. Lowest shows first.",
+          "x-widget": "number"
+        },
+        "totalCount": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991,
+          "title": "Total students in this group",
+          "description": "Digits only, e.g. 31. The full count including students not published by name. Drives the n = figure.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "id",
+        "family",
+        "label",
+        "fullLabel",
+        "tabLabel",
+        "sub",
+        "gradeScaleId",
+        "order",
+        "totalCount"
+      ],
+      "additionalProperties": false,
+      "title": "Programme"
+    },
+    "Student": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Student ID",
+          "description": "Permanent identifier, e.g. james-chow-2024. Testimonials point at it.",
+          "x-widget": "id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Name",
+          "description": "As it should be published, e.g. James Chow.",
+          "x-widget": "text"
+        },
+        "cohortYear": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991,
+          "title": "Exam year",
+          "description": "Four digits, e.g. 2024.",
+          "x-widget": "number"
+        },
+        "results": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StudentResult"
+          },
+          "title": "Results",
+          "description": "One row per programme. A student who took two programmes has two rows here, not two records.",
+          "x-widget": "collection"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "cohortYear",
+        "results"
+      ],
+      "additionalProperties": false,
+      "title": "Student"
+    },
+    "StudentResult": {
+      "type": "object",
+      "properties": {
+        "programmeId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Programme",
+          "description": "The ID of the programme this result belongs to, e.g. ibdp-hl.",
+          "x-widget": "id"
+        },
+        "gradeFrom": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Starting grade",
+          "description": "School predicted grade or mock, exactly as recorded, e.g. 3 or B(7). Must match a grade on the programme's scale.",
+          "x-widget": "text"
+        },
+        "gradeTo": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Final grade",
+          "description": "Final exam result, exactly as recorded, e.g. 7 or A*(9).",
+          "x-widget": "text"
+        },
+        "months": {
+          "type": "number",
+          "title": "Months of coaching",
+          "description": "How long it took, e.g. 3. May be a half, e.g. 1.5. Leave blank if it was not recorded.",
+          "x-widget": "number"
+        },
+        "published": {
+          "type": "boolean",
+          "title": "Publish by name",
+          "description": "On: this record shows in the ledger and the matrix with the student's name. Off: it still counts toward the group total but is never named.",
+          "x-widget": "switch"
+        },
+        "predicted": {
+          "type": "boolean",
+          "title": "Predicted result",
+          "description": "On: the final grade is a forecast, not a confirmed result. It is labelled 'predicted' wherever it appears.",
+          "x-widget": "switch"
+        }
+      },
+      "required": [
+        "programmeId",
+        "gradeFrom",
+        "gradeTo",
+        "published",
+        "predicted"
+      ],
+      "additionalProperties": false,
+      "title": "Result"
+    },
+    "Testimonial": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Testimonial ID",
+          "description": "Permanent identifier, e.g. alice-gao-2022.",
+          "x-widget": "id"
+        },
+        "studentId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Linked student",
+          "description": "Optional. The ID of the student record this quote belongs to, so the grades stay in step with the results table.",
+          "x-widget": "id"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Name shown",
+          "description": "e.g. Alice Gao. The year is added automatically from the field below.",
+          "x-widget": "text"
+        },
+        "cohortYear": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991,
+          "title": "Exam year",
+          "description": "Four digits, e.g. 2022. Shown in brackets after the name.",
+          "x-widget": "number"
+        },
+        "programmeLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Programme",
+          "description": "As it should read on the quote, e.g. IBDP AAHL.",
+          "x-widget": "text"
+        },
+        "gradeFrom": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Starting grade",
+          "description": "e.g. 6. Shown on the left of the arrow.",
+          "x-widget": "text"
+        },
+        "gradeTo": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Final grade",
+          "description": "e.g. 7. Shown on the right of the arrow.",
+          "x-widget": "text"
+        },
+        "gradePrefix": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Grade word",
+          "description": "Optional. A word placed before the starting grade in the written credential line only, e.g. “Level ” to read “From Level 6 to 7”. The arrow chip and the results table are unaffected. Carried so the published line stays byte-identical to the legacy site, which wrote “Level” for this one quote and bare numerals for every other.",
+          "x-widget": "text"
+        },
+        "months": {
+          "type": "number",
+          "title": "Months of coaching",
+          "description": "Optional. e.g. 7. May be a half, e.g. 1.5.",
+          "x-widget": "number"
+        },
+        "university": {
+          "type": "string",
+          "minLength": 1,
+          "title": "University",
+          "description": "Optional. University name shown separately (no brackets), e.g. “The University of Hong Kong”.",
+          "x-widget": "text"
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Quote",
+          "description": "Full testimonial text, exactly as written. Never shortened on the page.",
+          "x-widget": "textarea"
+        },
+        "lang": {
+          "type": "string",
+          "enum": [
+            "en",
+            "zh-Hant",
+            "zh-Hans",
+            "yue"
+          ],
+          "title": "Language",
+          "description": "The language the quote is written in. Screen readers use this to pronounce it correctly — a Chinese quote marked English is read with an English voice.",
+          "x-widget": "select"
+        },
+        "avatar": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MediaRef"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Photo",
+          "description": "Leave empty when the student's photo is withheld. The page then shows their grade improvement instead — never a grey silhouette.",
+          "x-widget": "image"
+        },
+        "placement": {
+          "type": "string",
+          "enum": [
+            "featured",
+            "carousel"
+          ],
+          "title": "Where it shows",
+          "description": "Featured: one of the large quotes. Carousel: in the scrolling row underneath.",
+          "x-widget": "select"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Order",
+          "description": "Position within its placement.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "id",
+        "displayName",
+        "cohortYear",
+        "programmeLabel",
+        "gradeFrom",
+        "gradeTo",
+        "quote",
+        "lang",
+        "avatar",
+        "placement",
+        "order"
+      ],
+      "additionalProperties": false,
+      "title": "Testimonial"
+    },
+    "Package": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Package ID",
+          "description": "Permanent identifier, e.g. private, ibdp.",
+          "x-widget": "id"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "private",
+            "board"
+          ],
+          "title": "Type",
+          "description": "Private 1-to-1 coaching, or a scheduled board course (IBDP, IAL, International GCSE).",
+          "x-widget": "select"
+        },
+        "tag": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Badge",
+          "description": "Optional. Solid badge at the top of the card, e.g. Most popular.",
+          "x-widget": "text"
+        },
+        "tagline": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Second badge",
+          "description": "Optional. Outlined badge, e.g. Customised coaching.",
+          "x-widget": "text"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Title",
+          "description": "Card title, e.g. IBDP Mathematics.",
+          "x-widget": "text"
+        },
+        "price": {
+          "$ref": "#/$defs/PackagePrice"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Description",
+          "description": "Short paragraph under the title.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "bullets": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$",
+                "title": "ID",
+                "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                "x-widget": "id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Bullet",
+                "description": "One selling point.",
+                "x-widget": "textarea",
+                "x-tokens": true
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "title": "Bullet points",
+          "description": "One main benefit per line. Add, remove or reorder freely.",
+          "x-widget": "collection"
+        },
+        "includedTitle": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Included block title",
+          "description": "Optional. Heading of the boxed list, e.g. {{programme.intensiveLessonCount}}-lesson intensive · ~{{money pricing.intensiveBlockCost}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "included": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$",
+                "title": "ID",
+                "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                "x-widget": "id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Included item",
+                "description": "One thing included.",
+                "x-widget": "textarea",
+                "x-tokens": true
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "title": "What is included",
+          "description": "One line per benefit (priority correspondence, IA support, etc.). Leave empty to hide the box.",
+          "x-widget": "collection"
+        },
+        "coverage": {
+          "$ref": "#/$defs/PackageCoverage"
+        },
+        "variants": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CourseVariant"
+          },
+          "title": "Courses in this package",
+          "description": "One per course sold under this heading. Add, remove or reorder — the card rows and the outline pages follow.",
+          "x-widget": "collection"
+        },
+        "outline": {
+          "$ref": "#/$defs/CourseOutline"
+        },
+        "footTag": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Card foot tag",
+          "description": "The small caps line in the card's foot, e.g. Live Zoom · Sundays · Replays included.",
+          "x-widget": "text"
+        },
+        "ctaKey": {
+          "$ref": "#/$defs/CtaKey"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "description",
+        "bullets",
+        "included",
+        "footTag",
+        "ctaKey"
+      ],
+      "additionalProperties": false,
+      "title": "Package"
+    },
+    "PackagePrice": {
+      "type": "object",
+      "properties": {
+        "now": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Price",
+          "description": "What it costs, e.g. {{money pricing.coursePrice}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "was": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Was",
+          "description": "Optional. The struck-through original, e.g. was {{money pricing.courseListPrice}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "per": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Unit",
+          "description": "What the price buys, e.g. / 90 min · typical rate.",
+          "x-widget": "text",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "now",
+        "per"
+      ],
+      "additionalProperties": false,
+      "title": "Price"
+    },
+    "PackageCoverage": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Coverage label",
+          "description": "The brass phrase, e.g. Every board covered.",
+          "x-widget": "text"
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Coverage claim",
+          "description": "The claim beside it, e.g. {{content.courseCount}} courses across {{programme.curriculaLabel}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "label",
+        "value"
+      ],
+      "additionalProperties": false,
+      "title": "Coverage claim"
+    },
+    "CourseVariant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Course ID",
+          "description": "Permanent identifier, e.g. aasl, 0607, 4ma1. The outline image file is named after it.",
+          "x-widget": "id"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Exam-board code",
+          "description": "Optional. The bare code shown in the left column, e.g. AASL, 0607, 4MA1.",
+          "x-widget": "text"
+        },
+        "courseId": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Row in Courses covered",
+          "description": "Optional. The ID of the matching course in the Course groups document, e.g. cambridge-international-math-0607. That row gets the diamond marking it as a scheduled group course.",
+          "x-widget": "id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Course name",
+          "description": "As it should read on the card, e.g. Math Analysis and Approaches SL.",
+          "x-widget": "text"
+        },
+        "delivery": {
+          "type": "string",
+          "enum": [
+            "live",
+            "video"
+          ],
+          "title": "How it runs",
+          "description": "Live: scheduled Zoom lessons. Video: self-paced recordings. Drives the badge on the row.",
+          "x-widget": "select"
+        },
+        "meta": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Schedule line",
+          "description": "The line under the course name, e.g. Sundays 10:00–10:50 · {{programme.ibdpLessonCount}} live {{setup.platform}} lessons.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "price": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Price",
+          "description": "What this course costs, e.g. {{money pricing.coursePrice}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "tier": {
+          "type": "string",
+          "enum": [
+            "standard",
+            "higher"
+          ],
+          "title": "Price tier",
+          "description": "Which price in Settings this course sells at — Standard (the usual course price) or Higher (the harder courses: AAHL, AIHL, 0606). The row still prints the Price field above; this is the figure search engines are given, and the build checks the two agree.",
+          "x-widget": "select"
+        },
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$",
+                "title": "ID",
+                "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                "x-widget": "id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Badge",
+                "description": "One short selling point for THIS course only.",
+                "x-widget": "textarea",
+                "x-tokens": true
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "title": "Course badges",
+          "description": "The diamond points on the row — what this course has that its siblings do not. Leave empty to show none.",
+          "x-widget": "collection"
+        },
+        "outlinePage": {
+          "title": "Outline page",
+          "description": "This course's page of the outline. File must be named for the Course ID, e.g. /courses/ibdp/aasl.webp.",
+          "x-widget": "image",
+          "$ref": "#/$defs/MediaRef"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "delivery",
+        "meta",
+        "price",
+        "tier",
+        "badges",
+        "outlinePage"
+      ],
+      "additionalProperties": false,
+      "title": "Course"
+    },
+    "CourseOutline": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Viewer title",
+          "description": "The title inside the viewer, e.g. IBDP course outline.",
+          "x-widget": "text"
+        },
+        "caption": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Caption under the card preview",
+          "description": "One line under the outline preview on the card, e.g. Course outline · one page per course. Topics, schedule and price for AASL, AAHL, AISL and AIHL.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "autoAdvanceSeconds": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 9007199254740991,
+          "title": "Seconds per page",
+          "description": "Digits only, e.g. 6. How often the viewer turns to the next course. Minimum 2.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "label",
+        "caption",
+        "autoAdvanceSeconds"
+      ],
+      "additionalProperties": false,
+      "title": "Course outline"
+    },
+    "CourseGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Group ID",
+          "description": "Permanent identifier, e.g. ibdp-courses.",
+          "x-widget": "id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Tab label",
+          "description": "What the folder tab says, e.g. IBDP Courses. The count is added automatically.",
+          "x-widget": "text"
+        },
+        "capLeft": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Caption, left",
+          "description": "Mono label above the list, e.g. AA / AI · HL / SL · IA.",
+          "x-widget": "text"
+        },
+        "capRight": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Caption, right",
+          "description": "Note on the right, e.g. four boards, nine specifications.",
+          "x-widget": "text"
+        },
+        "emphasize": {
+          "type": "boolean",
+          "title": "Flagship group",
+          "description": "On: this group is highlighted as the priority offer. Only one group should have it on.",
+          "x-widget": "switch"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Order",
+          "description": "Left-to-right position of the folder tab.",
+          "x-widget": "number"
+        },
+        "courses": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Course"
+          },
+          "title": "Courses",
+          "description": "One course per line (e.g. “Math Analysis and Approaches HL”, “Edexcel IAL Further Math YFM01”). The count on the tab follows this list.",
+          "x-widget": "collection"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "capLeft",
+        "capRight",
+        "emphasize",
+        "order",
+        "courses"
+      ],
+      "additionalProperties": false,
+      "title": "Course group"
+    },
+    "Course": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Course ID",
+          "description": "Permanent identifier, e.g. edexcel-ial-further-math-yfm01.",
+          "x-widget": "id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Course name",
+          "description": "As printed on the tab panel, e.g. Edexcel IAL Further Math YFM01. Transcribe exam-board codes exactly — never retype them from memory.",
+          "x-widget": "text"
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Exam-board code",
+          "description": "Optional. The bare code on its own, e.g. YFM01.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "additionalProperties": false,
+      "title": "Course"
+    },
+    "Faq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Question ID",
+          "description": "Permanent identifier, e.g. who-is-wsmath-best-for.",
+          "x-widget": "id"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Question",
+          "description": "The question as a parent would ask it.",
+          "x-widget": "text"
+        },
+        "answer": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Answer",
+          "description": "The answer. Leave a blank line between paragraphs — the blank line is what splits them on the page.",
+          "x-widget": "markdown",
+          "x-tokens": true
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Order",
+          "description": "Position in the list.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "id",
+        "question",
+        "answer",
+        "order"
+      ],
+      "additionalProperties": false,
+      "title": "FAQ"
+    },
+    "School": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "School ID",
+          "description": "Permanent identifier, e.g. diocesan-boys-school.",
+          "x-widget": "id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "title": "School name",
+          "description": "One school name, exactly as the school writes it, including punctuation.",
+          "x-widget": "text"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "title": "Order",
+          "description": "Position in the list.",
+          "x-widget": "number"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "order"
+      ],
+      "additionalProperties": false,
+      "title": "School"
+    },
+    "IaCourse": {
+      "type": "object",
+      "properties": {
+        "eyebrow": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Eyebrow",
+          "description": "Small line above the title, e.g. Supported by a PhD in Pure Mathematics.",
+          "x-widget": "text"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Title",
+          "description": "e.g. IBDP Maths IA Instructional Course.",
+          "x-widget": "text"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Description",
+          "description": "Short paragraph under the title.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "featuresLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Features label",
+          "description": "Mono label above the feature list, e.g. Course features.",
+          "x-widget": "text"
+        },
+        "features": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9-]*$",
+                "title": "ID",
+                "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
+                "x-widget": "id"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "title": "Feature",
+                "description": "One course feature, e.g. Tailored IA topics.",
+                "x-widget": "textarea"
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "title": "Course features",
+          "description": "One short feature each.",
+          "x-widget": "collection"
+        },
+        "themesLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Themes label",
+          "description": "Mono label above the theme list, e.g. Themes.",
+          "x-widget": "text"
+        },
+        "themes": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IaTheme"
+          },
+          "title": "Themes",
+          "description": "Edit IA topic directions here — title plus one line of description. Add, remove or reorder.",
+          "x-widget": "collection"
+        },
+        "ctaKey": {
+          "$ref": "#/$defs/CtaKey"
+        }
+      },
+      "required": [
+        "eyebrow",
+        "title",
+        "description",
+        "featuresLabel",
+        "features",
+        "themesLabel",
+        "themes",
+        "ctaKey"
+      ],
+      "additionalProperties": false,
+      "title": "Maths IA course"
+    },
+    "IaTheme": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "title": "Theme ID",
+          "description": "Permanent identifier, e.g. ancient-mathematics.",
+          "x-widget": "id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Theme",
+          "description": "e.g. Ancient Mathematics.",
+          "x-widget": "text"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "title": "One-line description",
+          "description": "e.g. Modern methods for classic problems.",
+          "x-widget": "text"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description"
+      ],
+      "additionalProperties": false,
+      "title": "IA theme"
+    },
+    "WhatsappPrefills": {
+      "type": "object",
+      "properties": {
+        "nav": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — top navigation",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "about-ribbon": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — About ribbon",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "results": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — Results",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "private": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — Private coaching card",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "ibdp": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — IBDP course card",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "ial": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — International A-Level course card",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "igcse": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — International GCSE course card",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "ia": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — Maths IA course",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "video": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — Student video clips",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "faq": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — FAQ",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "footer": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — Footer",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        }
+      },
+      "required": [
+        "nav",
+        "about-ribbon",
+        "results",
+        "private",
+        "ibdp",
+        "ial",
+        "igcse",
+        "ia",
+        "video",
+        "faq",
+        "footer"
+      ],
+      "additionalProperties": false,
+      "title": "WhatsApp messages",
+      "description": "WhatsApp is the only way anyone contacts you from this site. One message per button, so you can tell which part of the page an enquiry came from."
+    }
+  },
+  "x-site": "wsmath",
+  "x-generated-by": "scripts/generate-content-schema.ts",
+  "x-generator-note": "Generated from src/content/schema/*.ts. Do not edit by hand — run `npm run generate:schema`.",
+  "x-content-dir": "src/content",
+  "x-documents": [
+    {
+      "key": "settings",
+      "file": "settings.json",
+      "title": "Settings",
+      "order": 0
+    },
+    {
+      "key": "pages",
+      "file": "pages.json",
+      "title": "Page copy",
+      "order": 1
+    },
+    {
+      "key": "gradeScales",
+      "file": "grade-scales.json",
+      "title": "Grade scales",
+      "order": 2
+    },
+    {
+      "key": "programmes",
+      "file": "programmes.json",
+      "title": "Programmes",
+      "order": 3
+    },
+    {
+      "key": "students",
+      "file": "students.json",
+      "title": "Students",
+      "order": 4
+    },
+    {
+      "key": "testimonials",
+      "file": "testimonials.json",
+      "title": "Testimonials",
+      "order": 5
+    },
+    {
+      "key": "packages",
+      "file": "packages.json",
+      "title": "Packages",
+      "order": 6
+    },
+    {
+      "key": "courseGroups",
+      "file": "course-groups.json",
+      "title": "Course groups",
+      "order": 7
+    },
+    {
+      "key": "faqs",
+      "file": "faqs.json",
+      "title": "FAQs",
+      "order": 8
+    },
+    {
+      "key": "schools",
+      "file": "schools.json",
+      "title": "Schools",
+      "order": 9
+    },
+    {
+      "key": "iaCourse",
+      "file": "ia-course.json",
+      "title": "Maths IA course",
+      "order": 10
+    },
+    {
+      "key": "whatsappPrefills",
+      "file": "whatsapp-prefills.json",
+      "title": "WhatsApp messages",
+      "order": 11
+    }
+  ],
+  "x-token-syntax": {
+    "pattern": "{{token.path}}",
+    "formatters": {
+      "money": "{{money pricing.coursePrice}} → HKD 16,800",
+      "num": "{{num stats.tutoringHours}} → 20,000",
+      "plus": "{{plus stats.tutoringHours}} → 20,000+"
+    },
+    "note": "Fields flagged x-tokens may contain tokens. An unknown token fails the build rather than rendering blank."
+  }
+}

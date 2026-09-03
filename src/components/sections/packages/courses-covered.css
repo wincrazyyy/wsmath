@@ -1,0 +1,89 @@
+/* ══ courses covered — amethyst inlays ═════════════════════════════════════
+   Transcribed from the locked artifact (scratchpad/v6-3-2.html, CSS 929–959).
+
+   Three trays cut to ONE depth: the wells STRETCH to the tallest (A-Level's nine
+   rows) and each list distributes its rows across the tray floor, so the shorter
+   groups read as more generously spaced ledgers rather than short boxes with dead
+   ground beneath them — the same fill mechanism as the about section's paper
+   sheets. 38/32/30, not 46/30/24: IBDP stays widest (it is the merchandising
+   priority) but the IGCSE tray now holds "Cambridge International Math" on one
+   line at 1200–1440 instead of wrapping it against a single-line course code.
+   Absorbed into #mvt-s-packages by the courses→packages merge, so the block
+   heading is now `.mvt-subhead` — the same `.mvt-head` pattern one step down —
+   and the tray titles are `<h4>`, third-level under it.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.mvt-covered{margin-top:clamp(30px,3vw,58px)}
+
+/* the shared `.mvt-head` pattern, one step below the section h2 and one above a
+   tray. At 2560 the ladder reads 96 / 62 / 46; at 390 it reads 46 / 34 / 28. */
+.mvt-subhead{display:grid;grid-template-columns:auto minmax(280px,1fr);align-items:baseline;
+  column-gap:clamp(20px,2.6vw,68px);row-gap:14px;margin-bottom:clamp(24px,2.2vw,40px)}
+.mvt-subhead > .mvt-eyebrow{grid-column:1/-1;grid-row:1}
+.mvt-subhead > .mvt-h3     {grid-column:1;grid-row:2;font-size:clamp(34px,3.6vw,62px)}
+.mvt-subhead > .mvt-head-sub{grid-column:2;grid-row:2}
+.mvt-subhead > .mvt-rule   {grid-column:1/-1;grid-row:3;height:12px;align-self:end;
+  background-color:rgba(4,1,16,.30);border-radius:2px;background-position:0 100%,0 100%;
+  box-shadow:inset 0 2px 5px rgba(4,1,16,.55),
+    inset 0 -1px 0 color-mix(in oklab,var(--brass) 38%,transparent)}
+.mvt-subhead > *{min-width:0}
+@media (max-width:1024px){
+  .mvt-subhead{grid-template-columns:minmax(0,1fr)}
+  .mvt-subhead > .mvt-head-sub{grid-column:1;grid-row:3}
+  .mvt-subhead > .mvt-rule{grid-row:4}
+}
+
+.mvt-courses{display:grid;grid-template-columns:38fr 32fr 30fr;gap:clamp(16px,1.6vw,28px);align-items:stretch}
+.mvt-course{padding:clamp(20px,1.8vw,32px) clamp(20px,1.8vw,32px) clamp(10px,1vw,16px);
+  display:flex;flex-direction:column}
+.mvt-course-h{display:flex;flex-direction:column;gap:9px;padding-bottom:16px;
+  border-bottom:1px solid color-mix(in oklab,var(--brass) 46%,transparent)}
+/* class-typed, not element-typed: the tray title is an <h4> now (third level
+   under the block heading that contains it), and `.mvt-h3` is a pure class */
+.mvt-course-h .mvt-h3{color:var(--ink)}
+.mvt-course ul{display:flex;flex-direction:column;flex:1 1 auto}
+/* the exam-board code sits in a fixed 42px track and is LEFT-aligned inside it, so
+   the codes form a true column: right-aligning them left the 5-character codes
+   (YFM01, IBMYP) starting 7.6px inboard of the 4-character ones — the near-miss
+   column drift the client called out by name. */
+.mvt-course li{display:grid;grid-template-columns:1fr 42px;align-items:baseline;align-content:center;
+  gap:16px;flex:1 1 auto;min-height:48px;padding:12px 0;
+  border-bottom:1px solid color-mix(in oklab,var(--ink) 12%,transparent);font-size:15px}
+.mvt-course li:last-child{border-bottom:0}
+.mvt-course li span:first-child{color:var(--ink);text-wrap:pretty}
+.mvt-course li span:last-child{color:var(--am-lit);text-align:left;flex:none}
+.mvt-course--ibdp .mvt-course-h .mvt-mu{color:var(--ink)}
+.mvt-course--ibdp li span:last-child{color:var(--ink)}
+.mvt-course--ibdp li{border-bottom-color:rgba(255,255,255,.16)}
+.mvt-course:not(.mvt-course--ibdp) .mvt-course-h .mvt-mu{color:var(--am-lit)}
+
+/* ── the group-course marker ─────────────────────────────────────────────────
+   `.mvt-course li{grid-template-columns:1fr 42px}` and its 16px gap are
+   UNTOUCHED. A middle `auto` marker track would be wrong twice: unmarked rows
+   render exactly two children with no explicit `grid-column`, so their code
+   span would auto-place into the marker track and the codes on marked and
+   unmarked rows would sit in different columns — the near-miss column drift
+   above, reintroduced by the fix for something else; and it would tax the name
+   track by ~23px at exactly the widths the 38/32/30 split was tuned for.
+
+   So the mark hangs off the name's left edge into the tray's own padding: 6px
+   of clear air, then a 7px square rotated 45° whose diagonal reads 9.9px wide,
+   occupying 6→15.9px of a padding that is 20px at its narrowest and 32px at
+   2560. `top:.45em` is measured on the NAME span, whose box top is the first
+   text line's top, so a two-line name keeps its mark beside line one. */
+.mvt-course li > span:first-child{position:relative}
+.mvt-groupmark{position:absolute;right:calc(100% + 6px);top:.45em;
+  width:7px;height:7px;rotate:45deg;background:var(--brass-cast);
+  box-shadow:0 0 0 1px rgba(4,1,16,.5)}
+
+/* in the legend it is an ordinary inline flex item, not a margin mark */
+.mvt-courses-legend{display:flex;align-items:center;gap:10px;margin-top:clamp(14px,1.2vw,20px)}
+.mvt-courses-legend .mvt-groupmark{position:static;flex:none}
+
+@media (max-width:1180px){
+  .mvt-courses{grid-template-columns:1fr 1fr}
+  .mvt-courses > :first-child{grid-column:1/-1}
+}
+@media (max-width:640px){
+  .mvt-courses{grid-template-columns:1fr}
+}

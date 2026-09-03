@@ -1,0 +1,131 @@
+[
+  {
+    "id": "ibdp-courses",
+    "title": "IBDP Courses",
+    "capLeft": "AA / AI · HL / SL · IA",
+    "capRight": "the merchandising priority — most students arrive here",
+    "emphasize": true,
+    "order": 0,
+    "courses": [
+      {
+        "id": "math-analysis-and-approaches-hl",
+        "name": "Math Analysis and Approaches HL"
+      },
+      {
+        "id": "math-analysis-and-approaches-sl",
+        "name": "Math Analysis and Approaches SL"
+      },
+      {
+        "id": "math-applications-and-interpretation-hl",
+        "name": "Math Applications and Interpretation HL"
+      },
+      {
+        "id": "math-applications-and-interpretation-sl",
+        "name": "Math Applications and Interpretation SL"
+      },
+      {
+        "id": "math-internal-assessment-ia",
+        "name": "Math Internal Assessment (IA)"
+      }
+    ]
+  },
+  {
+    "id": "a-level-courses",
+    "title": "A-Level Courses",
+    "capLeft": "Edexcel · Cambridge · AQA · OCR",
+    "capRight": "four boards, nine specifications",
+    "emphasize": false,
+    "order": 1,
+    "courses": [
+      {
+        "id": "edexcel-ial-further-math-yfm01",
+        "name": "Edexcel IAL Further Math YFM01",
+        "code": "YFM01"
+      },
+      {
+        "id": "edexcel-ial-math-yma01",
+        "name": "Edexcel IAL Math YMA01",
+        "code": "YMA01"
+      },
+      {
+        "id": "edexcel-gce-al-further-math-9fm0",
+        "name": "Edexcel GCE AL Further Math 9FM0",
+        "code": "9FM0"
+      },
+      {
+        "id": "edexcel-gce-al-math-9ma0",
+        "name": "Edexcel GCE AL Math 9MA0",
+        "code": "9MA0"
+      },
+      {
+        "id": "cambridge-caie-further-math-9231",
+        "name": "Cambridge CAIE Further Math 9231",
+        "code": "9231"
+      },
+      {
+        "id": "cambridge-caie-math-9709",
+        "name": "Cambridge CAIE Math 9709",
+        "code": "9709"
+      },
+      {
+        "id": "aqa-al-further-math-7367",
+        "name": "AQA AL Further Math 7367",
+        "code": "7367"
+      },
+      {
+        "id": "aqa-al-math-7357",
+        "name": "AQA AL Math 7357",
+        "code": "7357"
+      },
+      {
+        "id": "ocr-al-math-h240",
+        "name": "OCR AL Math H240",
+        "code": "H240"
+      }
+    ]
+  },
+  {
+    "id": "igcse-courses",
+    "title": "IGCSE Courses",
+    "capLeft": "Cambridge · Edexcel · IBMYP",
+    "capRight": "bridging support into pre-DP",
+    "emphasize": false,
+    "order": 2,
+    "courses": [
+      {
+        "id": "cambridge-additional-math-0606",
+        "name": "Cambridge Additional Math 0606",
+        "code": "0606"
+      },
+      {
+        "id": "cambridge-international-math-0607",
+        "name": "Cambridge International Math 0607",
+        "code": "0607"
+      },
+      {
+        "id": "cambridge-math-0580",
+        "name": "Cambridge Math 0580",
+        "code": "0580"
+      },
+      {
+        "id": "edexcel-further-pure-math-4pm1",
+        "name": "Edexcel Further Pure Math 4PM1",
+        "code": "4PM1"
+      },
+      {
+        "id": "edexcel-math-4pm0",
+        "name": "Edexcel Math 4PM0",
+        "code": "4PM0"
+      },
+      {
+        "id": "edexcel-igcse-math-a-4ma1",
+        "name": "Edexcel Math A 4MA1",
+        "code": "4MA1"
+      },
+      {
+        "id": "ib-middle-year-programme",
+        "name": "IB Middle Year Programme"
+      }
+    ]
+  }
+]

@@ -1,0 +1,230 @@
+/* ══ voices — the trough of student voices ═════════════════════════════════
+   Transcribed from the locked artifact (scratchpad/v6-3-2.html, CSS 1237–1289),
+   with the two client-reported repairs folded in:
+
+   · ISSUE #2 (type) — every quote register declares its OWN CJK size. The
+     artifact's `.mvt-root :lang(zh-Hant){font-size:1.05em}` sat at specificity
+     (0,2,0) and beat `.mvt-sheet blockquote` (0,1,1), so a Chinese quote was
+     sized off the ROOT (23.1px at 2560) rather than off its card (15px) — +54%
+     on an identical sheet — and its 43.9px leading floated across a 24px
+     ruling drawn for another pitch. globals.css now sets FAMILY only; the sizes
+     below are relative to each card's own base, so the two languages carry the
+     same optical mass at every viewport. `:lang(yue)` is matched everywhere
+     `zh-Hant` is: testimonials.json really contains a Cantonese record.
+   · ISSUE #1 (video) — `.mvt-videoband` becomes a two-zone band with a real
+     player. The player is a SLIP INLAY (the course-outline treatment: lac-void
+     ground, 1px 44%-brass ring, 3px radius) inside the well's tray. Never a
+     `.mvt-raise` — a raise inside a well breaks the material grammar — and
+     never paper behind it.
+
+   Namespacing: every selector is scoped under `.mvt-voices` (the section
+   element). Nothing here may leak into another section's family.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── the video band ───────────────────────────────────────────────────────── */
+/* 58/42: the player needs the majority measure to stay legible at 16:9, and the
+   copy column is floored at 280px so its heading never sets one word per line.
+   The artifact's 26px brass play triangle is retired — the player carries its
+   own affordance, and two play glyphs in one band is a lie about which is live. */
+.mvt-voices .mvt-videoband{display:grid;grid-template-columns:minmax(0,58fr) minmax(280px,42fr);
+  gap:clamp(20px,2vw,40px);align-items:center;
+  padding:clamp(20px,1.8vw,34px) clamp(22px,2vw,40px);margin-bottom:clamp(24px,2.4vw,46px)}
+.mvt-voices .mvt-vb-slip{display:flex;flex-direction:column;gap:10px;min-width:0}
+.mvt-voices .mvt-video-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:3px;
+  overflow:hidden;background:var(--lac-void);container:mvt-vbframe / inline-size;
+  box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 44%,transparent)}
+/* `overflow:hidden` stops Loom's own rounded player corners poking outside the
+   well; the iframe is otherwise an exact 16:9 box, which is right at every width
+   BELOW Loom's own 600px breakpoint. */
+.mvt-voices .mvt-video-frame iframe{position:absolute;top:0;left:0;width:100%;height:100%;
+  border:0;display:block}
+/* MEASURED, not guessed (spec/video-live.md §4.3 caveat 1 says do not guess), and
+   measured as a FUNCTION of width, which is the part a single constant gets
+   wrong. Loom lays its media out top-aligned in `iframeHeight − C`, where C is
+   the height of the reactions strip (❤️👍🔥 … Comment) it parks below the
+   controls. Probed at nine widths (tools/voices-loom-chrome.js) and then bisected
+   (tools/voices-loom-threshold.js):
+       iframe width  ≤ 596px → C = 0    (media already fills a 16:9 box)
+       iframe width  ≥ 600px → C = 56px (media shrinks to 16:9-minus-56 and
+                                         PILLARBOXES with black bars each side)
+   So the correction is +56px of iframe height, applied only above that
+   breakpoint — and it is a CONTAINER query, not a viewport one, because the
+   frame's width is what Loom keys off and the band is 58fr at ≥1180px and
+   full-width below (a 1440px viewport gives a 705px frame; an 820px viewport
+   gives 680px; a 640px viewport gives 507px — no viewport breakpoint separates
+   those cases). A blanket +60px was the previous reading, taken at 1440 alone:
+   below the breakpoint it pushed the media down 30px and clipped its feet. */
+@container mvt-vbframe (min-width: 600px){
+  .mvt-voices .mvt-video-frame iframe{height:calc(100% + 56px)}
+}
+.mvt-voices .mvt-vb-stamp{color:var(--brass)}
+/* Colour and the 8px lead are the artifact's two band rules (CSS 1241–1242); the
+   heading keeps the shared `.mvt-h3` scale rather than a local one. An earlier
+   pass capped it at 36px on the theory that a 42fr column would break a 46px
+   heading badly — it does not (two lines at 2560, two at 1440), and shrinking it
+   left the copy column visibly under-filled beside a 600px-tall player, which is
+   the exact "half-empty at 2560" failure this rebuild is judged on. */
+.mvt-voices .mvt-vb-copy{min-width:0;display:flex;flex-direction:column}
+.mvt-voices .mvt-vb-copy h3{color:var(--ink);margin-bottom:8px}
+.mvt-voices .mvt-vb-copy p{color:var(--ink-2)}
+/* THE COPY COLUMN'S BOTTOM REGISTER. A 16:9 player is 600px tall at 2560 and
+   four lines of copy are 180 — centred, the column is 30% ink and ~464,000px²
+   of bare lacquer, which at the owner's review width reads as the half-empty
+   failure this rebuild is judged on. The ratio cannot be rebalanced away: widen
+   the copy track and the player shrinks in step, so the fill stays 30%. What
+   fixes it is composition — the copy sits at the TOP of a stretched column and
+   a milled knurl closes it at the bottom, on the player's own bottom edge, so
+   the column reads as a panel spanning the band instead of a block floating in
+   it. The knurl is this design's established "carries no information" filler
+   (it does the same work in `.mvt-rescta-foot` and `.mvt-trough-head`); no copy
+   is added and no second ask is introduced. Single-column widths keep the
+   artifact's stacking and drop the filler entirely. */
+.mvt-voices .mvt-vb-fill{display:none}
+@media (min-width:1181px){
+  .mvt-voices .mvt-videoband{align-items:stretch}
+  .mvt-voices .mvt-vb-fill{display:block;margin-top:auto}
+}
+
+/* ── the four featured plates ─────────────────────────────────────────────── */
+.mvt-voices .mvt-feat{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2vw,38px)}
+.mvt-voices .mvt-feat > li{padding:clamp(22px,2vw,40px);display:flex;flex-direction:column;gap:16px}
+.mvt-voices .mvt-feat-h{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.mvt-voices .mvt-bezel{width:72px;height:72px;border-radius:50%;padding:3px;background:var(--brass-radial);
+  flex:none;box-shadow:0 0 0 1px rgba(4,1,16,.62),0 4px 10px -2px rgba(4,1,16,.7)}
+.mvt-voices .mvt-bezel img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+/* fallback engraving when a student's photo is withheld — never a silhouette */
+.mvt-voices .mvt-bezel--mono{display:grid;place-items:center;color:var(--lac-void);
+  font-family:var(--f-ui);font-size:22px;font-weight:600;font-stretch:82%;letter-spacing:.06em}
+.mvt-voices .mvt-feat-h b{display:block;font-family:var(--f-display);font-size:clamp(21px,1.7vw,28px);
+  font-weight:600;color:var(--ink);line-height:1.2}
+.mvt-voices .mvt-feat-h .mvt-mu{color:var(--brass);margin:6px 0 4px}
+.mvt-voices .mvt-feat-h > div > span{display:block;color:var(--ink-2);font-size:14.5px;text-wrap:pretty}
+.mvt-voices .mvt-feat-h b .mvt-num{font-size:.78em;color:var(--ink-2);font-weight:400}
+
+/* REGISTER 1 — the featured quote. No ruling to sit on, so CJK keeps its +5%
+   optical compensation and a CJK-appropriate leading; both are stated against
+   THIS register's clamp, not against the root. */
+/* no `text-wrap:pretty` here, deliberately: the artifact sets it on the 340px
+   sheet quotes and the university line but NOT on the featured quote, and the
+   plates are wide enough that the rag needs no help. Matching the artifact's
+   line breaks is worth more than a rule that changes them. */
+.mvt-voices .mvt-feat blockquote{flex:1 1 auto;color:var(--ink);font-family:var(--f-display);
+  font-size:clamp(17px,1.15vw,20px);line-height:1.62;
+  font-variant-numeric:oldstyle-nums proportional-nums}
+/* The CJK rules must RESTATE the family. In the artifact `.mvt-sheet blockquote`
+   (0,1,1) lost to `:lang(zh-Hant)` (0,2,0), so the CJK stack came through for
+   free; namespacing every selector to `.mvt-voices` reverses that, and a rule
+   that set only a size would leave a Chinese quote (and the Latin words inside
+   it) set in Constantia. Hant and Hans are separate rules because they take
+   different stacks, and `yue` rides Hant — testimonials.json uses it. */
+.mvt-voices .mvt-feat blockquote:is(:lang(zh-Hant),:lang(yue)){font-family:var(--f-hant);
+  font-size:calc(clamp(17px,1.15vw,20px) * 1.05);line-height:1.85}
+.mvt-voices .mvt-feat blockquote:lang(zh-Hans){font-family:var(--f-hans);
+  font-size:calc(clamp(17px,1.15vw,20px) * 1.05);line-height:1.85}
+
+/* ── the drifting trough ──────────────────────────────────────────────────── */
+/* The channel runs off the page on the left and terminates in a machined right
+   end, clear of the coin's lane — a marquee cannot be padded out of a fixed
+   element's way, its sheets travel through the whole viewport, so the trough
+   itself stops short. --coin-w stays reserved even while the coin is hidden
+   behind the plan panel. */
+.mvt-voices .mvt-trough{--vc-gap:clamp(14px,1.4vw,24px);
+  margin-top:clamp(26px,2.6vw,52px);margin-right:var(--coin-w);
+  padding:clamp(20px,2vw,38px) 0;overflow:hidden;border-radius:0 18px 0 18px;position:relative}
+.mvt-voices .mvt-trough-head{display:flex;align-items:center;gap:clamp(18px,2vw,40px);
+  padding:0 var(--pad) clamp(16px,1.4vw,26px)}
+.mvt-voices .mvt-trough-head .mvt-knurl{flex:1 1 auto}
+.mvt-voices .mvt-trough-head > p{align-self:stretch;display:flex;align-items:center}
+.mvt-voices .mvt-pause{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;
+  border-radius:3px;flex:none;color:var(--ink);background:var(--lac-face);
+  box-shadow:0 0 0 1px color-mix(in oklab,var(--brass) 66%,transparent),inset 0 1px 0 rgba(255,255,255,.08);
+  transition:background-color var(--t-settle) var(--ease-settle)}
+.mvt-voices .mvt-pause:hover{background:var(--lac-lit)}
+.mvt-voices .mvt-pause:active{background:var(--lac-well)}
+.mvt-voices .mvt-pause svg{width:14px;height:14px;fill:var(--brass);flex:none}
+
+/* The loop is seamless only if the travel is EXACTLY one printing of the twelve.
+   The track's border box is `2·--pad + 24·sheet + 23·gap`, so a bare -50% lands
+   half a gap and one --pad short of the cycle — a visible stutter every 90s.
+   The correction is that difference, stated once. */
+.mvt-voices .mvt-track{display:flex;align-items:stretch;gap:var(--vc-gap);width:max-content;
+  padding-inline:var(--pad);animation:mvt-vc-drift 90s linear infinite}
+@keyframes mvt-vc-drift{
+  from{transform:translateX(0)}
+  to{transform:translateX(calc(-50% + var(--pad) - var(--vc-gap) / 2))}
+}
+/* hover pause — CSS, not a pointerenter listener, so it cannot stick on touch */
+@media (hover:hover){
+  .mvt-voices .mvt-trough:hover .mvt-track{animation-play-state:paused}
+}
+.mvt-voices .mvt-trough[data-paused] .mvt-track{animation-play-state:paused}
+
+.mvt-voices .mvt-sheet{width:340px;flex:none;background:var(--paper);color:var(--paper-ink);
+  border-radius:2px;padding:22px 24px 18px;display:flex;flex-direction:column;gap:14px;
+  background-image:repeating-linear-gradient(transparent 0 23px,color-mix(in oklab,var(--paper-ink) 8%,transparent) 23px 24px);
+  box-shadow:0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(32,31,42,.14),0 8px 20px -8px rgba(4,1,16,.9)}
+
+/* REGISTER 2 — the sheet quote, PITCH-LOCKED to the 24px paper ruling in every
+   language. CJK keeps the same +5% optical compensation (now relative to 15px,
+   not to the root), and its leading stays on the ruling: 15/24 beside 15.75/24
+   reads as the same component, which is the whole point of the repair. */
+.mvt-voices .mvt-sheet blockquote{flex:1 1 auto;font-family:var(--f-display);font-size:15px;line-height:24px;
+  color:var(--paper-ink);text-wrap:pretty;font-variant-numeric:oldstyle-nums proportional-nums}
+.mvt-voices .mvt-sheet blockquote:is(:lang(zh-Hant),:lang(yue)){font-family:var(--f-hant);
+  font-size:15.75px;line-height:24px}
+.mvt-voices .mvt-sheet blockquote:lang(zh-Hans){font-family:var(--f-hans);font-size:15.75px;line-height:24px}
+
+.mvt-voices .mvt-sheet-f{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;
+  padding-top:12px;border-top:1px solid color-mix(in oklab,var(--paper-ink) 18%,transparent)}
+.mvt-voices .mvt-medal{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:var(--brass-radial);color:var(--lac-void);font-family:var(--f-ui);font-size:12px;
+  font-weight:600;font-stretch:82%;letter-spacing:.06em;flex:none;overflow:hidden;
+  box-shadow:0 0 0 1px var(--lac-void)}
+.mvt-voices .mvt-medal img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.mvt-voices .mvt-sheet-f b{display:block;font-family:var(--f-display);font-size:16px;font-weight:600;
+  color:var(--paper-ink)}
+.mvt-voices .mvt-sheet-f > span > span{display:block;font-size:12.5px;line-height:1.4;text-wrap:pretty;
+  color:color-mix(in oklab,var(--paper-ink) 82%,var(--paper))}
+.mvt-voices .mvt-sheet-f b .mvt-num{display:inline;font-size:.85em;font-weight:400;
+  color:color-mix(in oklab,var(--paper-ink) 82%,var(--paper))}
+
+/* ── responsive ───────────────────────────────────────────────────────────── */
+@media (max-width:1180px){
+  /* player first, copy beneath — the video is the reason the band exists */
+  .mvt-voices .mvt-videoband{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:1024px){
+  .mvt-voices .mvt-feat{grid-template-columns:1fr}
+}
+/* TOUCH CAN PAN THE TROUGH. `overflow-x:hidden` blocks user panning while
+   still permitting programmatic scrolling, so on a phone — 1.3 sheets on
+   screen, every quote cut at one edge — the only way to reach a particular
+   testimonial was to wait for the 90s drift to carry it past. The channel is
+   already a plain scroller under reduced motion; granting the same on coarse
+   pointers costs nothing and is the difference between reading the section and
+   watching it. `overscroll-behavior-x:contain` keeps a swipe that runs out of
+   track from turning into a browser back-gesture; `overflow-y:hidden` leaves
+   vertical panning to the page. */
+@media (pointer:coarse){
+  .mvt-voices .mvt-trough{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain}
+}
+
+@media (max-width:640px){
+  .mvt-voices .mvt-sheet{width:264px}
+  /* the knurl is the one part of the head that carries no information */
+  .mvt-voices .mvt-trough-head{gap:14px}
+  .mvt-voices .mvt-trough-head .mvt-knurl{display:none}
+  .mvt-voices .mvt-trough-head > p{flex:1 1 auto;min-width:0}
+}
+
+/* ── reduced motion ───────────────────────────────────────────────────────── */
+/* globals forces every duration to 1ms, which would SNAP the drift to its end
+   state and leave the row parked half a printing to the left — the animation
+   has to be switched off by name, not shortened. The channel then becomes a
+   plain horizontal scroller and the inert clones leave the layout entirely,
+   which is what "no clones under reduced motion" means here. */
+@media (prefers-reduced-motion: reduce){
+  .mvt-voices .mvt-track{animation:none;transform:none}
+  .mvt-voices .mvt-sheet--clone{display:none}
+  .mvt-voices .mvt-trough{overflow-x:auto;overflow-y:hidden}
+}

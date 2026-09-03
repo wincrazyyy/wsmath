@@ -1,0 +1,50 @@
+[
+  {
+    "id": "who-is-wsmath-best-for",
+    "question": "Who is WSMath best for?",
+    "answer": "WSMath is for IBDP, A-Level / IAL, and IGCSE students who want a structured, exam-first plan—with clear weekly actions, accountability, and measurable grade improvement.",
+    "order": 0
+  },
+  {
+    "id": "how-do-i-choose-between-1-to-1-coaching-and-group-class",
+    "question": "How do I choose between 1-to-1 coaching and group class?",
+    "answer": "Group is the most cost-effective way to follow a full structure and routine. 1-to-1 is fully personalised with faster feedback and more targeted pacing.",
+    "order": 1
+  },
+  {
+    "id": "what-language-are-lessons-taught-in",
+    "question": "What language are lessons taught in?",
+    "answer": "Lessons are primarily delivered in Cantonese/Mandarin to ensure genuine understanding. All exam execution is trained in English — questions, key terms, and written solutions in the markscheme style. Full English delivery is available on request.",
+    "order": 2
+  },
+  {
+    "id": "how-do-lessons-work",
+    "question": "How do lessons work?",
+    "answer": "Lessons are run live on {{setup.platform}} and are highly interactive. I’ll explain the core concept, then we apply it immediately through targeted past-paper questions with markscheme-focused thinking. After each lesson, you’ll receive structured homework to consolidate the skills and eliminate recurring errors. \n\nFace-to-face lessons are also available at my centre in {{contact.centreAddress}}.",
+    "order": 3
+  },
+  {
+    "id": "how-many-hours-per-week-do-i-need-for-an-ibdp-level-6-7",
+    "question": "How many hours per week do I need for an IBDP Level 6 / 7?",
+    "answer": "As a baseline, a Level 6 typically requires around 6 hours per week in total (lessons + independent practice), while a Level 7 usually requires 7+ hours per week. The exact plan depends on your current level, how quickly you need to improve, and how consistently you can follow the weekly workload.",
+    "order": 4
+  },
+  {
+    "id": "what-if-my-foundation-is-weak-or-im-behind",
+    "question": "What if my foundation is weak or I’m behind?",
+    "answer": "That’s very common. We start with a diagnostic to pinpoint the exact gaps, rebuild the fundamentals by topic, and only then scale into past papers and markscheme execution. You’ll follow a weekly plan designed to turn weak areas into reliable exam marks.",
+    "order": 5
+  },
+  {
+    "id": "do-you-offer-trial-lessons",
+    "question": "Do you offer trial lessons?",
+    "answer": "Private Coaching (1-to-1): Yes — a trial session is available upon request, mainly to confirm fit and set expectations.\n\nGroup courses (IBDP / IAL / International GCSE): No — each is a structured programme designed to work as a complete system (diagnosis → plan → practice → feedback loops), so a single session wouldn’t reflect the real process or outcomes.",
+    "order": 6
+  },
+  {
+    "id": "what-should-i-prepare-before-the-first-lesson",
+    "question": "What should I prepare before the first lesson?",
+    "answer": "An {{setup.equipmentList}} is ideal for clean, fast, and interactive work. Please also ensure a stable internet connection. Most importantly, be ready to follow the weekly practice plan between lessons — that’s where the biggest gains come from.",
+    "order": 7
+  }
+]

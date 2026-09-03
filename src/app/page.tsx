@@ -1,73 +1,71 @@
-// app/page.tsx
-import { SmoothScroll } from "@/app/_components/ui/smooth-scroll";
-import { BackgroundGlow } from "@/app/_components/layout/background-glow";
-import { SectionDots } from "@/app/_components/ui/section-dots";
-import { Nav } from "@/app/_components/layout/nav";
-import { Home } from "./_components/sections/home/home";
-import { About } from "@/app/_components/sections/about/about";
-import { Packages } from "@/app/_components/sections/packages/packages";
-import { Testimonials } from "@/app/_components/sections/testimonials/testimonials";
-import { Results } from "@/app/_components/sections/results/results";
-import { Faq } from "./_components/sections/faq/faq";
-import { SiteFooter } from "@/app/_components/layout/footer";
-import { FloatingCta } from "@/app/_components/ui/floating-cta";
+import type { Metadata } from 'next';
 
-export default function Page() {
+import { PageView } from '@/components/page-view';
+import { JsonLd } from '@/components/seo/json-ld';
+import { loadContent } from '@/lib/content';
+
+/**
+ * The single page.
+ *
+ * Content is read, validated and token-resolved **once** here, at the server
+ * boundary, and handed down as props. `loadContent` is `react/cache`-wrapped, so
+ * `generateMetadata` and the component below share one read and one parse.
+ *
+ * Everything under `<PageView>` is server-rendered. The client islands it
+ * contains (the spine, the reveal observer, the count-ups, the carousel, the
+ * folder tabs, the course-outline and privacy dialogs) all receive finished,
+ * serialisable props and all server-render their final content first — the
+ * results matrix, the ledger, the distribution chart, the 28 quotes and the
+ * eight answers are complete in this HTML with JavaScript disabled.
+ *
+ * `dynamic = 'error'` makes that a build-time guarantee rather than a habit: if
+ * anything below ever reaches for a request-time API, the export fails loudly.
+ */
+export const dynamic = 'error';
+
+/**
+ * Page metadata wins over the static fallback in `layout.tsx`, so the title,
+ * description and share card follow `settings.seo` without a code edit.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const { settings } = await loadContent();
+  const { seo, brand } = settings;
+  const share = {
+    url: brand.ogImage.src,
+    width: brand.ogImage.width,
+    height: brand.ogImage.height,
+    alt: brand.ogImage.alt,
+  };
+
+  return {
+    metadataBase: new URL(seo.siteUrl),
+    title: seo.title,
+    description: seo.description,
+    alternates: { canonical: '/' },
+    openGraph: {
+      type: 'website',
+      siteName: brand.name,
+      url: '/',
+      title: seo.title,
+      description: seo.description,
+      images: [share],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seo.title,
+      description: seo.description,
+      images: [share.url],
+    },
+  };
+}
+
+export default async function Page() {
+  const content = await loadContent();
+
   return (
-    <main className="min-h-dvh bg-white text-neutral-900 antialiased">
-      <SmoothScroll />
-      <BackgroundGlow />
-      <SectionDots />
-      <div className="relative z-10">
-        <header className="sticky top-0 z-40 w-full">
-          <Nav />
-        </header>
-
-        <section
-          id="content"
-          className="container mx-auto max-w-5xl px-4 py-4"
-        >
-          <Home />
-        </section>
-
-        <section
-          id="about"
-          className="container mx-auto max-w-5xl px-4 py-4"
-        >
-          <About />
-        </section>
-
-        <section
-          id="packages"
-          className="container mx-auto max-w-5xl px-4 py-4"
-        >
-          <Packages />
-        </section>
-
-        <section
-          id="testimonials"
-          className="container mx-auto max-w-5xl px-4 py-4"
-        >
-          <Testimonials />
-        </section>
-
-        <section
-          id="results"
-          className="container mx-auto max-w-5xl px-4 py-4"
-        >
-          <Results />
-        </section>
-
-        <section
-          id="faq"
-          className="container mx-auto max-w-5xl px-4 py-4"
-        >
-          <Faq />
-        </section>
-
-        <SiteFooter />
-        <FloatingCta />
-      </div>
-    </main>
+    <>
+      <JsonLd content={content} />
+      <PageView content={content} />
+    </>
   );
 }

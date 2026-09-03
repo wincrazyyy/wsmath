@@ -1,0 +1,133 @@
+{
+  "brand": {
+    "name": "WSMath",
+    "copyrightHolder": "Winson Siu",
+    "tutorName": "Winson Siu",
+    "tutorNameZh": "數學軍師",
+    "taglineEn": "International Mathematics Exam Strategist",
+    "taglineZh": "國際數學科考試軍師",
+    "description": "Structured learning, exam strategy, measurable progress.",
+    "logo": {
+      "src": "/icon.png",
+      "alt": "WSMath logo",
+      "width": 512,
+      "height": 512
+    },
+    "ogImage": {
+      "src": "/opengraph-image.png",
+      "alt": "WSMath — Winson Siu, International Mathematics Exam Strategist",
+      "width": 2363,
+      "height": 2364
+    }
+  },
+  "contact": {
+    "whatsappPhone": "85269447214",
+    "timezoneLabel": "Hong Kong / Global online",
+    "centreAddress": "Times Square, Causeway Bay"
+  },
+  "socials": [
+    {
+      "platform": "facebook",
+      "url": "https://www.facebook.com/profile.php?id=61564257721098"
+    },
+    {
+      "platform": "instagram",
+      "url": "https://www.instagram.com/wsmath_ib_alevel"
+    },
+    {
+      "platform": "xiaohongshu",
+      "url": "https://xhslink.com/m/A3RfIEPO7Wf"
+    }
+  ],
+  "stats": {
+    "tutoringHours": 20000,
+    "studentsCoached": 250,
+    "lessonsTaught": 11000,
+    "teachingSince": "2017-09",
+    "oneToOneSince": 2018,
+    "iaStudents": 80,
+    "iaYearRange": "2020–2025",
+    "questionBankYears": "2008–2025",
+    "pastPapersIbdp": "2008–2026",
+    "pastPapersIal": "2014–2026",
+    "pastPapersCambridgeIgcse": "2014–2026",
+    "pastPapersEdexcelIgcse": "2018–2025"
+  },
+  "pricing": {
+    "currency": "HKD",
+    "locale": "en-HK",
+    "privateHourlyRate": 1500,
+    "coursePrice": 16800,
+    "coursePriceHigher": 19800,
+    "courseListPrice": 60000,
+    "referralRebateMax": 3000
+  },
+  "programme": {
+    "sessionMinutes": 90,
+    "courseSessionMinutes": 50,
+    "ibdpLessonCount": 28,
+    "ialLessonCount": 32,
+    "edexcelIgcseLessonCount": 24,
+    "ibdpBonusVideoHoursStandard": 32,
+    "ibdpBonusVideoHoursAdvanced": 64,
+    "videoHours0607": 32,
+    "videoHours0606": 32,
+    "intensiveLessonCount": 8,
+    "curricula": [
+      "IBDP",
+      "A-Level / IAL",
+      "IGCSE"
+    ]
+  },
+  "setup": {
+    "platform": "Zoom",
+    "equipment": [
+      "iPad",
+      "Apple Pencil",
+      "GoodNotes"
+    ]
+  },
+  "outcomes": {
+    "hlSixPlusRate": "65%+",
+    "slSixPlusRate": "65%+",
+    "avgUplift": "2+",
+    "improvedOneBand": "90%+ improved ≥1 band",
+    "typicalTimeToGain": "Often within 8–12 weeks",
+    "satisfaction": "Very high satisfaction",
+    "topBandsLabel": "6–7 / A–A* outcomes"
+  },
+  "seo": {
+    "siteUrl": "https://wsmath.com",
+    "title": "WSMath — Winson Siu · International Mathematics Exam Strategist",
+    "description": "International Mathematics Exam Strategist"
+  },
+  "builder": {
+    "label": "Built by",
+    "name": "XiniDev",
+    "siteUrl": "https://xini.dev",
+    "githubUrl": "https://github.com/XiniDev",
+    "stack": "Next.js + Tailwind"
+  },
+  "navSections": [
+    {
+      "id": "about",
+      "label": "About"
+    },
+    {
+      "id": "results",
+      "label": "Results"
+    },
+    {
+      "id": "packages",
+      "label": "Packages"
+    },
+    {
+      "id": "voices",
+      "label": "Voices"
+    },
+    {
+      "id": "faq",
+      "label": "FAQ"
+    }
+  ]
+}

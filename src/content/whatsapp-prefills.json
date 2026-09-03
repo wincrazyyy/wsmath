@@ -1,0 +1,13 @@
+{
+  "nav": "Hi {{brand.tutorName}}, I’m interested in 1-to-1 exam coaching. I am (name?) from (school?) in (year?).",
+  "about-ribbon": "Hi {{brand.tutorName}}, I’m interested in placement and a recommended plan. I am (name?) from (school?) in (year?).",
+  "results": "Hi {{brand.tutorName}}, I’m interested in starting IBDP / A-Level / IGCSE coaching. I am (name?) from (school?) in (year?).",
+  "private": "Hi {{brand.tutorName}}, I’m interested in IBDP Private coaching (1-to-1). I am (name?) from (school?) in (year?).",
+  "ibdp": "Hi {{brand.tutorName}}, I’m interested in the IBDP Mathematics group course (AASL / AAHL / AISL / AIHL). I am (name?) from (school?) in (year?).",
+  "ial": "Hi {{brand.tutorName}}, I’m interested in the Edexcel International A-Level Mathematics group course. I am (name?) from (school?) in (year?).",
+  "igcse": "Hi {{brand.tutorName}}, I’m interested in the International GCSE group courses (0607 / 0606 / 4MA1). I am (name?) from (school?) in (year?).",
+  "ia": "Hi {{brand.tutorName}}, I’m interested in the IBDP Maths IA Instructional Course. I am (name?) from (school?) in (year?).",
+  "video": "Hi {{brand.tutorName}}, I’m interested in watching the student video clips. I am (name?) from (school?) in (year?).",
+  "faq": "Hi {{brand.tutorName}}, I’m interested in asking a question that isn’t answered on the site. I am (name?) from (school?) in (year?).",
+  "footer": "Hi {{brand.tutorName}}, I’m interested in availability and course placement. I am (name?) from (school?) in (year?)."
+}
