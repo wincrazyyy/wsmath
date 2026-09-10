@@ -33,8 +33,8 @@ export interface FaqItemProps {
  * the tab order while closed — `overflow:hidden` alone would not.
  *
  * Items are independent: opening one never closes another (behaviours.md §7),
- * and because the two columns are `align-items:start`, an open answer grows
- * only its own column.
+ * and `data-open` is what releases the partner bar from the pair's levelling
+ * (faq.css), so an open answer grows only its own column.
  */
 export function FaqItem({ ordinal, questionId, answerId, question, body }: FaqItemProps) {
   const [open, setOpen] = useState(false);

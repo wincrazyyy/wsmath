@@ -28,11 +28,13 @@ type JsonObject = { readonly [key: string]: JsonValue };
 const ADDRESS_COUNTRY = 'HK';
 
 /**
- * The price band shown to search engines. A format string, not a figure: both
- * numbers resolve from `settings.pricing` and `settings.programme`, through the
- * same `money` formatter the visible copy uses, so the two can never disagree.
+ * The price band shown to search engines. A format string, not a figure: the
+ * rate resolves from `settings.pricing` through the same `money` formatter the
+ * private card uses, so the two can never disagree. It is an hourly rate, and
+ * the lesson length (`programme.sessionMinutes`) is deliberately not part of it
+ * (docs/12 §G6).
  */
-const PRICE_RANGE_TEMPLATE = '{{money pricing.privateHourlyRate}} / {{programme.sessionMinutes}} min';
+const PRICE_RANGE_TEMPLATE = '{{money pricing.privateHourlyRate}} / hour';
 
 /** Join a site root with a `/`-prefixed public path, tolerating a trailing slash on the root. */
 function absolute(siteUrl: string, path: string): string {
@@ -152,7 +154,9 @@ function course(content: SiteContent, item: Package): JsonObject {
     '@type': 'Course',
     '@id': `${seo.siteUrl.replace(/\/+$/, '')}/#course-${item.id}`,
     name: item.title,
-    description: plainText(item.description),
+    // A board's prose went with the trimmed build (docs/12 Part III); its leaflet
+    // page's alt text describes the course, so that is the structured-data fallback.
+    description: plainText(item.description ?? item.variants?.[0]?.outlinePage.alt ?? item.title),
     url: absolute(seo.siteUrl, '/#packages'),
     provider: { '@type': 'Organization', name: brand.name, url: seo.siteUrl },
     offers: {

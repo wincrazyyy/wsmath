@@ -52,7 +52,11 @@ body{margin:0;background:#1c0848;color:#f7f3e9}
   --brass-radial:radial-gradient(79% 79% at 42% 0%,#f6e8b3,#e6bf5d 46%,#9b722c 100%);
 
   /* system stacks ONLY — this design ships no webfont; do not add one */
-  --f-display:Constantia,"Sitka Heading",Cambria,"Iowan Old Style",Charter,Georgia,ui-serif,serif;
+  /* Fraunces is the one webfont: self-hosted by layout.tsx through next/font,
+     which defines --font-fraunces on <html> (docs/11 §0.3, docs/12 §G7). The
+     system serifs stay behind it as the fallback and for glyphs outside the
+     latin subset. */
+  --f-display:var(--font-fraunces,Fraunces),Constantia,"Sitka Heading",Cambria,"Iowan Old Style",Charter,Georgia,ui-serif,serif;
   --f-ui:Bahnschrift,"Segoe UI Variable Display","Franklin Gothic Medium",Corbel,Avenir,system-ui,sans-serif;
   --f-data:Consolas,"Cascadia Mono",ui-monospace,"SF Mono",Menlo,monospace;
   --f-hant:"Microsoft JhengHei","PingFang HK","Noto Sans HK","Segoe UI",sans-serif;
@@ -66,10 +70,25 @@ body{margin:0;background:#1c0848;color:#f7f3e9}
                       of a 390px viewport is a seventh of the measure; the trough keeps
                       it at every width. */
   --step:clamp(0px,(100vw - 1600px) * 0.0055,5px);
-  --pad:clamp(18px,3.6vw,92px);
+  --pad:clamp(20px,5.5vw,130px);
   --inset:clamp(20px,1.9vw,34px);
-  --wrap:1960px;
-  --sec:clamp(76px,5.6vw,150px);
+  --wrap:1800px;
+  --sec:clamp(64px,4vw,104px);
+
+  /* THE DESKTOP SCALE. From 1280px up the whole page renders at .85 — the
+     owner's own test was the browser at 85%, and `zoom` is that test made
+     permanent: one number, every clamp, gutter, seam and plate scaled
+     together, in the platform's standardised property (Chrome 128, Safari,
+     Firefox 126). Two things do NOT follow it and are handled where they live:
+     media queries read the REAL viewport, so every breakpoint at or above 1280
+     is written in real pixels (the zoomed figure × .85 — 1800 → 1530, 1679 →
+     1427, and anything that lands under 1280 collapses to 1279); and `vw`
+     resolves against the real viewport and is then scaled, so nothing above
+     1280 sizes itself off `100vw` (packages measures its row with container
+     units). Below 1280 the page is 1:1 — the laptop, tablet and phone layouts
+     were tuned there, and a phone at 85% is a phone with 12px text. */
+  --scale:1;
+  zoom:var(--scale);
 
   --ease-reveal:cubic-bezier(.16,1,.3,1);
   --ease-rise:cubic-bezier(.22,1,.36,1);
@@ -135,19 +154,22 @@ body{margin:0;background:#1c0848;color:#f7f3e9}
    2560 the layout is unchanged. */
 .mvt-wrap{width:100%;max-width:calc(var(--wrap) + var(--pad) * 2);margin-inline:auto;
   padding-inline:var(--pad) max(var(--pad),var(--coin-w))}
+/* the desktop scale switch — see the --scale note in the token block */
+@media (min-width:1280px){.mvt-root{--scale:.85}}
+
 .mvt-sec{position:relative;background:var(--lac-ground);padding-block:var(--sec);scroll-margin-top:92px}
 .mvt-root [id^="mvt-s-"]{scroll-margin-top:92px}
 .mvt-sec--tight{padding-block:clamp(38px,3vw,80px)}
 .mvt-edge{height:2px;width:100%;background:linear-gradient(#ffffff14 0 1px,#07031b 1px 2px)}
 
 /* ── type ─────────────────────────────────────────────────────────────────── */
-.mvt-d0{font-family:var(--f-display);font-size:clamp(72px,9.9vw,204px);font-weight:700;
+.mvt-d0{font-family:var(--f-display);font-size:clamp(64px,9vw,184px);font-weight:700;
   letter-spacing:-.042em;line-height:.86;text-wrap:balance}
-.mvt-h2{font-family:var(--f-display);font-size:clamp(46px,5.4vw,96px);font-weight:700;
+.mvt-h2{font-family:var(--f-display);font-size:clamp(42px,4.9vw,88px);font-weight:700;
   letter-spacing:-.032em;line-height:.94;text-wrap:balance}
-.mvt-h3{font-family:var(--f-display);font-size:clamp(28px,2.7vw,46px);font-weight:600;
+.mvt-h3{font-family:var(--f-display);font-size:clamp(26px,2.5vw,42px);font-weight:600;
   letter-spacing:-.018em;line-height:1.1;text-wrap:balance}
-.mvt-lead{font-family:var(--f-display);font-size:clamp(19px,1.4vw,26px);font-weight:400;line-height:1.55}
+.mvt-lead{font-family:var(--f-display);font-size:clamp(18px,1.3vw,24px);font-weight:400;line-height:1.55}
 .mvt-body{font-size:calc(17px + var(--step));line-height:1.62;letter-spacing:.004em;text-wrap:pretty}
 .mvt-small{font-size:15px;line-height:1.58;letter-spacing:.006em}
 .mvt-mu{font-family:var(--f-ui);font-size:11.5px;font-weight:600;font-stretch:82%;
@@ -266,8 +288,10 @@ body{margin:0;background:#1c0848;color:#f7f3e9}
 /* A header with no supporting line must NOT keep the second track and fill it
    with a stretched rule — that renders a huge ink-free recessed rectangle.
    Single track; the scale sits under the heading like every other section's. */
-.mvt-head:not(:has(.mvt-head-sub)){grid-template-columns:minmax(0,1fr)}
-.mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-column:1/-1;grid-row:3;height:14px;align-self:end}
+.mvt-head:not(:has(.mvt-head-sub)){grid-template-columns:auto minmax(0,1fr)}
+.mvt-head:not(:has(.mvt-head-sub)) > .mvt-h2{grid-column:1;grid-row:1}
+.mvt-head:not(:has(.mvt-head-sub)) > .mvt-eyebrow{grid-column:2;grid-row:1;align-self:baseline}
+.mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-column:1/-1;grid-row:2;height:14px;align-self:end}
 .mvt-head-sub{color:var(--ink-2);text-wrap:pretty}
 /* the header slot is a recess with the brass scale on its lower lip */
 .mvt-head > .mvt-rule{background-color:rgba(4,1,16,.30);border-radius:2px;
@@ -315,6 +339,8 @@ body{margin:0;background:#1c0848;color:#f7f3e9}
   .mvt-head{grid-template-columns:1fr}
   .mvt-head > .mvt-h2{grid-column:1;grid-row:2}
   .mvt-head > .mvt-head-sub{grid-column:1;grid-row:3;padding-bottom:0}
+  .mvt-head:not(:has(.mvt-head-sub)) > .mvt-eyebrow{grid-column:1;grid-row:1}
+  .mvt-head:not(:has(.mvt-head-sub)) > .mvt-h2{grid-column:1;grid-row:2}
   .mvt-head > .mvt-rule,.mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-column:1;grid-row:4;height:12px;align-self:auto}
 }
 @media (max-width:640px){

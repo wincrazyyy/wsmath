@@ -1,18 +1,20 @@
 /**
  * 8 · RESULTS — "Results, with context." (v6.3.2 "The Movement, Gilded")
  *
- * The original wsmath.com flow (head + context → outcome snapshot → group tabs
- * → grade improvements → schools), with v4.4's rising stream and v5.1's grade
- * matrix, struck in the gold ladder on the lacquer body. No coloured field;
- * carmine appears nowhere here.
+ * The original wsmath.com flow (head + outcome snapshot → group tabs → the
+ * rising stream → schools), struck in the gold ladder on the lacquer body. No
+ * coloured field; carmine appears nowhere here.
  *
- * Artifact: markup lines 1878–2042, CSS 1080–1235, behaviour §4–§6.
- * Spec: `scratchpad/spec/sections/results.md`.
+ * The stream is the section's ONE visual: the snap rail, the label chips and
+ * the grade matrix are gone, and the three summary counts under the stream are
+ * its caption — counted for the selected group, not globally.
+ *
+ * Artifact: `scratchpad/build/improved.html`, markup at `id="mvt-s-results"`,
+ * CSS at `.mvt-results`.
  *
  * Everything numeric is derived from the collections in `results-model.ts` —
- * the group sizes, every ribbon, every matrix cell and the four summary counts.
- * `students.json` is authoritative: the artifact's baked record arrays have
- * drifted from it.
+ * the group sizes, every ribbon and every summary count. `students.json` is
+ * authoritative: the artifact's baked record arrays have drifted from it.
  */
 
 import Image from 'next/image';
@@ -37,7 +39,7 @@ export interface ResultsSectionProps {
   page: ResultsCopy;
   /** `content.programmes` — the six group tabs, ordered by `order`. */
   programmes: readonly Programme[];
-  /** `content.students` — the 93 records; published ones feed stream + matrix. */
+  /** `content.students` — the 93 records; published ones feed the stream. */
   students: readonly Student[];
   /** `content.gradeScales` — the rails. */
   gradeScales: readonly GradeScale[];
@@ -63,16 +65,9 @@ export function ResultsSection({
   const panelCopy: ResultsPanelCopy = {
     tabsLabel: page.tabsLabel,
     tabsCountLabel: page.tabsCountLabel,
-    stream: page.stream,
-    matrix: {
-      caption: page.matrix.caption,
-      colLabel: page.matrix.colLabel,
-      binLabels: page.matrix.binLabels.map((bin) => bin.text),
-      readoutLabel: page.matrix.readoutLabel,
-      readoutIdle: page.matrix.readoutIdle,
-      readoutIdleStream: page.matrix.readoutIdleStream,
-      note: page.matrix.note,
-    },
+    stream: { fromLabel: page.stream.fromLabel, toLabel: page.stream.toLabel },
+    legend: page.legend,
+    legendScope: page.legendScope,
   };
 
   return (
@@ -91,42 +86,28 @@ export function ResultsSection({
             <stop offset=".85" stopColor="#fad035" stopOpacity=".95" />
             <stop offset="1" stopColor="#ffe066" stopOpacity="1" />
           </linearGradient>
-          <linearGradient id="mvt-rib-grad-hi" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0">
-            <stop offset="0" stopColor="#e0e8fd" stopOpacity="1" />
-            <stop offset=".5" stopColor="#f0e6c0" stopOpacity="1" />
-            <stop offset=".8" stopColor="#ffd83e" stopOpacity="1" />
-            <stop offset="1" stopColor="#ffe97a" stopOpacity="1" />
-          </linearGradient>
         </defs>
       </svg>
 
       <div className="mvt-wrap">
-        <div className="mvt-res-head">
-          <div className="mvt-head">
-            <p className="mvt-eyebrow mvt-rev mvt-rev--s">{page.eyebrow}</p>
-            <h2 className="mvt-h2 mvt-rev">{page.title}</h2>
-            <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
-            <p className="mvt-head-sub mvt-lead mvt-rev mvt-rev--s">{page.sub}</p>
-          </div>
-          <div className="mvt-res-uplift mvt-rev">
+        <div className="mvt-head">
+          <p className="mvt-eyebrow mvt-rev mvt-rev--s">{page.eyebrow}</p>
+          <h2 className="mvt-h2 mvt-rev">{page.title}</h2>
+          {/* the outcome snapshot IS the head's sub-column: it takes the
+              `.mvt-head-sub` slot beside the heading rather than a second
+              two-column wrapper of its own */}
+          <div className="mvt-head-sub mvt-res-uplift mvt-rev">
             <b className="mvt-num">{page.uplift.value}</b>
-            <p className="mvt-mu">{page.uplift.note}</p>
             <p>{page.uplift.label}</p>
           </div>
+          <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
         </div>
-
-        <ul className="mvt-snaprail">
-          {page.snapList.map((item) => (
-            <li key={item.id} className="mvt-well mvt-rev mvt-rev--s">
-              <span className="mvt-mu">{item.dt}</span>
-              <b className="mvt-num">{item.dd}</b>
-            </li>
-          ))}
-        </ul>
 
         <div className="mvt-grade-h">
           <h3 className="mvt-h3 mvt-rev">{page.gradeHead.title}</h3>
-          <p className="mvt-body mvt-dim mvt-rev mvt-rev--s">{page.gradeHead.sub}</p>
+          {page.gradeHead.sub !== undefined && (
+            <p className="mvt-body mvt-dim mvt-rev mvt-rev--s">{page.gradeHead.sub}</p>
+          )}
           <p className="mvt-body mvt-rev mvt-rev--s">
             <span className="mvt-num">{page.gradeHead.scaleLeft}</span>{' '}
             <span aria-hidden="true">·</span>{' '}
@@ -134,39 +115,13 @@ export function ResultsSection({
           </p>
         </div>
 
+        {/* the tabs, the stream and the stream's caption — the legend is counted
+            per group, so it lives with the panel that owns the selection */}
         <ResultsPanel groups={model.groups} copy={panelCopy} />
-
-        {/* summary counts — GLOBAL over the published records, counted from
-            students.json, never typed into copy */}
-        <ul className="mvt-legend">
-          {page.legend.map((card) => {
-            const count = model.legend[card.metric];
-            return (
-              <li key={card.id} className="mvt-well mvt-rev mvt-rev--s">
-                <span aria-hidden="true">{card.emoji}</span>
-                <span className="mvt-li">{card.label}</span>
-                <span className="mvt-legend-n">
-                  <b className="mvt-num">{count?.count ?? 0}</b>
-                  <span className="mvt-legend-p mvt-num">{count?.percent ?? '0%'}</span>
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-        <p className="mvt-legend-scope mvt-small mvt-rev mvt-rev--s">{page.legendScope}</p>
-
-        <ul className="mvt-reschips">
-          {page.chips.map((chip) => (
-            <li key={chip.id} className="mvt-rev mvt-rev--s">
-              {chip.text}
-            </li>
-          ))}
-        </ul>
 
         <div className="mvt-schools-h">
           <p className="mvt-eyebrow mvt-rev mvt-rev--s">{page.schoolsHead.eyebrow}</p>
           <h3 className="mvt-h3 mvt-rev">{page.schoolsHead.title}</h3>
-          <p className="mvt-body mvt-dim mvt-rev mvt-rev--s">{page.schoolsHead.prov}</p>
         </div>
         <ul className="mvt-schools mvt-well mvt-rev">
           {schools.map((school) => (
@@ -177,7 +132,6 @@ export function ResultsSection({
         <div className="mvt-rescta mvt-raise mvt-rev">
           <div className="mvt-rescta-copy">
             <h3 className="mvt-h3">{page.cta.title}</h3>
-            <p className="mvt-body">{page.cta.body}</p>
             <ul>
               {page.cta.rows.map((row) => (
                 <li key={row.id}>
@@ -185,7 +139,6 @@ export function ResultsSection({
                 </li>
               ))}
             </ul>
-            <p className="mvt-small mvt-dim">{page.cta.prov}</p>
             <div className="mvt-rescta-foot">
               <span className="mvt-knurl" aria-hidden="true" />
               <PlateCta

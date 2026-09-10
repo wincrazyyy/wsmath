@@ -1,6 +1,10 @@
 /* ── footer — the void (artifact CSS 1325–1348 + responsive) ─────────────── */
 .mvt-footer{background:var(--lac-void);padding-block:clamp(44px,3vw,76px) clamp(26px,1.8vw,38px)}
-.mvt-foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.15fr;gap:clamp(24px,2.6vw,52px)}
+/* Three tracks, not four: the two link columns became ONE column of links set
+   as a two-column ledger inside its own track (`.mvt-foot-links ul` below), so
+   the grid loses a track — 1.6fr 1fr 1fr 1.15fr → 1.6fr 2fr 1.15fr — and the
+   brand and contact blocks stay on the same sides of the sheet they held. */
+.mvt-foot-grid{display:grid;grid-template-columns:1.6fr 2fr 1.15fr;gap:clamp(24px,2.6vw,52px)}
 .mvt-foot-brand{display:flex;flex-direction:column;gap:14px}
 .mvt-foot-brand img{width:40px;height:40px;border-radius:6px}
 .mvt-foot-brand h2{font-family:var(--f-display);font-size:clamp(26px,2.1vw,38px);font-weight:600;color:var(--ink)}
@@ -23,32 +27,43 @@
    10.9px short. Ratio and leading are the artifact's own (1.05em / 1.9), just
    applied where they cannot reach a testimonial. */
 .mvt-footer :is(:lang(zh-Hant),:lang(zh-Hans),:lang(yue)){font-size:1.05em;line-height:1.9}
-.mvt-foot-col h3{color:var(--brass);margin-bottom:14px}
-.mvt-foot-col li{position:relative;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.07)}
-.mvt-foot-col li:last-child{border-bottom:0}
-.mvt-foot-col a,.mvt-foot-col span,.mvt-foot-col button{color:var(--ink-2);font-size:15px}
-.mvt-foot-col a:hover,.mvt-foot-col button:hover{color:var(--brass);text-decoration:underline;text-underline-offset:4px}
-/* TAP TARGETS — as a STRETCHED HIT AREA, not as a changed box model.
-   The row looks tappable but the anchor inside it is only 15px tall, so the
-   real target was a fifth of a fingertip. An earlier pass fixed that by moving
-   the `li`'s 8px onto the child as `display:block`, and its comment claimed the
-   row kept its height. It did not: an INLINE anchor's line box is the `li`'s
-   own strut — 22px/35.64px at 2560, fluid with `.mvt-root` — so the artifact's
-   row is 52.6px there, 47.4px at 1920 and 44.5px at ≤1440. A BLOCK anchor drops
-   to its own 24.3px leading and froze every row at 41.3px, i.e. 11.3px per row
-   and 45.3px per column short at the owner's review width, so the two link
-   columns stopped bottom-aligning with the brand column's social row. Any
-   padding constant would have to be re-derived per breakpoint to undo that.
-   The overlay has no such problem: the anchor stays inline, the `li` keeps the
-   artifact's `padding:8px 0`, the row height is the artifact's at EVERY width,
-   and the whole row — hover, click and touch alike — belongs to the control.
-   It also restores the focus ring to the words: as a block, `.mvt-pv-trigger`
-   drew a brass box across the entire Resources column. Only `a`/`button` get
-   one; a bare `span` in a link list is not a target. */
-.mvt-foot-col li > :is(a,button)::after{content:"";position:absolute;inset:0}
+
+/* ── the link ledger ──────────────────────────────────────────────────────
+   One column of links, ruled and set two abreast inside its own grid track.
+   The heading is optional (a single unlabelled ledger needs no "Programmes"
+   over it), so the rule only ever fires when the column carries a title.
+
+   ROW HEIGHT is now derived, not inherited from a strut: the `li` is a block
+   with the artifact's `padding:8px 0` and the control inside it is an
+   `inline-flex` with `min-height:28px` — 8 + 28 + 8 = a 44px row at EVERY
+   width, independent of `.mvt-root`'s fluid leading. (The earlier two-column
+   footer left the anchor inline precisely because a block anchor collapsed the
+   row to its own 24.3px leading; an explicit min-height is what makes the block
+   safe here, and it is what the artifact does.)
+
+   TAP TARGET stays a STRETCHED HIT AREA rather than a changed box model: the
+   `::after` overlay hands the whole row — hover, click and touch alike — to the
+   control while the focus ring stays on the words. Only `a`/`button` get one; a
+   bare `span` in a link list is not a target. */
+.mvt-foot-links h3{color:var(--brass);margin-bottom:14px}
+.mvt-foot-links ul{display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(20px,2vw,38px)}
+.mvt-foot-links li{display:block;position:relative;padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.07)}
+/* the bottom ROW of the ledger, not the last cell: two abreast means the last
+   two items share it, and a rule under the final row would draw a line under
+   nothing. */
+.mvt-foot-links li:nth-last-child(-n+2){border-bottom:0}
+.mvt-foot-links :is(a,button){display:inline-flex;align-items:center;min-height:28px;
+  color:var(--ink-2);font-size:15px}
+.mvt-foot-links li > :is(a,button)::after{content:"";position:absolute;inset:0}
+.mvt-foot-links :is(a,button):hover{color:var(--brass);text-decoration:underline;text-underline-offset:4px}
 .mvt-foot-cta{display:flex;flex-direction:column;gap:14px}
 .mvt-foot-cta p{color:var(--ink-2);font-size:15px;line-height:1.6}
-.mvt-foot-meta{display:flex;flex-direction:column;gap:6px;padding-top:6px;color:var(--ink-2);font-size:15px;text-wrap:pretty}
+/* one line at the current copy; the column flex and its 6px gap are kept so a
+   second practical detail added in the editor sets as its own line rather than
+   running on. */
+.mvt-foot-meta{display:flex;flex-direction:column;gap:6px;padding-top:6px;color:var(--ink-2);
+  font-size:15px;line-height:1.6;text-wrap:pretty}
 .mvt-foot-bot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:baseline;
   margin-top:clamp(22px,1.6vw,34px);padding-top:18px;border-top:1px solid rgba(255,255,255,.10);
   color:var(--ink-2);font-size:15px}
@@ -70,14 +85,13 @@
    points with the same fingertip a 390px phone does, so `pointer:coarse` is in
    the query too — and phone WIDTHS are in it regardless of what the pointer
    reports, because that is how the brief states the bar and because emulated
-   mobile viewports do not always claim touch. With the overlay above, the
-   artifact's own row already measures 44.5px wherever `.mvt-root` sits at its
-   17px floor — 0.5px of headroom, which one font-metric change would spend, so
-   touch takes two more pixels a side for a 48.5px row. The social row is given
-   a real box instead of a 14px baseline strip. A mouse at a desktop width is
-   untouched by this block and keeps the artifact's exact footer metrics. */
+   mobile viewports do not always claim touch. The ledger row is exactly 44px
+   everywhere (8 + 28 + 8); touch raises the control itself to 48px for a 64px
+   row rather than adding padding the desktop row would then have to undo. The
+   social row is given a real box instead of a 14px baseline strip. A mouse at a
+   desktop width is untouched by this block and keeps the artifact's metrics. */
 @media (max-width:640px), (pointer:coarse){
-  .mvt-foot-col li{padding:10px 0}
+  .mvt-foot-links :is(a,button){min-height:48px}
   .mvt-social{align-items:center;gap:0 18px}
   .mvt-social a{min-height:44px;align-items:center}
 }

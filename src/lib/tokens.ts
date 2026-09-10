@@ -243,8 +243,17 @@ export function deriveTokens(settings: Settings, options: BuildTokenMapOptions =
     ibdpPrivateEquivalent,
     intensiveBlockCost,
     ibdpTeachingHours,
+    ibdpTeachingHoursExact,
     delta: courseVsPrivateSaving,
   } = derived;
+
+  /** `23.333` → `23 hours 20 minutes`; whole hours drop the minutes. */
+function hoursAndMinutes(hours: number): string {
+  const whole = Math.floor(hours);
+  const minutes = Math.round((hours - whole) * 60);
+  const h = `${whole} hour${whole === 1 ? "" : "s"}`;
+  return minutes > 0 ? `${h} ${minutes} minute${minutes === 1 ? "" : "s"}` : h;
+}
 
   const monthLabel =
     startMonth >= 1 && startMonth <= 12 ? `${MONTH_ABBREVIATIONS[startMonth - 1]} ${startYear}` : String(startYear);
@@ -260,6 +269,7 @@ export function deriveTokens(settings: Settings, options: BuildTokenMapOptions =
     "pricing.intensiveBlockCost": intensiveBlockCost,
     "pricing.courseVsPrivateSaving": courseVsPrivateSaving,
     "programme.ibdpTeachingHours": ibdpTeachingHours,
+    "programme.ibdpTeachingTime": hoursAndMinutes(ibdpTeachingHoursExact),
     "programme.curriculaLabel": joinProse(programme.curricula),
     "programme.curriculaDots": programme.curricula.join(" · "),
     "programme.curriculaSlashes": programme.curricula.join(" / "),

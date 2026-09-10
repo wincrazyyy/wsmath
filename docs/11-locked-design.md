@@ -62,20 +62,23 @@ to `.mvt-plate-cta`, because that plate carries text), `--brass-cast-text` and `
 **Single theme, committed** — dark only. `color-scheme:dark` on `.mvt-root`; there is no light
 variant and no theme toggle.
 
-### 0.3 Typography — system stacks only, no webfont
+### 0.3 Typography — one self-hosted display serif, system stacks for everything else
 
 ```css
---f-display:Constantia,"Sitka Heading",Cambria,"Iowan Old Style",Charter,Georgia,ui-serif,serif
+--f-display:var(--font-fraunces),Constantia,"Sitka Heading",Cambria,"Iowan Old Style",Charter,Georgia,ui-serif,serif
 --f-ui:Bahnschrift,"Segoe UI Variable Display","Franklin Gothic Medium",Corbel,Avenir,system-ui,sans-serif
 --f-data:Consolas,"Cascadia Mono",ui-monospace,"SF Mono",Menlo,monospace
 --f-hant:"Microsoft JhengHei","PingFang HK","Noto Sans HK","Segoe UI",sans-serif
 --f-hans:"Microsoft YaHei","PingFang SC","Noto Sans SC","Segoe UI",sans-serif
 ```
 
-**This design ships no webfont. Do not add one** — `src/lib/fonts.ts` and the Roboto Flex payload
-were deleted with the Boundary build. The Boundary's "must self-host a variable grotesk" note in
-§3 below no longer applies: the display voice here is the *serif*, which is well served on every
-platform, and the sans is supporting.
+**One webfont, the display serif; never a second one.** Fraunces — variable, `opsz` 9–144 and
+`wght` 100–900, latin subset, 67 KB woff2 — is self-hosted from `src/app/fonts/` through
+`next/font/local` and leads `--f-display`; the system serifs behind it are the fallback, not the
+design (`docs/12` §G7, 2026-09-03: the system stack rendered Constantia on Windows and the owner
+rejected it for the nameplate). The UI and data stacks ship no webfont: `src/lib/fonts.ts` and
+the Roboto Flex payload were deleted with the Boundary build and stay deleted, because the sans
+is supporting.
 
 **CJK rules set FAMILY only, never `font-size`.** The comp writes
 `.mvt-root :lang(zh-Hant){font-family:…;font-size:1.05em;line-height:1.9}` at specificity (0,2,0),

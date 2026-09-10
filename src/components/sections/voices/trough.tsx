@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 
 import { PauseBars, PlayTriangle } from '@/components/ui/icons';
 
@@ -11,7 +11,14 @@ export interface TroughProps {
   pauseLabel: string;
   /** `pages.voices.trough.playLabel` — shown once the reader has stopped it. */
   playLabel: string;
-  /** The twenty-four sheets: the twelve, then the twelve inert clones. */
+  /**
+   * How many sheets ONE printing holds — `sheetIds.length`, computed on the
+   * server. It is published as `--vc-count` and the drift duration is
+   * `--vc-count · --vc-pace`, which is what keeps the pixel speed of the row
+   * independent of how many quotes the owner lists. See voices.css.
+   */
+  sheetCount: number;
+  /** Both printings: the sheets, then the same sheets again as inert clones. */
   children: ReactNode;
 }
 
@@ -46,12 +53,23 @@ export interface TroughProps {
  * being appended by script, so the row is seamless on first paint and no DOM
  * mutation runs on boot. Reduced motion hides them in CSS and turns the channel
  * into a plain horizontal scroller.
+ *
+ * `--vc-count` is the one number this component publishes to CSS. The travel of
+ * one loop is exactly `sheetCount × (sheet + gap)` (voices.css derives it), so
+ * a fixed duration would mean the row crawls when the owner lists six quotes
+ * and races when they list twenty. Pacing the animation per sheet holds the
+ * speed at `(sheet + gap) / --vc-pace` at every count and every viewport.
  */
-export function Trough({ label, pauseLabel, playLabel, children }: TroughProps) {
+export function Trough({ label, pauseLabel, playLabel, sheetCount, children }: TroughProps) {
   const [paused, setPaused] = useState(false);
 
   return (
-    <div className="mvt-trough mvt-well" data-plan-avoid="" data-paused={paused ? 'true' : undefined}>
+    <div
+      className="mvt-trough mvt-well"
+      data-plan-avoid=""
+      data-paused={paused ? 'true' : undefined}
+      style={{ '--vc-count': String(sheetCount) } as CSSProperties}
+    >
       <div className="mvt-trough-head">
         <p className="mvt-mu mvt-brass">{label}</p>
         <span className="mvt-knurl" aria-hidden="true" />

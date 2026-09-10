@@ -31,7 +31,7 @@ holds the legacy site, with its build output (`out/`) tracked and served in prod
    and the load-bearing `\n\n` in FAQ answers 4 and 7. Never retype it.
 2. **The design is locked.** `docs/11-locked-design.md` §0 is the specification and the
    client-approved artifact `4820bc1c…` is the source of truth. Do not re-litigate it. Do not add
-   a webfont. Deliberate departures from the comp are recorded in `docs/12`; add to that record
+   a second webfont. Deliberate departures from the comp are recorded in `docs/12`; add to that record
    rather than diverging silently.
 3. **Every business fact is a token.** Prices, session minutes, lesson counts, student counts,
    tutoring hours, the tutor name, the WhatsApp number, the equipment list — all live in
@@ -57,7 +57,8 @@ holds the legacy site, with its build output (`out/`) tracked and served in prod
 - Radix primitives (dialog, accordion, tabs, avatar), `motion`, Embla carousel, lucide-react
 - Zod 4 schemas in `src/content/schema/` are the single source of truth for content types and
   validation. `npm run generate:schema` runs on prebuild and emits `content.schema.json`
-- No webfont: system serif for display, system sans for UI, system mono for data (docs/11 §0.3)
+- One self-hosted webfont: Fraunces for the display serif (`src/app/fonts/`, `next/font/local`,
+  docs/12 §G7). System sans for UI, system mono for data (docs/11 §0.3)
 - Content: JSON in git, committed by the external editor through a GitHub App
 - Host: **Cloudflare Pages** — free, commercial use permitted, no adapter for a static export.
   Not Vercel (Hobby is non-commercial). Cloudflare keeps DNS
@@ -70,7 +71,8 @@ holds the legacy site, with its build output (`out/`) tracked and served in prod
 - `src/app/` (page, layout, `/preview`, robots, sitemap) · `src/components/{layout,sections,ui,seo}`
   · `src/lib/` (content loading, anchors, grades, pricing, results stats, tokens, CTA beacon)
   · `src/content/` (JSON plus Zod schema) · `scripts/` (schema generation, course-outline extraction)
-- Section order: `nav · hero · about · courses · ribbon · packages · results · voices · faq · footer`.
+- Section order: `nav · hero · about · ribbon · packages · results · voices · faq · footer`. The course
+  catalogue lives inside the three board plates as "Also taught 1-to-1" ledgers (docs/12 Part III).
   `page-view.tsx` renders the 2px `.mvt-edge` seam between sections; sections never do. Sections
   carry `id="mvt-s-<name>"`; content stores plain ids and `src/lib/anchors.ts` maps between them.
 - Server Components by default. `"use client"` only for genuine interactivity, and every client

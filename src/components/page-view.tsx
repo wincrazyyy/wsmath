@@ -105,7 +105,6 @@ export function PageView({ content }: PageViewProps) {
           <PackagesSection
             page={pages.packagesPage}
             packages={content.packages}
-            courses={pages.courses}
             courseGroups={content.courseGroups}
             iaCourse={content.iaCourse}
             phone={phone}

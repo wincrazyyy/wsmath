@@ -48,7 +48,7 @@
    `課程定價 HK$60,000 → $16,800` block: covering a crop's dead margin and
    covering the struck price are not the same act. The focus ring and the hover
    ring still wrap frame and plate together, because both are one trigger. */
-@media (min-width:1800px){
+@media (min-width:1530px){ /* 1800 zoomed */
   .mvt-pack--board .mvt-lf-trigger{flex-direction:column;gap:10px}
   .mvt-pack--board .mvt-lf-hint{position:static;align-self:flex-start}
 }

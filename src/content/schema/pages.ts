@@ -132,7 +132,7 @@ const JourneyItem = z
     course: text("Course", "e.g. IBDP AAHL."),
     from: text("From", "Starting grade, e.g. 1."),
     to: text("To", "Final grade, e.g. 7."),
-    duration: text("Duration", "e.g. 2 years."),
+    duration: text("Duration", "Optional, e.g. 2 years.").optional(),
   })
   .meta({ id: "JourneyItem", title: "Journey" });
 
@@ -174,7 +174,7 @@ const About = z
         }),
         chip: text("Setup chip", "The kit line in the rounded chip, e.g. Best setup: {{setup.equipmentList}}.", {
           tokens: true,
-        }),
+        }).optional(),
       })
       .meta({ title: "Who I teach" }),
     journeys: z
@@ -182,7 +182,7 @@ const About = z
         items: field(z.array(JourneyItem).min(1), {
           title: "Journeys",
           description:
-            "The seven short journeys shown as pills under the grid. These restate records from the results section — keep them in step or the two will disagree.",
+            "The short journeys shown as pills under the grid. These restate records from the results section — keep them in step or the two will disagree.",
           widget: "collection",
         }),
       })
@@ -199,26 +199,6 @@ const CourseCode = z
   })
   .meta({ id: "CourseCode", title: "Course display code" });
 
-const Courses = z
-  .strictObject({
-    eyebrow: text("Eyebrow", "e.g. IBDP · A-Level · IGCSE."),
-    title: text("Heading", "e.g. Courses covered."),
-    sub: longText("Supporting line", "The sentence beside the heading.", { tokens: true }),
-    groupMarkLabel: text(
-      "Group-course marker",
-      "The sentence the diamond beside a course name stands for, e.g. Also sold as a scheduled group course. " +
-        "Read out by screen readers on every marked row, and printed once as the legend under the trays.",
-    ),
-    displayCodes: field(z.array(CourseCode), {
-      title: "Display codes",
-      description:
-        "Short codes for courses that have none in the Course groups document (the IBDP courses and IBMYP). Courses with a real exam-board code show that code automatically.",
-      widget: "collection",
-    }),
-  })
-  .meta({ title: "Courses covered" });
-
-/* ─────────────────────────── ribbon ─────────────────────────── */
 
 const Ribbon = z
   .strictObject({
@@ -227,8 +207,8 @@ const Ribbon = z
       "Never shown. Names the band for screen readers moving between landmarks, e.g. Availability.",
     ),
     title: text("Heading", "The big line in the carmine band.", { tokens: true }),
-    body: text("Body", "The line under it.", { tokens: true }),
-    waLabel: text("Small label", "The small caps label above the button, e.g. WhatsApp."),
+    body: text("Body", "Optional. The line under it.", { tokens: true }).optional(),
+    waLabel: text("Small label", "Optional. The small caps label above the button.").optional(),
     ctaLabel: text("Button label", "e.g. Get in touch."),
     ctaKey: CtaKey,
   })
@@ -256,11 +236,11 @@ const Results = z
   .strictObject({
     eyebrow: text("Eyebrow", "e.g. Proven Outcomes · Data-Driven Coaching."),
     title: text("Heading", "e.g. Results, with context."),
-    sub: longText("Supporting line", "The sentence beside the heading.", { tokens: true }),
+    sub: longText("Supporting line", "Optional. The sentence beside the heading.", { tokens: true }).optional(),
     uplift: z
       .strictObject({
         value: text("Headline figure", "e.g. {{outcomes.avgUplift}}.", { tokens: true }),
-        note: text("Small caps note", "e.g. {{outcomes.satisfaction}}.", { tokens: true }),
+        note: text("Small caps note", "Optional, e.g. {{outcomes.satisfaction}}.", { tokens: true }).optional(),
         label: text("Headline label", "e.g. average grade uplift (From PG/mock to final)."),
       })
       .meta({ title: "Outcome snapshot" }),
@@ -268,11 +248,11 @@ const Results = z
       title: "Snapshot rows",
       description: "The label/value wells under the heading.",
       widget: "collection",
-    }),
+    }).optional(),
     gradeHead: z
       .strictObject({
         title: text("Heading", "e.g. Grade improvements."),
-        sub: text("First line", "e.g. How students move from school predictions to final exam results."),
+        sub: text("First line", "Optional, e.g. How students move from school predictions to final exam results.").optional(),
         scaleLeft: text("Count line", "e.g. {{content.studentRecordCount}} records across {{content.programmeCount}} groups.", {
           tokens: true,
         }),
@@ -291,12 +271,12 @@ const Results = z
       .strictObject({
         fromLabel: text("Left gutter caption", "e.g. From PG / mock."),
         toLabel: text("Right gutter caption", "e.g. Final."),
-        readLabel: text("Read-out label", "e.g. Drawn records."),
-        readIdle: text("Read-out prompt", "e.g. Hover a ribbon to read its record."),
+        readLabel: text("Read-out label", "Optional, e.g. Drawn records.").optional(),
+        readIdle: text("Read-out prompt", "Optional, e.g. Hover a ribbon to read its record.").optional(),
         drawnTemplate: text(
           "Read-out summary",
           "Shown when nothing is hovered. Write {group} for the group name, {n} for its size and {k} for the drawn count, e.g. {group} · n = {n} · {k} published records drawn.",
-        ),
+        ).optional(),
       })
       .meta({ title: "The stream" }),
     matrix: z
@@ -323,7 +303,7 @@ const Results = z
         ),
         note: text("Helper note", "The small line under the table, e.g. 👆 Hover on each cell to see the students."),
       })
-      .meta({ title: "Improvement matrix" }),
+      .meta({ title: "Improvement matrix" }).optional(),
     legend: field(z.array(SummaryCard).min(1), {
       title: "Summary counts",
       description: "Each row counts something across the published records. The number and percentage are calculated, never typed.",
@@ -336,18 +316,18 @@ const Results = z
       title: "Label chips",
       description: "The debossed label chips under the summary counts.",
       widget: "collection",
-    }),
+    }).optional(),
     schoolsHead: SectionHead,
     cta: z
       .strictObject({
         title: text("Heading", "e.g. Start your IBDP / A-Level / IGCSE coaching.", { tokens: true }),
-        body: text("Body", "The line under the heading.", { tokens: true }),
+        body: text("Body", "Optional. The line under the heading.", { tokens: true }).optional(),
         rows: field(z.array(textItem("Point", "One benefit per line.", { tokens: true })).min(1), {
           title: "Points",
           description: "Shown as short lines above the WhatsApp button.",
           widget: "collection",
         }),
-        prov: text("Note", "Tiny note under the points (e.g. response time / what to send).", { tokens: true }),
+        prov: text("Note", "Optional tiny note under the points.", { tokens: true }).optional(),
         trio: text("Prompt trio", "The small caps prompt beside the button, e.g. (name?) · (school?) · (year?)."),
         art: media("Image", "The image in the small well beside the call to action."),
         ctaLabel: text("Button label", "e.g. Get in touch."),
@@ -404,14 +384,14 @@ const OutlineCopy = z
 
 const PackagesPage = z
   .strictObject({
-    eyebrow: text("Eyebrow", "e.g. IBDP Coaching Packages."),
+    eyebrow: text("Eyebrow", "Optional, e.g. IBDP Coaching Packages.").optional(),
     title: text("Heading", "e.g. Choose the path that fits your goal."),
     sub: longText("Supporting line", "The sentence beside the heading.", { tokens: true }),
     chips: field(z.array(textItem("Chip", "One short label chip.")).min(1), {
       title: "Label chips",
       description: "The debossed label chips under the heading.",
       widget: "collection",
-    }),
+    }).optional(),
     ledger: z
       .strictObject({
         title: text(
@@ -447,7 +427,7 @@ const PackagesPage = z
           widget: "collection",
         }),
       })
-      .meta({ title: "Value comparison" }),
+      .meta({ title: "Value comparison" }).optional(),
     rateLabel: text("Rate label", "The small caps label before the private price, e.g. Typical rate."),
     /*
      * The two words the delivery badge can say. Keyed by `CourseVariant.delivery`,
@@ -468,8 +448,9 @@ const PackagesPage = z
      * it there rather than in page copy. `iaFootTag` stays here because the IA
      * block is an `IaCourse`, not a `Package`.
      */
-    iaFootTag: text("IA block foot tag", "The small caps line in the IA course's foot."),
+    iaFootTag: text("IA block foot tag", "Optional. The small caps line in the IA course's foot.").optional(),
     ctaLabel: text("Button label", "The label on the package WhatsApp buttons, e.g. Get in touch."),
+    cardCue: text("Card cue", "Optional. The small line on each course card saying the card itself opens WhatsApp, e.g. Enquire on WhatsApp.").optional(),
     plan: z
       .strictObject({
         label: text("Panel label", "The floating panel's title, e.g. Your plan."),
@@ -512,7 +493,7 @@ const Voices = z
   .strictObject({
     eyebrow: text("Eyebrow", "e.g. Student Voices."),
     title: text("Heading", "e.g. What my students and parents say."),
-    lede: longText("Supporting line", "The sentence beside the heading.", { tokens: true }),
+    lede: longText("Supporting line", "Optional. The sentence beside the heading.", { tokens: true }).optional(),
     video: z
       .strictObject({
         provider: field(z.enum(VIDEO_PROVIDERS), {
@@ -521,14 +502,14 @@ const Voices = z
           widget: "select",
         }),
         url: text("Video link", "Paste the share link exactly as the host gives it."),
-        stamp: text("Corner stamp", "The small caps line under the player, e.g. Video · replays available."),
+        stamp: text("Corner stamp", "Optional. The small caps line under the player.").optional(),
         heading: text("Heading beside the video", "e.g. Real students talking about their WSMath journey."),
-        body: longText("Body beside the video", "The paragraph under that heading.", { tokens: true }),
+        body: longText("Body beside the video", "The paragraph under that heading.", { tokens: true }).optional(),
         clips: field(z.array(VideoClip).min(1), {
           title: "Clips",
           description: "The students in the video, in order.",
           widget: "collection",
-        }),
+        }).optional(),
         ctaKey: CtaKey,
       })
       .meta({ title: "Student video" }),
@@ -559,7 +540,7 @@ const FaqPage = z
   .strictObject({
     eyebrow: text("Eyebrow", "e.g. Questions answered."),
     title: text("Heading", "e.g. FAQs."),
-    sub: longText("Supporting line", "The sentence beside the heading.", { tokens: true }),
+    sub: longText("Supporting line", "Optional. The sentence beside the heading.", { tokens: true }).optional(),
     ctaKey: CtaKey,
   })
   .meta({ title: "FAQ" });
@@ -603,7 +584,7 @@ const FooterLink = z
 const FooterColumn = z
   .strictObject({
     id: stableId(),
-    title: text("Column heading", "e.g. Programmes."),
+    title: text("Column heading", "e.g. Programmes.").optional(),
     links: field(z.array(FooterLink).min(1), {
       title: "Links",
       description: "Add, remove or reorder.",
@@ -615,7 +596,7 @@ const FooterColumn = z
 const FooterMeta = z
   .strictObject({
     id: stableId(),
-    label: text("Label", "e.g. Time zone:."),
+    label: text("Label", "Optional, e.g. Time zone:.").optional(),
     value: text("Value", "e.g. Hong Kong / Global online.", { tokens: true }),
   })
   .meta({ id: "FooterMeta", title: "Footer detail" });
@@ -705,7 +686,6 @@ export const Pages = z
     nav: Nav,
     hero: Hero,
     about: About,
-    courses: Courses,
     ribbon: Ribbon,
     packagesPage: PackagesPage,
     results: Results,
@@ -730,7 +710,6 @@ export type EmphasisPart = z.infer<typeof EmphasisPart>;
 export type About = z.infer<typeof About>;
 export type LeadItem = z.infer<typeof LeadItem>;
 export type JourneyItem = z.infer<typeof JourneyItem>;
-export type Courses = z.infer<typeof Courses>;
 export type CourseCode = z.infer<typeof CourseCode>;
 export type Ribbon = z.infer<typeof Ribbon>;
 export type SectionHead = z.infer<typeof SectionHead>;

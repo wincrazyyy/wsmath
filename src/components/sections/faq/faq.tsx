@@ -22,9 +22,17 @@ export interface FaqSectionProps {
  *
  * Two columns of four. Eight full-width bars each ~70% empty is the "same
  * object repeated" failure; halving the measure and enlarging the question
- * fills the bar with the question and halves the section's vertical run. The
- * columns are independent (`align-items:start`), so opening a question grows
- * only its own column and never shunts the other four.
+ * fills the bar with the question and halves the section's vertical run. At
+ * rest the two bars of a pair are levelled to the taller of them, so a
+ * three-line question does not leave its neighbour short; the moment an answer
+ * opens, the grid drops back to independent columns (faq.css), so opening a
+ * question grows only its own column and never shunts the other four.
+ *
+ * `copy.sub` is optional in the schema and absent from the current copy: it
+ * renders nothing when it is missing rather than being deleted outright, so a
+ * line typed into the editor still appears. With no `.mvt-head-sub` child the
+ * foundation collapses the head to a single track
+ * (globals.css `:not(:has(.mvt-head-sub))`), which is the comp's composition.
  *
  * The answers are `faqs.json` verbatim, split on their blank lines by the
  * shared `paragraphs()` helper — the same one the privacy policy uses, so the
@@ -48,7 +56,9 @@ export function FaqSection({ copy, faqs }: FaqSectionProps) {
           <p className="mvt-eyebrow mvt-rev mvt-rev--s">{copy.eyebrow}</p>
           <h2 className="mvt-h2 mvt-rev">{copy.title}</h2>
           <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
-          <p className="mvt-head-sub mvt-lead mvt-rev mvt-rev--s">{copy.sub}</p>
+          {copy.sub === undefined ? null : (
+            <p className="mvt-head-sub mvt-lead mvt-rev mvt-rev--s">{copy.sub}</p>
+          )}
         </div>
         <ul className="mvt-faq">
           {ordered.map((faq, index) => (

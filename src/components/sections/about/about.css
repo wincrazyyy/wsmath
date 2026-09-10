@@ -3,7 +3,7 @@
 
    Donor: v5.5 #wsd5-about. The heading and both content groups run down the
    LEFT column; the figure sits on the RIGHT with the who-panel beneath it; the
-   seven result pills run full-width under the grid. Material stays v5.2: paper
+   result pills run full-width under the grid. Material stays v5.2: paper
    inlays in wells, a raised photo plate, a debossed chip. v6.3.2: the two paper
    sheets sit SIDE BY SIDE under the heading so the ruling is inhabited, and the
    photo plate frames the image evenly (its caption bar is deleted). No red
@@ -20,7 +20,12 @@
    the class stays on both elements. See notes/about.md §3.
    ────────────────────────────────────────────────────────────────────────── */
 
-.mvt-about-grid{display:grid;grid-template-columns:60fr 40fr;gap:clamp(28px,3vw,56px);align-items:stretch}
+/* `align-items:start`, not `stretch`: with the shorter copy the side column no
+   longer has enough content to fill the main column's height, and a stretched
+   track handed the surplus to `.mvt-who` (`flex:1 1 auto`) — the well grew a
+   band of empty lacquer under the course codes and the paper sheets stretched
+   with it. Top-aligned, each column is exactly as tall as what it holds. */
+.mvt-about-grid{display:grid;grid-template-columns:60fr 40fr;gap:clamp(28px,3vw,56px);align-items:start}
 .mvt-about-main{display:flex;flex-direction:column;gap:clamp(20px,2vw,34px)}
 .mvt-about-head{display:flex;flex-direction:column;gap:16px}
 .mvt-about-head .mvt-hair{margin-top:-2px}
@@ -91,9 +96,12 @@
 /* result pills — v6.3.2: the champlevé slabs (--au-deep grounds, the least-golden
    gold on the page) are replaced by dark lacquer wells in the hero facts' register:
    record text in ink, every outcome struck in bright --au-lit, brass hairline seams.
-   Count-aware ledger grid over 12 columns — spans always sum each row to 12
-   (>=1680: 3·3·3·3 / 4·4·4 = rows of 4+3; below: 4·4·4 / 6·6 / 6·6 = rows of
-   3+2+2; <=1024 the pills stack) — so no record count can strand an orphan. */
+   Count-aware ledger grid over 12 columns — spans always sum each row to 12.
+   Re-tuned for FOUR records (was seven): >=1680 → 3·3·3·3, one row of four;
+   below → 6·6 / 6·6, two rows of two; <=1024 the pills stack. The old rule set
+   kept a `nth-child(n+4){span 6}` step that belonged to the seven-record run;
+   at four records it left the fourth pill alone on a half-width row below
+   1680, which is the orphan the whole scheme exists to prevent. */
 .mvt-pills{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;
   margin-top:clamp(26px,2.4vw,44px)}
 .mvt-pills li{grid-column:span 3;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;
@@ -103,17 +111,15 @@
     inset 0 -1px 0 color-mix(in oklab,var(--brass) 52%,transparent),
     0 0 0 1px color-mix(in oklab,var(--brass) 34%,transparent),
     0 1px 0 rgba(255,255,255,.05)}
-.mvt-pills li:nth-child(n+5){grid-column:span 4}
 .mvt-pills b{flex:1 1 auto;font-weight:400;color:var(--ink)}
 .mvt-pills > li > span{color:var(--ink-2)}
 
-@media (max-width:1679px){
-  .mvt-pills li:nth-child(n){grid-column:span 4}
-  .mvt-pills li:nth-child(n+4){grid-column:span 6}
+@media (max-width:1427px){ /* 1679 zoomed */
+  .mvt-pills li{grid-column:span 6}
 }
 @media (max-width:1024px){
   .mvt-about-grid{grid-template-columns:1fr}
-  .mvt-pills li:nth-child(n){grid-column:1/-1}
+  .mvt-pills li{grid-column:1/-1}
 }
 @media (max-width:640px){
   .mvt-about-papers{grid-template-columns:1fr}

@@ -1,12 +1,17 @@
 'use client';
 
 /**
- * The results tab panel — group tabs, the rising stream, the grade matrix and
- * the two read-outs.
+ * The results tab panel — the group tabs, the rising stream and the stream's
+ * caption: the three summary counts for the SELECTED group.
  *
  * All the data arrives pre-computed from the server (`results-model.ts`), so
- * every group's ribbons and cells are in the prerendered HTML: this component
+ * every group's ribbons and counts are in the prerendered HTML: this component
  * adds behaviour only.
+ *
+ * The legend lives inside the tab panel, not beside it. It counts the records
+ * the stream above it draws, so it is content the tab controls: rendering it
+ * outside the panel would leave a screen-reader user inside the panel without
+ * it, and change it silently when the tab moves.
  *
  * ## The draw-on (behaviours.md §5, artifact lines 2601–2665)
  *
@@ -26,7 +31,6 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -35,7 +39,16 @@ import {
 
 import { FolderTabs } from '@/components/ui/folder-tabs';
 
-import { STREAM_VB_H, type MatrixCellModel, type ResultsGroupModel } from './results-model';
+import { STREAM_VB_H, type ResultsGroupModel } from './results-model';
+
+/** One summary card, from `pages.results.legend`. */
+export interface ResultsLegendCard {
+  readonly id: string;
+  /** Keys the group's counts — `topBand` / `secondBand` / `bigJumps` / `anyImprovement`. */
+  readonly metric: string;
+  readonly emoji: string;
+  readonly label: string;
+}
 
 /** Copy for the interactive block, all from `pages.results`. */
 export interface ResultsPanelCopy {
@@ -45,22 +58,10 @@ export interface ResultsPanelCopy {
   readonly stream: {
     readonly fromLabel: string;
     readonly toLabel: string;
-    readonly readLabel: string;
-    readonly readIdle: string;
-    /** `{group} · n = {n} · {k} published records drawn` */
-    readonly drawnTemplate: string;
   };
-  readonly matrix: {
-    readonly caption: string;
-    readonly colLabel: string;
-    /** Exactly four, in bin order. */
-    readonly binLabels: readonly string[];
-    readonly readoutLabel: string;
-    readonly readoutIdle: string;
-    /** The half of the prompt that talks about the stream — dropped where the stream is not drawn. */
-    readonly readoutIdleStream: string;
-    readonly note: string;
-  };
+  readonly legend: readonly ResultsLegendCard[];
+  /** `Over the {n} published records in {group}` — both placeholders are filled per group. */
+  readonly legendScope: string;
 }
 
 export interface ResultsPanelProps {
@@ -68,23 +69,16 @@ export interface ResultsPanelProps {
   readonly copy: ResultsPanelCopy;
 }
 
-const NO_HIGHLIGHT: readonly number[] = [];
-
 /** Draw timings, artifact lines 2649–2661. */
 const DRAW_MS = 1600;
 const STAGGER_MS = 40;
-const WIDTH_MS = 160;
+/** Tail pad before the dash is cleared, so the clear can never clip the last ribbon. */
+const TAIL_MS = 160;
 /** Samples per path when measuring device length. */
 const SAMPLES = 24;
 
 function cssVar(name: string, value: string): CSSProperties {
   return { [name]: value } as CSSProperties;
-}
-
-/** Abbreviated column label — the text before the first space (`0–1 grade improvement` → `0–1`). */
-function abbreviate(binLabel: string): string {
-  const at = binLabel.indexOf(' ');
-  return at < 0 ? binLabel : binLabel.slice(0, at);
 }
 
 export function ResultsPanel({ groups, copy }: ResultsPanelProps) {
@@ -145,17 +139,9 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
   const reducedRef = useRef(false);
   const seenRef = useRef(false);
 
-  const [highlighted, setHighlighted] = useState<readonly number[]>(NO_HIGHLIGHT);
-  const [streamRead, setStreamRead] = useState<string | null>(null);
-  const [readout, setReadout] = useState<{ head: string; body: string } | null>(null);
-  const [expanded, setExpanded] = useState<string | null>(null);
-
-  const highlightSet = useMemo(() => new Set(highlighted), [highlighted]);
-
-  const drawnLine = copy.stream.drawnTemplate
-    .replace('{group}', group.name)
-    .replace('{n}', String(group.totalCount))
-    .replace('{k}', String(group.publishedCount));
+  const scopeLine = copy.legendScope
+    .replace('{n}', String(group.publishedCount))
+    .replace('{group}', group.label);
 
   const cancelPending = useCallback(() => {
     for (const frame of framesRef.current) cancelAnimationFrame(frame);
@@ -194,14 +180,9 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
       const sx = viewBox.width ? box.width / viewBox.width : 1;
       const sy = viewBox.height ? box.height / viewBox.height : 1;
 
-      const lengths: number[] = [];
       visRefs.current.forEach((path, index) => {
-        if (!path) {
-          lengths[index] = 0;
-          return;
-        }
+        if (!path) return;
         const length = deviceLength(path, sx, sy);
-        lengths[index] = length;
         hide(path, length);
         hide(glowRefs.current[index], length);
       });
@@ -213,12 +194,12 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
           visRefs.current.forEach((path, index) => {
             const delay = index * STAGGER_MS;
             if (path) {
-              path.style.transition = `stroke-dashoffset ${DRAW_MS}ms var(--ease-draw) ${delay}ms, stroke-width ${WIDTH_MS}ms linear`;
+              path.style.transition = `stroke-dashoffset ${DRAW_MS}ms var(--ease-draw) ${delay}ms`;
               path.style.strokeDashoffset = '0';
             }
             const glow = glowRefs.current[index];
             if (glow) {
-              glow.style.transition = `stroke-dashoffset ${DRAW_MS}ms var(--ease-draw) ${delay}ms, opacity ${WIDTH_MS}ms linear`;
+              glow.style.transition = `stroke-dashoffset ${DRAW_MS}ms var(--ease-draw) ${delay}ms`;
               glow.style.strokeDashoffset = '0';
             }
           });
@@ -233,7 +214,7 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
             if (path) path.style.strokeDasharray = 'none';
           }
         },
-        DRAW_MS + visRefs.current.length * STAGGER_MS + WIDTH_MS,
+        DRAW_MS + visRefs.current.length * STAGGER_MS + TAIL_MS,
       );
     },
     [cancelPending, paintComplete],
@@ -277,20 +258,6 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
 
   useEffect(() => cancelPending, [cancelPending]);
 
-  const lightRecords = (cell: MatrixCellModel, on: boolean) => {
-    setHighlighted(on ? cell.ribbonIndices : NO_HIGHLIGHT);
-  };
-
-  const readCell = (row: { gradeLabel: string }, cell: MatrixCellModel) => {
-    setReadout({
-      head: `${group.name} · ${copy.matrix.colLabel} ${row.gradeLabel} · ${copy.matrix.binLabels[cell.binIndex]}`,
-      body: cell.records.join('  ·  '),
-    });
-  };
-
-  const readoutId = `mvt-readout-${group.id}`;
-  const captionId = `mvt-matrix-cap-${group.id}`;
-
   return (
     <>
       <div className="mvt-stream mvt-rev" aria-hidden="true">
@@ -318,7 +285,7 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
                   ref={(node) => {
                     glowRefs.current[index] = node;
                   }}
-                  className={highlightSet.has(index) ? 'mvt-rib-glow is-hi' : 'mvt-rib-glow'}
+                  className="mvt-rib-glow"
                   d={ribbon.d}
                   vectorEffect="non-scaling-stroke"
                 />
@@ -331,26 +298,9 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
                   ref={(node) => {
                     visRefs.current[index] = node;
                   }}
-                  className={highlightSet.has(index) ? 'mvt-rib is-hi' : 'mvt-rib'}
+                  className="mvt-rib"
                   d={ribbon.d}
                   vectorEffect="non-scaling-stroke"
-                />
-              ))}
-            </g>
-            <g>
-              {group.ribbons.map((ribbon, index) => (
-                <path
-                  key={ribbon.key}
-                  className="mvt-rib-hit"
-                  d={ribbon.d}
-                  onPointerEnter={() => {
-                    setHighlighted([index]);
-                    setStreamRead(ribbon.label);
-                  }}
-                  onPointerLeave={() => {
-                    setHighlighted(NO_HIGHLIGHT);
-                    setStreamRead(null);
-                  }}
                 />
               ))}
             </g>
@@ -367,108 +317,26 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
         </div>
       </div>
 
-      <div className="mvt-stream-read mvt-well mvt-well--shallow mvt-rev mvt-rev--s" aria-live="polite">
-        <p className="mvt-mu">{copy.stream.readLabel}</p>
-        <p>{streamRead ?? drawnLine}</p>
-      </div>
-
-      <div className="mvt-matrix-well mvt-well mvt-rev">
-        <table className="mvt-matrix" role="table" aria-labelledby={captionId}>
-          <caption className="mvt-visually-hidden" id={captionId}>
-            {copy.matrix.caption}
-          </caption>
-          <thead role="rowgroup">
-            <tr role="row">
-              <th scope="col" role="columnheader">
-                {copy.matrix.colLabel}
-              </th>
-              {copy.matrix.binLabels.map((binLabel) => (
-                <th key={binLabel} scope="col" role="columnheader">
-                  <span className="mvt-th-ab" aria-hidden="true">
-                    {abbreviate(binLabel)}
-                  </span>
-                  <span className="mvt-th-full">{binLabel}</span>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody role="rowgroup">
-            {group.rows.map((row) => (
-              <tr key={row.gradeIndex} role="row">
-                <th scope="row" role="rowheader" className="mvt-num">
-                  <span className="mvt-th-ab">{copy.matrix.colLabel} </span>
-                  {row.gradeLabel}
-                </th>
-                {row.cells.map((cell) => {
-                  const key = `${row.gradeIndex}-${cell.binIndex}`;
-                  return (
-                    <td key={key} className="mvt-cell" role="cell">
-                      {cell.tier === null ? (
-                        <span className="mvt-cellnil mvt-num">0</span>
-                      ) : (
-                        <button
-                          type="button"
-                          className={`mvt-cellbtn mvt-num mvt-${cell.tier}`}
-                          aria-expanded={expanded === key}
-                          aria-controls={readoutId}
-                          aria-label={`${cell.count} in ${copy.matrix.binLabels[cell.binIndex]}, ${lowerFirst(copy.matrix.colLabel)} ${row.gradeLabel}`}
-                          onPointerEnter={() => {
-                            readCell(row, cell);
-                            lightRecords(cell, true);
-                          }}
-                          onPointerLeave={() => lightRecords(cell, false)}
-                          onFocus={() => {
-                            readCell(row, cell);
-                            lightRecords(cell, true);
-                          }}
-                          onBlur={() => lightRecords(cell, false)}
-                          onClick={() => {
-                            if (expanded === key) {
-                              setExpanded(null);
-                              setReadout(null);
-                            } else {
-                              setExpanded(key);
-                              readCell(row, cell);
-                            }
-                          }}
-                        >
-                          {cell.count}
-                        </button>
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="mvt-readout mvt-well mvt-well--shallow" id={readoutId} aria-live="polite">
-          <p className="mvt-mu">{readout?.head ?? copy.matrix.readoutLabel}</p>
-          {/* The idle prompt is two sentences with two different truth
-              conditions. The second one points at the rising stream, which
-              ≤640 does not draw (results.css) — printed there it tells a phone
-              reader to look at something that is not on the page. Splitting it
-              in content and hiding the span with the stream keeps the desktop
-              sentence byte-identical and makes the phone one true. */}
-          <p>
-            {readout?.body ?? (
-              <>
-                {copy.matrix.readoutIdle}{' '}
-                <span className="mvt-idle-stream">{copy.matrix.readoutIdleStream}</span>
-              </>
-            )}
-          </p>
-        </div>
-        <p className="mvt-matrix-note mvt-small">{copy.matrix.note}</p>
-      </div>
+      {/* the stream's caption — counted from students.json for THIS group, never
+          typed into copy */}
+      <ul className="mvt-legend">
+        {copy.legend.map((card) => {
+          const count = group.legend[card.metric];
+          return (
+            <li key={card.id} className="mvt-well mvt-rev mvt-rev--s">
+              <span aria-hidden="true">{card.emoji}</span>
+              <span className="mvt-li">{card.label}</span>
+              <span className="mvt-legend-n">
+                <b className="mvt-num">{count?.count ?? 0}</b>
+                <span className="mvt-legend-p mvt-num">{count?.percent ?? '0%'}</span>
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="mvt-mu mvt-legend-scope mvt-rev mvt-rev--s">{scopeLine}</p>
     </>
   );
-}
-
-/** `Final grade` → `final grade`, so the composed cell label reads as a sentence. */
-function lowerFirst(value: string): string {
-  return value.charAt(0).toLowerCase() + value.slice(1);
 }
 
 function hide(path: SVGPathElement | null | undefined, length: number): void {

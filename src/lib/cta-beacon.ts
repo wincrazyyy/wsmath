@@ -19,6 +19,7 @@
  *  the type-checker and loud in the analytics. */
 export const CTA_IDS = [
   'nav',
+  'hero',
   'about-ribbon',
   'results',
   'private',

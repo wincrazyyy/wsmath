@@ -1,33 +1,32 @@
 /**
  * Results section — the derived, serialisable model.
  *
- * Everything the group tabs, the rising stream, the grade matrix and the four
- * summary counts display is computed **here, on the server, at build time**,
- * from `programmes.json`, `students.json` and `grade-scales.json`. The client
- * component receives plain data (path `d` strings, gutter fractions, cell
- * counts, record labels) and adds only draw-on, hover and tab behaviour — so
- * the section's data is complete in the prerendered HTML.
+ * Everything the group tabs, the rising stream and the summary legend display is
+ * computed **here, on the server, at build time**, from `programmes.json`,
+ * `students.json` and `grade-scales.json`. The client component receives plain
+ * data (path `d` strings, gutter fractions, counts) and adds only draw-on and
+ * tab behaviour — so the section's data is complete in the prerendered HTML.
  *
  * Executable spec: the locked artifact `scratchpad/v6-3-2.html`, JS §6 (data,
- * lines 2462–2497), §7 (stream geometry, 2499–2686) and §8 (matrix, 2688–2762).
+ * lines 2462–2497) and §7 (stream geometry, 2499–2686).
  * Written spec: `scratchpad/spec/sections/results.md`, `spec/behaviours.md`
- * §4–§6.
+ * §4–§5.
  *
  * **students.json is authoritative.** The artifact's baked `GROUPS` arrays have
  * drifted from it (names, cohort years, durations); every figure below is
- * recounted from the JSON. The four summary counts reproduce the artifact's
- * 19 / 39 / 40 / 45 exactly — because they are correct, not because they were
- * copied.
+ * recounted from the JSON.
  *
- * Pure and React-free: standard library plus `@/lib/grades` and
- * `@/lib/results-stats`.
+ * The legend counts are **per group**, not global: they caption the stream that
+ * is on screen, so they are computed once per group from that group's published
+ * records and re-read when the tab changes.
+ *
+ * Pure and React-free: standard library plus `@/lib/results-stats`.
  */
 
 import type { GradeScale, Programme, Student } from '@/content/schema';
-import { binOf, type BinIndex } from '@/lib/grades';
 import {
   enrichRows,
-  summaryCounts,
+  summaryCountsOf,
   type GroupInput,
   type StatRow,
 } from '@/lib/results-stats';
@@ -59,8 +58,6 @@ export interface RibbonModel {
   readonly key: string;
   /** Cubic path in viewBox space, flat at both ends. */
   readonly d: string;
-  /** Read-out line, e.g. `Marcus Li 2025 6→7 (10mo)`. */
-  readonly label: string;
 }
 
 /** One tick on a gutter rail. */
@@ -71,30 +68,18 @@ export interface GutterTick {
   readonly p: number;
 }
 
-/** One matrix cell: a final grade × an improvement bin. */
-export interface MatrixCellModel {
-  readonly binIndex: BinIndex;
+/** One summary count with its share of the records it was counted over. */
+export interface LegendCount {
   readonly count: number;
-  /** Champlevé heat: ≥5 → `t3`, ≥3 → `t2`, ≥1 → `t1`; `null` for an empty cell. */
-  readonly tier: 't1' | 't2' | 't3' | null;
-  /** Indices into {@link ResultsGroupModel.ribbons} — the records this cell lights. */
-  readonly ribbonIndices: readonly number[];
-  /** Those records' read-out lines, in group order. */
-  readonly records: readonly string[];
+  /** `42%` — rounded, never typed in copy. */
+  readonly percent: string;
 }
 
-/** One matrix row: a final grade across all four bins. */
-export interface MatrixRowModel {
-  /** 0-based index of the final grade on its scale — sorted descending. */
-  readonly gradeIndex: number;
-  /** The band as recorded on the scale, e.g. `7`, `A*`, `A(8)`. */
-  readonly gradeLabel: string;
-  readonly cells: readonly MatrixCellModel[];
-}
-
-/** One programme group — one tab, one stream, one matrix. */
+/** One programme group — one tab, one stream, one legend. */
 export interface ResultsGroupModel {
   readonly id: string;
+  /** `programmes.label` — the prose name (`IBDP · HL`, `A-Level Further Math`). */
+  readonly label: string;
   /** `fullLabel` before the first ` · ` — the tab's headline. */
   readonly headline: string;
   /**
@@ -108,30 +93,23 @@ export interface ResultsGroupModel {
   readonly tabLabel: string;
   /** `fullLabel` after the first ` · ` — the tab's second line. */
   readonly detail: string;
-  /** `headline · detail` — the read-out's group name. */
-  readonly name: string;
   /** Full group size including unpublished records — the tab's `n =`. */
   readonly totalCount: number;
-  /** Records published by name — the ribbons actually drawn. */
+  /** Records published by name — the ribbons actually drawn, and the legend's `n`. */
   readonly publishedCount: number;
   readonly gutters: readonly GutterTick[];
   readonly ribbons: readonly RibbonModel[];
-  readonly rows: readonly MatrixRowModel[];
-}
-
-/** One summary count with its share of the published records. */
-export interface LegendCount {
-  readonly count: number;
-  /** `42%` — rounded, never typed in copy. */
-  readonly percent: string;
+  /**
+   * This group's summary counts, by `SummaryCard.metric` — `topBand` /
+   * `secondBand` / `bigJumps` / `anyImprovement`. Counted over
+   * {@link publishedCount} records, so every percentage is a share of the stream
+   * above it.
+   */
+  readonly legend: Readonly<Record<string, LegendCount>>;
 }
 
 export interface ResultsModel {
   readonly groups: readonly ResultsGroupModel[];
-  /** By `SummaryCard.metric` — `topBand` / `secondBand` / `bigJumps` / `anyImprovement`. */
-  readonly legend: Readonly<Record<string, LegendCount>>;
-  /** Published-by-name records across every group (45). */
-  readonly publishedTotal: number;
 }
 
 /* ──────────────────────────── construction ───────────────────────────── */
@@ -141,19 +119,6 @@ function splitFullLabel(fullLabel: string): [string, string] {
   const at = fullLabel.indexOf(' · ');
   if (at < 0) return [fullLabel, ''];
   return [fullLabel.slice(0, at), fullLabel.slice(at + 3)];
-}
-
-/**
- * The read-out line for one record: `Marcus Li 2025 6→7 (10mo)`.
- *
- * The bands are the strings **as recorded** (`B(6)` stays `B(6)`, even where the
- * scale's sixth rung is written `C(6)` — see `docs/07-content-conflicts.md`
- * §A1), not the scale's own label at that index: the records migrate
- * byte-for-byte.
- */
-function recordLabel(row: StatRow): string {
-  const duration = row.monthsCompact === null ? '' : ` (${row.monthsCompact})`;
-  return `${row.name} ${row.year} ${row.fromLabel}→${row.toLabel}${duration}`;
 }
 
 /**
@@ -255,23 +220,7 @@ export function buildResultsModel(
     };
   });
 
-  const groups = inputs.map((input, index) => buildGroup(ordered[index], input));
-  const counts = summaryCounts(inputs);
-  const share = (n: number): LegendCount => ({
-    count: n,
-    percent: `${counts.total === 0 ? 0 : Math.round((n / counts.total) * 100)}%`,
-  });
-
-  return {
-    groups,
-    legend: {
-      topBand: share(counts.top1),
-      secondBand: share(counts.top2),
-      bigJumps: share(counts.big),
-      anyImprovement: share(counts.any),
-    },
-    publishedTotal: counts.total,
-  };
+  return { groups: inputs.map((input, index) => buildGroup(ordered[index], input)) };
 }
 
 function buildGroup(programme: Programme, input: GroupInput): ResultsGroupModel {
@@ -286,7 +235,6 @@ function buildGroup(programme: Programme, input: GroupInput): ResultsGroupModel 
     return {
       key: `${row.studentId}-${row.programmeId}`,
       d: `M 0 ${yl} C 420 ${yl}, 580 ${yr}, 1000 ${yr}`,
-      label: recordLabel(row),
     };
   });
 
@@ -295,62 +243,29 @@ function buildGroup(programme: Programme, input: GroupInput): ResultsGroupModel 
     p: yOf(index + 1, bands.length) / STREAM_VB_H,
   }));
 
+  // The rows are already enriched; `summaryCountsOf` counts them where
+  // `summaryCounts` would enrich the group a second time.
+  const counts = summaryCountsOf(rows);
+  const share = (n: number): LegendCount => ({
+    count: n,
+    percent: `${counts.total === 0 ? 0 : Math.round((n / counts.total) * 100)}%`,
+  });
+
   return {
     id: programme.id,
+    label: programme.label,
     headline,
     tabLabel: programme.tabLabel,
     detail,
-    name: `${headline} · ${detail}`,
     totalCount: programme.totalCount,
     publishedCount: rows.length,
     gutters,
     ribbons,
-    rows: buildMatrixRows(rows, bands.map((band) => band.value)),
+    legend: {
+      topBand: share(counts.top1),
+      secondBand: share(counts.top2),
+      bigJumps: share(counts.big),
+      anyImprovement: share(counts.any),
+    },
   };
-}
-
-/**
- * Rows are the distinct FINAL grades present in the group, highest first;
- * columns are the four improvement bins (artifact `buildMatrix`, lines
- * 2721–2762). Regressions are excluded rather than filed under "0–1", matching
- * `buildMatrix` in `@/lib/results-stats`.
- */
-function buildMatrixRows(
-  rows: readonly StatRow[],
-  bandValues: readonly string[],
-): MatrixRowModel[] {
-  const byGrade = new Map<number, number[][]>();
-  rows.forEach((row, index) => {
-    if (row.delta < 0) return;
-    let bins = byGrade.get(row.toIndex);
-    if (bins === undefined) {
-      bins = [[], [], [], []];
-      byGrade.set(row.toIndex, bins);
-    }
-    bins[binOf(row.delta)].push(index);
-  });
-
-  return [...byGrade.keys()]
-    .sort((a, b) => b - a)
-    .map((gradeIndex) => {
-      const bins = byGrade.get(gradeIndex) ?? [[], [], [], []];
-      return {
-        gradeIndex,
-        gradeLabel: bandValues[gradeIndex] ?? String(gradeIndex + 1),
-        cells: bins.map((ribbonIndices, binIndex) => ({
-          binIndex: binIndex as BinIndex,
-          count: ribbonIndices.length,
-          tier: tierOf(ribbonIndices.length),
-          ribbonIndices,
-          records: ribbonIndices.map((index) => recordLabel(rows[index])),
-        })),
-      };
-    });
-}
-
-function tierOf(count: number): 't1' | 't2' | 't3' | null {
-  if (count === 0) return null;
-  if (count >= 5) return 't3';
-  if (count >= 3) return 't2';
-  return 't1';
 }

@@ -533,25 +533,36 @@ export interface SummaryCounts {
   readonly total: number;
 }
 
-/** Count the summary cards across every group. Comp lines 2864–2876. */
-export function summaryCounts(groups: readonly GroupInput[]): SummaryCounts {
+/**
+ * Count the summary cards over already-enriched rows.
+ *
+ * The scope is whatever the caller passes: one group's published records (the
+ * results legend, which reads for the SELECTED tab) or every group's
+ * ({@link summaryCounts}). Taking {@link StatRow}s rather than {@link GroupInput}s
+ * is what lets a caller that has already enriched a group count it without
+ * enriching it a second time.
+ */
+export function summaryCountsOf(rows: readonly StatRow[]): SummaryCounts {
   let top1 = 0;
   let top2 = 0;
   let big = 0;
   let any = 0;
   let total = 0;
 
-  for (const group of groups) {
-    for (const row of enrichRows(group)) {
-      total += 1;
-      if (row.bandFromTop === 0) top1 += 1;
-      if (row.bandFromTop <= 1) top2 += 1;
-      if (row.delta >= 2) big += 1;
-      if (row.delta >= 1) any += 1;
-    }
+  for (const row of rows) {
+    total += 1;
+    if (row.bandFromTop === 0) top1 += 1;
+    if (row.bandFromTop <= 1) top2 += 1;
+    if (row.delta >= 2) big += 1;
+    if (row.delta >= 1) any += 1;
   }
 
   return { top1, top2, big, any, total };
+}
+
+/** Count the summary cards across every group. Comp lines 2864–2876. */
+export function summaryCounts(groups: readonly GroupInput[]): SummaryCounts {
+  return summaryCountsOf(groups.flatMap((group) => enrichRows(group)));
 }
 
 /** Full group size across every group — 93 records, published or not. */

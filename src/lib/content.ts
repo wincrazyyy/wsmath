@@ -150,7 +150,7 @@ function contentCounts(parsed: {
     "content.courseGroupCount": parsed.courseGroups.length,
     "content.courseCount": parsed.courseGroups.reduce((total, group) => total + group.courses.length, 0),
     "content.iaThemeCount": parsed.iaCourse.themes.length,
-    "content.iaFeatureCount": parsed.iaCourse.features.length,
+    "content.iaFeatureCount": (parsed.iaCourse.features ?? []).length,
     /* Every course sold as a scheduled group course, across all boards — 8
        today. It replaces `content.leafletPageCount`, which was a `Math.max`
        across every package's leaflet and therefore wrong by construction the
@@ -283,7 +283,7 @@ function crossCheck(content: Omit<SiteContent, "tokens">): string[] {
     }
   }
 
-  for (const clip of content.pages.voices.video.clips) {
+  for (const clip of content.pages.voices.video.clips ?? []) {
     if (clip.testimonialId !== undefined && !testimonialIds.has(clip.testimonialId)) {
       problems.push(`pages → voices.video.clips.${clip.id}: testimonialId "${clip.testimonialId}" is not a known testimonial.`);
     }
@@ -339,10 +339,10 @@ function crossCheck(content: Omit<SiteContent, "tokens">): string[] {
   for (const item of content.packages) {
     const variants = item.variants ?? [];
 
-    if (item.kind === "board" && (variants.length === 0 || item.outline === undefined)) {
-      problems.push(
-        `packages → ${item.id}: a board package needs at least one course and an outline.`,
-      );
+    // The outline (leaflet vitrine) is optional since the trimmed build kept
+    // only the flagship's — docs/12 Part III. A board still needs its courses.
+    if (item.kind === "board" && variants.length === 0) {
+      problems.push(`packages → ${item.id}: a board package needs at least one course.`);
     }
     if (item.outline !== undefined && variants.length === 0) {
       problems.push(
@@ -402,11 +402,6 @@ function crossCheck(content: Omit<SiteContent, "tokens">): string[] {
 
   // Pre-existing gap, closed here: a stale display-code id used to render an
   // empty <span/> in the coverage tray, silently.
-  for (const entry of content.pages.courses.displayCodes) {
-    if (!courseIds.has(entry.id)) {
-      problems.push(`pages → courses.displayCodes: "${entry.id}" is not a course in course-groups.json.`);
-    }
-  }
 
   // The floating panel starts on this package. A typo would silently preselect
   // whichever card happens to be first, and a package with no price yields no

@@ -103,8 +103,8 @@ export const Settings = z
     stats: z
       .strictObject({
         tutoringHours: integer("1-to-1 tutoring hours", "Digits only, e.g. 20000. The + and the comma are added automatically."),
-        studentsCoached: integer("Students coached", "Digits only, e.g. 250."),
-        lessonsTaught: integer("Lessons taught", "Digits only, e.g. 11000."),
+        studentsCoached: integer("Students coached", "Digits only, e.g. 270."),
+        lessonsTaught: integer("Lessons taught", "Digits only, e.g. 12000."),
         teachingSince: field(
           z.string().regex(/^\d{4}-\d{2}$/, "Use YYYY-MM, e.g. 2017-09."),
           {
@@ -270,7 +270,7 @@ export const Settings = z
         name: text("Builder name", "Who built the site, e.g. XiniDev."),
         siteUrl: externalUrl("Builder site", "Link on the builder credit."),
         githubUrl: externalUrl("Builder GitHub", "Optional. Second link on the builder credit, e.g. a GitHub profile.").optional(),
-        stack: text("Stack", "What it is built with, shown after the name, e.g. Next.js + Tailwind."),
+        stack: text("Stack", "What it is built with, shown after the name, e.g. Next.js + Tailwind.").optional(),
       })
       .meta({ title: "Builder credit" }),
 

@@ -52,9 +52,9 @@ function PaperSheet({ title, items }: { title: string; items: readonly LeadItem[
 }
 
 /**
- * One result pill: `Name (year) COURSE from → to` on the left, the duration
- * right-justified by the flex gap. The outcome is ALWAYS struck in `--au-lit`
- * — it is the only gold in this section.
+ * One result pill: `Name (year) COURSE from → to` on the left, and — when the
+ * record carries one — the duration right-justified by the flex gap. The
+ * outcome is ALWAYS struck in `--au-lit`, the only gold in this section.
  */
 function JourneyPill({ item }: { item: JourneyItem }) {
   const { lead, code } = courseParts(item.course);
@@ -70,8 +70,11 @@ function JourneyPill({ item }: { item: JourneyItem }) {
         {isNumericGrade(item.from) ? <span className="mvt-num">{item.from}</span> : item.from}{' '}
         <span className="mvt-arrow">→</span>{' '}
         <span className={isNumericGrade(item.to) ? 'mvt-aulit mvt-num' : 'mvt-aulit'}>{item.to}</span>
-      </b>{' '}
-      <span>({item.duration})</span>
+      </b>
+      {/* the pill is a flex row: the separator is its 10px column gap, not a
+          text node (a whitespace-only run between flex items is not rendered),
+          so an absent duration leaves nothing behind. */}
+      {item.duration === undefined ? null : <span>({item.duration})</span>}
     </li>
   );
 }
@@ -81,9 +84,9 @@ function JourneyPill({ item }: { item: JourneyItem }) {
  *
  * A 60/40 grid: the section head and the two ivory paper sheets run down the
  * left column; a raised photo plate and the "Who I teach" well stack in the
- * right. The seven result pills run full-width beneath, on a count-aware
- * 12-column ledger grid whose spans always sum to 12 so no record count can
- * strand an orphan pill.
+ * right. The two columns are top-aligned, so each keeps its own height. The
+ * result pills run full-width beneath, on a 12-column ledger grid whose spans
+ * sum each row to 12 so no row is left holding an orphan pill.
  */
 export function About({ about }: AboutProps) {
   return (
@@ -128,9 +131,13 @@ export function About({ about }: AboutProps) {
                   </Fragment>
                 ))}
               </dl>
-              <div className="mvt-chipwrap">
-                <span className="mvt-chip mvt-small">{about.whoBlock.chip}</span>
-              </div>
+              {/* the setup chip is optional; when it is absent the wrapper goes
+                  with it, so the well does not distribute space to an empty row. */}
+              {about.whoBlock.chip === undefined ? null : (
+                <div className="mvt-chipwrap">
+                  <span className="mvt-chip mvt-small">{about.whoBlock.chip}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

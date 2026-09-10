@@ -2,21 +2,17 @@ import Image from 'next/image';
 import type { CSSProperties, ReactNode } from 'react';
 
 import { unitFromPer } from '@/components/layout/plan-panel/plan-options';
-import { PlateCta } from '@/components/ui/plate-cta';
+import { PlateCta, WaTextLink } from '@/components/ui/plate-cta';
 import type {
   CourseGroup,
-  Courses as CoursesCopy,
-  EmphasisLine,
   IaCourse,
   Package,
   PackagesPage,
   WhatsappPrefills,
 } from '@/content/schema';
 
-import { CoursesCovered } from './courses-covered';
 import { IaCourseBlock } from './ia-course';
 import { OutlineDialog } from './outline-dialog';
-import { PlanPick } from './plan-pick';
 
 import './packages.css';
 
@@ -25,13 +21,16 @@ export interface PackagesSectionProps {
   page: PackagesPage;
   /**
    * `content.packages` — the private card followed by every board course, in
-   * authored order. The section walks them: `kind === 'private'` takes the
-   * left cell of row 3, and the boards fill the rest, flagship first.
+   * authored order. The section walks them: the boards fill row 3 with the
+   * flagship (the first board authored) lifted into the centre column, and
+   * `kind === 'private'` takes row 4 on its own, full width.
    */
   packages: readonly Package[];
-  /** `pages.courses` — head copy, the group-course marker label, display codes. */
-  courses: CoursesCopy;
-  /** `content.courseGroups` — the absorbed coverage trays' rows, authoritative. */
+  /**
+   * `content.courseGroups` — authoritative for the whole catalogue. Each board
+   * plate prints the courses of its own group that it does NOT sell as a
+   * scheduled group course, as its "also taught 1-to-1" tail.
+   */
   courseGroups: readonly CourseGroup[];
   /** `content.iaCourse`. */
   iaCourse: IaCourse;
@@ -116,23 +115,66 @@ function noBreakRatios(value: string): ReactNode {
   ));
 }
 
-/** A line whose bold runs are authored, not guessed (`EmphasisLine`). */
-function EmphasisText({ line }: { line: EmphasisLine }) {
-  return (
-    <>
-      {line.parts.map((part) =>
-        part.strong ? (
-          <b key={part.id} className="mvt-num">
-            {part.text}
-          </b>
-        ) : (
-          <span key={part.id} className="mvt-num">
-            {part.text}
-          </span>
-        ),
-      )}
-    </>
+/* ── content ids that presentation has to know ───────────────────────────────
+   Two, both documented here rather than hidden in a lookup elsewhere. */
+
+/**
+ * Courses that present themselves: the IA course has its own block under the
+ * boards, so the IBDP plate's strip does not list it a second time.
+ */
+const SELF_PRESENTED_COURSE_IDS: readonly string[] = ['math-internal-assessment-ia'];
+
+/**
+ * Display codes for courses that have no exam-board code of their own. This
+ * replaces the retired `pages.courses.displayCodes`.
+ */
+const DISPLAY_CODES: Readonly<Record<string, string>> = { 'ib-middle-year-programme': 'IBMYP' };
+
+
+interface TailRow {
+  readonly id: string;
+  /** The exam-board code, or a display code — empty only if neither exists. */
+  readonly code: string;
+  /** The course name with its trailing code stripped. */
+  readonly name: string;
+}
+
+/**
+ * `course-groups.json` stores the code inside the name (`Edexcel IAL Math
+ * YMA01`) and the tail prints the two in separate cells, so the split happens
+ * here — the same rule, and the same reason, the retired trays used. That file
+ * is read-only content; this is presentation.
+ */
+function tailRow(course: CourseGroup['courses'][number]): TailRow {
+  if (course.code === undefined) {
+    return { id: course.id, code: DISPLAY_CODES[course.id] ?? '', name: course.name };
+  }
+  const suffix = ` ${course.code}`;
+  const name = course.name.endsWith(suffix) ? course.name.slice(0, -suffix.length) : course.name;
+  return { id: course.id, code: course.code, name };
+}
+
+/**
+ * Every course in this board's group that the board does not sell as a
+ * scheduled group course — the plate's "also taught 1-to-1" rows.
+ *
+ * The group is found by lookup, not by a table: a board's variants each name a
+ * `courseId`, and the group holding those ids is this board's catalogue. A
+ * board with no variants (or with ids no group claims — `crossCheck` fails the
+ * build on that) simply gets no tail.
+ */
+function catalogueTail(pkg: Package, courseGroups: readonly CourseGroup[]): readonly TailRow[] {
+  const sold = new Set(
+    (pkg.variants ?? []).flatMap((variant) => (variant.courseId === undefined ? [] : [variant.courseId])),
   );
+  if (sold.size === 0) return [];
+
+  const group = courseGroups.find((candidate) => candidate.courses.some((course) => sold.has(course.id)));
+  if (group === undefined) return [];
+
+  return group.courses
+    .filter((course) => !sold.has(course.id) && !SELF_PRESENTED_COURSE_IDS.includes(course.id))
+    .map(tailRow);
 }
 
 /* ── row 1 · the valuation ledger + the outcome snapshot ──────────────────── */
@@ -168,6 +210,12 @@ function Ledger({ page }: { page: PackagesPage }) {
   );
 }
 
+/**
+ * The outcome snapshot beside the ledger. Three stations — the period, the
+ * headline count, and the `snapList` rows — spread down the tile
+ * (`justify-content:space-between`), so the tile fills the ledger's height
+ * without a stretched hole in the middle of it.
+ */
 function Snapshot({ page }: { page: PackagesPage }) {
   return (
     <div className="mvt-snap mvt-well mvt-well--shallow mvt-rev">
@@ -179,7 +227,7 @@ function Snapshot({ page }: { page: PackagesPage }) {
       <div>
         {page.snapList.map((row) => (
           <div className="mvt-snap-row" key={row.id}>
-            <span className="mvt-mu mvt-dim">{row.dt}</span>
+            <span className="mvt-mu mvt-brass">{row.dt}</span>
             <b className="mvt-num">{row.dd}</b>
           </div>
         ))}
@@ -188,65 +236,32 @@ function Snapshot({ page }: { page: PackagesPage }) {
   );
 }
 
-/* ── row 2 · the value comparison — depth encodes cost, never hue ─────────── */
-
-function Comparison({ page }: { page: PackagesPage }) {
-  return (
-    <div className="mvt-cmp">
-      <p className="mvt-cmp-h mvt-rev mvt-rev--s">
-        <EmphasisText line={page.cmp.heading} />
-      </p>
-      <div className="mvt-cmp-grid">
-        {page.cmp.cells.map((cell, index) => {
-          /* The first cell is the cost being argued against — it sits in the
-             carmine well. Every cell after it is the offer: a shallow well
-             with its figure cast in brass. Position carries the argument, so
-             reordering the cells in the editor swaps the roles too. */
-          const isCost = index === 0;
-          return (
-            <div
-              className={`mvt-cmp-cell mvt-well ${isCost ? 'mvt-well--ca' : 'mvt-well--shallow'} mvt-rev mvt-rev--s`}
-              key={cell.id}
-            >
-              <p className="mvt-mu">{cell.label}</p>
-              <p className={isCost ? 'mvt-cmp-fig mvt-num' : 'mvt-cmp-fig mvt-num mvt-castxt'}>{cell.fig}</p>
-              <p className="mvt-small mvt-dim">
-                <span className="mvt-num">{cell.sub}</span>
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 /* ── rows 3 and 4 · the four plates ───────────────────────────────────────── */
 
 interface PlateFootProps {
-  /** The package id — the plan key `PlanPick` resolves its option by. */
-  planKey: string;
   ctaKey: string;
   ctaLabel: string;
   message: string;
   phone: string;
-  plan: PackagesPage['plan'];
-  tag: string;
+  /** `Package.footTag` — optional, and absent in the current cut. */
+  tag: string | undefined;
 }
 
 /**
  * The foot every plate (and the IA block) shares: a knurl filling the leftover
- * run, the WhatsApp plate, the plan pick, and the plate's small-caps tag.
- * The knurl is `order:9` so it always trails, whatever the wrap.
+ * run, the WhatsApp plate, the plan pick, and — when one is authored — the
+ * plate's small-caps tag. The knurl is `order:9` so it always trails, whatever
+ * the wrap.
  */
-function PlateFoot({ planKey, ctaKey, ctaLabel, message, phone, plan, tag }: PlateFootProps) {
+function PlateFoot({ ctaKey, ctaLabel, message, phone, tag }: PlateFootProps) {
   return (
     <div className="mvt-pack-foot">
       <span className="mvt-knurl" aria-hidden="true" />
-      {/* no coin dot on the package plates — artifact-faithful */}
+      {/* no coin dot on the package plates — artifact-faithful; no plan pick
+          either — the boards have no buttons at all, so a pick on the one
+          plate that kept its button would be the page's only such control */}
       <PlateCta phone={phone} message={message} ctaKey={ctaKey} label={ctaLabel} />
-      <PlanPick planKey={planKey} showLabel={plan.pickShow} activeLabel={plan.pickActive} />
-      <span className="mvt-mu mvt-dim">{tag}</span>
+      {tag === undefined ? null : <span className="mvt-mu mvt-dim">{tag}</span>}
     </div>
   );
 }
@@ -263,6 +278,14 @@ function Bullets({ items }: { items: readonly { id: string; text: string }[] }) 
   );
 }
 
+/**
+ * The private plate — row 4, alone and full width.
+ *
+ * Two columns: the pitch (`.mvt-pack-main`) beside the 8-lesson intensive's
+ * own ledger, with the coverage claim and the foot spanning both underneath.
+ * It is the only plate that carries `.mvt-pack-main` beside something rather
+ * than above it, which is why the wrapper is here and not inside `Bullets`.
+ */
 function PrivatePlate({
   page,
   pkg,
@@ -276,18 +299,20 @@ function PrivatePlate({
 }) {
   const included = splitIncludedTitle(pkg.includedTitle ?? '');
   return (
-    <article className="mvt-pack mvt-raise mvt-rev">
-      {pkg.tagline === undefined ? null : <p className="mvt-mu mvt-brass">{pkg.tagline}</p>}
-      <h3 className="mvt-h3">{pkg.title}</h3>
-      {pkg.price === undefined ? null : (
-        <div className="mvt-price">
-          <span className="mvt-mu mvt-dim">{page.rateLabel}</span>
-          <b className="mvt-num mvt-castxt">{pkg.price.now}</b>
-          <span className="mvt-small mvt-dim mvt-num">{unitFromPer(pkg.price.per)}</span>
-        </div>
-      )}
-      <p className="mvt-body mvt-dim">{pkg.description}</p>
-      <Bullets items={pkg.bullets} />
+    <article className="mvt-pack mvt-pack--private mvt-raise mvt-rev">
+      <div className="mvt-pack-main">
+        {pkg.tagline === undefined ? null : <p className="mvt-mu mvt-brass">{pkg.tagline}</p>}
+        <h3 className="mvt-h3">{pkg.title}</h3>
+        {pkg.price === undefined ? null : (
+          <div className="mvt-price">
+            <span className="mvt-mu mvt-dim">{page.rateLabel}</span>
+            <b className="mvt-num mvt-castxt">{pkg.price.now}</b>
+            <span className="mvt-small mvt-dim mvt-num">{unitFromPer(pkg.price.per)}</span>
+          </div>
+        )}
+        <p className="mvt-body mvt-dim">{pkg.description}</p>
+        <Bullets items={pkg.bullets ?? []} />
+      </div>
 
       {pkg.included.length === 0 ? null : (
         <div className="mvt-sub mvt-well mvt-well--shallow">
@@ -317,43 +342,69 @@ function PrivatePlate({
       )}
 
       <PlateFoot
-        planKey={pkg.id}
         ctaKey={pkg.ctaKey}
-        ctaLabel={page.ctaLabel}
+        ctaLabel={pkg.ctaLabel ?? page.ctaLabel}
         message={message}
         phone={phone}
-        plan={page.plan}
         tag={pkg.footTag}
       />
     </article>
   );
 }
 
+/** One chip in a board's drifting course strip. */
+interface CourseTag {
+  readonly id: string;
+  /** The exam-board code; a course without one (IB MYP) prints its name alone. */
+  readonly code?: string;
+  readonly name: string;
+}
+
+/**
+ * Every course a board teaches, priced or 1-to-1, as one flat list: the sold
+ * variants first (their leaflet page is the board's body), then the rest of
+ * the group's catalogue. The strip that renders it has no heading — the
+ * leaflet above already says what the board is.
+ */
+function courseTags(pkg: Package, tail: readonly TailRow[]): readonly CourseTag[] {
+  const variants = (pkg.variants ?? []).map((variant) => ({
+    id: variant.id,
+    code: variant.code,
+    name: variant.title,
+  }));
+  return [...variants, ...tail.map((row) => ({ id: row.id, code: row.code, name: row.name }))];
+}
+
 /**
  * A board course — IBDP, International A-Level or International GCSE.
  *
- * Four regions in DOM order (`main · lineup · slip · foot`), which is also the
- * visual order at every width: the pitch, then one engraved ledger row per
- * course sold under it, then the outline vitrine, then the foot.
+ * The leaflet IS the content. Four regions in DOM order (`main · slip · tags ·
+ * strip`): the pitch head (tagline, title, was/now price), the course outline
+ * as a full-page vitrine, a headless drifting strip of every course the board
+ * teaches, and a decorative rule. The description, the bullets and the priced
+ * rows are gone — the leaflet prints the topics, the schedule and the price,
+ * so the plate stopped saying them twice.
+ *
+ * The whole plate is the enquiry: a stretched `WaTextLink` covers it (label
+ * kept for assistive tech), and the vitrine trigger sits above that link so
+ * the outline viewer still opens on its own. Hovering the plate pauses the
+ * strip; reduced motion turns it into a wrapped list with no clones.
  *
  * `variants` and `outline` are both optional on `Package` — `private` has
- * neither, and `CourseOutline`'s own fields are required, so a required
- * `outline` would force the private card to author a viewer it does not have.
- * The `null` branches below satisfy TypeScript without a non-null assertion and
- * are **unreachable in any build that passes**: `crossCheck` requires a
- * `kind:'board'` package to carry both, and any package with an `outline` to
- * carry courses. A board plate with no rows and no vitrine is a content mistake
- * that fails the build, not a layout the CSS has to survive.
+ * neither. A board without an outline renders no vitrine.
  */
 function BoardPlate({
   page,
   pkg,
+  tail,
   flagship,
   phone,
   message,
 }: {
   page: PackagesPage;
   pkg: Package;
+  /** The board's catalogue tail, computed once at the section boundary. */
+  tail: readonly TailRow[];
   /** The lifted plate — exactly one on the page, the first board in authored order. */
   flagship: boolean;
   phone: string;
@@ -361,11 +412,12 @@ function BoardPlate({
 }) {
   const variants = pkg.variants ?? [];
   const first = variants[0];
+  const ctaLabel = pkg.ctaLabel ?? page.ctaLabel;
+  const tags = courseTags(pkg, tail);
 
   return (
     <article className={`mvt-pack mvt-pack--board${flagship ? ' mvt-pack--hi' : ''} mvt-raise mvt-rev`}>
       <div className="mvt-pack-main">
-        {pkg.tag === undefined ? null : <p className="mvt-nameplate mvt-mu">{pkg.tag}</p>}
         {pkg.tagline === undefined ? null : <p className="mvt-mu mvt-brass">{pkg.tagline}</p>}
         <h3 className="mvt-h3">{pkg.title}</h3>
         {pkg.price === undefined ? null : (
@@ -379,53 +431,16 @@ function BoardPlate({
             </span>
           </div>
         )}
-        <p className="mvt-body mvt-dim">{pkg.description}</p>
-        <Bullets items={pkg.bullets} />
+        {pkg.description === undefined ? null : (
+          <p className="mvt-body mvt-dim">{noBreakRatios(pkg.description)}</p>
+        )}
       </div>
 
-      {variants.length === 0 ? null : (
-        <ul className="mvt-lineup mvt-well mvt-well--shallow">
-          {variants.map((variant) => (
-            <li key={variant.id}>
-              {variant.code === undefined ? null : (
-                <span className="mvt-lineup-code mvt-code">{variant.code}</span>
-              )}
-              <span className="mvt-lineup-name">{variant.title}</span>
-              <b className="mvt-lineup-fig mvt-num">{variant.price}</b>
-              <p className="mvt-lineup-meta">
-                {/* Delivery is depth, not hue: `live` and `video` are the same
-                    debossed slot at two brass depths. Colour-coding it would
-                    spend a hue the palette has already assigned. */}
-                <span className="mvt-deliv mvt-mu" data-delivery={variant.delivery}>
-                  {page.deliveryLabels[variant.delivery]}
-                </span>
-                <span className="mvt-num">{variant.meta}</span>
-                {variant.badges.length === 0 ? null : (
-                  <span className="mvt-lineup-badges">
-                    {variant.badges.map((badge) => (
-                      <span key={badge.id}>
-                        <i aria-hidden="true" />
-                        {badge.text}
-                      </span>
-                    ))}
-                  </span>
-                )}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
-
       {pkg.outline === undefined || first === undefined ? null : (
-        /* The outline slip. A <figure> wrapping frame + caption, rather than
-           the artifact's figcaption stranded outside its figure — same
-           rendering, valid markup.
-
-           The frame is the trigger for the outline viewer: the first course's
-           page stays server-rendered here and is handed to `<OutlineDialog>` as
-           children, so the card is complete (and the image is fetched) with
-           JavaScript off. The caption is the outline's own, so each board says
-           what its own document contains. */
+        /* The leaflet, full page. The frame is the trigger for the outline
+           viewer: the first course's page stays server-rendered here and is
+           handed to `<OutlineDialog>` as children, so the plate is complete
+           (and the image is fetched) with JavaScript off. */
         <figure className="mvt-slip mvt-well mvt-well--shallow">
           <OutlineDialog
             outline={pkg.outline}
@@ -434,7 +449,7 @@ function BoardPlate({
             phone={phone}
             message={message}
             ctaKey={pkg.ctaKey}
-            ctaLabel={page.ctaLabel}
+            ctaLabel={ctaLabel}
           >
             <div className="mvt-slip-frame" style={slipAspect(first.outlinePage.width, first.outlinePage.height)}>
               <Image
@@ -442,22 +457,54 @@ function BoardPlate({
                 alt={first.outlinePage.alt}
                 width={first.outlinePage.width}
                 height={first.outlinePage.height}
-                sizes="(max-width: 1799px) 92vw, 420px"
+                sizes="(min-width:1280px) 26vw, (min-width:1025px) 46vw, 92vw"
               />
             </div>
           </OutlineDialog>
-          <figcaption className="mvt-mu">{pkg.outline.caption}</figcaption>
+          {pkg.outline.caption === undefined ? null : (
+            <figcaption className="mvt-mu">{pkg.outline.caption}</figcaption>
+          )}
         </figure>
       )}
 
-      <PlateFoot
-        planKey={pkg.id}
-        ctaKey={pkg.ctaKey}
-        ctaLabel={page.ctaLabel}
-        message={message}
+      {tags.length === 0 ? null : (
+        /* Two printings of the same tags, the second inert and hidden from the
+           tree, so the drift is seamless on first paint. `--tg-count` paces the
+           animation per tag: the pixel speed does not depend on how many
+           courses a board lists. */
+        <div className="mvt-tags" style={{ '--tg-count': tags.length } as CSSProperties}>
+          <ul className="mvt-tags-track">
+            {tags.map((tag) => (
+              <li key={tag.id}>
+                {tag.code === undefined ? null : <span className="mvt-code">{tag.code}</span>}
+                {tag.name}
+              </li>
+            ))}
+            {tags.map((tag) => (
+              <li key={`clone-${tag.id}`} className="mvt-tags-clone" aria-hidden="true" inert>
+                {tag.code === undefined ? null : <span className="mvt-code">{tag.code}</span>}
+                {tag.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* decorative, and visually the one cue that the card is the enquiry —
+          the stretched link below carries the accessible name, so this row
+          stays out of the tree */}
+      <div className="mvt-pack-strip" aria-hidden="true">
+        <span className="mvt-knurl" />
+        {page.cardCue === undefined ? null : <span className="mvt-mu mvt-pack-cue">{page.cardCue}</span>}
+      </div>
+
+      <WaTextLink
         phone={phone}
-        plan={page.plan}
-        tag={pkg.footTag}
+        message={message}
+        ctaKey={pkg.ctaKey}
+        label={ctaLabel}
+        className="mvt-pack-link"
+        hideLabel
       />
     </article>
   );
@@ -466,13 +513,14 @@ function BoardPlate({
 /* ── the section ──────────────────────────────────────────────────────────── */
 
 /**
- * Packages — "the vault". Six blocks under the section head: the valuation
- * ledger beside the outcome snapshot, the value comparison, the private plate
- * beside the flagship board, the two remaining boards, the absorbed coverage
- * trays, and the IA course.
+ * Packages — "the vault". Four blocks under the section head: the valuation
+ * ledger beside the outcome snapshot, the three board plates across one row,
+ * the private plate full width beneath them, and the IA course.
  *
- * Reading order is the funnel: *what fits me* → the flagship board → the two
- * bridge/alternative boards → *here is everything I cover* → the IA add-on.
+ * Reading order is the funnel: *what the course is worth* → the three boards,
+ * flagship in the centre → *if none of those fit, here is 1-to-1* → the IA
+ * add-on. Each board carries its own catalogue, so the coverage trays that used
+ * to answer "what else do you teach?" as a block of their own are gone.
  *
  * `data-plan-anchor` is load-bearing: the fixed "Your plan" panel goes live
  * once this section's top passes the viewport, and the WhatsApp coin yields
@@ -484,7 +532,6 @@ function BoardPlate({
 export function PackagesSection({
   page,
   packages,
-  courses,
   courseGroups,
   iaCourse,
   phone,
@@ -494,19 +541,21 @@ export function PackagesSection({
   const boards = packages.filter((pkg) => pkg.kind === 'board');
   const [flagship, ...rest] = boards;
 
+  /* The flagship is the first board in authored order and the lifted centre
+     column of the row, so the boards are re-seated around it: the next board
+     authored takes the left cell and everything after it follows on the right.
+     Authored order is `ibdp · ial · igcse`, which lands as A-Level | IBDP |
+     IGCSE — the artifact's row, without an order typed here. */
+  const row =
+    flagship === undefined ? [] : [...rest.slice(0, 1), flagship, ...rest.slice(1)];
+
   return (
     <section id="mvt-s-packages" className="mvt-sec" data-plan-anchor="">
       <div className="mvt-wrap">
         <div className="mvt-head">
-          <p className="mvt-eyebrow mvt-rev mvt-rev--s">{page.eyebrow}</p>
           <h2 className="mvt-h2 mvt-rev">{page.title}</h2>
           <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
           <p className="mvt-head-sub mvt-lead mvt-rev mvt-rev--s">{noBreakRatios(page.sub)}</p>
-          <ul className="mvt-reschips mvt-rev mvt-rev--s">
-            {page.chips.map((chip) => (
-              <li key={chip.id}>{chip.text}</li>
-            ))}
-          </ul>
         </div>
 
         <div className="mvt-pk-r1">
@@ -514,34 +563,16 @@ export function PackagesSection({
           <Snapshot page={page} />
         </div>
 
-        <Comparison page={page} />
-
-        {/* Row 3 keeps its locked 48/52 geometry: the private plate keeps its
-            exact cell and its exact width, and the flagship board inherits the
-            lifted slot beside it. */}
-        <div className="mvt-pk-r3">
-          {privatePkg === undefined ? null : (
-            <PrivatePlate page={page} pkg={privatePkg} phone={phone} message={prefills[privatePkg.ctaKey]} />
-          )}
-          {flagship === undefined ? null : (
-            <BoardPlate
-              page={page}
-              pkg={flagship}
-              flagship
-              phone={phone}
-              message={prefills[flagship.ctaKey]}
-            />
-          )}
-        </div>
-
-        {rest.length === 0 ? null : (
-          <div className="mvt-pk-r4">
-            {rest.map((pkg) => (
+        {/* Row 3 · the three boards, the flagship lifted between them. */}
+        {row.length === 0 ? null : (
+          <div className="mvt-pk-r3">
+            {row.map((pkg) => (
               <BoardPlate
                 key={pkg.id}
                 page={page}
                 pkg={pkg}
-                flagship={false}
+                tail={catalogueTail(pkg, courseGroups)}
+                flagship={pkg === flagship}
                 phone={phone}
                 message={prefills[pkg.ctaKey]}
               />
@@ -549,13 +580,17 @@ export function PackagesSection({
           </div>
         )}
 
-        {/* ── the absorbed coverage trays (was #mvt-s-courses) ───────────── */}
-        <CoursesCovered courses={courses} courseGroups={courseGroups} packages={packages} />
+        {/* Row 4 · private coaching, full width. */}
+        {privatePkg === undefined ? null : (
+          <div className="mvt-pk-r4">
+            <PrivatePlate page={page} pkg={privatePkg} phone={phone} message={prefills[privatePkg.ctaKey]} />
+          </div>
+        )}
 
         {/* ── the IA course ──────────────────────────────────────────────── */}
         <IaCourseBlock
           ia={iaCourse}
-          ctaLabel={page.ctaLabel}
+          ctaLabel={iaCourse.ctaLabel ?? page.ctaLabel}
           footTag={page.iaFootTag}
           phone={phone}
           message={prefills[iaCourse.ctaKey]}

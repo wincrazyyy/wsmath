@@ -16,13 +16,24 @@
 .mvt-ribbon{position:relative;background:var(--ca-deep);
   box-shadow:inset 0 24px 48px -24px rgba(4,1,16,.5),inset 0 -24px 48px -24px rgba(4,1,16,.5)}
 
-.mvt-ribbon-in{min-height:clamp(200px,16vh,280px);display:grid;
+/* No `min-height` floor any more. The band held a clamp(200px,16vh,280px) floor
+   because it carried a heading, a rule and a body paragraph; with the body gone
+   that floor is taller than the content and the strike turns into a field of
+   carmine with a sentence floating in it. The band is now exactly as deep as
+   the taller of its two tracks — which is the CTA well — plus its own padding. */
+.mvt-ribbon-in{min-height:0;display:grid;
   grid-template-columns:1fr minmax(240px,auto);align-items:stretch;
   gap:clamp(24px,3vw,64px);padding-block:clamp(18px,1.4vw,30px)}
 
-.mvt-ribbon-copy{display:flex;flex-direction:column;justify-content:space-around;gap:16px}
+/* `center`, not `space-around`: two items in a track no taller than they are
+   have no space to distribute, and `space-around` would push the rule away from
+   the line it underscores the moment the track did grow. */
+.mvt-ribbon-copy{display:flex;flex-direction:column;justify-content:center;gap:16px}
 /* an <h2> at the .mvt-h3 scale — hierarchy without a section head's weight */
 .mvt-ribbon-copy h2{color:var(--ink);font-size:clamp(28px,2.7vw,46px)}
+/* this rule and `.mvt-ribbon-cta .mvt-mu` dress `body` and `waLabel`, which the
+   current copy omits. Both fields are optional, not deleted — an editor can put
+   either back without a code change, so their registers stay declared. */
 .mvt-ribbon-copy p{color:var(--brass-hi)}
 
 .mvt-ribbon-cta{display:flex;flex-direction:column;align-items:flex-start;

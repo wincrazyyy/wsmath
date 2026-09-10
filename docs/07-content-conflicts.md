@@ -60,6 +60,9 @@ is **HKD 72,000**. The very next line in the same file *does* apply the conversi
 > **Question:** is the intended claim *"32 lessons of 1-to-1 ≈ HKD 48,000"* or *"48 hours of 1-to-1
 > ≈ HKD 72,000"*? The second is a much stronger argument for the group course, but it must be true.
 
+> **Moot 2026-09-03:** the owner wants no 1-to-1 total on the page. The comparison now states the
+> rate, HKD 1,500 an hour, against the course price — `docs/12-migration-deviations.md` §G6.
+
 ### 4. Four referenced avatar files do not exist
 
 `testimonials.carousel[0..3].avatarSrc` point at `/avatars/carousel-1.png` … `-4.png`. None exist

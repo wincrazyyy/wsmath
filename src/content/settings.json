@@ -41,8 +41,8 @@
   ],
   "stats": {
     "tutoringHours": 20000,
-    "studentsCoached": 250,
-    "lessonsTaught": 11000,
+    "studentsCoached": 270,
+    "lessonsTaught": 12000,
     "teachingSince": "2017-09",
     "oneToOneSince": 2018,
     "iaStudents": 80,
@@ -105,8 +105,7 @@
     "label": "Built by",
     "name": "XiniDev",
     "siteUrl": "https://xini.dev",
-    "githubUrl": "https://github.com/XiniDev",
-    "stack": "Next.js + Tailwind"
+    "githubUrl": "https://github.com/XiniDev"
   },
   "navSections": [
     {

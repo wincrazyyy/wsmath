@@ -32,10 +32,13 @@
 /* the site display scale (--d0's 204 ceiling), never a private super-scale;
    18.5svh is the fold insurance — a short window degrades the name, not the
    composition. The 44px floor keeps WINSON (one unbreakable 6-glyph word)
-   inside every wrap the pad can produce. */
+   inside every wrap the pad can produce.
+   Tracking is -.012em, not the comp's -.042em: that figure was set on Constantia.
+   Fraunces at display optical size carries long hairline serifs, and at -.042em
+   the W runs into the I and the S into the O (docs/12 G7). */
 .mvt-cp-h1{margin:0;font-family:var(--f-display);font-weight:700;color:var(--ink);
   text-transform:uppercase;
-  font-size:clamp(44px,min(9.3vw,18.5svh),204px);letter-spacing:-.042em;line-height:.84;
+  font-size:clamp(44px,min(9.3vw,18.5svh),204px);letter-spacing:-.012em;line-height:.84;
   text-shadow:0 1px 0 rgba(4,1,16,.85),0 -1px 0 rgba(255,255,255,.05)}
 
 .mvt-cp-vrule{grid-column:3;grid-row:1/6;width:2px;

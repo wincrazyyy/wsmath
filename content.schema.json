@@ -228,7 +228,7 @@
               "minimum": -9007199254740991,
               "maximum": 9007199254740991,
               "title": "Students coached",
-              "description": "Digits only, e.g. 250.",
+              "description": "Digits only, e.g. 270.",
               "x-widget": "number"
             },
             "lessonsTaught": {
@@ -236,7 +236,7 @@
               "minimum": -9007199254740991,
               "maximum": 9007199254740991,
               "title": "Lessons taught",
-              "description": "Digits only, e.g. 11000.",
+              "description": "Digits only, e.g. 12000.",
               "x-widget": "number"
             },
             "teachingSince": {
@@ -682,8 +682,7 @@
           "required": [
             "label",
             "name",
-            "siteUrl",
-            "stack"
+            "siteUrl"
           ],
           "additionalProperties": false,
           "title": "Builder credit"
@@ -1158,8 +1157,7 @@
                 "label",
                 "ageLead",
                 "ageRest",
-                "rows",
-                "chip"
+                "rows"
               ],
               "additionalProperties": false,
               "title": "Who I teach"
@@ -1174,7 +1172,7 @@
                     "$ref": "#/$defs/JourneyItem"
                   },
                   "title": "Journeys",
-                  "description": "The seven short journeys shown as pills under the grid. These restate records from the results section — keep them in step or the two will disagree.",
+                  "description": "The short journeys shown as pills under the grid. These restate records from the results section — keep them in step or the two will disagree.",
                   "x-widget": "collection"
                 }
               },
@@ -1198,58 +1196,6 @@
           "additionalProperties": false,
           "title": "About"
         },
-        "courses": {
-          "type": "object",
-          "properties": {
-            "eyebrow": {
-              "type": "string",
-              "minLength": 1,
-              "title": "Eyebrow",
-              "description": "e.g. IBDP · A-Level · IGCSE.",
-              "x-widget": "text"
-            },
-            "title": {
-              "type": "string",
-              "minLength": 1,
-              "title": "Heading",
-              "description": "e.g. Courses covered.",
-              "x-widget": "text"
-            },
-            "sub": {
-              "type": "string",
-              "minLength": 1,
-              "title": "Supporting line",
-              "description": "The sentence beside the heading.",
-              "x-widget": "textarea",
-              "x-tokens": true
-            },
-            "groupMarkLabel": {
-              "type": "string",
-              "minLength": 1,
-              "title": "Group-course marker",
-              "description": "The sentence the diamond beside a course name stands for, e.g. Also sold as a scheduled group course. Read out by screen readers on every marked row, and printed once as the legend under the trays.",
-              "x-widget": "text"
-            },
-            "displayCodes": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/CourseCode"
-              },
-              "title": "Display codes",
-              "description": "Short codes for courses that have none in the Course groups document (the IBDP courses and IBMYP). Courses with a real exam-board code show that code automatically.",
-              "x-widget": "collection"
-            }
-          },
-          "required": [
-            "eyebrow",
-            "title",
-            "sub",
-            "groupMarkLabel",
-            "displayCodes"
-          ],
-          "additionalProperties": false,
-          "title": "Courses covered"
-        },
         "ribbon": {
           "type": "object",
           "properties": {
@@ -1272,7 +1218,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Body",
-              "description": "The line under it.",
+              "description": "Optional. The line under it.",
               "x-widget": "text",
               "x-tokens": true
             },
@@ -1280,7 +1226,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Small label",
-              "description": "The small caps label above the button, e.g. WhatsApp.",
+              "description": "Optional. The small caps label above the button.",
               "x-widget": "text"
             },
             "ctaLabel": {
@@ -1297,8 +1243,6 @@
           "required": [
             "ariaLabel",
             "title",
-            "body",
-            "waLabel",
             "ctaLabel",
             "ctaKey"
           ],
@@ -1312,7 +1256,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Eyebrow",
-              "description": "e.g. IBDP Coaching Packages.",
+              "description": "Optional, e.g. IBDP Coaching Packages.",
               "x-widget": "text"
             },
             "title": {
@@ -1498,7 +1442,7 @@
               "type": "string",
               "minLength": 1,
               "title": "IA block foot tag",
-              "description": "The small caps line in the IA course's foot.",
+              "description": "Optional. The small caps line in the IA course's foot.",
               "x-widget": "text"
             },
             "ctaLabel": {
@@ -1506,6 +1450,13 @@
               "minLength": 1,
               "title": "Button label",
               "description": "The label on the package WhatsApp buttons, e.g. Get in touch.",
+              "x-widget": "text"
+            },
+            "cardCue": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Card cue",
+              "description": "Optional. The small line on each course card saying the card itself opens WhatsApp, e.g. Enquire on WhatsApp.",
               "x-widget": "text"
             },
             "plan": {
@@ -1559,18 +1510,14 @@
             }
           },
           "required": [
-            "eyebrow",
             "title",
             "sub",
-            "chips",
             "ledger",
             "snapshot",
             "snapList",
-            "cmp",
             "rateLabel",
             "deliveryLabels",
             "outline",
-            "iaFootTag",
             "ctaLabel",
             "plan"
           ],
@@ -1598,7 +1545,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Supporting line",
-              "description": "The sentence beside the heading.",
+              "description": "Optional. The sentence beside the heading.",
               "x-widget": "textarea",
               "x-tokens": true
             },
@@ -1617,7 +1564,7 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Small caps note",
-                  "description": "e.g. {{outcomes.satisfaction}}.",
+                  "description": "Optional, e.g. {{outcomes.satisfaction}}.",
                   "x-widget": "text",
                   "x-tokens": true
                 },
@@ -1631,7 +1578,6 @@
               },
               "required": [
                 "value",
-                "note",
                 "label"
               ],
               "additionalProperties": false,
@@ -1661,7 +1607,7 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "First line",
-                  "description": "e.g. How students move from school predictions to final exam results.",
+                  "description": "Optional, e.g. How students move from school predictions to final exam results.",
                   "x-widget": "text"
                 },
                 "scaleLeft": {
@@ -1683,7 +1629,6 @@
               },
               "required": [
                 "title",
-                "sub",
                 "scaleLeft",
                 "scaleRight"
               ],
@@ -1724,14 +1669,14 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Read-out label",
-                  "description": "e.g. Drawn records.",
+                  "description": "Optional, e.g. Drawn records.",
                   "x-widget": "text"
                 },
                 "readIdle": {
                   "type": "string",
                   "minLength": 1,
                   "title": "Read-out prompt",
-                  "description": "e.g. Hover a ribbon to read its record.",
+                  "description": "Optional, e.g. Hover a ribbon to read its record.",
                   "x-widget": "text"
                 },
                 "drawnTemplate": {
@@ -1744,10 +1689,7 @@
               },
               "required": [
                 "fromLabel",
-                "toLabel",
-                "readLabel",
-                "readIdle",
-                "drawnTemplate"
+                "toLabel"
               ],
               "additionalProperties": false,
               "title": "The stream"
@@ -1911,7 +1853,7 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Body",
-                  "description": "The line under the heading.",
+                  "description": "Optional. The line under the heading.",
                   "x-widget": "text",
                   "x-tokens": true
                 },
@@ -1951,7 +1893,7 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Note",
-                  "description": "Tiny note under the points (e.g. response time / what to send).",
+                  "description": "Optional tiny note under the points.",
                   "x-widget": "text",
                   "x-tokens": true
                 },
@@ -1980,9 +1922,7 @@
               },
               "required": [
                 "title",
-                "body",
                 "rows",
-                "prov",
                 "trio",
                 "art",
                 "ctaLabel",
@@ -1995,17 +1935,13 @@
           "required": [
             "eyebrow",
             "title",
-            "sub",
             "uplift",
-            "snapList",
             "gradeHead",
             "tabsLabel",
             "tabsCountLabel",
             "stream",
-            "matrix",
             "legend",
             "legendScope",
-            "chips",
             "schoolsHead",
             "cta"
           ],
@@ -2033,7 +1969,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Supporting line",
-              "description": "The sentence beside the heading.",
+              "description": "Optional. The sentence beside the heading.",
               "x-widget": "textarea",
               "x-tokens": true
             },
@@ -2062,7 +1998,7 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Corner stamp",
-                  "description": "The small caps line under the player, e.g. Video · replays available.",
+                  "description": "Optional. The small caps line under the player.",
                   "x-widget": "text"
                 },
                 "heading": {
@@ -2097,10 +2033,7 @@
               "required": [
                 "provider",
                 "url",
-                "stamp",
                 "heading",
-                "body",
-                "clips",
                 "ctaKey"
               ],
               "additionalProperties": false,
@@ -2168,7 +2101,6 @@
           "required": [
             "eyebrow",
             "title",
-            "lede",
             "video",
             "trough"
           ],
@@ -2196,7 +2128,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Supporting line",
-              "description": "The sentence beside the heading.",
+              "description": "Optional. The sentence beside the heading.",
               "x-widget": "textarea",
               "x-tokens": true
             },
@@ -2207,7 +2139,6 @@
           "required": [
             "eyebrow",
             "title",
-            "sub",
             "ctaKey"
           ],
           "additionalProperties": false,
@@ -2417,7 +2348,6 @@
         "nav",
         "hero",
         "about",
-        "courses",
         "ribbon",
         "packagesPage",
         "results",
@@ -2459,6 +2389,7 @@
       "type": "string",
       "enum": [
         "nav",
+        "hero",
         "about-ribbon",
         "results",
         "private",
@@ -2650,7 +2581,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Duration",
-          "description": "e.g. 2 years.",
+          "description": "Optional, e.g. 2 years.",
           "x-widget": "text"
         }
       },
@@ -2660,36 +2591,10 @@
         "year",
         "course",
         "from",
-        "to",
-        "duration"
+        "to"
       ],
       "additionalProperties": false,
       "title": "Journey"
-    },
-    "CourseCode": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*$",
-          "title": "Course",
-          "description": "The course this code belongs to — the ID from the Course groups document.",
-          "x-widget": "id"
-        },
-        "code": {
-          "type": "string",
-          "minLength": 1,
-          "title": "Display code",
-          "description": "The short code shown in the tray, e.g. AAHL or IBMYP.",
-          "x-widget": "text"
-        }
-      },
-      "required": [
-        "id",
-        "code"
-      ],
-      "additionalProperties": false,
-      "title": "Course display code"
     },
     "CmpCell": {
       "type": "object",
@@ -3004,7 +2909,6 @@
       },
       "required": [
         "id",
-        "title",
         "links"
       ],
       "additionalProperties": false,
@@ -3069,7 +2973,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Label",
-          "description": "e.g. Time zone:.",
+          "description": "Optional, e.g. Time zone:.",
           "x-widget": "text"
         },
         "value": {
@@ -3083,7 +2987,6 @@
       },
       "required": [
         "id",
-        "label",
         "value"
       ],
       "additionalProperties": false,
@@ -3574,7 +3477,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Description",
-          "description": "Short paragraph under the title.",
+          "description": "Optional. Short paragraph under the title — the leaflet carries a board's detail.",
           "x-widget": "textarea",
           "x-tokens": true
         },
@@ -3669,7 +3572,14 @@
           "type": "string",
           "minLength": 1,
           "title": "Card foot tag",
-          "description": "The small caps line in the card's foot, e.g. Live Zoom · Sundays · Replays included.",
+          "description": "Optional. The small caps line in the card's foot.",
+          "x-widget": "text"
+        },
+        "ctaLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Button label",
+          "description": "Optional. What this card's WhatsApp button says, e.g. Enquire about the IBDP course. Falls back to the page label.",
           "x-widget": "text"
         },
         "ctaKey": {
@@ -3680,10 +3590,7 @@
         "id",
         "kind",
         "title",
-        "description",
-        "bullets",
         "included",
-        "footTag",
         "ctaKey"
       ],
       "additionalProperties": false,
@@ -3897,7 +3804,6 @@
       },
       "required": [
         "label",
-        "caption",
         "autoAdvanceSeconds"
       ],
       "additionalProperties": false,
@@ -4109,7 +4015,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Features label",
-          "description": "Mono label above the feature list, e.g. Course features.",
+          "description": "Optional. Mono label above the feature list.",
           "x-widget": "text"
         },
         "features": {
@@ -4160,6 +4066,13 @@
           "description": "Edit IA topic directions here — title plus one line of description. Add, remove or reorder.",
           "x-widget": "collection"
         },
+        "ctaLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Button label",
+          "description": "Optional. What this card's WhatsApp button says, e.g. Enquire about the IBDP course. Falls back to the page label.",
+          "x-widget": "text"
+        },
         "ctaKey": {
           "$ref": "#/$defs/CtaKey"
         }
@@ -4168,8 +4081,6 @@
         "eyebrow",
         "title",
         "description",
-        "featuresLabel",
-        "features",
         "themesLabel",
         "themes",
         "ctaKey"
@@ -4198,14 +4109,13 @@
           "type": "string",
           "minLength": 1,
           "title": "One-line description",
-          "description": "e.g. Modern methods for classic problems.",
+          "description": "Optional, e.g. Modern methods for classic problems.",
           "x-widget": "text"
         }
       },
       "required": [
         "id",
-        "title",
-        "description"
+        "title"
       ],
       "additionalProperties": false,
       "title": "IA theme"
@@ -4217,6 +4127,14 @@
           "type": "string",
           "minLength": 1,
           "title": "Message — top navigation",
+          "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
+          "x-widget": "textarea",
+          "x-tokens": true
+        },
+        "hero": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Message — Hero",
           "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
           "x-widget": "textarea",
           "x-tokens": true
@@ -4304,6 +4222,7 @@
       },
       "required": [
         "nav",
+        "hero",
         "about-ribbon",
         "results",
         "private",

@@ -109,6 +109,10 @@ export function Hero({ hero, tutoringHours, phone, message }: HeroProps) {
             <div className="mvt-cp-close">
               <p className="mvt-mu mvt-cp-scope">{hero.scope}</p>
               <div className="mvt-cp-anchor">
+                {/* one fact line at the current copy, but `facts` is a collection
+                    and the wrapper is what carries the 10px column gap and the
+                    on-load stagger (`.js .mvt-cp-facts`, hero.css) — so it stays
+                    even at a count of one. */}
                 <div className="mvt-cp-facts">
                   {hero.facts.map((fact) => (
                     <p key={fact.id} className="mvt-cp-fact mvt-num">

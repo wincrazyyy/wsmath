@@ -18,7 +18,7 @@ export interface VideoFrameProps {
 /**
  * The intro video, inlaid into the voices band as a *slip* — the same treatment
  * the board cards' course outlines get, this design's canonical "foreign media
- * in the lacquer" object (`spec/issues.md` §b).
+ * in the lacquer" object.
  *
  * CLIENT ISSUE #1. The player is in the initial server-rendered HTML with the
  * autoplaying source, eagerly loaded, with no click-to-load gate: the visitor's
@@ -48,46 +48,56 @@ export interface VideoFrameProps {
  * and the reveal animates opacity/transform on an ancestor — the iframe is
  * never remounted, so playback is never interrupted.
  *
- * ## The focus guard — why an autoplaying third-party frame needs one
+ * ## The focus guard — an autoplaying third-party frame needs one
  *
- * Measured: about three seconds after a cold load, with the reader still at
- * `scrollY 0` and having touched nothing, Loom's own player script pulls focus
- * into the frame (`document.activeElement` goes `BODY → IFRAME`). From that
- * moment the *page* is broken for anyone on a keyboard: ArrowDown and Space no
- * longer scroll (Space toggles Loom's playback instead) and the first Tab
- * teleports the viewport eleven thousand pixels down into the player's own
- * controls, past every skip link and nav item. It is not a harness artefact —
- * it reproduces with and without Chrome's autoplay override, and it never
- * happens under `prefers-reduced-motion`, where the src carries no `autoplay`.
+ * Loom's player takes focus for itself twice without being asked:
+ *
+ * 1. About three seconds after a cold load, with the reader still at `scrollY 0`
+ *    and having touched nothing, its script focuses the frame. From then on the
+ *    page is broken for a keyboard: ArrowDown and Space no longer scroll (Space
+ *    toggles playback) and the first Tab teleports the viewport eleven thousand
+ *    pixels down into the player's own controls.
+ * 2. When the video ends, its end card focuses the "Reply" textarea. Focusing an
+ *    element scrolls it into view through every ancestor frame, so a reader who
+ *    let the muted autoplay run and kept reading is yanked back to the player
+ *    two and a half minutes later, from anywhere on the page. Reported by the
+ *    owner 2026-09-03; no embed parameter suppresses the end card.
  *
  * Dropping autoplay is not available: autoplay on arrival is the client's
- * stated requirement (`spec/issues.md` §b). So the frame is guarded instead —
- * focus that lands on the iframe **while the reader could not possibly have put
- * it there** is handed straight back, and the scroll offset is restored in the
- * same tick.
+ * stated requirement. So focus that lands on the frame **while the reader
+ * cannot have put it there** is handed straight back and the scroll offset is
+ * restored. "Cannot have put it there" is all three of:
  *
- * Two mechanics, both measured rather than assumed (`probes/fix-focus-diag.js`):
+ * - the frame was not on screen at the previous paint (the observer's report,
+ *   which lags one frame — the steal itself scrolls the frame into view, so the
+ *   *current* rectangle is not evidence), and if the page did not move since
+ *   that paint, the frame is not on screen now either;
+ * - no Tab key was pressed in this document in the last {@link TAB_GRACE_MS}.
+ *   Tab is the only key that can carry focus from the page into the frame; a
+ *   wheel or a touch cannot, and a pointer needs the frame on screen;
+ * - fewer than {@link MAX_CORRECTIONS} hand-backs this off-screen spell, so a
+ *   hostile player cannot be fought forever.
+ *
+ * A reader who has the player on screen, or who tabbed into it, is never
+ * touched: the guard yields for as long as their focus stays inside. When they
+ * scroll the player off screen with focus still in it, focus is returned to the
+ * page — Space and the arrows scroll again, and the end card's later grab is
+ * then a fresh steal the rule above catches.
+ *
+ * Two mechanics, both measured rather than assumed:
  *
  * 1. **The guard polls; it cannot listen.** When a cross-origin frame focuses
- *    itself, Chrome fires **no** `focus`/`focusin` on the embedding document —
- *    `document.activeElement` simply *is* the iframe at the next tick. A
- *    listener never runs. So a `requestAnimationFrame` loop watches
- *    `activeElement` while the guard is armed — one identity comparison per
- *    paint, which is the finest sampling available and keeps the window in
- *    which a keystroke could reach the player under a single frame.
- * 2. **`navigator.userActivation` is not the test.** It reads `hasBeenActive:
- *    true` on this page nine seconds in with nothing touched, so it cannot
- *    distinguish a steal from a click. The test that *is* sound is
- *    **`interacted && visible`**: the reader has produced a real input event in
- *    this document AND the player is actually on screen. Pointer events inside
- *    a cross-origin frame never reach us, but reaching the player at all takes
- *    a scroll — a wheel, a touch or a key, all of which do. Until both hold,
- *    nobody can have clicked the player, so focus in it is a steal.
- *
- * The guard disarms the moment both conditions hold, after
- * {@link MAX_CORRECTIONS} hand-backs (so a hostile player cannot be fought
- * forever), and unconditionally after {@link GUARD_MS} — it can never outlive
- * the load it exists for.
+ *    itself, Chrome fires no `focus`/`focusin` on the embedding document —
+ *    `document.activeElement` simply *is* the iframe at the next tick. So a
+ *    `requestAnimationFrame` loop compares `activeElement` once per paint and
+ *    remembers the scroll offset of the previous paint, which is by definition
+ *    the pre-steal offset. One identity comparison per paint, armed only while
+ *    the frame is off screen.
+ * 2. **The parent's scroll can arrive late.** Under site isolation the child
+ *    frame asks the parent to scroll over IPC, so the jump may land a paint or
+ *    two after the focus change. For {@link SETTLE_MS} after a hand-back the
+ *    loop keeps snapping the offset back, unless the reader produces an input
+ *    of their own, which ends the window at once.
  */
 export function VideoFrame({ provider, url, title }: VideoFrameProps) {
   const [reduced, setReduced] = useState(false);
@@ -103,52 +113,42 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
 
   useEffect(() => {
     const frame = frameRef.current;
-    if (frame === null) return;
+    if (frame === null || typeof IntersectionObserver === 'undefined') return;
 
-    let interacted = false;
+    /* the observer's last report — one paint behind, which is what makes it
+       evidence about the moment *before* a steal */
     let visible = false;
-    let corrections = 0;
     let frameRequest = 0;
+    let corrections = 0;
+    let settleUntil = 0;
+    let lastTabAt = Number.NEGATIVE_INFINITY;
+    /* `rest` is where the reader was before focus moved; `last` is where the
+       page was at the previous paint, so a move between paints is detectable */
+    let restX = window.scrollX;
+    let restY = window.scrollY;
+    let lastX = restX;
+    let lastY = restY;
+    /* focus is inside the frame with the reader's consent — leave it alone */
+    let yielded = false;
 
-    const markInteracted = () => {
-      interacted = true;
-    };
     const options = { capture: true, passive: true } as const;
-    const GESTURES = ['pointerdown', 'keydown', 'touchstart', 'wheel'] as const;
-    for (const type of GESTURES) window.addEventListener(type, markInteracted, options);
+    const onKeydown = (event: KeyboardEvent) => {
+      if (event.key === 'Tab') lastTabAt = performance.now();
+      settleUntil = 0;
+    };
+    const onGesture = () => {
+      settleUntil = 0;
+    };
+    const GESTURES = ['pointerdown', 'touchstart', 'wheel'] as const;
+    window.addEventListener('keydown', onKeydown, options);
+    for (const type of GESTURES) window.addEventListener(type, onGesture, options);
 
-    const observer =
-      typeof IntersectionObserver === 'undefined'
-        ? null
-        : new IntersectionObserver(
-            (entries) => {
-              visible = entries.some((entry) => entry.isIntersecting);
-            },
-            { threshold: 0.1 },
-          );
-    observer?.observe(frame);
-
-    const stop = () => {
-      if (frameRequest !== 0) {
-        cancelAnimationFrame(frameRequest);
-        frameRequest = 0;
-      }
+    const onScreenNow = () => {
+      const rect = frame.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight && rect.right > 0 && rect.left < window.innerWidth;
     };
 
-    /* A frame callback, not an interval: it is the finest sampling the page can
-       offer, so the steal is undone within one paint and no keystroke can be
-       delivered to the player in between. The body is one identity comparison. */
-    const watch = () => {
-      frameRequest = requestAnimationFrame(watch);
-      if (document.activeElement !== frame) return;
-      if ((interacted && visible) || corrections >= MAX_CORRECTIONS) {
-        stop();
-        return;
-      }
-      corrections += 1;
-
-      const x = window.scrollX;
-      const y = window.scrollY;
+    const handBack = () => {
       frame.blur();
       /* `blur()` alone can leave `activeElement` on the frame; a momentarily
          focusable <body> parks focus back at the top of the tab order without
@@ -160,17 +160,84 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
         body.focus({ preventScroll: true });
         if (!had) body.removeAttribute('tabindex');
       }
-      window.scrollTo(x, y);
     };
-    frameRequest = requestAnimationFrame(watch);
 
-    const disarm = window.setTimeout(stop, GUARD_MS);
+    const restore = () => {
+      window.scrollTo({ left: restX, top: restY, behavior: 'instant' });
+    };
+
+    const watch = () => {
+      frameRequest = requestAnimationFrame(watch);
+      const now = performance.now();
+      const x = window.scrollX;
+      const y = window.scrollY;
+      const moved = x !== lastX || y !== lastY;
+      lastX = x;
+      lastY = y;
+
+      if (document.activeElement !== frame) {
+        yielded = false;
+        if (now < settleUntil) {
+          if (x !== restX || y !== restY) restore();
+        } else {
+          restX = x;
+          restY = y;
+        }
+        return;
+      }
+      if (yielded) return;
+
+      const tabbed = now - lastTabAt < TAB_GRACE_MS;
+      const consented = visible || (!moved && onScreenNow());
+      if (tabbed || consented || corrections >= MAX_CORRECTIONS) {
+        yielded = true;
+        return;
+      }
+
+      corrections += 1;
+      handBack();
+      restore();
+      settleUntil = now + SETTLE_MS;
+    };
+
+    const arm = () => {
+      if (frameRequest !== 0) return;
+      restX = lastX = window.scrollX;
+      restY = lastY = window.scrollY;
+      frameRequest = requestAnimationFrame(watch);
+    };
+    const disarm = () => {
+      if (frameRequest !== 0) {
+        cancelAnimationFrame(frameRequest);
+        frameRequest = 0;
+      }
+      settleUntil = 0;
+      yielded = false;
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visible = entries.some((entry) => entry.isIntersecting);
+        if (visible) {
+          corrections = 0;
+          disarm();
+          return;
+        }
+        /* the reader scrolled the player away with focus still inside it:
+           give the page its keys back, and make the end card's later grab a
+           fresh steal rather than an invisible move within a focused frame */
+        if (document.activeElement === frame) handBack();
+        arm();
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(frame);
 
     return () => {
-      for (const type of GESTURES) window.removeEventListener(type, markInteracted, options);
-      observer?.disconnect();
-      window.clearTimeout(disarm);
-      stop();
+      window.removeEventListener('keydown', onKeydown, options);
+      for (const type of GESTURES) window.removeEventListener(type, onGesture, options);
+      observer.disconnect();
+      disarm();
     };
   }, []);
 
@@ -190,16 +257,24 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
 }
 
 /**
- * How long the guard stays armed at most. Long enough to cover the measured
- * steal (~3 s after load) and any retry, short enough that it can never
- * interfere with a reader who reaches the player much later.
+ * How long after a Tab keypress focus arriving on the frame counts as the
+ * reader's own. Tab is the only key that can move focus from the page into
+ * the frame; a quarter second covers a slow repeat.
  */
-const GUARD_MS = 30_000;
+const TAB_GRACE_MS = 250;
 
 /**
- * Hand-backs before the guard concedes. A player that re-takes focus after
- * every correction would otherwise be fought once per frame for the whole of
- * {@link GUARD_MS}; conceding leaves the reader no worse off than before the
- * guard existed.
+ * How long after a hand-back the loop keeps undoing scroll changes the reader
+ * did not make. Long enough for a late cross-process scroll to land and be
+ * reverted; short enough to be over before anyone notices, and ended early by
+ * any input of the reader's own.
+ */
+const SETTLE_MS = 400;
+
+/**
+ * Hand-backs per off-screen spell before the guard concedes. A player that
+ * re-takes focus after every correction would otherwise be fought once per
+ * paint; conceding leaves the reader no worse off than before the guard
+ * existed. Reset each time the frame comes back on screen.
  */
 const MAX_CORRECTIONS = 12;

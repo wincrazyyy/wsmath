@@ -6,6 +6,7 @@ import { PlateCta, WaTextLink } from '@/components/ui/plate-cta';
 import type { Footer as FooterCopy, FooterLink, Legal, Settings, WhatsappPrefills } from '@/content/schema';
 import { sectionHash } from '@/lib/anchors';
 import { paragraphs } from '@/lib/paragraphs';
+import { deriveTokens } from '@/lib/tokens';
 
 import './footer.css';
 
@@ -57,15 +58,21 @@ function FooterLinkItem({
 }
 
 /**
- * The footer — the page's only `--lac-void` field: brand column, two link
- * columns, the get-in-touch column, then the legal bottom row with the builder
- * credit. Carries `data-plan-avoid` so the fixed "Your plan" panel parks before
- * it can cover the legal bar.
+ * The footer — the page's only `--lac-void` field: brand column, the ruled
+ * link ledger, the get-in-touch column, then the legal bottom row with the
+ * builder credit. Carries `data-plan-avoid` so the fixed "Your plan" panel
+ * parks before it can cover the legal bar.
  */
 export function SiteFooter({ copy, legal, settings, prefills }: SiteFooterProps) {
   const { brand, builder } = settings;
   const phone = settings.contact.whatsappPhone;
   const footMessage = prefills[copy.getInTouch.ctaKey];
+  /* The scope line under the tagline pair is the same derived token the hero's
+     scope line reads (`{{programme.curriculaDots}}`), taken from the token
+     derivation rather than re-joined here so the two can never disagree about
+     the curricula or the separator. */
+  const curriculaDots = String(deriveTokens(settings)['programme.curriculaDots']);
+  const year = new Date().getFullYear();
 
   return (
     <footer id="mvt-s-footer" className="mvt-footer" data-plan-avoid="">
@@ -77,8 +84,11 @@ export function SiteFooter({ copy, legal, settings, prefills }: SiteFooterProps)
             <p>
               {brand.taglineEn} - <span lang="zh-Hant">{brand.taglineZh}</span>
             </p>
-            <p>{brand.description}</p>
-            <div className="mvt-social" aria-label={copy.socialsLabel}>
+            <p>{curriculaDots}</p>
+            {/* a <nav>, not a <div>: `aria-label` names an element only if its
+                role supports a name, and a bare div's generic role does not —
+                as a div this group's label ("Social") reached nobody. */}
+            <nav className="mvt-social" aria-label={copy.socialsLabel}>
               {settings.socials.map((social) => (
                 <a key={social.platform} className="mvt-mu" href={social.url} target="_blank" rel="noopener">
                   {social.platform === 'xiaohongshu' ? (
@@ -91,12 +101,12 @@ export function SiteFooter({ copy, legal, settings, prefills }: SiteFooterProps)
                   )}
                 </a>
               ))}
-            </div>
+            </nav>
           </div>
 
           {copy.columns.map((column) => (
-            <div key={column.id} className="mvt-foot-col">
-              <h3 className="mvt-mu">{column.title}</h3>
+            <div key={column.id} className="mvt-foot-links">
+              {column.title === undefined ? null : <h3 className="mvt-mu">{column.title}</h3>}
               <ul>
                 {column.links.map((link) => (
                   <li key={link.id}>
@@ -125,23 +135,26 @@ export function SiteFooter({ copy, legal, settings, prefills }: SiteFooterProps)
             />
             <div className="mvt-foot-meta">
               {copy.meta.map((row) => (
-                <span key={row.id}>
-                  {row.label} {row.value}
-                </span>
+                <span key={row.id}>{row.label === undefined ? row.value : `${row.label} ${row.value}`}</span>
               ))}
             </div>
           </div>
         </div>
 
         <div className="mvt-foot-bot">
+          {/* The © notice is assembled here, not stored: the year is the build's
+              own and the holder is `settings.brand.copyrightHolder`, which is a
+              legal person and deliberately separate from the trading name. Only
+              the words after it ("All rights reserved.") are editable copy —
+              a rights notice an editor could accidentally leave in last year is
+              worse than one that cannot be edited at all. */}
           <p>
-            {copy.bottom.rights} · {copy.bottom.disclaimer}
+            © {year} {brand.copyrightHolder}. {copy.bottom.rights} · {copy.bottom.disclaimer}
           </p>
           <div>
             <span>
               {builder.label} {builder.name}
             </span>
-            <span>{builder.stack}</span>
           </div>
         </div>
 

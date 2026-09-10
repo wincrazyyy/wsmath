@@ -194,6 +194,7 @@ export function media(title: string, description?: string) {
  */
 export const CTA_KEYS = [
   "nav",
+  "hero",
   "about-ribbon",
   "results",
   "private",

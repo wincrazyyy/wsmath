@@ -17,6 +17,11 @@ export interface RibbonProps {
  * 1681–1699). A full-bleed band in `--ca-deep` stating limited availability,
  * with a deeper carmine well holding the WhatsApp plate on the right.
  *
+ * `body` and `waLabel` are optional: the band states its case in one line and
+ * the plate says what it does, so the current copy carries neither. Each is
+ * rendered only when it exists — never as an empty element the flex gaps would
+ * still pay for.
+ *
  * The `.mvt-edge` seams above and below are rendered by `page-view.tsx`, not
  * here. The heading is an `<h2>` at the `.mvt-h3` size — the ribbon is a
  * statement, not a section with a header pattern, so it keeps the document
@@ -30,11 +35,11 @@ export function Ribbon({ ribbon, phone, message }: RibbonProps) {
           <div className="mvt-ribbon-copy">
             <h2 className="mvt-h3 mvt-rev">{ribbon.title}</h2>
             <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
-            <p className="mvt-body mvt-rev mvt-rev--s">{ribbon.body}</p>
+            {ribbon.body === undefined ? null : <p className="mvt-body mvt-rev mvt-rev--s">{ribbon.body}</p>}
           </div>
 
           <div className="mvt-ribbon-cta mvt-well mvt-well--ca mvt-rev mvt-rev--s">
-            <p className="mvt-mu">{ribbon.waLabel}</p>
+            {ribbon.waLabel === undefined ? null : <p className="mvt-mu">{ribbon.waLabel}</p>}
             <PlateCta phone={phone} message={message} ctaKey={ribbon.ctaKey} label={ribbon.ctaLabel} dot />
           </div>
         </div>

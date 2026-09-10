@@ -78,6 +78,12 @@ export interface WaTextLinkProps {
   label: string;
   /** Classes on the `<a>`. */
   className?: string;
+  /**
+   * Keep the label in the accessibility tree but out of the paint — for a
+   * stretched link that covers a card whose visible content already says what
+   * the link does.
+   */
+  hideLabel?: boolean;
 }
 
 /**
@@ -85,7 +91,7 @@ export interface WaTextLinkProps {
  * `kind: "whatsapp"` entry (the footer's Contact link). Same href construction
  * and same beacon as {@link PlateCta}.
  */
-export function WaTextLink({ phone, message, ctaKey, label, className }: WaTextLinkProps) {
+export function WaTextLink({ phone, message, ctaKey, label, className, hideLabel = false }: WaTextLinkProps) {
   return (
     <a
       className={className}
@@ -95,7 +101,7 @@ export function WaTextLink({ phone, message, ctaKey, label, className }: WaTextL
       data-cta={ctaKey}
       onClick={() => sendCtaBeacon(ctaKey)}
     >
-      {label}
+      {hideLabel ? <span className="mvt-visually-hidden">{label}</span> : label}
     </a>
   );
 }

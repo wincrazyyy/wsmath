@@ -17,11 +17,35 @@
    stays on the element for the paper-ink focus ring in globals.css.
    ────────────────────────────────────────────────────────────────────────── */
 
+/* THE PAIRS ARE LEVELLED. The questions run one to three lines, so a row of two
+   independent bars stepped by up to 56px and the grid read as eight unrelated
+   objects rather than four ranks. Stretching the row and letting the heading —
+   and through it the button — take the slack makes each pair one rank; the
+   brass bottom lip of the two bars then lands on one line, which is the edge
+   the eye actually tracks down the column. */
 .mvt-faqsec .mvt-faq{display:grid;grid-template-columns:1fr 1fr;gap:10px clamp(20px,2vw,40px);
-  align-items:start}
-.mvt-faqsec .mvt-faq > li{border-radius:4px 18px 4px 18px;
+  align-items:stretch}
+.mvt-faqsec .mvt-faq > li{border-radius:4px 18px 4px 18px;display:flex;flex-direction:column;
   transition:background var(--t-settle) var(--ease-settle),box-shadow var(--t-settle) var(--ease-settle)}
-.mvt-faqsec .mvt-faq h3{margin:0}
+.mvt-faqsec .mvt-faq h3{margin:0;flex:1 1 auto;display:flex}
+.mvt-faqsec .mvt-faq h3 > .mvt-qbtn{flex:1 1 auto}
+/* …BUT ONLY WHILE THE PAIR IS SHUT. Levelling is `stretch` on a grid row and an
+   OPEN answer is part of its item's height, so leaving it on would stretch the
+   PARTNER's closed bar to the full height of the open panel — a 400px plate
+   with one line of text floating in its middle, the exact half-empty object
+   this design refuses. The partner therefore opts out of the stretch, and only
+   the partner: rows are (1,2), (3,4), (5,6), (7,8) in DOM order, so an odd item
+   releases the item after it and an even item releases the one before it. The
+   other three ranks stay levelled, which is why this is not simply
+   `align-items:start` on the grid. `:has()` is already a foundation dependency
+   (globals.css `.mvt-head:not(:has(.mvt-head-sub))`). At ≤1180px the grid is one
+   column, every row holds one item and both rules are inert.
+   Scripts off is the same hazard stated without an attribute: nothing ever sets
+   `data-open`, every answer is open (below), and both members of a pair would
+   stretch each other. That case takes the whole grid. */
+.mvt-faqsec .mvt-faq > li:nth-child(odd)[data-open] + li,
+.mvt-faqsec .mvt-faq > li:nth-child(odd):has(+ li[data-open]){align-self:start}
+body:not(.js) .mvt-faqsec .mvt-faq{align-items:start}
 
 .mvt-faqsec .mvt-qbtn{display:grid;grid-template-columns:auto 1fr auto;align-items:center;
   gap:clamp(14px,1.6vw,30px);width:100%;padding:clamp(20px,1.7vw,32px) clamp(20px,2vw,36px);

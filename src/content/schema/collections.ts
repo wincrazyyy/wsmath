@@ -307,7 +307,7 @@ export const CourseOutline = z
       "One line under the outline preview on the card, e.g. Course outline · one page per course. " +
         "Topics, schedule and price for AASL, AAHL, AISL and AIHL.",
       { tokens: true },
-    ),
+    ).optional(),
     autoAdvanceSeconds: field(z.number().int().min(2), {
       title: "Seconds per page",
       description: "Digits only, e.g. 6. How often the viewer turns to the next course. Minimum 2.",
@@ -328,12 +328,12 @@ export const Package = z
     tagline: text("Second badge", "Optional. Outlined badge, e.g. Customised coaching.").optional(),
     title: text("Title", "Card title, e.g. IBDP Mathematics."),
     price: PackagePrice.optional(),
-    description: longText("Description", "Short paragraph under the title.", { tokens: true }),
+    description: longText("Description", "Optional. Short paragraph under the title — the leaflet carries a board's detail.", { tokens: true }).optional(),
     bullets: field(z.array(textItem("Bullet", "One selling point.", { tokens: true })).min(1), {
       title: "Bullet points",
       description: "One main benefit per line. Add, remove or reorder freely.",
       widget: "collection",
-    }),
+    }).optional(),
     includedTitle: text(
       "Included block title",
       "Optional. Heading of the boxed list, e.g. {{programme.intensiveLessonCount}}-lesson intensive · ~{{money pricing.intensiveBlockCost}}.",
@@ -352,7 +352,8 @@ export const Package = z
       widget: "collection",
     }).optional(),
     outline: CourseOutline.optional(),
-    footTag: text("Card foot tag", "The small caps line in the card's foot, e.g. Live Zoom · Sundays · Replays included."),
+    footTag: text("Card foot tag", "Optional. The small caps line in the card's foot.").optional(),
+    ctaLabel: text("Button label", "Optional. What this card's WhatsApp button says, e.g. Enquire about the IBDP course. Falls back to the page label.").optional(),
     ctaKey: CtaKey,
   })
   .meta({ id: "Package", title: "Package" });
@@ -428,7 +429,7 @@ export const IaTheme = z
   .strictObject({
     id: stableId("Theme ID", "Permanent identifier, e.g. ancient-mathematics."),
     title: text("Theme", "e.g. Ancient Mathematics."),
-    description: text("One-line description", "e.g. Modern methods for classic problems."),
+    description: text("One-line description", "Optional, e.g. Modern methods for classic problems.").optional(),
   })
   .meta({ id: "IaTheme", title: "IA theme" });
 
@@ -437,18 +438,19 @@ export const IaCourse = z
     eyebrow: text("Eyebrow", "Small line above the title, e.g. Supported by a PhD in Pure Mathematics."),
     title: text("Title", "e.g. IBDP Maths IA Instructional Course."),
     description: longText("Description", "Short paragraph under the title.", { tokens: true }),
-    featuresLabel: text("Features label", "Mono label above the feature list, e.g. Course features."),
+    featuresLabel: text("Features label", "Optional. Mono label above the feature list.").optional(),
     features: field(z.array(textItem("Feature", "One course feature, e.g. Tailored IA topics.")).min(1), {
       title: "Course features",
       description: "One short feature each.",
       widget: "collection",
-    }),
+    }).optional(),
     themesLabel: text("Themes label", "Mono label above the theme list, e.g. Themes."),
     themes: field(z.array(IaTheme).min(1), {
       title: "Themes",
       description: "Edit IA topic directions here — title plus one line of description. Add, remove or reorder.",
       widget: "collection",
     }),
+    ctaLabel: text("Button label", "Optional. What this card's WhatsApp button says, e.g. Enquire about the IBDP course. Falls back to the page label.").optional(),
     ctaKey: CtaKey,
   })
   .meta({ id: "IaCourse", title: "Maths IA course" });
@@ -465,6 +467,7 @@ const prefill = (where: string) =>
 export const WhatsappPrefills = z
   .strictObject({
     nav: prefill("top navigation"),
+    hero: prefill("Hero"),
     "about-ribbon": prefill("About ribbon"),
     results: prefill("Results"),
     private: prefill("Private coaching card"),
