@@ -11,30 +11,55 @@
      below are relative to each card's own base, so the two languages carry the
      same optical mass at every viewport. `:lang(yue)` is matched everywhere
      `zh-Hant` is: testimonials.json really contains a Cantonese record.
-   · ISSUE #1 (video) — `.mvt-videoband` becomes a two-zone band with a real
-     player. The player is a SLIP INLAY (the course-outline treatment: lac-void
-     ground, 1px 44%-brass ring, 3px radius). Never a `.mvt-raise` — a raise
-     inside a well breaks the material grammar — and never paper behind it.
-     The band is NO LONGER a well: with the stamp and the body cut, a tray with
-     an inset ring and a bottom brass lip framed one heading and a lot of empty
-     lacquer. Bare ground and a wider gutter let the player be the object.
+   · ISSUE #1 (video) — `.mvt-videoband` became a two-zone band with a real
+     player, and then (owner, 2026-09-17) the band went altogether: the player
+     is the first cell of the featured grid. It is a SLIP INLAY (the
+     course-outline treatment: lac-void ground, 1px 44%-brass ring, 3px
+     radius) that now doubles as a matte around the 16:9 frame. Never a
+     `.mvt-raise` — a raise inside a well breaks the material grammar — and
+     never paper behind it.
 
    Namespacing: every selector is scoped under `.mvt-voices` (the section
    element). Nothing here may leak into another section's family.
    ────────────────────────────────────────────────────────────────────────── */
 
-/* ── the video band ───────────────────────────────────────────────────────── */
-/* 58/42: the player needs the majority measure to stay legible at 16:9, and the
-   copy column is floored at 280px so its heading never sets one word per line.
+/* ── the player + the four featured plates: ONE GRID ──────────────────────── */
+/* The video band is gone (owner, 2026-09-17: the heading beside the player left
+   a column of bare lacquer). The player is the first item of the featured list
+   and the list is a 12-track grid:
+
+       ≥1700px real   [ player 8/12, two rows ][ plate 1 ]     12 tracks so the
+                      [                       ][ plate 2 ]     seam at 8/12 runs
+                      [ plate 3               ][ plate 4 ]     through every row
+       1280–1699      [ player 7/12 ][ plate 1 ]               plate 1 centres
+                      [ plate 2 ][ plate 3 ][ plate 4 ]        its content
+       ≤1279          player full width, plates 2 × 2; ≤1024 one column
+
+   WHY THE PLATES ARE SET COMPACT. A 16:9 player in 8/12 of the full 1800px
+   measure is 668px tall; the two plates beside it are auto rows, so if their
+   natural height is greater the player's cell grows and the ground shows under
+   the frame — the hole this rework exists to remove. At the comp's register
+   (20px quotes, 72px bezel, 40px padding) Alice + CY Ting measure 891px; at
+   17px / 60px / 26px they measure ~705: an 18px matte either side of the player.
+   The slip absorbs whatever remains: it is a MATTE (void ground, brass ring)
+   that stretches to the cell and centres the 16:9 frame, so a longer quote
+   typed into the editor shows as a few pixels of matte, never as bare ground,
+   and shorter ones stretch the plates as they always did. Below 1700px real
+   two stacked plates are always taller than the player (the plates narrow
+   faster than the player shrinks), so one plate sits beside it, its content
+   centred, and the other three share a row.
    The artifact's 26px brass play triangle is retired — the player carries its
    own affordance, and two play glyphs in one band is a lie about which is live. */
-.mvt-voices .mvt-videoband{display:grid;grid-template-columns:minmax(0,58fr) minmax(280px,42fr);
-  gap:clamp(28px,3vw,64px);align-items:center;
-  padding:0;margin-bottom:clamp(28px,2.8vw,52px)}
-.mvt-voices .mvt-vb-slip{display:flex;flex-direction:column;gap:10px;min-width:0}
-.mvt-voices .mvt-video-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:3px;
-  overflow:hidden;background:var(--lac-void);container:mvt-vbframe / inline-size;
+.mvt-voices .mvt-feat{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(18px,2vw,38px)}
+.mvt-voices .mvt-feat > li{min-width:0}
+.mvt-voices .mvt-feat > li:not(.mvt-feat-video){grid-column:span 4}
+.mvt-voices .mvt-feat-video{grid-column:1/-1;display:flex}
+/* the slip is the matte: it fills its cell and the frame keeps 16:9 inside it */
+.mvt-voices .mvt-vb-slip{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;
+  gap:10px;min-width:0;border-radius:3px;background:var(--lac-void);
   box-shadow:inset 0 0 0 1px color-mix(in oklab,var(--brass) 44%,transparent)}
+.mvt-voices .mvt-video-frame{position:relative;width:100%;aspect-ratio:16/9;border-radius:3px;
+  overflow:hidden;background:var(--lac-void);container:mvt-vbframe / inline-size}
 /* `overflow:hidden` stops Loom's own rounded player corners poking outside the
    slip; the iframe is otherwise an exact 16:9 box, which is right at every width
    BELOW Loom's own 600px breakpoint. */
@@ -60,38 +85,24 @@
   .mvt-voices .mvt-video-frame iframe{height:calc(100% + 56px)}
 }
 /* both only reachable while `video.stamp` / `video.body` carry copy; the current
-   content omits them and the column then holds the heading alone */
+   content omits them. They sit in the matte, under the frame. */
+.mvt-voices .mvt-vb-cap{display:flex;flex-direction:column;gap:6px;padding:0 18px 14px;text-align:center}
 .mvt-voices .mvt-vb-stamp{color:var(--brass)}
-/* The heading keeps the shared `.mvt-h3` scale rather than a local one. An
-   earlier pass capped it at 36px on the theory that a 42fr column would break a
-   46px heading badly — it does not (two lines at 2560, two at 1440).
-   THE COLUMN IS NO LONGER STRETCHED AND CLOSED WITH A KNURL. That filler bought
-   a 30%-ink column its bottom register when the copy was a stamp, a heading and
-   four lines of body; with the heading alone it would have closed 46px of ink
-   over a 600px drop, which is the half-empty failure it was there to prevent,
-   not a cure for it. The heading is centred on the player instead — two objects
-   on one axis — and `text-wrap:balance` keeps its two lines even so the block
-   reads as a caption to the player rather than a ragged column. */
-.mvt-voices .mvt-vb-copy{min-width:0;display:flex;flex-direction:column}
-.mvt-voices .mvt-vb-copy h3{color:var(--ink);margin-bottom:0;text-wrap:balance}
-/* the lead comes back only if a body or a second block follows the heading */
-.mvt-voices .mvt-vb-copy h3:not(:last-child){margin-bottom:8px}
-.mvt-voices .mvt-vb-copy p{color:var(--ink-2)}
+.mvt-voices .mvt-vb-cap p{color:var(--ink-2);text-wrap:balance}
 
-/* ── the four featured plates ─────────────────────────────────────────────── */
-.mvt-voices .mvt-feat{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2vw,38px)}
-.mvt-voices .mvt-feat > li{padding:clamp(22px,2vw,40px);display:flex;flex-direction:column;gap:16px}
-.mvt-voices .mvt-feat-h{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
-.mvt-voices .mvt-bezel{width:72px;height:72px;border-radius:50%;padding:3px;background:var(--brass-radial);
+/* ── the four featured plates — the compact register (see the grid note) ─── */
+.mvt-voices .mvt-feat > li.mvt-raise{padding:clamp(18px,1.4vw,26px);display:flex;flex-direction:column;gap:12px}
+.mvt-voices .mvt-feat-h{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.mvt-voices .mvt-bezel{width:60px;height:60px;border-radius:50%;padding:3px;background:var(--brass-radial);
   flex:none;box-shadow:0 0 0 1px rgba(4,1,16,.62),0 4px 10px -2px rgba(4,1,16,.7)}
 .mvt-voices .mvt-bezel img{width:100%;height:100%;border-radius:50%;object-fit:cover}
 /* fallback engraving when a student's photo is withheld — never a silhouette */
 .mvt-voices .mvt-bezel--mono{display:grid;place-items:center;color:var(--lac-void);
-  font-family:var(--f-ui);font-size:22px;font-weight:600;font-stretch:82%;letter-spacing:.06em}
-.mvt-voices .mvt-feat-h b{display:block;font-family:var(--f-display);font-size:clamp(21px,1.7vw,28px);
+  font-family:var(--f-ui);font-size:19px;font-weight:600;font-stretch:82%;letter-spacing:.06em}
+.mvt-voices .mvt-feat-h b{display:block;font-family:var(--f-display);font-size:clamp(19px,1.3vw,24px);
   font-weight:600;color:var(--ink);line-height:1.2}
-.mvt-voices .mvt-feat-h .mvt-mu{color:var(--brass);margin:6px 0 4px}
-.mvt-voices .mvt-feat-h > div > span{display:block;color:var(--ink-2);font-size:14.5px;text-wrap:pretty}
+.mvt-voices .mvt-feat-h .mvt-mu{color:var(--brass);margin:3px 0 2px}
+.mvt-voices .mvt-feat-h > div > span{display:block;color:var(--ink-2);font-size:14px;text-wrap:pretty}
 .mvt-voices .mvt-feat-h b .mvt-num{font-size:.78em;color:var(--ink-2);font-weight:400}
 
 /* REGISTER 1 — the featured quote. No ruling to sit on, so CJK keeps its +5%
@@ -102,7 +113,7 @@
    plates are wide enough that the rag needs no help. Matching the artifact's
    line breaks is worth more than a rule that changes them. */
 .mvt-voices .mvt-feat blockquote{flex:1 1 auto;color:var(--ink);font-family:var(--f-display);
-  font-size:clamp(17px,1.15vw,20px);line-height:1.62;
+  font-size:17px;line-height:1.55;
   font-variant-numeric:oldstyle-nums proportional-nums}
 /* The CJK rules must RESTATE the family. In the artifact `.mvt-sheet blockquote`
    (0,1,1) lost to `:lang(zh-Hant)` (0,2,0), so the CJK stack came through for
@@ -111,9 +122,9 @@
    it) set in Constantia. Hant and Hans are separate rules because they take
    different stacks, and `yue` rides Hant — testimonials.json uses it. */
 .mvt-voices .mvt-feat blockquote:is(:lang(zh-Hant),:lang(yue)){font-family:var(--f-hant);
-  font-size:calc(clamp(17px,1.15vw,20px) * 1.05);line-height:1.85}
+  font-size:calc(17px * 1.05);line-height:1.7}
 .mvt-voices .mvt-feat blockquote:lang(zh-Hans){font-family:var(--f-hans);
-  font-size:calc(clamp(17px,1.15vw,20px) * 1.05);line-height:1.85}
+  font-size:calc(17px * 1.05);line-height:1.7}
 
 /* ── the drifting trough ──────────────────────────────────────────────────── */
 /* The channel runs off the page on the left and terminates in a machined right
@@ -197,12 +208,25 @@
   color:color-mix(in oklab,var(--paper-ink) 82%,var(--paper))}
 
 /* ── responsive ───────────────────────────────────────────────────────────── */
-@media (max-width:1180px){
-  /* player first, copy beneath — the video is the reason the band exists */
-  .mvt-voices .mvt-videoband{grid-template-columns:minmax(0,1fr)}
+/* the grid's three geometries (see the note above the grid). Breakpoints at or
+   above 1280 are REAL pixels: the page is zoomed .85 there, so 1700 real is a
+   2000px layout viewport, where the measure is at its full 1800 and the
+   player + two plates balance. */
+@media (min-width:1700px){
+  .mvt-voices .mvt-feat-video{grid-column:1/9;grid-row:1/3}
+  .mvt-voices .mvt-feat > li:nth-child(4){grid-column:1/9}
+}
+@media (min-width:1280px) and (max-width:1699px){
+  .mvt-voices .mvt-feat-video{grid-column:1/8}
+  /* the one plate beside the player: as tall as the player, content centred */
+  .mvt-voices .mvt-feat > li:nth-child(2){grid-column:8/-1;justify-content:center}
+  .mvt-voices .mvt-feat > li:nth-child(2) blockquote{flex:0 0 auto}
+}
+@media (max-width:1279px){
+  .mvt-voices .mvt-feat > li:not(.mvt-feat-video){grid-column:span 6}
 }
 @media (max-width:1024px){
-  .mvt-voices .mvt-feat{grid-template-columns:1fr}
+  .mvt-voices .mvt-feat > li:not(.mvt-feat-video){grid-column:span 12}
 }
 /* TOUCH CAN PAN THE TROUGH. `overflow-x:hidden` blocks user panning while
    still permitting programmatic scrolling, so on a phone — 1.3 sheets on

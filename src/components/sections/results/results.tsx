@@ -39,7 +39,7 @@ export interface ResultsSectionProps {
   page: ResultsCopy;
   /** `content.programmes` — the six group tabs, ordered by `order`. */
   programmes: readonly Programme[];
-  /** `content.students` — the 93 records; published ones feed the stream. */
+  /** `content.students` — the student records; published ones feed the stream. */
   students: readonly Student[];
   /** `content.gradeScales` — the rails. */
   gradeScales: readonly GradeScale[];
@@ -99,6 +99,7 @@ export function ResultsSection({
           <div className="mvt-head-sub mvt-res-uplift mvt-rev">
             <b className="mvt-num">{page.uplift.value}</b>
             <p>{page.uplift.label}</p>
+            {page.uplift.note !== undefined && <span className="mvt-mu">{page.uplift.note}</span>}
           </div>
           <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
         </div>

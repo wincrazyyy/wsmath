@@ -58,6 +58,12 @@ export interface RibbonModel {
   readonly key: string;
   /** Cubic path in viewBox space, flat at both ends. */
   readonly d: string;
+  /** `Joyce Ho (2026)` — the hover tip's name line. */
+  readonly who: string;
+  /** `1 → 7` — the recorded bands, byte-for-byte. */
+  readonly move: string;
+  /** `10 months`, or `null` when no duration was recorded. */
+  readonly months: string | null;
 }
 
 /** One tick on a gutter rail. */
@@ -235,6 +241,9 @@ function buildGroup(programme: Programme, input: GroupInput): ResultsGroupModel 
     return {
       key: `${row.studentId}-${row.programmeId}`,
       d: `M 0 ${yl} C 420 ${yl}, 580 ${yr}, 1000 ${yr}`,
+      who: `${row.name} (${row.year})`,
+      move: `${row.fromLabel} → ${row.toLabel}`,
+      months: row.monthsRecorded ? row.monthsLabel : null,
     };
   });
 

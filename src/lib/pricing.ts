@@ -24,7 +24,7 @@ export interface PricingInput {
   readonly coursePrice: number;
   /** The higher-tier board-course price — AAHL, AIHL, 0606, e.g. `19800`. */
   readonly coursePriceHigher: number;
-  /** Pre-discount list price, struck on every course page, e.g. `60000`. */
+  /** The IBDP course's list price, struck on its card and printed as "Was" in its ledger, e.g. `180000`. */
   readonly courseListPrice: number;
   /** Maximum referral rebate per student referred, e.g. `3000`. */
   readonly referralRebateMax: number;

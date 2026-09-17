@@ -164,9 +164,11 @@ function printing(sheets: readonly Testimonial[]): readonly RowSheet[] {
  * artifact and a click-to-load poster on the live site. It is now a real,
  * eagerly-loaded, autoplaying player in the server-rendered HTML — see
  * `video-frame.tsx` and `embed.ts` for why the URL parameters, not the markup,
- * are the fix. The band is no longer a well: it is a bare two-zone grid, the
- * player beside its heading, so the tray no longer frames a heading that is now
- * the copy column's only occupant.
+ * are the fix. The band itself is gone (owner, 2026-09-17): the player is the
+ * first item of the featured grid, spanning two rows beside two plates with the
+ * other two beneath, and its heading is the head's `lede`. The slip around the
+ * player is a matte, so the cell it spans is never bare lacquer — see
+ * `voices.css` for the geometry and why the plates are set compact.
  *
  * **Issue #2 — the quote typography.** The artifact's global
  * `:lang(zh-Hant){font-size:1.05em}` outranked every card register, so a CJK
@@ -187,12 +189,13 @@ function printing(sheets: readonly Testimonial[]): readonly RowSheet[] {
  * speed, and `printing()` above prints the list enough times to fill the
  * channel so the loop still closes seamlessly.
  *
- * `lede`, `video.stamp` and `video.body` are optional in the schema and absent
- * from the current copy: each renders nothing when it is missing rather than
- * being deleted outright, so a line typed into the editor still appears.
- * Without a `.mvt-head-sub` child the foundation collapses the head to a single
- * track (globals.css `:not(:has(.mvt-head-sub))`), which is the composition the
- * comp shows.
+ * `video.stamp` and `video.body` are optional in the schema and absent from the
+ * current copy: each renders nothing when it is missing rather than being
+ * deleted outright, so a line typed into the editor still appears — inside the
+ * player's slip, under the frame. `lede` carries the line that was the video's
+ * heading; without it the foundation collapses the head to a single track
+ * (globals.css `:not(:has(.mvt-head-sub))`), which is the composition the comp
+ * shows.
  */
 export function VoicesSection({ voices, testimonials }: VoicesSectionProps) {
   const featured = testimonials
@@ -222,21 +225,24 @@ export function VoicesSection({ voices, testimonials }: VoicesSectionProps) {
           )}
         </div>
 
-        {/* no tray: the player is a slip inlay sitting on the section ground */}
-        <div className="mvt-videoband mvt-rev mvt-rev--s">
-          <figure className="mvt-vb-slip">
-            <VideoFrame provider={voices.video.provider} url={voices.video.url} title={voices.video.heading} />
-            {voices.video.stamp === undefined ? null : (
-              <figcaption className="mvt-mu mvt-vb-stamp">{voices.video.stamp}</figcaption>
-            )}
-          </figure>
-          <div className="mvt-vb-copy">
-            <h3 className="mvt-h3">{voices.video.heading}</h3>
-            {voices.video.body === undefined ? null : <p className="mvt-body">{voices.video.body}</p>}
-          </div>
-        </div>
-
+        {/* the player is the first item of the featured grid — a slip inlay on
+            the section ground, spanning two rows beside the first two plates.
+            The list item, not the frame, carries the reveal class: VideoFrame's
+            classes must stay static (see its header note). */}
         <ul className="mvt-feat">
+          <li className="mvt-feat-video mvt-rev mvt-rev--s">
+            <figure className="mvt-vb-slip">
+              <VideoFrame provider={voices.video.provider} url={voices.video.url} title={voices.video.heading} />
+              {voices.video.stamp === undefined && voices.video.body === undefined ? null : (
+                <figcaption className="mvt-vb-cap">
+                  {voices.video.stamp === undefined ? null : (
+                    <span className="mvt-mu mvt-vb-stamp">{voices.video.stamp}</span>
+                  )}
+                  {voices.video.body === undefined ? null : <p className="mvt-body">{voices.video.body}</p>}
+                </figcaption>
+              )}
+            </figure>
+          </li>
           {featured.map((testimonial) => (
             <FeaturedPlate key={testimonial.id} testimonial={testimonial} />
           ))}

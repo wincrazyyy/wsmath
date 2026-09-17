@@ -368,8 +368,24 @@
               "type": "integer",
               "minimum": -9007199254740991,
               "maximum": 9007199254740991,
-              "title": "Course list price",
-              "description": "Digits only, e.g. 60000. The undiscounted price, shown struck through above the real one. The saving and the discount percentage are calculated from it.",
+              "title": "IBDP list price",
+              "description": "Digits only, e.g. 180000. The IBDP course's undiscounted price — struck through on its card and printed as “Was” in the IBDP ledger. The saving and the discount percentage are calculated from it.",
+              "x-widget": "number"
+            },
+            "ialListPrice": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "IAL list price",
+              "description": "Digits only, e.g. 54000. The International A-Level course's undiscounted price, struck through on its card.",
+              "x-widget": "number"
+            },
+            "igcseListPrice": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "International GCSE list price",
+              "description": "Digits only, e.g. 180000. The International GCSE course's undiscounted price, struck through on its card.",
               "x-widget": "number"
             },
             "referralRebateMax": {
@@ -388,6 +404,8 @@
             "coursePrice",
             "coursePriceHigher",
             "courseListPrice",
+            "ialListPrice",
+            "igcseListPrice",
             "referralRebateMax"
           ],
           "additionalProperties": false,
@@ -1560,20 +1578,20 @@
                   "x-widget": "text",
                   "x-tokens": true
                 },
-                "note": {
-                  "type": "string",
-                  "minLength": 1,
-                  "title": "Small caps note",
-                  "description": "Optional, e.g. {{outcomes.satisfaction}}.",
-                  "x-widget": "text",
-                  "x-tokens": true
-                },
                 "label": {
                   "type": "string",
                   "minLength": 1,
                   "title": "Headline label",
-                  "description": "e.g. average grade uplift (From PG/mock to final).",
+                  "description": "e.g. average grade uplift.",
                   "x-widget": "text"
+                },
+                "note": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Small caps note",
+                  "description": "Optional, under the label, e.g. From PG/mock to final.",
+                  "x-widget": "text",
+                  "x-tokens": true
                 }
               },
               "required": [
@@ -2004,15 +2022,15 @@
                 "heading": {
                   "type": "string",
                   "minLength": 1,
-                  "title": "Heading beside the video",
-                  "description": "e.g. Real students talking about their WSMath journey.",
+                  "title": "Player title",
+                  "description": "The player's accessible name; not printed. The line beside the section heading is the supporting line above.",
                   "x-widget": "text"
                 },
                 "body": {
                   "type": "string",
                   "minLength": 1,
-                  "title": "Body beside the video",
-                  "description": "The paragraph under that heading.",
+                  "title": "Body under the player",
+                  "description": "Optional. A paragraph inside the player's frame, under the video.",
                   "x-widget": "textarea",
                   "x-tokens": true
                 },
@@ -2697,6 +2715,13 @@
           "title": "Full-size label",
           "description": "Shown on the small plate in the corner of the page, e.g. Open at full size.",
           "x-widget": "text"
+        },
+        "coverLabel": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Cover label",
+          "description": "The cover's stop on the page rail, e.g. Cover.",
+          "x-widget": "text"
         }
       },
       "required": [
@@ -2707,7 +2732,8 @@
         "nextLabel",
         "pauseLabel",
         "playLabel",
-        "fullSizeLabel"
+        "fullSizeLabel",
+        "coverLabel"
       ],
       "additionalProperties": false,
       "title": "Course outline viewer"
@@ -3567,6 +3593,12 @@
         },
         "outline": {
           "$ref": "#/$defs/CourseOutline"
+        },
+        "outlineCover": {
+          "title": "Leaflet cover",
+          "description": "Optional. The leaflet's cover page — the card's face and the first page of the viewer. File: /courses/<board>/cover.webp.",
+          "x-widget": "image",
+          "$ref": "#/$defs/MediaRef"
         },
         "footTag": {
           "type": "string",

@@ -240,8 +240,8 @@ const Results = z
     uplift: z
       .strictObject({
         value: text("Headline figure", "e.g. {{outcomes.avgUplift}}.", { tokens: true }),
-        note: text("Small caps note", "Optional, e.g. {{outcomes.satisfaction}}.", { tokens: true }).optional(),
-        label: text("Headline label", "e.g. average grade uplift (From PG/mock to final)."),
+        label: text("Headline label", "e.g. average grade uplift."),
+        note: text("Small caps note", "Optional, under the label, e.g. From PG/mock to final.", { tokens: true }).optional(),
       })
       .meta({ title: "Outcome snapshot" }),
     snapList: field(z.array(DefinitionItem).min(1), {
@@ -355,7 +355,7 @@ const CmpCell = z
  * own exam-board codes.
  *
  * `openLabel` carries a `{count}` placeholder rather than a token: the number of
- * pages differs per card (IBDP 4, International GCSE 3, IAL 1), so it is
+ * pages differs per card (IBDP 5, International GCSE 4, IAL 2, cover included), so it is
  * substituted by the component from `pages.length`. A token would be one number
  * for every card, which is exactly how the retired `content.leafletPageCount`
  * was wrong by construction.
@@ -379,6 +379,7 @@ const OutlineCopy = z
       "Full-size label",
       "Shown on the small plate in the corner of the page, e.g. Open at full size.",
     ),
+    coverLabel: text("Cover label", "The cover's stop on the page rail, e.g. Cover."),
   })
   .meta({ id: "OutlineCopy", title: "Course outline viewer" });
 
@@ -503,8 +504,8 @@ const Voices = z
         }),
         url: text("Video link", "Paste the share link exactly as the host gives it."),
         stamp: text("Corner stamp", "Optional. The small caps line under the player.").optional(),
-        heading: text("Heading beside the video", "e.g. Real students talking about their WSMath journey."),
-        body: longText("Body beside the video", "The paragraph under that heading.", { tokens: true }).optional(),
+        heading: text("Player title", "The player's accessible name; not printed. The line beside the section heading is the supporting line above."),
+        body: longText("Body under the player", "Optional. A paragraph inside the player's frame, under the video.", { tokens: true }).optional(),
         clips: field(z.array(VideoClip).min(1), {
           title: "Clips",
           description: "The students in the video, in order.",

@@ -24,8 +24,8 @@ holds the legacy site, with its build output (`out/`) tracked and served in prod
 
 ## Non-negotiables
 
-1. **The content is the asset.** 93 student grade records, 28 testimonials in four written
-   languages, 30 school names, 20 exam-board course codes, 8 FAQ answers, a privacy policy. None
+1. **The content is the asset.** 114 student grade records, 28 testimonials in four written
+   languages, 36 school names, 20 exam-board course codes, 8 FAQ answers, a privacy policy. None
    of it can be regenerated. It lives in `src/content/*.json`, migrated byte-for-byte: curly
    apostrophes (`’`), en/em dashes (`–` `—`), `·` and `•` separators, `→` arrows, emoji, all CJK,
    and the load-bearing `\n\n` in FAQ answers 4 and 7. Never retype it.

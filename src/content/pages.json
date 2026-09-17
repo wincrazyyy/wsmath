@@ -262,11 +262,12 @@
       "openLabel": "View the course outline · {count} pages",
       "openLabelSingle": "View the course outline",
       "closeLabel": "Close",
-      "previousLabel": "Previous course",
-      "nextLabel": "Next course",
+      "previousLabel": "Previous page",
+      "nextLabel": "Next page",
       "pauseLabel": "Pause",
       "playLabel": "Play",
-      "fullSizeLabel": "Open at full size"
+      "fullSizeLabel": "Open at full size",
+      "coverLabel": "Cover"
     },
     "ctaLabel": "Get in touch",
     "plan": {
@@ -283,7 +284,8 @@
     "title": "Results, with context.",
     "uplift": {
       "value": "{{outcomes.avgUplift}}",
-      "label": "average grade uplift (From PG/mock to final)"
+      "label": "average grade uplift",
+      "note": "From PG/mock to final"
     },
     "gradeHead": {
       "title": "Grade improvements",
@@ -347,6 +349,7 @@
   "voices": {
     "eyebrow": "Student Voices",
     "title": "What my students say",
+    "lede": "Real students talking about their WSMath journey",
     "video": {
       "provider": "loom",
       "url": "https://www.loom.com/share/dc71ae4ab4ee4ea5a318319141a79e65",

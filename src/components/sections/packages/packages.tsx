@@ -412,6 +412,8 @@ function BoardPlate({
 }) {
   const variants = pkg.variants ?? [];
   const first = variants[0];
+  /** The leaflet's face on the card: its cover when it has one, else the first course's page. */
+  const face = pkg.outlineCover ?? first?.outlinePage;
   const ctaLabel = pkg.ctaLabel ?? page.ctaLabel;
   const tags = courseTags(pkg, tail);
 
@@ -436,27 +438,29 @@ function BoardPlate({
         )}
       </div>
 
-      {pkg.outline === undefined || first === undefined ? null : (
+      {pkg.outline === undefined || first === undefined || face === undefined ? null : (
         /* The leaflet, full page. The frame is the trigger for the outline
-           viewer: the first course's page stays server-rendered here and is
-           handed to `<OutlineDialog>` as children, so the plate is complete
-           (and the image is fetched) with JavaScript off. */
+           viewer: the leaflet's face — its cover, or the first course's page —
+           stays server-rendered here and is handed to `<OutlineDialog>` as
+           children, so the plate is complete (and the image is fetched) with
+           JavaScript off. */
         <figure className="mvt-slip mvt-well mvt-well--shallow">
           <OutlineDialog
             outline={pkg.outline}
             variants={variants}
+            cover={pkg.outlineCover}
             copy={page.outline}
             phone={phone}
             message={message}
             ctaKey={pkg.ctaKey}
             ctaLabel={ctaLabel}
           >
-            <div className="mvt-slip-frame" style={slipAspect(first.outlinePage.width, first.outlinePage.height)}>
+            <div className="mvt-slip-frame" style={slipAspect(face.width, face.height)}>
               <Image
-                src={first.outlinePage.src}
-                alt={first.outlinePage.alt}
-                width={first.outlinePage.width}
-                height={first.outlinePage.height}
+                src={face.src}
+                alt={face.alt}
+                width={face.width}
+                height={face.height}
                 sizes="(min-width:1280px) 26vw, (min-width:1025px) 46vw, 92vw"
               />
             </div>

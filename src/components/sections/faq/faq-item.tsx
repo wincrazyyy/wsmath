@@ -57,7 +57,7 @@ export function FaqItem({ ordinal, questionId, answerId, question, body }: FaqIt
       </h3>
       <div className="mvt-ansgrid">
         <div>
-          <div className="mvt-ans mvt-paper" id={answerId} role="region" aria-labelledby={questionId}>
+          <div className="mvt-ans" id={answerId} role="region" aria-labelledby={questionId}>
             {/* index keys: the split is a static, never-reordered list derived
                 from one string, and two identical paragraphs in one answer would
                 collide on a text key */}

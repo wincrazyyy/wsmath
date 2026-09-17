@@ -59,7 +59,9 @@
     "privateHourlyRate": 1500,
     "coursePrice": 16800,
     "coursePriceHigher": 19800,
-    "courseListPrice": 60000,
+    "courseListPrice": 180000,
+    "ialListPrice": 54000,
+    "igcseListPrice": 180000,
     "referralRebateMax": 3000
   },
   "programme": {

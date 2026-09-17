@@ -352,6 +352,10 @@ export const Package = z
       widget: "collection",
     }).optional(),
     outline: CourseOutline.optional(),
+    outlineCover: media(
+      "Leaflet cover",
+      "Optional. The leaflet's cover page — the card's face and the first page of the viewer. File: /courses/<board>/cover.webp.",
+    ).optional(),
     footTag: text("Card foot tag", "Optional. The small caps line in the card's foot.").optional(),
     ctaLabel: text("Button label", "Optional. What this card's WhatsApp button says, e.g. Enquire about the IBDP course. Falls back to the page label.").optional(),
     ctaKey: CtaKey,

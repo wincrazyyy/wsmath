@@ -169,9 +169,17 @@ export const Settings = z
           "Digits only, e.g. 19800. What the harder courses cost — AAHL, AIHL and 0606.",
         ),
         courseListPrice: integer(
-          "Course list price",
-          "Digits only, e.g. 60000. The undiscounted price, shown struck through above the real one. " +
-            "The saving and the discount percentage are calculated from it.",
+          "IBDP list price",
+          "Digits only, e.g. 180000. The IBDP course's undiscounted price — struck through on its card and " +
+            "printed as “Was” in the IBDP ledger. The saving and the discount percentage are calculated from it.",
+        ),
+        ialListPrice: integer(
+          "IAL list price",
+          "Digits only, e.g. 54000. The International A-Level course's undiscounted price, struck through on its card.",
+        ),
+        igcseListPrice: integer(
+          "International GCSE list price",
+          "Digits only, e.g. 180000. The International GCSE course's undiscounted price, struck through on its card.",
         ),
         referralRebateMax: integer("Maximum referral rebate", "Digits only, e.g. 3000."),
       })

@@ -62,7 +62,9 @@ export interface OutlineDialogProps {
    * pages and three courses, because the courses *are* the pages.
    */
   variants: readonly CourseVariant[];
-  /** `pages.packagesPage.outline` — the eight UI labels, tokens already resolved. */
+  /** `packages[board].outlineCover` — the leaflet's cover, page one of the viewer when present. */
+  cover: CourseVariant['outlinePage'] | undefined;
+  /** `pages.packagesPage.outline` — the UI labels, tokens already resolved. */
   copy: OutlineCopy;
   /** `settings.contact.whatsappPhone` — for the CTA in the viewer's foot. */
   phone: string;
@@ -82,8 +84,8 @@ export interface OutlineDialogProps {
 }
 
 /**
- * A board card's course outline, opened from the card's slip — one page per
- * course, one at a time, in a lac-void vitrine.
+ * A board card's course outline, opened from the card's slip — the leaflet's
+ * cover, then one page per course, one at a time, in a lac-void vitrine.
  *
  * The page rail is labelled with the courses' own exam-board codes
  * (`AASL AAHL AISL AIHL`, not `1 2 3 4`), so the rail *is* the course selector
@@ -109,13 +111,14 @@ export interface OutlineDialogProps {
  *   pauses it while the pointer rests there.
  *
  * · **Only a window of pages is mounted** (the current page, its two
- *   neighbours and the one just left). The eight outline pages run ~1.7 MB; the
+ *   neighbours and the one just left). The eleven outline pages run ~2.3 MB; the
  *   window keeps the next page decoded and ready for an instant cross-fade
  *   without fetching the whole outline the moment the dialog opens.
  */
 export function OutlineDialog({
   outline,
   variants,
+  cover,
   copy,
   phone,
   message,
@@ -123,7 +126,12 @@ export function OutlineDialog({
   ctaLabel,
   children,
 }: OutlineDialogProps) {
-  const pages = useMemo(() => variants.map((variant) => variant.outlinePage), [variants]);
+  const pages = useMemo(
+    () => (cover === undefined ? [] : [cover]).concat(variants.map((variant) => variant.outlinePage)),
+    [cover, variants],
+  );
+  /** Rail position → page index: the cover, when present, is page 0. */
+  const offset = cover === undefined ? 0 : 1;
   const count = pages.length;
   const first = pages[0];
 
@@ -322,6 +330,19 @@ export function OutlineDialog({
                 </button>
 
                 <ol className="mvt-lf-rail">
+                  {cover === undefined ? null : (
+                    <li key="cover">
+                      <button
+                        className="mvt-lf-dot mvt-code mvt-num"
+                        type="button"
+                        aria-label={cover.alt}
+                        aria-current={index === 0 ? 'page' : undefined}
+                        onClick={() => select(0)}
+                      >
+                        {copy.coverLabel}
+                      </button>
+                    </li>
+                  )}
                   {variants.map((variant, at) => (
                     <li key={variant.id}>
                       {/* Labelled with the course's own exam-board code, so the
@@ -331,8 +352,8 @@ export function OutlineDialog({
                         className="mvt-lf-dot mvt-code mvt-num"
                         type="button"
                         aria-label={variant.outlinePage.alt}
-                        aria-current={at === index ? 'page' : undefined}
-                        onClick={() => select(at)}
+                        aria-current={at + offset === index ? 'page' : undefined}
+                        onClick={() => select(at + offset)}
                       >
                         {variant.code ?? String(at + 1)}
                       </button>

@@ -15,17 +15,35 @@
  *
  * ## The draw-on (behaviours.md §5, artifact lines 2601–2665)
  *
- * The ribbons carry `vector-effect="non-scaling-stroke"`, which puts the dash
- * **pattern** in device pixels while the path's coordinates live in the
- * stretched 1000×620 user space. A dash length taken from `getTotalLength()`
- * (or from `pathLength`) therefore under-covers the on-screen path and the
- * pattern repeats — the v6.1 regression of two sliding segments instead of one
- * growing line. The length must be measured in device space: sample each path
- * at 24 equal arc-length steps, apply the svg's non-uniform viewBox scale to
- * each step, sum, and pad by 2px. The dash is cleared once the draw finishes so
- * a resize can never re-expose a stale device-space pattern.
+ * The ribbons carry `vector-effect="non-scaling-stroke"`, which lays the dash
+ * **pattern** out in the host space — the svg's own layout box in CSS px,
+ * before the root's `zoom` and any ancestor transform — while the path's
+ * coordinates live in the stretched 1000×620 user space. A dash length taken
+ * from `getTotalLength()` (or from `pathLength`) therefore under-covers the
+ * drawn path and the pattern repeats — the v6.1 regression of two sliding
+ * segments instead of one growing line. So does a length taken from
+ * `getBoundingClientRect()`, which is the ZOOMED box: under the desktop `.85`
+ * scale it covers 85% of each ribbon and the last 15% is on screen from the
+ * first frame. The length is measured in the host space instead (`hostScale`):
+ * sample each path at 24 equal arc-length steps, apply the svg's non-uniform
+ * viewBox scale to each step, sum, and pad by 2px. The dash's off-run is far
+ * longer than any ribbon (`DASH_GAP`), so the pattern cannot repeat within a
+ * path even where an engine's dash unit differs from the measured one. The
+ * dash is cleared once the draw finishes so a resize can never re-expose a
+ * stale pattern.
  *
  * Reduced motion paints the stream complete on first paint and never animates.
+ *
+ * ## The hover read-out (2026-09-17)
+ *
+ * The ribbons are anonymous ink until the pointer reaches one: the base layers
+ * dim, that ribbon is re-drawn on top at full strength, and a tip at the pointer
+ * names the record (`RibbonModel.who` / `move` / `months`, all computed on the
+ * server). The tip is positioned in the channel's LAYOUT space — `clientX` and
+ * the channel's rect are both zoomed, and their difference divided by the
+ * rendered/layout width ratio is not (the same trap as `hostScale`). Touch taps
+ * pin a ribbon; a tap on the bare channel clears it. Hover-only by design: the
+ * svg is presentational and the legend beneath carries the counts in text.
  */
 
 import {
@@ -34,6 +52,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from 'react';
 
@@ -74,8 +93,14 @@ const DRAW_MS = 1600;
 const STAGGER_MS = 40;
 /** Tail pad before the dash is cleared, so the clear can never clip the last ribbon. */
 const TAIL_MS = 160;
-/** Samples per path when measuring device length. */
+/** Samples per path when measuring host length. */
 const SAMPLES = 24;
+/**
+ * The dash's off-run. Longer than any ribbon on any screen, so the pattern is
+ * one dash followed by nothing: a growing segment and never a second one,
+ * whatever unit an engine takes the dash in.
+ */
+const DASH_GAP = 1e6;
 
 function cssVar(name: string, value: string): CSSProperties {
   return { [name]: value } as CSSProperties;
@@ -138,10 +163,28 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
   const timerRef = useRef<number | null>(null);
   const reducedRef = useRef(false);
   const seenRef = useRef(false);
+  const channelRef = useRef<HTMLDivElement | null>(null);
+  const tipRef = useRef<HTMLDivElement | null>(null);
+  const [hot, setHot] = useState<number | null>(null);
 
   const scopeLine = copy.legendScope
     .replace('{n}', String(group.publishedCount))
     .replace('{group}', group.label);
+
+  const placeTip = useCallback((event: ReactPointerEvent<Element>) => {
+    const channel = channelRef.current;
+    const tip = tipRef.current;
+    if (!channel || !tip) return;
+    const box = channel.getBoundingClientRect();
+    const zoom = channel.offsetWidth ? box.width / channel.offsetWidth : 1;
+    const half = tip.offsetWidth / 2 + 6;
+    const x = Math.min(Math.max((event.clientX - box.left) / zoom, half), channel.clientWidth - half);
+    const y = (event.clientY - box.top) / zoom;
+    tip.style.left = `${x}px`;
+    tip.style.top = `${y}px`;
+    tip.dataset.side = y < 64 ? 'below' : 'above';
+  }, []);
+  const hotRibbon = hot === null ? undefined : group.ribbons[hot];
 
   const cancelPending = useCallback(() => {
     for (const frame of framesRef.current) cancelAnimationFrame(frame);
@@ -171,18 +214,15 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
         return;
       }
 
-      const box = svg.getBoundingClientRect();
-      if (!box.width || !box.height) {
+      const scale = hostScale(svg);
+      if (!scale) {
         paintComplete();
         return;
       }
-      const viewBox = svg.viewBox.baseVal;
-      const sx = viewBox.width ? box.width / viewBox.width : 1;
-      const sy = viewBox.height ? box.height / viewBox.height : 1;
 
       visRefs.current.forEach((path, index) => {
         if (!path) return;
-        const length = deviceLength(path, sx, sy);
+        const length = hostLength(path, scale.sx, scale.sy);
         hide(path, length);
         hide(glowRefs.current[index], length);
       });
@@ -270,15 +310,24 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
           ))}
         </div>
 
-        <div className="mvt-stream-ch mvt-well">
+        <div
+          ref={channelRef}
+          className="mvt-stream-ch mvt-well"
+          onPointerDown={(event) => {
+            if (event.pointerType !== 'touch') return;
+            if (event.target instanceof Element && event.target.closest('.mvt-rib-hit')) return;
+            setHot(null);
+          }}
+        >
           <svg
             ref={svgRef}
             className="mvt-stream-svg"
             viewBox={`0 0 1000 ${STREAM_VB_H}`}
             preserveAspectRatio="none"
             focusable="false"
+            data-hot={hot === null ? undefined : ''}
           >
-            <g>
+            <g className="mvt-rib-layer">
               {group.ribbons.map((ribbon, index) => (
                 <path
                   key={ribbon.key}
@@ -291,7 +340,7 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
                 />
               ))}
             </g>
-            <g>
+            <g className="mvt-rib-layer">
               {group.ribbons.map((ribbon, index) => (
                 <path
                   key={ribbon.key}
@@ -304,7 +353,50 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
                 />
               ))}
             </g>
+            {/* the hovered record, re-drawn complete above the dimmed layers */}
+            {hotRibbon === undefined ? null : (
+              <g className="mvt-rib-hi">
+                <path className="mvt-rib-glow" d={hotRibbon.d} vectorEffect="non-scaling-stroke" />
+                <path className="mvt-rib" d={hotRibbon.d} vectorEffect="non-scaling-stroke" />
+              </g>
+            )}
+            {/* the hit areas: a transparent 16px stroke over every ribbon, on top */}
+            <g>
+              {group.ribbons.map((ribbon, index) => (
+                <path
+                  key={ribbon.key}
+                  className="mvt-rib-hit"
+                  d={ribbon.d}
+                  vectorEffect="non-scaling-stroke"
+                  onPointerEnter={(event) => {
+                    if (event.pointerType === 'touch') return;
+                    setHot(index);
+                    placeTip(event);
+                  }}
+                  onPointerMove={placeTip}
+                  onPointerLeave={(event) => {
+                    if (event.pointerType !== 'touch') setHot(null);
+                  }}
+                  onPointerDown={(event) => {
+                    if (event.pointerType !== 'touch') return;
+                    setHot((current) => (current === index ? null : index));
+                    placeTip(event);
+                  }}
+                />
+              ))}
+            </g>
           </svg>
+          <div ref={tipRef} className={hotRibbon === undefined ? 'mvt-rib-tip' : 'mvt-rib-tip is-on'}>
+            {hotRibbon === undefined ? null : (
+              <>
+                <b>{hotRibbon.who}</b>
+                <span className="mvt-num">
+                  {hotRibbon.move}
+                  {hotRibbon.months === null ? '' : ` · ${hotRibbon.months}`}
+                </span>
+              </>
+            )}
+          </div>
         </div>
 
         <div className="mvt-gut mvt-gut--r mvt-well">
@@ -342,17 +434,46 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
 function hide(path: SVGPathElement | null | undefined, length: number): void {
   if (!path) return;
   path.style.transition = 'none';
-  path.style.strokeDasharray = String(length);
+  path.style.strokeDasharray = `${length} ${DASH_GAP}`;
   path.style.strokeDashoffset = String(length);
 }
 
 /**
- * On-screen length of a path under a non-uniform viewBox scale: sample at
+ * The svg's user→host scale, or `null` while it has no box (a panel behind
+ * another tab). The host space is the svg's LAYOUT box — `clientWidth` /
+ * `clientHeight`, which the standardised CSS `zoom` leaves un-zoomed — not
+ * `getBoundingClientRect()`, which reports the zoomed, transformed box and is
+ * 85% of the host width under the root's desktop scale. An engine that gives
+ * an outer `<svg>` no client box falls back to the rendered box divided by its
+ * accumulated zoom.
+ */
+function hostScale(svg: SVGSVGElement): { sx: number; sy: number } | null {
+  let width = svg.clientWidth;
+  let height = svg.clientHeight;
+  if (!width || !height) {
+    const box = svg.getBoundingClientRect();
+    const zoom =
+      'currentCSSZoom' in svg && typeof svg.currentCSSZoom === 'number' && svg.currentCSSZoom > 0
+        ? svg.currentCSSZoom
+        : 1;
+    width = box.width / zoom;
+    height = box.height / zoom;
+  }
+  if (!width || !height) return null;
+  const viewBox = svg.viewBox.baseVal;
+  return {
+    sx: viewBox.width ? width / viewBox.width : 1,
+    sy: viewBox.height ? height / viewBox.height : 1,
+  };
+}
+
+/**
+ * Host-space length of a path under a non-uniform viewBox scale: sample at
  * {@link SAMPLES} equal user-space arc-length steps, scale each step by the
  * svg's own `sx` / `sy`, and sum. `+2px` of rounding pad so the dash can never
  * fall short and leave a gap at the end of the draw.
  */
-function deviceLength(path: SVGPathElement, sx: number, sy: number): number {
+function hostLength(path: SVGPathElement, sx: number, sy: number): number {
   if (typeof path.getTotalLength !== 'function') return 0;
   const total = path.getTotalLength();
   let previous = path.getPointAtLength(0);

@@ -10,11 +10,9 @@
    as a second plate stacked on the first.
 
    Namespacing: every selector is scoped under `.mvt-faqsec` (the section
-   element). `.mvt-ans` is deliberately self-sufficient — it declares its own
-   paper ground and ruling rather than leaning on `.mvt-paper` from the about
-   family, so the FAQ renders correctly on its own dev route and cannot be
-   broken by another section's stylesheet load order. The `mvt-paper` class
-   stays on the element for the paper-ink focus ring in globals.css.
+   element). `.mvt-ans` carries no paper (2026-09-17, see the rule): the answer
+   is ink on the open item's own well, so nothing here leans on `.mvt-paper`
+   from the about family and the element no longer carries that class.
    ────────────────────────────────────────────────────────────────────────── */
 
 /* THE PAIRS ARE LEVELLED. The questions run one to three lines, so a row of two
@@ -91,14 +89,20 @@ body:not(.js) .mvt-faqsec .mvt-chev{transform:rotate(180deg)}
 .js .mvt-faqsec .mvt-ansgrid > div{visibility:hidden;transition:visibility 0s linear 420ms}
 .js .mvt-faqsec .mvt-faq > li[data-open] .mvt-ansgrid > div{visibility:visible;transition-delay:0s}
 
-.mvt-faqsec .mvt-ans{margin:0 clamp(20px,2vw,36px) clamp(18px,1.5vw,28px);
-  padding:clamp(20px,1.8vw,30px) clamp(20px,2vw,34px);
-  background:var(--paper);color:var(--paper-ink);border-radius:2px;
-  display:flex;flex-direction:column;gap:14px;position:relative;
-  background-image:repeating-linear-gradient(transparent 0 23px,color-mix(in oklab,var(--paper-ink) 9%,transparent) 23px 24px);
-  box-shadow:inset 0 0 0 1px rgba(32,31,42,.14),inset 0 2px 6px -3px rgba(32,31,42,.35)}
-/* pitch-locked to the sheet's 24px ruling, exactly as the trough quotes are */
-.mvt-faqsec .mvt-ans p{font-size:15.5px;line-height:24px;color:var(--paper-ink);text-wrap:pretty}
+/* THE ANSWER SITS ON THE WELL (2026-09-17). The comp set it on a ruled paper
+   sheet (docs/11 §0, "paper inlays"); the direction now is the lacquer, so an
+   open item is ONE pressed object — the question bar, then the answer in ink on
+   the same sunk ground — rather than a sheet inside a well. It has no box of
+   its own: the bar's brass lip above and the item's lip below are its edges.
+   Its margin is the bar's inner padding, so ordinal, question and answer share
+   a left edge; `max-width` keeps a long answer on a readable line once the
+   grid is one column (≤1180px). Paper stays where a student or a document
+   speaks — the trough sheets, the about inlays, the privacy policy. */
+.mvt-faqsec .mvt-ans{margin:0 clamp(20px,2vw,36px);
+  padding:clamp(18px,1.6vw,28px) 0 clamp(22px,1.9vw,34px);max-width:72ch;
+  display:flex;flex-direction:column;gap:12px;position:relative}
+.mvt-faqsec .mvt-ans p{font-size:calc(16px + var(--step));line-height:1.62;letter-spacing:.004em;
+  color:var(--ink-2);text-wrap:pretty}
 
 /* the open bar sinks into the sheet and its raised ring goes out */
 .mvt-faqsec .mvt-faq > li[data-open]{background:linear-gradient(158deg,var(--lac-well),var(--lac-ground));

@@ -8,7 +8,7 @@
     "gradeScaleId": "ibdp",
     "order": 0,
     "fullLabel": "IBDP · HL / AAHL / AIHL",
-    "totalCount": 31
+    "totalCount": 36
   },
   {
     "id": "sl",
@@ -19,7 +19,7 @@
     "gradeScaleId": "ibdp",
     "order": 1,
     "fullLabel": "IBDP · SL / AASL / AISL",
-    "totalCount": 25
+    "totalCount": 31
   },
   {
     "id": "alfm",
@@ -41,7 +41,7 @@
     "gradeScaleId": "alevel",
     "order": 3,
     "fullLabel": "A-Level Math · IAL YMA01 / GCE AL 9MA0 / CAIE 9709 / AQA 7357 / OCR H240",
-    "totalCount": 11
+    "totalCount": 15
   },
   {
     "id": "igadd",
@@ -52,7 +52,7 @@
     "gradeScaleId": "igcse",
     "order": 4,
     "fullLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
-    "totalCount": 4
+    "totalCount": 6
   },
   {
     "id": "igm",
@@ -63,6 +63,6 @@
     "gradeScaleId": "igcse",
     "order": 5,
     "fullLabel": "IGCSE · Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
-    "totalCount": 18
+    "totalCount": 22
   }
 ]

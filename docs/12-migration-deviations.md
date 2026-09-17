@@ -395,6 +395,14 @@ and widens "WINSON" at the 44px floor from 183px to 191px, which still fits a 39
 **Status: shipped on client instruction. Checked at 2560 and 898; re-approve the nameplate on
 a real phone before merge.**
 
+Addendum 2026-09-17 — the nameplate's optical size is pinned at 72 (`font-variation-settings`,
+weight 650). Left to `auto`, the 204px name took the 144 cut: hairline serifs and Didone
+contrast that read as a fashion masthead, which is what was reported. 72 is the cut the h2s
+already take at their own size, so the name and the headings are visibly one face; 650 keeps
+the mass 700 had at the thinner cut. Below 640px the pin is released and the 44–60px name
+takes the text cut. Compared against 96/700, 56/620 and 40/600 on the dev server; 56/620 is
+the next step if the owner wants it calmer still.
+
 ---
 
 ## H · Deviations from the artifact taken during the build
@@ -474,11 +482,22 @@ editor can edit them and no component hard-codes copy:
 - **All six result panels are server-rendered** (five `hidden`) rather than built in JS, so
   every ribbon path, matrix cell and record label is in the prerendered HTML and survives
   JS-off and crawlers. Cost: ~135 extra `<path>` nodes. No duplicate ids.
-- **The grade stream's dash length is measured in device pixels**, by sampling 24
+- **The grade stream's dash length is measured in the svg's host space**, by sampling 24
   arc-length points and scaling each step by the SVG's own `sx`/`sy`. The ribbons carry
   `vector-effect="non-scaling-stroke"` inside a `preserveAspectRatio="none"` viewBox, so a
   `getTotalLength()` dash under-covers the on-screen path and the pattern *repeats* — that
-  is the v6.1 regression of two sliding segments instead of one growing line.
+  is the v6.1 regression of two sliding segments instead of one growing line. The host
+  space is the svg's **layout** box (`clientWidth`/`clientHeight`), not
+  `getBoundingClientRect()`: the dash is laid out before the root's `zoom` (§J), and the
+  rendered box is 85% of it, which re-created the same regression on 2026-09-10 — every
+  ribbon's final-grade end was on screen from the first frame (fixed 2026-09-17). The
+  dash's off-run is `1e6`, so the pattern cannot repeat inside a path in any engine.
+- **The `2+` uplift label is `clamp(20px,1.6vw,30px)` with the qualifier on a brass
+  small-caps line under it** (`uplift.note`, "From PG/mock to final"), where the comp set
+  the whole phrase at 15.5px beside a slogan note. With that note dropped (§I) the label
+  was the numeral's only caption and read as a footnote under a 150px figure; it is now
+  scaled to the numeral the way the hero's 20,000 ↔ 24px pair is, and the parenthetical
+  moved out of the label into the note slot — the same words, one line each.
 - **The trough marquee keyframe is `translateX(calc(-50% + var(--pad) - var(--vc-gap)/2))`**,
   not a bare `-50%`. The track's border box is `2·--pad + 24·sheet + 23·gap`, so `-50%`
   lands half a gap and one `--pad` short of one printing and stutters once per cycle.
@@ -574,7 +593,35 @@ deliberately **not** restored.
   80vh. Row 4 is private coaching full width: pitch beside the intensive ledger.
 - **The snapshot tile** carries "Often within 8–12 weeks" as its third station.
 - **The IA block** is intro | themes (`38fr 62fr`); the six-feature well is gone.
-- **The video band** is no longer a well; the heading sits beside the player on the ground.
+- **The video band is gone (2026-09-17).** The heading beside the player left a column of bare
+  lacquer, so the player is now the first cell of the featured grid: at the full measure it
+  spans two rows beside two plates with the other two beneath (a 12-track grid, seam at 8/12,
+  `voices.css`), and its heading is the head's `lede`. The plates are set in a compact register
+  (17px quotes, 60px bezel) so two of them stack to the player's height, and the slip is a matte
+  that absorbs the remainder — a longer quote shows as a few pixels of matte, never as ground.
+  1280–1699px real: one plate beside the player, content centred, the other three in a row.
+  ≤1279: player full width over a 2×2; ≤1024 one column.
+- **The leaflet covers ship (2026-09-17).** The extraction dropped page 1 of each PDF because
+  the covers carry `No.1` and `超過 75% 學生勇奪 A/A* 佳績`, claims `docs/07` lists as
+  unverified. The owner asked for the covers back: each board now has `outlineCover`, the
+  card's face is the cover, and the viewer opens on it with a `Cover` stop on the rail. The
+  claims concern is unchanged and stays with the owner.
+- **Each board strikes its own leaflet's highest list price (2026-09-17).** One
+  `courseListPrice` of 60,000 fed all three cards against leaflets that strike 90,000 and
+  180,000 (IBDP), 54,000 (IAL) and 90,000 and 180,000 (International GCSE). It is now the IBDP
+  figure, 180,000 (also the ledger's "Was", and what `saveAmount` / `savePercent` derive from),
+  with `ialListPrice` 54,000 and `igcseListPrice` 180,000 for the other two cards.
+- **The stream names its records again (2026-09-17).** §I dropped the read-out well with the
+  matrix, which left the ribbons anonymous and "published individually below" pointing at
+  nothing. A pointer tip now names the ribbon under the cursor — `Name (year)`, the recorded
+  bands, the months when recorded — while that ribbon is re-drawn on top and the rest dim;
+  touch taps pin one. Hover-only: the svg stays presentational and the legend carries the
+  counts in text.
+- **FAQ answers are ink on the well, not paper (2026-09-17).** The comp's ruled paper sheet
+  inside the sunk item (`docs/11` §0, "paper inlays") is dropped for the FAQ only: an open item
+  is one pressed object — the question bar, then the answer at body size in `--ink-2` on the
+  same lacquer, sharing the bar's left edge (`faq.css`). Paper stays where a student or a
+  document speaks: the trough sheets, the about inlays, the privacy policy.
 - **Footer links** are a ruled two-column ledger; the rights line prints `© year holder`.
 - **Measure and gutters:** `--wrap` 1960 → 1800, `--pad` 3.6vw → 5.5vw; display sizes down ~8%
   (`.mvt-d0` 184, `.mvt-h2` 88, `.mvt-h3` 42, `.mvt-lead` 24). Body text unchanged.
@@ -588,7 +635,10 @@ deliberately **not** restored.
   85% is 12px text. Two things do not follow `zoom` and were rewritten: media queries read the
   real viewport, so breakpoints at or above 1280 are in real pixels (`1800 → 1530`, `1679 →
   1427`, `1499`/`1420 → 1279`), and `vw` is scaled after it resolves, so the packages row
-  measures itself with container units (`100cqi`) instead of `100vw`. One number to tune.
+  measures itself with container units (`100cqi`) instead of `100vw`. A third does not
+  follow it either: `getBoundingClientRect()` reports the zoomed box, so a script measuring
+  layout for a property laid out in the element's own space (the stream's dash, §H6) must
+  read the client box. One number to tune.
 - **CTAs are labelled by intent** (nav and footer stay neutral); the hero has its own `hero` key
   and prefill; the nav/coin prefill is curriculum-neutral; the results prefill asks for the same
   three things its visible prompt does.

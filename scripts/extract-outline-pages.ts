@@ -1,5 +1,5 @@
 /**
- * Render the owner's three course-outline PDFs to the eight `.webp` pages the
+ * Render the owner's three course-outline PDFs to the eleven `.webp` pages the
  * board cards and the outline viewer use.
  *
  * The PDFs themselves are **not tracked** (`.gitignore` → `/courses/`): they are
@@ -20,10 +20,12 @@
  *    `variants[].id` in `src/content/packages.json`; `crossCheck` asserts the
  *    same relationship from the other side, so a rename in either place fails
  *    the build rather than silently serving the wrong document.
- * 2. **The covers do not ship.** Page 1 of each PDF is a marketing cover
- *    carrying `No.1 …` and `超過 75% 學生勇奪 A/A* 佳績` at ~200px type. Rendering
- *    a claim as an image publishes it as surely as typing it, and those claims
- *    are unverified (docs/07). They are dropped here, not filtered downstream.
+ * 2. **The covers ship (owner, 2026-09-17).** Page 1 of each PDF is the
+ *    marketing cover, carrying `No.1 …` and `超過 75% 學生勇奪 A/A* 佳績` at
+ *    ~200px type. The first build dropped them because rendering a claim as an
+ *    image publishes it as surely as typing it and those claims are unverified
+ *    (docs/07); the owner asked for the covers back, so they render as
+ *    `cover.webp` and the concern stands recorded in docs/12 §J.
  *
  * `pdf-to-img` and `sharp` are devDependencies: `next.config.ts` sets
  * `images:{unoptimized:true}` on an `output:'export'` build, so sharp has no
@@ -48,28 +50,31 @@ interface Job {
   /** The owner's PDF, in `courses/`. */
   readonly file: string;
   /**
-   * Course ids in PDF page order, **starting at page 2** — the cover is dropped.
-   * These must match `variants[].id` for this package in `packages.json`.
+   * Output ids in PDF page order, starting at page 1: `cover`, then the course
+   * ids, which must match `variants[].id` for this package in `packages.json`.
    */
   readonly pages: readonly string[];
 }
 
 const JOBS: readonly Job[] = [
-  { board: "ibdp", file: "IBDP Course Outline.pdf", pages: ["aasl", "aahl", "aisl", "aihl"] },
-  { board: "ial", file: "IAL Course Outline.pdf", pages: ["ial-math"] },
-  { board: "igcse", file: "IGCSE Course Outline.pdf", pages: ["0607", "0606", "4ma1"] },
+  { board: "ibdp", file: "IBDP Course Outline.pdf", pages: ["cover", "aasl", "aahl", "aisl", "aihl"] },
+  { board: "ial", file: "IAL Course Outline.pdf", pages: ["cover", "ial-math"] },
+  { board: "igcse", file: "IGCSE Course Outline.pdf", pages: ["cover", "0607", "0606", "4ma1"] },
 ];
 
 /** The byte table this pipeline produced, so a re-run is verifiable against it. */
 const EXPECTED_BYTES: Readonly<Record<string, number | undefined>> = {
-  "ibdp/aasl.webp": 189_902,
-  "ibdp/aahl.webp": 226_886,
-  "ibdp/aisl.webp": 188_472,
-  "ibdp/aihl.webp": 238_922,
-  "ial/ial-math.webp": 199_460,
-  "igcse/0607.webp": 226_446,
-  "igcse/0606.webp": 206_600,
-  "igcse/4ma1.webp": 225_042,
+  "ibdp/cover.webp": 153_564,
+  "ibdp/aasl.webp": 190_014,
+  "ibdp/aahl.webp": 227_218,
+  "ibdp/aisl.webp": 188_378,
+  "ibdp/aihl.webp": 238_908,
+  "ial/cover.webp": 147_648,
+  "ial/ial-math.webp": 199_228,
+  "igcse/cover.webp": 140_600,
+  "igcse/0607.webp": 226_456,
+  "igcse/0606.webp": 197_988,
+  "igcse/4ma1.webp": 224_776,
 };
 
 function argValue(flag: string, fallback: string): string {
@@ -113,13 +118,10 @@ async function run(): Promise<void> {
     let ordinal = 0;
     for await (const buffer of document) {
       ordinal += 1;
-      // Page 1 is the marketing cover and does not ship.
-      if (ordinal === 1) continue;
-
-      const id = job.pages.at(ordinal - 2);
+      const id = job.pages.at(ordinal - 1);
       if (id === undefined) {
         throw new Error(
-          `${job.file}: page ${ordinal} has no course id in JOBS.pages. ` +
+          `${job.file}: page ${ordinal} has no id in JOBS.pages. ` +
             `Add it, or the page is one the site does not sell.`,
         );
       }
@@ -140,10 +142,8 @@ async function run(): Promise<void> {
       console.log(`  ${id}.webp  ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)} KB${delta}`);
     }
 
-    if (!probeOnly && ordinal - 1 !== job.pages.length) {
-      throw new Error(
-        `${job.file}: ${ordinal - 1} page(s) after the cover, but ${job.pages.length} course id(s) declared.`,
-      );
+    if (!probeOnly && ordinal !== job.pages.length) {
+      throw new Error(`${job.file}: ${ordinal} page(s), but ${job.pages.length} id(s) declared.`);
     }
   }
 

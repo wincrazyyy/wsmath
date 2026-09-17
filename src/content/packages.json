@@ -163,6 +163,12 @@
       "label": "IBDP course outline",
       "autoAdvanceSeconds": 6
     },
+    "outlineCover": {
+      "src": "/courses/ibdp/cover.webp",
+      "alt": "IBDP Math leaflet cover — Winson Siu, with his credentials and a note on the Math IA.",
+      "width": 1500,
+      "height": 2121
+    },
     "ctaKey": "ibdp",
     "ctaLabel": "Enquire about the IBDP course"
   },
@@ -173,7 +179,7 @@
     "title": "A-Level",
     "price": {
       "now": "{{money pricing.coursePrice}}",
-      "was": "was {{money pricing.courseListPrice}}",
+      "was": "was {{money pricing.ialListPrice}}",
       "per": "· {{programme.ialLessonCount}} live lessons"
     },
     "description": "Sundays on Zoom, replays included. Course notes, past papers {{stats.pastPapersIal}}, and A* strategy with GDC technique.",
@@ -211,6 +217,12 @@
     "outline": {
       "label": "International A-Level course outline",
       "autoAdvanceSeconds": 6
+    },
+    "outlineCover": {
+      "src": "/courses/ial/cover.webp",
+      "alt": "International A-Level Mathematics leaflet cover — Winson Siu, with his credentials.",
+      "width": 1500,
+      "height": 2121
     }
   },
   {
@@ -220,7 +232,7 @@
     "title": "IGCSE",
     "price": {
       "now": "from {{money pricing.coursePrice}}",
-      "was": "was {{money pricing.courseListPrice}}",
+      "was": "was {{money pricing.igcseListPrice}}",
       "per": "· video + live options"
     },
     "description": "0607 and 0606 self-paced on video, 4MA1 live on Sundays. Free upgrade to the IBDP or IAL video course when you move up.",
@@ -314,6 +326,12 @@
     "outline": {
       "label": "International GCSE course outline",
       "autoAdvanceSeconds": 6
+    },
+    "outlineCover": {
+      "src": "/courses/igcse/cover.webp",
+      "alt": "International GCSE and IBMYP Math leaflet cover — Winson Siu, with his credentials.",
+      "width": 1500,
+      "height": 2121
     }
   }
 ]
