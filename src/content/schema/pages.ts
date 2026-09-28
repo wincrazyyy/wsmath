@@ -387,7 +387,7 @@ const PackagesPage = z
   .strictObject({
     eyebrow: text("Eyebrow", "Optional, e.g. IBDP Coaching Packages.").optional(),
     title: text("Heading", "e.g. Choose the path that fits your goal."),
-    sub: longText("Supporting line", "The sentence beside the heading.", { tokens: true }),
+    sub: longText("Supporting line", "Optional. The sentence beside the heading.", { tokens: true }).optional(),
     chips: field(z.array(textItem("Chip", "One short label chip.")).min(1), {
       title: "Label chips",
       description: "The debossed label chips under the heading.",

@@ -1288,7 +1288,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Supporting line",
-              "description": "The sentence beside the heading.",
+              "description": "Optional. The sentence beside the heading.",
               "x-widget": "textarea",
               "x-tokens": true
             },
@@ -1529,7 +1529,6 @@
           },
           "required": [
             "title",
-            "sub",
             "ledger",
             "snapshot",
             "snapList",

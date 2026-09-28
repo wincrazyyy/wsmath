@@ -26,8 +26,10 @@
    the three children are re-seated one row up. Namespaced and at id
    specificity so it also beats the foundation's ≤1024 re-placement — the only
    other rule that moves the scale — which is restated below for the same
-   reason. `:not(:has(.mvt-head-sub))` is NOT the fallback here: the supporting
-   line is authored, it is only the eyebrow that is gone. */
+   reason. `packagesPage.sub` is optional too and currently unauthored (removed
+   2026-09-28). Above 1024 the rows here already match the foundation's
+   no-sub layout (heading on row 1, scale on row 2); below it the scale must
+   close up to row 2 itself, or the empty sub row opens a second gap. */
 #mvt-s-packages .mvt-head > .mvt-h2      {grid-row:1}
 #mvt-s-packages .mvt-head > .mvt-head-sub{grid-row:1}
 #mvt-s-packages .mvt-head > .mvt-rule    {grid-row:2}
@@ -35,6 +37,7 @@
   #mvt-s-packages .mvt-head > .mvt-h2      {grid-row:1}
   #mvt-s-packages .mvt-head > .mvt-head-sub{grid-row:2}
   #mvt-s-packages .mvt-head > .mvt-rule    {grid-row:3}
+  #mvt-s-packages .mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-row:2}
 }
 
 /* ── row 1 · the valuation ledger + the outcome snapshot ─────────────────── */

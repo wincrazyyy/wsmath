@@ -572,6 +572,11 @@ edited. Every business fact is still a token.
 exactly — the legacy "32+ hours ≈ HKD 48,000" frame was a withdrawn price claim (`docs/07`) and was
 deliberately **not** restored.
 
+**2026-09-28:** `packagesPage.sub` was removed, so the packages head has no supporting line. The field
+is now optional in the schema, and the tokens it used (`programme.ibdpTeachingTime`,
+`pricing.ibdpPrivateEquivalent`) are still defined. No other copy on the page states the 1-to-1
+equivalent now.
+
 ## J · Structure changed (re-opens the comp — the owner asked for it)
 
 - **Section heads with no subtitle** put the eyebrow on the title's baseline in the second

@@ -532,6 +532,10 @@ function BoardPlate({
  *
  * Every figure on this section is either a token-interpolated string from
  * content or a derivation in `lib/pricing.ts`. No price is typed in JSX.
+ *
+ * `page.sub` is optional and absent from the current copy; a line typed into
+ * the editor still renders, and without one the head collapses to a single
+ * track (globals.css `:not(:has(.mvt-head-sub))`, packages.css for ≤1024).
  */
 export function PackagesSection({
   page,
@@ -559,7 +563,9 @@ export function PackagesSection({
         <div className="mvt-head">
           <h2 className="mvt-h2 mvt-rev">{page.title}</h2>
           <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
-          <p className="mvt-head-sub mvt-lead mvt-rev mvt-rev--s">{noBreakRatios(page.sub)}</p>
+          {page.sub === undefined ? null : (
+            <p className="mvt-head-sub mvt-lead mvt-rev mvt-rev--s">{noBreakRatios(page.sub)}</p>
+          )}
         </div>
 
         <div className="mvt-pk-r1">

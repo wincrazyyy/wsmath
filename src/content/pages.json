@@ -220,7 +220,6 @@
   },
   "packagesPage": {
     "title": "Choose the path that fits your goal",
-    "sub": "{{programme.ibdpTeachingTime}} of live teaching for {{money pricing.coursePrice}}. The same hours 1-to-1 would cost {{money pricing.ibdpPrivateEquivalent}}.",
     "ledger": {
       "title": "IBDP Mathematics group course",
       "rows": [
