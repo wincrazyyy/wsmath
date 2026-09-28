@@ -29,9 +29,10 @@ export interface RibbonProps {
  * group courses and scarcity is stated beside the price it qualifies.
  *
  * Left: the offer's name, the availability line, the rule. Right, in the
- * deeper carmine well: the hourly rate, the block price, the one WhatsApp
- * plate. The figures come from the private package, not from here, so the band
- * and the "Your plan" panel cannot quote different prices.
+ * deeper carmine well: the hourly rate, the block price when the package has
+ * one (the current copy does not), and the one WhatsApp plate. The figures come
+ * from the private package, not from here, so no second copy of a price exists
+ * to drift.
  *
  * `body` and `waLabel` are optional: each is rendered only when it exists —
  * never as an empty element the flex gaps would still pay for.

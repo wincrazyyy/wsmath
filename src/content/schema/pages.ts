@@ -397,7 +397,7 @@ const PackagesPage = z
       "Optional. The small caps line beside the heading, e.g. Live on {{setup.platform}}, or self-paced on video.",
       { tokens: true },
     ).optional(),
-    title: text("Heading", "Says what the section sells, e.g. Group courses."),
+    title: text("Heading", "Says what the section sells, e.g. Video Class Package."),
     sub: longText("Supporting line", "Optional. The sentence beside the heading.", { tokens: true }).optional(),
     chips: field(z.array(textItem("Chip", "One short label chip.")).min(1), {
       title: "Label chips",
@@ -474,7 +474,7 @@ const PackagesPage = z
            always shows `defaultPackageId` — these two dress that one package. */
         name: text(
           "Featured name",
-          "Optional. The course's name in the panel, e.g. IBDP group course. Without it the panel prints the package's title.",
+          "Optional. The course's name in the panel, e.g. IBDP Video Package. Without it the panel prints the package's title.",
           { tokens: true },
         ).optional(),
         unit: text(

@@ -444,7 +444,7 @@
               "minimum": -9007199254740991,
               "maximum": 9007199254740991,
               "title": "IBDP lessons, headline figure",
-              "description": "Digits only, e.g. 60. The lesson count the floating featured-course panel advertises for the IBDP group course, printed with a plus (60+). The course card still quotes the live lessons above.",
+              "description": "Digits only, e.g. 60. The lesson count the floating featured-course panel advertises for the IBDP package, printed with a plus (60+). The course card still quotes the live lessons above.",
               "x-widget": "number"
             },
             "ialLessonCount": {
@@ -1299,7 +1299,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Heading",
-              "description": "Says what the section sells, e.g. Group courses.",
+              "description": "Says what the section sells, e.g. Video Class Package.",
               "x-widget": "text"
             },
             "sub": {
@@ -1502,7 +1502,7 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Featured name",
-                  "description": "Optional. The course's name in the panel, e.g. IBDP group course. Without it the panel prints the package's title.",
+                  "description": "Optional. The course's name in the panel, e.g. IBDP Video Package. Without it the panel prints the package's title.",
                   "x-widget": "text",
                   "x-tokens": true
                 },

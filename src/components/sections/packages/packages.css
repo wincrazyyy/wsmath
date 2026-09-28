@@ -21,6 +21,9 @@
    `.mvt-ia*` and `.mvt-themes` belong to ia-course.css.
    ============================================================ */
 
+/* the About → Packages seam runs at the tight step — see about.css */
+#mvt-s-packages{padding-top:clamp(38px,3vw,80px)}
+
 /* ── the head, when it has no eyebrow ─────────────────────────────────────
    `packagesPage.eyebrow` and `sub` are both optional. Every head WITH an
    eyebrow is the foundation's pattern untouched (globals.css) — with a sub the
@@ -247,6 +250,17 @@
   height:calc(var(--pk-side-w) / (var(--slip-ar,1500/2123)))}
 .mvt-pk-r3 .mvt-pack--board .mvt-slip img{height:100%;object-fit:contain;object-position:50% 50%}
 .mvt-pk-r3 .mvt-pack--board .mvt-lf-hint{position:static;align-self:flex-start}
+/* …but not "with a little lacquer either side of it": the frame's ground is
+   `--lac-void`, so on the centre board that margin read as black bars beside
+   the page (owner, 2026-09-28). Three across, the centre frame is cut to the
+   page — the sides' width, which with the shared height IS the page's own
+   ratio — and its slip shrinks to it, centred in the wider column. Below 1280
+   the two-across and stacked layouts size the frame by `aspect-ratio`, so
+   there is no margin to remove there. */
+@media (min-width:1280px){
+  .mvt-pk-r3 > .mvt-pack--hi .mvt-slip{align-self:center}
+  .mvt-pk-r3 > .mvt-pack--hi .mvt-lf-trigger > .mvt-slip-frame{width:var(--pk-side-w)}
+}
 
 /* the course strip — headless, drifting, paused while the plate is hovered */
 /* `contain:inline-size`: the track is `max-content` wide (every tag twice over),

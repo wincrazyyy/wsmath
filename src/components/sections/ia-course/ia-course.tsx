@@ -21,13 +21,14 @@ export interface IaCourseSectionProps {
  * The Maths IA instructional course (artifact lines 1977–2001, CSS 966–986),
  * a section of its own since 2026-09-28.
  *
- * It used to close the packages section, under the boards. Packages is now
- * headed "Group courses" and this course is 1-to-1 coaching, so it follows the
- * carmine private-coaching ribbon instead: group → 1-to-1 → 1-to-1 IA. It has
- * no nav marker of its own; `data-spy-part` makes the scroll-spy light
- * "Packages" across it, as across the ribbon, from either scroll direction.
- * Its title is an `<h2>` (at the `.mvt-h3` size,
- * like the ribbon's) — it heads a section now, not a block inside one.
+ * It used to close the packages section, under the boards. Packages now sells
+ * only the class courses ("Video Class Package") and this course is 1-to-1
+ * coaching, so it follows the carmine private-coaching ribbon instead:
+ * class courses → 1-to-1 → 1-to-1 IA. It has no nav marker of its own;
+ * `data-spy-part` makes the scroll-spy light "Packages" across it, as across
+ * the ribbon, from either scroll direction. Its title is an `<h2>` (at the
+ * `.mvt-h3` size, like the ribbon's) — it heads a section now, not a block
+ * inside one.
  *
  * The intro sits beside the eight amethyst champlevé theme chips in one 38/62
  * grid, with the shared plate foot under both. The IA is a course, not a plan,

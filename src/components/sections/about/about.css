@@ -20,6 +20,13 @@
    the class stays on both elements. See notes/about.md §3.
    ────────────────────────────────────────────────────────────────────────── */
 
+/* The About → Packages seam runs at the TIGHT step (`.mvt-sec--tight`'s value),
+   this half and Packages' top half both (packages.css). It used to hold the
+   carmine ribbon; with the ribbon moved below Packages (2026-09-28) the plain
+   seam was two full --sec paddings, ~176px at 2560, under a row of short pills
+   — read as a hole (owner). */
+#mvt-s-about{padding-bottom:clamp(38px,3vw,80px)}
+
 /* `align-items:start`, not `stretch`: with the shorter copy the side column no
    longer has enough content to fill the main column's height, and a stretched
    track handed the surplus to `.mvt-who` (`flex:1 1 auto`) — the well grew a

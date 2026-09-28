@@ -7,11 +7,6 @@
       "now": "{{money pricing.privateHourlyRate}}",
       "per": "/ hour · typical rate"
     },
-    "blockPrice": {
-      "label": "{{programme.intensiveLessonCount}}-lesson intensive",
-      "now": "~{{money pricing.intensiveBlockCost}}",
-      "per": "({{programme.intensiveLessonCount}} × {{programme.sessionMinutes}} mins)"
-    },
     "ctaKey": "private"
   },
   {

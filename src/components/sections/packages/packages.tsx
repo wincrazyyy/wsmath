@@ -368,7 +368,7 @@ function BoardPlate({
 /* ── the section ──────────────────────────────────────────────────────────── */
 
 /**
- * Packages — "the vault", headed "Group courses": the three board plates
+ * Packages — "the vault", headed "Video Class Package": the three board plates
  * across one row under the section head, and nothing else. The valuation
  * ledger and outcome snapshot row above the boards is optional and unauthored
  * (2026-09-28).

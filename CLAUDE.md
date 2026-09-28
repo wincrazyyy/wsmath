@@ -73,7 +73,7 @@ holds the legacy site, with its build output (`out/`) tracked and served in prod
   · `src/content/` (JSON plus Zod schema) · `scripts/` (schema generation, course-outline extraction)
 - Section order: `nav · hero · about · packages · ribbon · ia · results · voices · faq · footer`. The
   course catalogue lives inside the three board plates as "Also taught 1-to-1" ledgers (docs/12 Part
-  III). Packages is "Group courses" (the three boards only); the carmine ribbon after it is the
+  III). Packages is "Video Class Package" (the three boards only); the carmine ribbon after it is the
   private-coaching offer, then the 1-to-1 IA course (docs/12 Part J).
   `page-view.tsx` renders the 2px `.mvt-edge` seam between sections; sections never do. Sections
   carry `id="mvt-s-<name>"`; content stores plain ids and `src/lib/anchors.ts` maps between them.

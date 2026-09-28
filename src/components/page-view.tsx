@@ -19,7 +19,7 @@
  *
  * `courses` is no longer a section: the coverage trays were absorbed into
  * Packages. Since 2026-09-28 the page sells group before 1-to-1: Packages
- * ("Group courses") holds only the three boards; the carmine ribbon, moved
+ * ("Video Class Package") holds only the three boards; the carmine ribbon, moved
  * from above Packages to below it, absorbed the private plate and is the
  * private-coaching offer; the 1-to-1 IA course follows it as a section of its
  * own. Neither has a nav marker; both carry `data-spy-part` so the scroll-spy

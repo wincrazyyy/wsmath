@@ -221,7 +221,7 @@
   },
   "packagesPage": {
     "eyebrow": "Live on {{setup.platform}}, or self-paced on video",
-    "title": "Group courses",
+    "title": "Video Class Package",
     "deliveryLabels": {
       "live": "Live",
       "video": "Video"
@@ -240,7 +240,7 @@
     "ctaLabel": "Get in touch",
     "plan": {
       "label": "Featured course",
-      "name": "IBDP group course",
+      "name": "IBDP Video Package",
       "unit": "{{plus programme.ibdpHeadlineLessonCount}} lessons",
       "pickShow": "Show in your plan",
       "pickActive": "In your plan",

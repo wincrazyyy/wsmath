@@ -46,13 +46,15 @@
 .mvt-ribbon-cta > .mvt-plate-cta{align-self:stretch;justify-content:center}
 
 /* ── the private offer, in the well ───────────────────────────────────────
-   Two prices side by side, label over figure, ruled off from the plate below.
-   Side by side, not stacked: stacked, the two rows plus the plate make the
-   well — and so the band, which is exactly as deep as its taller track — about
-   a third deeper than the two-line statement beside it needs. Both figures are
-   plain ink at one size: the label says which is the headline rate, and the
-   brass cast stays reserved for the plates' prices. */
-.mvt-ribbon-rates{display:grid;grid-template-columns:repeat(2,auto);gap:16px clamp(24px,2.4vw,48px);
+   The hourly rate — and the block price beside it when one is authored (the
+   current copy has none since 2026-09-28) — label over figure, ruled off from
+   the plate below. One column per price, flowing across: a fixed two-track
+   grid left an empty track and its gap in the well for a single price, and
+   stacked, two prices plus the plate made the band a third deeper than the
+   statement beside it needs. Figures are plain ink at one size; the brass cast
+   stays reserved for the plates' prices. */
+.mvt-ribbon-rates{display:grid;grid-auto-flow:column;grid-auto-columns:max-content;justify-content:start;
+  gap:16px clamp(24px,2.4vw,48px);
   align-self:stretch;margin:0;padding-bottom:18px;
   border-bottom:1px solid color-mix(in oklab,var(--ink) 18%,transparent)}
 .mvt-ribbon-rates > div{display:flex;flex-direction:column;gap:8px}
@@ -70,7 +72,7 @@
   .mvt-ribbon-cta{flex-wrap:wrap}
   .mvt-ribbon-cta .mvt-plate-cta{flex:1 1 auto;justify-content:center}
 }
-/* below ~420 the two prices no longer fit beside each other at their floor size */
+/* below ~420 two prices no longer fit beside each other at their floor size */
 @media (max-width:420px){
-  .mvt-ribbon-rates{grid-template-columns:1fr}
+  .mvt-ribbon-rates{grid-auto-flow:row}
 }

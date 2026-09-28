@@ -597,6 +597,13 @@ equivalent now.
   tall) over the two boards; below 1025px everything stacks, flagship first, pages capped at
   80vh. Row 4 is private coaching full width: pitch beside the intensive ledger (superseded
   2026-09-28: the private plate is now the ribbon, below).
+- **No lacquer beside the centre leaflet (2026-09-28, owner).** Three across, the centre frame
+  was the wider column's full width with the page drawn at the sides' size inside it, so the
+  frame's `--lac-void` ground showed as black bars either side. The frame is now cut to the page
+  (`--pk-side-w`) and its slip centred in the column; all three pages stay one height.
+- **The About → Packages seam runs at the tight step (2026-09-28, owner).** With the ribbon moved
+  below Packages this seam was two full `--sec` paddings (~176px at 2560) under a row of short
+  pills; both halves are now `clamp(38px,3vw,80px)` (~133px), the value `.mvt-sec--tight` uses.
 - **The snapshot tile** carries "Often within 8–12 weeks" as its third station (removed
   2026-09-28 with the whole ledger/snapshot row, below).
 - **The private plate is the carmine ribbon, and the ribbon closes Packages (2026-09-28).** The
@@ -613,7 +620,9 @@ equivalent now.
   `Package.bullets`, `included`, `coverage` and `footTag` left the schema with their last
   renderer; `includedTitle` became the structured `blockPrice` (`label`, `now`, `per`), and
   `rateLabel` moved from `packagesPage` to `ribbon`. The `about-ribbon` CTA id is unchanged: ids
-  are permanent, and only its editor label says where it lives.
+  are permanent, and only its editor label says where it lives. Later the same day the
+  8-lesson intensive (~HKD 18,000) came off too, so the well is the hourly rate and the button;
+  `blockPrice` stays in the schema, optional, and the band prints it again if one is authored.
 - **The ledger/snapshot row is gone (2026-09-28, at the client's request).** `packagesPage.ledger`,
   `snapshot` and `snapList` are optional and unauthored, so the boards follow the head directly
   (`.mvt-head + .mvt-pk-r3` keeps the flagship's 18px overhang clear of the scale). Two facts left
@@ -632,7 +641,11 @@ equivalent now.
   an eyebrow, "Live on {{setup.platform}}, or self-paced on video": with neither eyebrow nor
   sub, "Group courses" was a short title over a full-width empty bar, the case the head pattern
   exists to prevent; the wording stays true for the video-only IGCSE courses. Cost accepted: the
-  IA course no longer sits directly under the IBDP board it extends.
+  IA course no longer sits directly under the IBDP board it extends. Later the same day the
+  client renamed the head "Video Class Package" and the featured panel's name "IBDP Video
+  Package", and the IBDP / IAL / IGCSE WhatsApp prefills now say "video class(es)" (the
+  featured panel sends the IBDP one). The FAQ answer still says "Group courses": owner copy,
+  kept verbatim.
 - **Results tabs name the group in the heading (2026-09-28).** `programmes.fullLabel`'s heading
   part (before the first ` · `) is now `IBDP HL`, `IBDP SL`, `IGCSE Additional Math` and `IGCSE
   Math` (A-Level unchanged); every detail line is byte-identical. The count reads
