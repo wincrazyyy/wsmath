@@ -33,7 +33,8 @@ export interface MvtRootProps {
  *     stay invisible after being scrolled past. Do not ship IO-only.
  *
  * 2 · Nav scroll-spy: `[data-spy]` links follow the section occupying the
- *     40–45% viewport band (rootMargin `-40% 0px -55% 0px`).
+ *     40–45% viewport band (rootMargin `-40% 0px -55% 0px`). An unmarked
+ *     section that belongs to a marked one says so with `data-spy-part`.
  *
  * Reduced motion renders everything complete immediately.
  *
@@ -172,12 +173,21 @@ export function MvtRoot({ skipLabel = 'Skip to content', skipHref = '#mvt-s-hero
       const targets = Array.from(byId.keys())
         .map((id) => document.getElementById(id))
         .filter((el): el is HTMLElement => el !== null);
+      /* A section with no nav marker of its own names the marked section it
+         belongs to — `data-spy-part="mvt-s-packages"` on the ribbon and the IA
+         course, which follow Packages. Without it an unmarked section kept
+         whichever link was lit last, so it read as Packages scrolling down and
+         as Results scrolling up. */
+      const parts = Array.from(root.querySelectorAll<HTMLElement>('[data-spy-part]')).filter((el) =>
+        byId.has(el.dataset.spyPart ?? ''),
+      );
       if (targets.length === 0) return;
       spy = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
             if (!entry.isIntersecting) continue;
-            const link = byId.get(entry.target.id);
+            const target = entry.target as HTMLElement;
+            const link = byId.get(target.dataset.spyPart ?? target.id);
             if (!link) continue;
             for (const l of links) {
               l.classList.remove('is-active');
@@ -189,7 +199,7 @@ export function MvtRoot({ skipLabel = 'Skip to content', skipHref = '#mvt-s-hero
         },
         { rootMargin: '-40% 0px -55% 0px' },
       );
-      for (const t of targets) spy.observe(t);
+      for (const t of [...targets, ...parts]) spy.observe(t);
     };
 
     scanReveals();

@@ -1,17 +1,11 @@
 import Image from 'next/image';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 
 import { unitFromPer } from '@/components/layout/plan-panel/plan-options';
-import { PlateCta, WaTextLink } from '@/components/ui/plate-cta';
-import type {
-  CourseGroup,
-  IaCourse,
-  Package,
-  PackagesPage,
-  WhatsappPrefills,
-} from '@/content/schema';
+import { WaTextLink } from '@/components/ui/plate-cta';
+import { noBreakRatios } from '@/components/ui/typeset';
+import type { CourseGroup, Package, PackagesPage, WhatsappPrefills } from '@/content/schema';
 
-import { IaCourseBlock } from './ia-course';
 import { OutlineDialog } from './outline-dialog';
 
 import './packages.css';
@@ -20,10 +14,10 @@ export interface PackagesSectionProps {
   /** `pages.packagesPage`. */
   page: PackagesPage;
   /**
-   * `content.packages` — the private card followed by every board course, in
-   * authored order. The section walks them: the boards fill row 3 with the
-   * flagship (the first board authored) lifted into the centre column, and
-   * `kind === 'private'` takes row 4 on its own, full width.
+   * `content.packages`, in authored order. The section takes only the boards:
+   * they fill row 3 with the flagship (the first board authored) lifted into
+   * the centre column. `kind === 'private'` is not a plate any more — the
+   * carmine ribbon after this section sells it (`ribbon.tsx`).
    */
   packages: readonly Package[];
   /**
@@ -32,21 +26,19 @@ export interface PackagesSectionProps {
    * scheduled group course, as its "also taught 1-to-1" tail.
    */
   courseGroups: readonly CourseGroup[];
-  /** `content.iaCourse`. */
-  iaCourse: IaCourse;
   /** `settings.contact.whatsappPhone`. */
   phone: string;
-  /** All prefills — the cards use `prefills[pkg.ctaKey]`, the IA block `prefills[iaCourse.ctaKey]`. */
+  /** All prefills — each board uses `prefills[pkg.ctaKey]`. */
   prefills: WhatsappPrefills;
 }
 
 /* ── string shaping ───────────────────────────────────────────────────────
-   Two authored strings carry two facts each. The figures are content; the
-   joining words are the legacy card's presentation, so the plate splits them
-   rather than asking an editor to maintain two copies of the same number. Both
-   degrade to "print the whole string" if the shape ever changes.
+   `price.was` carries a label word and a figure; the plate strikes the figure
+   and drops the word rather than asking an editor to maintain two copies of
+   the same number. It degrades to "print the whole string" if the shape ever
+   changes.
 
-   The third — `price.per` → the unit — is `unitFromPer`, imported from
+   `price.per` → the unit is `unitFromPer`, imported from
    `plan-panel/plan-options.ts`. The floating panel prints that same unit from
    that same authored string, so there is exactly one copy of the rule. */
 
@@ -57,29 +49,6 @@ export interface PackagesSectionProps {
  */
 function figureFromWas(was: string | undefined): string {
   return was === undefined ? '' : was.replace(/^was\s+/i, '');
-}
-
-/**
- * `includedTitle` is authored as
- * `8-lesson intensive · ~HKD 18,000 (8 × 90 mins)` — one string holding the
- * block's name, its price and the arithmetic behind it. The sub-well prints
- * them as the same label / figure / unit triple the price rows above use.
- *
- * 18,000 is the CORRECT figure (`pricing.ts` docblock: 8 × 90 min × HKD 1,500
- * per hour). The artifact's `~HKD 12,000` drops the 90/60 session factor —
- * do not retype it.
- */
-function splitIncludedTitle(title: string): { label: string; figure: string; unit: string } {
-  const [label, ...rest] = title.split(' · ');
-  const remainder = rest.join(' · ');
-  if (remainder === '') return { label: title, figure: '', unit: '' };
-  const paren = remainder.indexOf(' (');
-  if (paren === -1) return { label: label ?? '', figure: remainder, unit: '' };
-  return {
-    label: label ?? '',
-    figure: remainder.slice(0, paren),
-    unit: remainder.slice(paren + 1),
-  };
 }
 
 /**
@@ -99,28 +68,13 @@ function slipAspect(width: number | undefined, height: number | undefined): CSSP
   return { '--slip-ar': `${width} / ${height}` } as CSSProperties;
 }
 
-/**
- * Wrap every `1-to-1` in `.mvt-nb` so the ratio never breaks across its own
- * hyphens (artifact line 1709 does this by hand). The copy in `pages.json`
- * stays plain text — this is typesetting, not content.
- */
-function noBreakRatios(value: string): ReactNode {
-  const parts = value.split('1-to-1');
-  if (parts.length === 1) return value;
-  return parts.map((part, index) => (
-    <span key={index}>
-      {index > 0 ? <span className="mvt-nb">1-to-1</span> : null}
-      {part}
-    </span>
-  ));
-}
-
 /* ── content ids that presentation has to know ───────────────────────────────
    Two, both documented here rather than hidden in a lookup elsewhere. */
 
 /**
- * Courses that present themselves: the IA course has its own block under the
- * boards, so the IBDP plate's strip does not list it a second time.
+ * Courses that present themselves: the IA course has its own section after the
+ * private-coaching ribbon, so the IBDP plate's strip does not list it a second
+ * time.
  */
 const SELF_PRESENTED_COURSE_IDS: readonly string[] = ['math-internal-assessment-ia'];
 
@@ -177,17 +131,20 @@ function catalogueTail(pkg: Package, courseGroups: readonly CourseGroup[]): read
     .map(tailRow);
 }
 
-/* ── row 1 · the valuation ledger + the outcome snapshot ──────────────────── */
+/* ── row 1 · the valuation ledger + the outcome snapshot ────────────────────
+   Both optional and both absent from the current copy (2026-09-28): the row
+   renders only when an editor fills one in, and one tile alone takes the
+   full measure (packages.css). */
 
-function Ledger({ page }: { page: PackagesPage }) {
+function Ledger({ ledger }: { ledger: NonNullable<PackagesPage['ledger']> }) {
   return (
     <div className="mvt-ledger mvt-well mvt-rev">
       {/* Authored, not taken from a package's title: the ledger is a claim
           about the flagship course, and which course that is belongs in copy
           rather than in whichever card happens to sort first. */}
-      <p className="mvt-mu mvt-brass">{page.ledger.title}</p>
+      <p className="mvt-mu mvt-brass">{ledger.title}</p>
       <dl>
-        {page.ledger.rows.map((row) => (
+        {ledger.rows.map((row) => (
           <div className="mvt-ledger-row" key={row.id}>
             <dt>{row.dt}</dt>
             {/* the three rows are a list price, the price paid, and a count —
@@ -216,141 +173,35 @@ function Ledger({ page }: { page: PackagesPage }) {
  * (`justify-content:space-between`), so the tile fills the ledger's height
  * without a stretched hole in the middle of it.
  */
-function Snapshot({ page }: { page: PackagesPage }) {
+function Snapshot({
+  snapshot,
+  rows,
+}: {
+  snapshot: NonNullable<PackagesPage['snapshot']>;
+  rows: PackagesPage['snapList'];
+}) {
   return (
     <div className="mvt-snap mvt-well mvt-well--shallow mvt-rev">
-      <p className="mvt-mu mvt-brass">{page.snapshot.label}</p>
+      <p className="mvt-mu mvt-brass">{snapshot.label}</p>
       <div>
-        <span className="mvt-snap-big mvt-num mvt-castxt">{page.snapshot.value}</span>
-        <p className="mvt-body mvt-dim mvt-snap-sub">{page.snapshot.sub}</p>
+        <span className="mvt-snap-big mvt-num mvt-castxt">{snapshot.value}</span>
+        <p className="mvt-body mvt-dim mvt-snap-sub">{snapshot.sub}</p>
       </div>
-      <div>
-        {page.snapList.map((row) => (
-          <div className="mvt-snap-row" key={row.id}>
-            <span className="mvt-mu mvt-brass">{row.dt}</span>
-            <b className="mvt-num">{row.dd}</b>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* ── rows 3 and 4 · the four plates ───────────────────────────────────────── */
-
-interface PlateFootProps {
-  ctaKey: string;
-  ctaLabel: string;
-  message: string;
-  phone: string;
-  /** `Package.footTag` — optional, and absent in the current cut. */
-  tag: string | undefined;
-}
-
-/**
- * The foot every plate (and the IA block) shares: a knurl filling the leftover
- * run, the WhatsApp plate, the plan pick, and — when one is authored — the
- * plate's small-caps tag. The knurl is `order:9` so it always trails, whatever
- * the wrap.
- */
-function PlateFoot({ ctaKey, ctaLabel, message, phone, tag }: PlateFootProps) {
-  return (
-    <div className="mvt-pack-foot">
-      <span className="mvt-knurl" aria-hidden="true" />
-      {/* no coin dot on the package plates — artifact-faithful; no plan pick
-          either — the boards have no buttons at all, so a pick on the one
-          plate that kept its button would be the page's only such control */}
-      <PlateCta phone={phone} message={message} ctaKey={ctaKey} label={ctaLabel} />
-      {tag === undefined ? null : <span className="mvt-mu mvt-dim">{tag}</span>}
-    </div>
-  );
-}
-
-function Bullets({ items }: { items: readonly { id: string; text: string }[] }) {
-  return (
-    <ul className="mvt-bullets">
-      {items.map((item) => (
-        <li key={item.id}>
-          <span className="mvt-li mvt-num">{item.text}</span>
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-/**
- * The private plate — row 4, alone and full width.
- *
- * Two columns: the pitch (`.mvt-pack-main`) beside the 8-lesson intensive's
- * own ledger, with the coverage claim and the foot spanning both underneath.
- * It is the only plate that carries `.mvt-pack-main` beside something rather
- * than above it, which is why the wrapper is here and not inside `Bullets`.
- */
-function PrivatePlate({
-  page,
-  pkg,
-  phone,
-  message,
-}: {
-  page: PackagesPage;
-  pkg: Package;
-  phone: string;
-  message: string;
-}) {
-  const included = splitIncludedTitle(pkg.includedTitle ?? '');
-  return (
-    <article className="mvt-pack mvt-pack--private mvt-raise mvt-rev">
-      <div className="mvt-pack-main">
-        {pkg.tagline === undefined ? null : <p className="mvt-mu mvt-brass">{pkg.tagline}</p>}
-        <h3 className="mvt-h3">{pkg.title}</h3>
-        {pkg.price === undefined ? null : (
-          <div className="mvt-price">
-            <span className="mvt-mu mvt-dim">{page.rateLabel}</span>
-            <b className="mvt-num mvt-castxt">{pkg.price.now}</b>
-            <span className="mvt-small mvt-dim mvt-num">{unitFromPer(pkg.price.per)}</span>
-          </div>
-        )}
-        <p className="mvt-body mvt-dim">{pkg.description}</p>
-        <Bullets items={pkg.bullets ?? []} />
-      </div>
-
-      {pkg.included.length === 0 ? null : (
-        <div className="mvt-sub mvt-well mvt-well--shallow">
-          <div className="mvt-price">
-            <span className="mvt-mu mvt-brass">{included.label}</span>
-            <b className="mvt-num mvt-sub-fig">{included.figure}</b>
-            {included.unit === '' ? null : <span className="mvt-small mvt-dim mvt-num">{included.unit}</span>}
-          </div>
-          <ul>
-            {pkg.included.map((item) => (
-              <li key={item.id}>
-                <span className="mvt-li mvt-num">{item.text}</span>
-              </li>
-            ))}
-          </ul>
+      {rows === undefined ? null : (
+        <div>
+          {rows.map((row) => (
+            <div className="mvt-snap-row" key={row.id}>
+              <span className="mvt-mu mvt-brass">{row.dt}</span>
+              <b className="mvt-num">{row.dd}</b>
+            </div>
+          ))}
         </div>
       )}
-
-      {/* The coverage claim the retired courses strip used to make, on the one
-          card that genuinely earns it: only 8 of the courses are sold as
-          scheduled group courses, all of them are taught 1-to-1. */}
-      {pkg.coverage === undefined ? null : (
-        <p className="mvt-cover mvt-mu">
-          <span className="mvt-brass">{pkg.coverage.label}</span>
-          <span className="mvt-num">{pkg.coverage.value}</span>
-        </p>
-      )}
-
-      <PlateFoot
-        ctaKey={pkg.ctaKey}
-        ctaLabel={pkg.ctaLabel ?? page.ctaLabel}
-        message={message}
-        phone={phone}
-        tag={pkg.footTag}
-      />
-    </article>
+    </div>
   );
 }
+
+/* ── row 3 · the three board plates ───────────────────────────────────────── */
 
 /** One chip in a board's drifting course strip. */
 interface CourseTag {
@@ -517,14 +368,17 @@ function BoardPlate({
 /* ── the section ──────────────────────────────────────────────────────────── */
 
 /**
- * Packages — "the vault". Four blocks under the section head: the valuation
- * ledger beside the outcome snapshot, the three board plates across one row,
- * the private plate full width beneath them, and the IA course.
+ * Packages — "the vault", headed "Group courses": the three board plates
+ * across one row under the section head, and nothing else. The valuation
+ * ledger and outcome snapshot row above the boards is optional and unauthored
+ * (2026-09-28).
  *
- * Reading order is the funnel: *what the course is worth* → the three boards,
- * flagship in the centre → *if none of those fit, here is 1-to-1* → the IA
- * add-on. Each board carries its own catalogue, so the coverage trays that used
- * to answer "what else do you teach?" as a block of their own are gone.
+ * Reading order is the funnel: the three group boards, flagship in the centre
+ * → *if none of those fit, here is 1-to-1*, the carmine ribbon directly after
+ * this section (it absorbed the private plate) → the 1-to-1 IA course, a
+ * section of its own after that. Each board carries its own catalogue, so the
+ * coverage trays that used to answer "what else do you teach?" as a block of
+ * their own are gone.
  *
  * `data-plan-anchor` is load-bearing: the fixed "Your plan" panel goes live
  * once this section's top passes the viewport, and the WhatsApp coin yields
@@ -541,11 +395,9 @@ export function PackagesSection({
   page,
   packages,
   courseGroups,
-  iaCourse,
   phone,
   prefills,
 }: PackagesSectionProps) {
-  const privatePkg = packages.find((pkg) => pkg.kind === 'private');
   const boards = packages.filter((pkg) => pkg.kind === 'board');
   const [flagship, ...rest] = boards;
 
@@ -561,6 +413,9 @@ export function PackagesSection({
     <section id="mvt-s-packages" className="mvt-sec" data-plan-anchor="">
       <div className="mvt-wrap">
         <div className="mvt-head">
+          {page.eyebrow === undefined ? null : (
+            <p className="mvt-eyebrow mvt-rev mvt-rev--s">{page.eyebrow}</p>
+          )}
           <h2 className="mvt-h2 mvt-rev">{page.title}</h2>
           <span className="mvt-rule mvt-rev mvt-rev--rule" aria-hidden="true" />
           {page.sub === undefined ? null : (
@@ -568,10 +423,12 @@ export function PackagesSection({
           )}
         </div>
 
-        <div className="mvt-pk-r1">
-          <Ledger page={page} />
-          <Snapshot page={page} />
-        </div>
+        {page.ledger === undefined && page.snapshot === undefined ? null : (
+          <div className="mvt-pk-r1">
+            {page.ledger === undefined ? null : <Ledger ledger={page.ledger} />}
+            {page.snapshot === undefined ? null : <Snapshot snapshot={page.snapshot} rows={page.snapList} />}
+          </div>
+        )}
 
         {/* Row 3 · the three boards, the flagship lifted between them. */}
         {row.length === 0 ? null : (
@@ -590,21 +447,6 @@ export function PackagesSection({
           </div>
         )}
 
-        {/* Row 4 · private coaching, full width. */}
-        {privatePkg === undefined ? null : (
-          <div className="mvt-pk-r4">
-            <PrivatePlate page={page} pkg={privatePkg} phone={phone} message={prefills[privatePkg.ctaKey]} />
-          </div>
-        )}
-
-        {/* ── the IA course ──────────────────────────────────────────────── */}
-        <IaCourseBlock
-          ia={iaCourse}
-          ctaLabel={iaCourse.ctaLabel ?? page.ctaLabel}
-          footTag={page.iaFootTag}
-          phone={phone}
-          message={prefills[iaCourse.ctaKey]}
-        />
       </div>
     </section>
   );

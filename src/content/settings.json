@@ -68,6 +68,7 @@
     "sessionMinutes": 90,
     "courseSessionMinutes": 50,
     "ibdpLessonCount": 28,
+    "ibdpHeadlineLessonCount": 60,
     "ialLessonCount": 32,
     "edexcelIgcseLessonCount": 24,
     "ibdpBonusVideoHoursStandard": 32,

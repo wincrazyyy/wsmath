@@ -81,11 +81,12 @@ function youtubeEmbedUrl(url: URL): URL {
 
 export interface ResolveEmbedOptions {
   /**
-   * Drop the autoplay parameter. The band renders the autoplaying source in the
-   * static HTML (so a reader without JavaScript still gets the behaviour the
-   * client asked for) and swaps to this one when
-   * `prefers-reduced-motion: reduce` is set — a 2½-minute video starting itself
-   * is motion (`spec/video-live.md` §4.6).
+   * Drop the autoplay parameter. The player mounts with the autoplaying source
+   * when the reader scrolls to it (`video-frame.tsx`); this one is for the two
+   * readers it must not start itself for — one with
+   * `prefers-reduced-motion: reduce` (a 2½-minute video starting itself is
+   * motion, `spec/video-live.md` §4.6), and one without JavaScript, whose
+   * `<noscript>` frame has no scroll trigger and plays on a click.
    */
   readonly noAutoplay?: boolean;
 }

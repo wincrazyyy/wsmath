@@ -200,19 +200,26 @@ const CourseCode = z
   .meta({ id: "CourseCode", title: "Course display code" });
 
 
+/*
+ * The carmine band that closes Packages and sells private coaching. Its name,
+ * hourly rate and block price are the private package's own (`packages.json`,
+ * `kind: "private"`), so the band and the "Your plan" panel quote one figure;
+ * this object holds only the band's own words.
+ */
 const Ribbon = z
   .strictObject({
     ariaLabel: text(
       "Landmark name",
-      "Never shown. Names the band for screen readers moving between landmarks, e.g. Availability.",
+      "Never shown. Names the band for screen readers moving between landmarks, e.g. Private coaching.",
     ),
     title: text("Heading", "The big line in the carmine band.", { tokens: true }),
     body: text("Body", "Optional. The line under it.", { tokens: true }).optional(),
+    rateLabel: text("Rate label", "The small caps label over the private hourly price, e.g. Typical rate."),
     waLabel: text("Small label", "Optional. The small caps label above the button.").optional(),
     ctaLabel: text("Button label", "e.g. Get in touch."),
     ctaKey: CtaKey,
   })
-  .meta({ title: "Availability ribbon" });
+  .meta({ title: "Private coaching ribbon" });
 
 /* ─────────────────────────── results ─────────────────────────── */
 
@@ -264,7 +271,7 @@ const Results = z
     tabsLabel: text("Tab strip description", "Read out before the group tabs, e.g. Result groups."),
     tabsCountLabel: text(
       "Tab count prefix",
-      "Printed before each tab's record count, e.g. n = . Keep the trailing space.",
+      "Printed before each tab's student count, e.g. students = . Keep the trailing space.",
       { allowEmpty: true },
     ),
     stream: z
@@ -385,14 +392,21 @@ const OutlineCopy = z
 
 const PackagesPage = z
   .strictObject({
-    eyebrow: text("Eyebrow", "Optional, e.g. IBDP Coaching Packages.").optional(),
-    title: text("Heading", "e.g. Choose the path that fits your goal."),
+    eyebrow: text(
+      "Eyebrow",
+      "Optional. The small caps line beside the heading, e.g. Live on {{setup.platform}}, or self-paced on video.",
+      { tokens: true },
+    ).optional(),
+    title: text("Heading", "Says what the section sells, e.g. Group courses."),
     sub: longText("Supporting line", "Optional. The sentence beside the heading.", { tokens: true }).optional(),
     chips: field(z.array(textItem("Chip", "One short label chip.")).min(1), {
       title: "Label chips",
       description: "The debossed label chips under the heading.",
       widget: "collection",
     }).optional(),
+    /* ledger · snapshot · snapList are the optional row above the boards; the
+       current copy omits all three (2026-09-28). A field the editor fills in
+       still renders. */
     ledger: z
       .strictObject({
         title: text(
@@ -406,19 +420,21 @@ const PackagesPage = z
           widget: "collection",
         }),
       })
-      .meta({ title: "Valuation ledger" }),
+      .meta({ title: "Valuation ledger" })
+      .optional(),
     snapshot: z
       .strictObject({
         label: text("Small caps label", "e.g. Since {{stats.oneToOneSince}}.", { tokens: true }),
         value: text("Headline figure", "e.g. {{plus stats.studentsCoached}}.", { tokens: true }),
         sub: text("Under the figure", "e.g. students coached 1-on-1."),
       })
-      .meta({ title: "Outcome snapshot" }),
+      .meta({ title: "Outcome snapshot" })
+      .optional(),
     snapList: field(z.array(DefinitionItem).min(1), {
       title: "Snapshot rows",
-      description: "The label/value rows under the headline figure.",
+      description: "Optional. The label/value rows under the headline figure. Shown only with a snapshot.",
       widget: "collection",
-    }),
+    }).optional(),
     cmp: z
       .strictObject({
         heading: EmphasisLine,
@@ -429,7 +445,6 @@ const PackagesPage = z
         }),
       })
       .meta({ title: "Value comparison" }).optional(),
-    rateLabel: text("Rate label", "The small caps label before the private price, e.g. Typical rate."),
     /*
      * The two words the delivery badge can say. Keyed by `CourseVariant.delivery`,
      * so adding a delivery mode to the schema forces a label rather than leaving
@@ -454,16 +469,29 @@ const PackagesPage = z
     cardCue: text("Card cue", "Optional. The small line on each course card saying the card itself opens WhatsApp, e.g. Enquire on WhatsApp.").optional(),
     plan: z
       .strictObject({
-        label: text("Panel label", "The floating panel's title, e.g. Your plan."),
+        label: text("Panel label", "The floating panel's title, e.g. Featured course."),
+        /* Selection UI is unrendered (no plate carries a pick button), so the panel
+           always shows `defaultPackageId` — these two dress that one package. */
+        name: text(
+          "Featured name",
+          "Optional. The course's name in the panel, e.g. IBDP group course. Without it the panel prints the package's title.",
+          { tokens: true },
+        ).optional(),
+        unit: text(
+          "Featured detail",
+          "Optional. The small line under the price, e.g. {{plus programme.ibdpHeadlineLessonCount}} lessons. " +
+            "Without it the panel prints the package's own unit.",
+          { tokens: true },
+        ).optional(),
         pickShow: text("Pick label", "The button before a plan is chosen, e.g. Show in your plan."),
         pickActive: text("Picked label", "The button once the plan is chosen, e.g. In your plan."),
         ctaLabel: text("Panel button label", "The WhatsApp button in the floating panel, e.g. Get in touch."),
         defaultPackageId: stableId(
-          "Preselected plan",
-          "The ID of the package the floating panel starts on, e.g. ibdp. It must be a package that has a price.",
+          "Featured package",
+          "The ID of the package the floating panel features, e.g. ibdp. Its price is the panel's price, so it must be a package that has one.",
         ),
       })
-      .meta({ title: "Your plan panel" }),
+      .meta({ title: "Featured course panel" }),
   })
   .meta({ title: "Packages" });
 

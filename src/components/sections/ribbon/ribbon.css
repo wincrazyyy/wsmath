@@ -1,8 +1,9 @@
 /* ============================================================
-   RIBBON — the carmine access strike (#mvt-s-ribbon)
+   RIBBON — the carmine private-coaching band (#mvt-s-ribbon)
    Section family: .mvt-ribbon, .mvt-ribbon-*
    Transcribed from the locked artifact, CSS lines 961–972 + the
-   ≤820 block at 1394–1399.
+   ≤820 block at 1394–1399. Since 2026-09-28 it closes Packages and
+   carries the private offer's prices (docs/12 Part J).
 
    Palette colours are NEVER declared here — only var(--…) from
    globals.css. Shared vocabulary (.mvt-wrap, .mvt-well, .mvt-well--ca,
@@ -37,9 +38,28 @@
 .mvt-ribbon-copy p{color:var(--brass-hi)}
 
 .mvt-ribbon-cta{display:flex;flex-direction:column;align-items:flex-start;
-  justify-content:center;gap:16px;
+  justify-content:center;gap:18px;
   padding:clamp(20px,1.8vw,32px) clamp(20px,2vw,34px)}
 .mvt-ribbon-cta .mvt-mu{color:var(--brass-hi)}
+/* under a price ledger the plate is that ledger's action, so it takes the
+   well's width; alone in the well it was already the well's width */
+.mvt-ribbon-cta > .mvt-plate-cta{align-self:stretch;justify-content:center}
+
+/* ── the private offer, in the well ───────────────────────────────────────
+   Two prices side by side, label over figure, ruled off from the plate below.
+   Side by side, not stacked: stacked, the two rows plus the plate make the
+   well — and so the band, which is exactly as deep as its taller track — about
+   a third deeper than the two-line statement beside it needs. Both figures are
+   plain ink at one size: the label says which is the headline rate, and the
+   brass cast stays reserved for the plates' prices. */
+.mvt-ribbon-rates{display:grid;grid-template-columns:repeat(2,auto);gap:16px clamp(24px,2.4vw,48px);
+  align-self:stretch;margin:0;padding-bottom:18px;
+  border-bottom:1px solid color-mix(in oklab,var(--ink) 18%,transparent)}
+.mvt-ribbon-rates > div{display:flex;flex-direction:column;gap:8px}
+.mvt-ribbon-rates dd{margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px}
+.mvt-ribbon-rates b{font-family:var(--f-display);font-size:clamp(26px,2.2vw,38px);font-weight:600;
+  line-height:1.05;letter-spacing:-.01em;color:var(--ink)}
+.mvt-ribbon-rates dd span{font-size:14px;color:color-mix(in oklab,var(--ink) 76%,var(--ca-deep))}
 
 /* brass reads on carmine; the global --brass ring would otherwise sit on a
    ground close to its own value */
@@ -49,4 +69,8 @@
   .mvt-ribbon-in{grid-template-columns:1fr;gap:26px}
   .mvt-ribbon-cta{flex-wrap:wrap}
   .mvt-ribbon-cta .mvt-plate-cta{flex:1 1 auto;justify-content:center}
+}
+/* below ~420 the two prices no longer fit beside each other at their floor size */
+@media (max-width:420px){
+  .mvt-ribbon-rates{grid-template-columns:1fr}
 }

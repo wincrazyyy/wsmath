@@ -439,6 +439,14 @@
               "description": "Digits only, e.g. 28. Applies to all four IBDP courses. The per-lesson rate and the value comparison use it.",
               "x-widget": "number"
             },
+            "ibdpHeadlineLessonCount": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991,
+              "title": "IBDP lessons, headline figure",
+              "description": "Digits only, e.g. 60. The lesson count the floating featured-course panel advertises for the IBDP group course, printed with a plus (60+). The course card still quotes the live lessons above.",
+              "x-widget": "number"
+            },
             "ialLessonCount": {
               "type": "integer",
               "minimum": -9007199254740991,
@@ -514,6 +522,7 @@
             "sessionMinutes",
             "courseSessionMinutes",
             "ibdpLessonCount",
+            "ibdpHeadlineLessonCount",
             "ialLessonCount",
             "edexcelIgcseLessonCount",
             "ibdpBonusVideoHoursStandard",
@@ -1221,7 +1230,7 @@
               "type": "string",
               "minLength": 1,
               "title": "Landmark name",
-              "description": "Never shown. Names the band for screen readers moving between landmarks, e.g. Availability.",
+              "description": "Never shown. Names the band for screen readers moving between landmarks, e.g. Private coaching.",
               "x-widget": "text"
             },
             "title": {
@@ -1239,6 +1248,13 @@
               "description": "Optional. The line under it.",
               "x-widget": "text",
               "x-tokens": true
+            },
+            "rateLabel": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Rate label",
+              "description": "The small caps label over the private hourly price, e.g. Typical rate.",
+              "x-widget": "text"
             },
             "waLabel": {
               "type": "string",
@@ -1261,11 +1277,12 @@
           "required": [
             "ariaLabel",
             "title",
+            "rateLabel",
             "ctaLabel",
             "ctaKey"
           ],
           "additionalProperties": false,
-          "title": "Availability ribbon"
+          "title": "Private coaching ribbon"
         },
         "packagesPage": {
           "type": "object",
@@ -1274,14 +1291,15 @@
               "type": "string",
               "minLength": 1,
               "title": "Eyebrow",
-              "description": "Optional, e.g. IBDP Coaching Packages.",
-              "x-widget": "text"
+              "description": "Optional. The small caps line beside the heading, e.g. Live on {{setup.platform}}, or self-paced on video.",
+              "x-widget": "text",
+              "x-tokens": true
             },
             "title": {
               "type": "string",
               "minLength": 1,
               "title": "Heading",
-              "description": "e.g. Choose the path that fits your goal.",
+              "description": "Says what the section sells, e.g. Group courses.",
               "x-widget": "text"
             },
             "sub": {
@@ -1394,7 +1412,7 @@
                 "$ref": "#/$defs/DefinitionItem"
               },
               "title": "Snapshot rows",
-              "description": "The label/value rows under the headline figure.",
+              "description": "Optional. The label/value rows under the headline figure. Shown only with a snapshot.",
               "x-widget": "collection"
             },
             "cmp": {
@@ -1420,13 +1438,6 @@
               ],
               "additionalProperties": false,
               "title": "Value comparison"
-            },
-            "rateLabel": {
-              "type": "string",
-              "minLength": 1,
-              "title": "Rate label",
-              "description": "The small caps label before the private price, e.g. Typical rate.",
-              "x-widget": "text"
             },
             "deliveryLabels": {
               "type": "object",
@@ -1484,8 +1495,24 @@
                   "type": "string",
                   "minLength": 1,
                   "title": "Panel label",
-                  "description": "The floating panel's title, e.g. Your plan.",
+                  "description": "The floating panel's title, e.g. Featured course.",
                   "x-widget": "text"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Featured name",
+                  "description": "Optional. The course's name in the panel, e.g. IBDP group course. Without it the panel prints the package's title.",
+                  "x-widget": "text",
+                  "x-tokens": true
+                },
+                "unit": {
+                  "type": "string",
+                  "minLength": 1,
+                  "title": "Featured detail",
+                  "description": "Optional. The small line under the price, e.g. {{plus programme.ibdpHeadlineLessonCount}} lessons. Without it the panel prints the package's own unit.",
+                  "x-widget": "text",
+                  "x-tokens": true
                 },
                 "pickShow": {
                   "type": "string",
@@ -1511,8 +1538,8 @@
                 "defaultPackageId": {
                   "type": "string",
                   "pattern": "^[a-z0-9][a-z0-9-]*$",
-                  "title": "Preselected plan",
-                  "description": "The ID of the package the floating panel starts on, e.g. ibdp. It must be a package that has a price.",
+                  "title": "Featured package",
+                  "description": "The ID of the package the floating panel features, e.g. ibdp. Its price is the panel's price, so it must be a package that has one.",
                   "x-widget": "id"
                 }
               },
@@ -1524,15 +1551,11 @@
                 "defaultPackageId"
               ],
               "additionalProperties": false,
-              "title": "Your plan panel"
+              "title": "Featured course panel"
             }
           },
           "required": [
             "title",
-            "ledger",
-            "snapshot",
-            "snapList",
-            "rateLabel",
             "deliveryLabels",
             "outline",
             "ctaLabel",
@@ -1662,7 +1685,7 @@
             "tabsCountLabel": {
               "type": "string",
               "title": "Tab count prefix",
-              "description": "Printed before each tab's record count, e.g. n = . Keep the trailing space.",
+              "description": "Printed before each tab's student count, e.g. students = . Keep the trailing space.",
               "x-widget": "text"
             },
             "stream": {
@@ -3161,7 +3184,7 @@
           "type": "string",
           "minLength": 1,
           "title": "Programme name in full",
-          "description": "Name including every detail, e.g. IBDP · HL / AAHL / AIHL. Used where there is room for it.",
+          "description": "The results tab on wide screens, written Heading · detail: before the first · is the large heading, after it the small line, e.g. IBDP HL · HL / AAHL / AIHL.",
           "x-widget": "text"
         },
         "tabLabel": {
@@ -3498,6 +3521,9 @@
         "price": {
           "$ref": "#/$defs/PackagePrice"
         },
+        "blockPrice": {
+          "$ref": "#/$defs/PackageBlockPrice"
+        },
         "description": {
           "type": "string",
           "minLength": 1,
@@ -3505,80 +3531,6 @@
           "description": "Optional. Short paragraph under the title — the leaflet carries a board's detail.",
           "x-widget": "textarea",
           "x-tokens": true
-        },
-        "bullets": {
-          "minItems": 1,
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^[a-z0-9][a-z0-9-]*$",
-                "title": "ID",
-                "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
-                "x-widget": "id"
-              },
-              "text": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Bullet",
-                "description": "One selling point.",
-                "x-widget": "textarea",
-                "x-tokens": true
-              }
-            },
-            "required": [
-              "id",
-              "text"
-            ],
-            "additionalProperties": false
-          },
-          "title": "Bullet points",
-          "description": "One main benefit per line. Add, remove or reorder freely.",
-          "x-widget": "collection"
-        },
-        "includedTitle": {
-          "type": "string",
-          "minLength": 1,
-          "title": "Included block title",
-          "description": "Optional. Heading of the boxed list, e.g. {{programme.intensiveLessonCount}}-lesson intensive · ~{{money pricing.intensiveBlockCost}}.",
-          "x-widget": "text",
-          "x-tokens": true
-        },
-        "included": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "pattern": "^[a-z0-9][a-z0-9-]*$",
-                "title": "ID",
-                "description": "Permanent identifier. Lower-case letters, digits and hyphens, e.g. james-chow-2024. Never change it once set — other records point at it.",
-                "x-widget": "id"
-              },
-              "text": {
-                "type": "string",
-                "minLength": 1,
-                "title": "Included item",
-                "description": "One thing included.",
-                "x-widget": "textarea",
-                "x-tokens": true
-              }
-            },
-            "required": [
-              "id",
-              "text"
-            ],
-            "additionalProperties": false
-          },
-          "title": "What is included",
-          "description": "One line per benefit (priority correspondence, IA support, etc.). Leave empty to hide the box.",
-          "x-widget": "collection"
-        },
-        "coverage": {
-          "$ref": "#/$defs/PackageCoverage"
         },
         "variants": {
           "minItems": 1,
@@ -3599,13 +3551,6 @@
           "x-widget": "image",
           "$ref": "#/$defs/MediaRef"
         },
-        "footTag": {
-          "type": "string",
-          "minLength": 1,
-          "title": "Card foot tag",
-          "description": "Optional. The small caps line in the card's foot.",
-          "x-widget": "text"
-        },
         "ctaLabel": {
           "type": "string",
           "minLength": 1,
@@ -3621,7 +3566,6 @@
         "id",
         "kind",
         "title",
-        "included",
         "ctaKey"
       ],
       "additionalProperties": false,
@@ -3662,31 +3606,40 @@
       "additionalProperties": false,
       "title": "Price"
     },
-    "PackageCoverage": {
+    "PackageBlockPrice": {
       "type": "object",
       "properties": {
         "label": {
           "type": "string",
           "minLength": 1,
-          "title": "Coverage label",
-          "description": "The brass phrase, e.g. Every board covered.",
-          "x-widget": "text"
+          "title": "Block name",
+          "description": "The small caps name, e.g. {{programme.intensiveLessonCount}}-lesson intensive.",
+          "x-widget": "text",
+          "x-tokens": true
         },
-        "value": {
+        "now": {
           "type": "string",
           "minLength": 1,
-          "title": "Coverage claim",
-          "description": "The claim beside it, e.g. {{content.courseCount}} courses across {{programme.curriculaLabel}}.",
+          "title": "Block price",
+          "description": "What the block costs, e.g. ~{{money pricing.intensiveBlockCost}}.",
+          "x-widget": "text",
+          "x-tokens": true
+        },
+        "per": {
+          "type": "string",
+          "minLength": 1,
+          "title": "Block detail",
+          "description": "Optional. Printed small after the price, e.g. ({{programme.intensiveLessonCount}} × {{programme.sessionMinutes}} mins).",
           "x-widget": "text",
           "x-tokens": true
         }
       },
       "required": [
         "label",
-        "value"
+        "now"
       ],
       "additionalProperties": false,
-      "title": "Coverage claim"
+      "title": "Block price"
     },
     "CourseVariant": {
       "type": "object",
@@ -4173,7 +4126,7 @@
         "about-ribbon": {
           "type": "string",
           "minLength": 1,
-          "title": "Message — About ribbon",
+          "title": "Message — Private coaching ribbon",
           "description": "The message WhatsApp opens with. Write (name?), (school?) and (year?) where the student should fill something in — those show as dashed blanks in the on-page preview.",
           "x-widget": "textarea",
           "x-tokens": true

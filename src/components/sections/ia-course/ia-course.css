@@ -1,6 +1,7 @@
 /* ============================================================
-   IA COURSE — the last block of the packages section
-   (#mvt-s-packages). Section family: .mvt-ia*, .mvt-themes*
+   IA COURSE — its own section (#mvt-s-ia) after the carmine
+   private-coaching ribbon since 2026-09-28; it used to close the
+   packages section. Section family: .mvt-ia*, .mvt-themes*
    Transcribed from the improved artifact, CSS lines 966–986 and
    its two responsive rules (999 `.mvt-ia-grid` at ≤1024, 1002
    `.mvt-themes li` at ≤820).
@@ -15,16 +16,13 @@
    .mvt-cham--am, .mvt-knurl, .mvt-plate-cta, .mvt-eyebrow,
    .mvt-h3, .mvt-body, .mvt-mu, .mvt-li, .mvt-rev) comes from
    globals.css and is not redefined here; `.mvt-pack-foot` and its
-   knurl rule belong to packages.css and are reused as-is.
-
-   The reveal repair for the globals.css `.mvt-rev--s` cascade bug
-   is NOT duplicated here: this block renders inside
-   #mvt-s-packages, so packages.css's scoped repair already covers
-   it. Both disappear when globals.css is reordered — see
-   notes/packages.md §1.
+   knurl rule belong to packages.css and are reused as-is (both
+   sections are always on the same page, so the rules are loaded).
    ============================================================ */
 
-.mvt-ia{margin-top:clamp(20px,2.2vw,44px);display:flex;flex-direction:column;gap:clamp(18px,1.8vw,32px)}
+/* the section's own padding spaces it now; the old margin-top spaced it from
+   the private plate above it inside Packages */
+.mvt-ia{display:flex;flex-direction:column;gap:clamp(18px,1.8vw,32px)}
 
 /* The intro is now a COLUMN of the grid, not a band above it, so it no longer
    sets its own measure — the 38fr track is the measure (artifact 970). */

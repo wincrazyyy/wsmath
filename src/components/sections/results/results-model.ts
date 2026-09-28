@@ -91,10 +91,11 @@ export interface ResultsGroupModel {
   /**
    * `programmes.tabLabel` — the short, already-unique name (`IBDP · HL`).
    *
-   * The phone tab prints this instead of `headline` + `detail`. Four of the six
-   * headlines are ambiguous on their own (two read `IBDP`, two read `IGCSE`),
-   * so a narrow tab that sheds `detail` sheds the only thing telling HL from SL
-   * — on screen *and* in the tab's accessible name.
+   * The phone tab prints this instead of `headline` + `detail`: a narrow tab has
+   * no room for the detail line, and `tabLabel` is the one name kept short
+   * enough to fit it while still telling the six groups apart — on screen *and*
+   * in the tab's accessible name. (Since 2026-09-28 the headlines are unique
+   * too — `IBDP HL`, `IGCSE Math` — but they are not all short.)
    */
   readonly tabLabel: string;
   /** `fullLabel` after the first ` · ` — the tab's second line. */
@@ -120,7 +121,7 @@ export interface ResultsModel {
 
 /* ──────────────────────────── construction ───────────────────────────── */
 
-/** `IBDP · HL / AAHL / AIHL` → `['IBDP', 'HL / AAHL / AIHL']`. Splits at the FIRST separator. */
+/** `IBDP HL · HL / AAHL / AIHL` → `['IBDP HL', 'HL / AAHL / AIHL']`. Splits at the FIRST separator. */
 function splitFullLabel(fullLabel: string): [string, string] {
   const at = fullLabel.indexOf(' · ');
   if (at < 0) return [fullLabel, ''];

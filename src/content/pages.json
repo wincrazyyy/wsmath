@@ -213,46 +213,15 @@
     }
   },
   "ribbon": {
-    "ariaLabel": "Availability",
+    "ariaLabel": "Private coaching",
     "title": "Limited 1-to-1 availability — enquire for placement and a recommended plan.",
+    "rateLabel": "Typical rate",
     "ctaLabel": "Enquire about placement",
     "ctaKey": "about-ribbon"
   },
   "packagesPage": {
-    "title": "Choose the path that fits your goal",
-    "ledger": {
-      "title": "IBDP Mathematics group course",
-      "rows": [
-        {
-          "id": "was",
-          "dt": "Was",
-          "dd": "{{money pricing.courseListPrice}}"
-        },
-        {
-          "id": "now",
-          "dt": "Now",
-          "dd": "from {{money pricing.coursePrice}}"
-        },
-        {
-          "id": "lessons",
-          "dt": "Lessons",
-          "dd": "{{programme.ibdpLessonCount}} × {{programme.courseSessionMinutes}} min"
-        }
-      ]
-    },
-    "snapshot": {
-      "label": "Since {{stats.oneToOneSince}}",
-      "value": "{{plus stats.studentsCoached}}",
-      "sub": "students coached 1-to-1"
-    },
-    "snapList": [
-      {
-        "id": "fast-initial-gains",
-        "dt": "Fast initial gains",
-        "dd": "{{outcomes.typicalTimeToGain}}"
-      }
-    ],
-    "rateLabel": "Typical rate",
+    "eyebrow": "Live on {{setup.platform}}, or self-paced on video",
+    "title": "Group courses",
     "deliveryLabels": {
       "live": "Live",
       "video": "Video"
@@ -270,7 +239,9 @@
     },
     "ctaLabel": "Get in touch",
     "plan": {
-      "label": "Your plan",
+      "label": "Featured course",
+      "name": "IBDP group course",
+      "unit": "{{plus programme.ibdpHeadlineLessonCount}} lessons",
       "pickShow": "Show in your plan",
       "pickActive": "In your plan",
       "ctaLabel": "Get in touch",
@@ -292,7 +263,7 @@
       "scaleRight": "{{content.publishedRecordCount}} of them are published individually below"
     },
     "tabsLabel": "Result groups",
-    "tabsCountLabel": "n = ",
+    "tabsCountLabel": "students = ",
     "stream": {
       "fromLabel": "From PG / mock",
       "toLabel": "Final"
@@ -359,11 +330,29 @@
       "label": "More voices, in four written languages",
       "sheetIds": [
         "james-chow-2024",
+        "sharon-deng-2023",
+        "joy-angela-sun-2022",
+        "cassie-luo-2023",
+        "vera-jing-2021",
         "bill-zhang-2024",
         "michelle-chan-2021",
+        "kathy-ye-2024",
+        "jasmine-hung-2023",
+        "connie-feng-2021",
+        "lucia-zhu-2018",
+        "coco-cheng-2024",
         "jason-yeung-2025",
-        "cherish-chiu-2025",
-        "lucy-han-2019"
+        "jasmine-yang-2023",
+        "kelly-li-2023",
+        "judy-wei-2021",
+        "vivian-chen-2018",
+        "gordon-lo-2025",
+        "aidan-cheung-2019",
+        "david-zhang-2020",
+        "ken-chen-2024",
+        "nicole-li-2024",
+        "lucy-han-2019",
+        "cherish-chiu-2025"
       ],
       "universityShortNames": [
         {

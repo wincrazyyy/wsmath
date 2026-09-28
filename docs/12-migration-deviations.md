@@ -562,7 +562,7 @@ edited. Every business fact is still a token.
 | Packages | the value-comparison cells, all four `footTag`s, both leaflet captions, the outcomes hedge and the referral row in the private plate's included list, "Live answers in class" ×3, the papers badge on four IBDP rows (now one board line), "Market-exclusive" ×4 of 5, "· N live Zoom lessons" on row metas | Each fact now stated once, where the product is |
 | About | `whoBlock.chip` (equipment, printed 4×), `whoBlock.rows[1]`, three of seven journey pills, every pill duration | Durations were hand-typed and disagreed with `students.json` for three students |
 | Hero | "Question bank 2008–2025" (contradicted the boards' 2008–2026), the "9 yrs" clause | Tenure was stated twice 30px apart |
-| Voices | `video.stamp`, `video.body`, `video.clips` (never rendered), six of twelve trough sheets | The body described "short clips" that do not exist |
+| Voices | `video.stamp`, `video.body`, `video.clips` (never rendered), six of twelve trough sheets (restored, all 24, 2026-09-28 — K1) | The body described "short clips" that do not exist |
 | Footer | "Group Classes" and "Contact" links, `builder.stack`, "WSMath is a premium tutoring brand.", the brand slogan, one meta row | |
 | Courses covered | **the whole section** | Its 21 rows now live inside the three boards as "Also taught 1-to-1" ledgers — one catalogue, not two |
 
@@ -595,8 +595,67 @@ equivalent now.
   reserves three lines, so the three stacks align to the pixel. Below 1500px the row breaks: the
   flagship takes the top row landscape (pitch left, page right at `clamp(360px,30vw,460px)`
   tall) over the two boards; below 1025px everything stacks, flagship first, pages capped at
-  80vh. Row 4 is private coaching full width: pitch beside the intensive ledger.
-- **The snapshot tile** carries "Often within 8–12 weeks" as its third station.
+  80vh. Row 4 is private coaching full width: pitch beside the intensive ledger (superseded
+  2026-09-28: the private plate is now the ribbon, below).
+- **The snapshot tile** carries "Often within 8–12 weeks" as its third station (removed
+  2026-09-28 with the whole ledger/snapshot row, below).
+- **The private plate is the carmine ribbon, and the ribbon closes Packages (2026-09-28).** The
+  ribbon above Packages said "Limited 1-to-1 availability" while a private plate at the foot of
+  Packages sold the same thing two screens further down. They are one unit now. The band is still
+  full-bleed and still the page's only carmine, but it sits **after** Packages (`about · packages ·
+  ribbon · ia · results`, superseding `docs/11` §0's section order), so 1-to-1 reads as the
+  alternative to the group courses above it. It carries the private package's name as its
+  small-caps line, the availability statement, and in its well the hourly rate and the 8-lesson
+  intensive side by side over one plate CTA (`about-ribbon`, "Enquire about placement"). The
+  figures are the private package's own, so the band and the "Your plan" panel quote one price.
+  Cut with the plate: its tagline, description, three bullets, four-item included list, the
+  coverage claim ("Every board covered · 21 courses…") and the "Ask about 1-to-1" button.
+  `Package.bullets`, `included`, `coverage` and `footTag` left the schema with their last
+  renderer; `includedTitle` became the structured `blockPrice` (`label`, `now`, `per`), and
+  `rateLabel` moved from `packagesPage` to `ribbon`. The `about-ribbon` CTA id is unchanged: ids
+  are permanent, and only its editor label says where it lives.
+- **The ledger/snapshot row is gone (2026-09-28, at the client's request).** `packagesPage.ledger`,
+  `snapshot` and `snapList` are optional and unauthored, so the boards follow the head directly
+  (`.mvt-head + .mvt-pk-r3` keeps the flagship's 18px overhang clear of the scale). Two facts left
+  the page with it and are printed nowhere else: "Often within 8–12 weeks"
+  (`outcomes.typicalTimeToGain`) and "Since 2018" (`stats.oneToOneSince`). The IBDP was/now
+  prices remain on the IBDP plate; "270+ students coached" remains in About and the footer.
+- **Packages is "Group courses", and the IA course is a section after the ribbon (2026-09-28).**
+  The head said "Choose the path that fits your goal"; it now states what the section sells.
+  That made the IA block wrong where it stood: it is 1-to-1 coaching ("1-to-1 Maths IA
+  coaching, from topic selection to final draft"), not a group course. It moved out of Packages
+  to its own section (`#mvt-s-ia`, `sections/ia-course/`) directly after the ribbon, so the page
+  reads group → 1-to-1 → 1-to-1 IA. Its title is an `<h2>` at the `.mvt-h3` size, like the
+  ribbon's. Neither section has a nav marker; both carry `data-spy-part="mvt-s-packages"`, which
+  the scroll-spy (`mvt-root.tsx`) treats as Packages — without it an unmarked section kept
+  whichever link was lit last (Packages scrolling down, Results scrolling up). The head gained
+  an eyebrow, "Live on {{setup.platform}}, or self-paced on video": with neither eyebrow nor
+  sub, "Group courses" was a short title over a full-width empty bar, the case the head pattern
+  exists to prevent; the wording stays true for the video-only IGCSE courses. Cost accepted: the
+  IA course no longer sits directly under the IBDP board it extends.
+- **Results tabs name the group in the heading (2026-09-28).** `programmes.fullLabel`'s heading
+  part (before the first ` · `) is now `IBDP HL`, `IBDP SL`, `IGCSE Additional Math` and `IGCSE
+  Math` (A-Level unchanged); every detail line is byte-identical. The count reads
+  `students = 36` (`results.tabsCountLabel`), not `n = 36`.
+- **The stream's axis captions and legend no longer collide (2026-09-28).** The captions were
+  boxed to their gutters (96px below ~1300px, where "From PG / mock" wrapped) and hung into a
+  bottom margin shallower than even one line, so the legend covered them. They are one line now,
+  anchored to the stream's outer edges, and the margin reserves them. The legend is one row of
+  `--leg-n` cards (the authored count) from 1280px real, one per row below — the old 2-across
+  step left three cards as 2 + a hole.
+- **The video starts when it is scrolled to, not on load (2026-09-28, owner).** The iframe mounts
+  (autoplaying, muted) once the frame has been ≥40% visible for 300ms, and is never unmounted;
+  without JavaScript a `<noscript>` player without autoplay stands in. The focus guard's consent
+  rule changed with it — Loom's post-load focus steal now happens on screen, so "on screen" no
+  longer counts as consent except on touch screens; a Tab or the pointer over the frame does
+  (`video-frame.tsx`).
+- **"Your plan" is a featured-course panel (2026-09-28).** No plate renders a plan pick, so
+  nothing could change the plan and "Your plan" promised a choice that did not exist. The panel
+  is labelled "Featured course" and features `plan.defaultPackageId` (IBDP) as "IBDP group course
+  · from HKD 16,800 · 60+ lessons": `plan.name` and `plan.unit` dress it in the panel only, its
+  price is still the package's own. "60+" is `{{plus programme.ibdpHeadlineLessonCount}}`, a
+  new settings figure (60) — the owner's number and wording, kept as stated (K9); the IBDP card
+  still says 28 live lessons.
 - **The IA block** is intro | themes (`38fr 62fr`); the six-feature well is gone.
 - **The video band is gone (2026-09-17).** The heading beside the player left a column of bare
   lacquer, so the player is now the first cell of the featured grid: at the full measure it
@@ -652,11 +711,12 @@ equivalent now.
 
 | # | Question | Where it bites |
 | - | --- | --- |
-| K1 | Which six testimonials stay in the trough. The developer's pick is in `voices.trough.sheetIds`; it keeps all four written languages. The HKDSE record (`lucy-han-2019`) is the only Traditional-Chinese sheet — dropping it makes the label false | `pages.json` |
+| K1 | ~~Which six testimonials stay in the trough.~~ **Resolved 2026-09-28:** the client wanted them back — `voices.trough.sheetIds` lists all 24 `placement: "carousel"` testimonials in their `order` (six repeated too quickly to read as more than six). One printing is 24 sheets; the drift speed is per sheet, so the row moves as before and the loop is 3 minutes | `pages.json` |
 | K2 | The journey pills print no durations because `students.json` holds none for three of the four. Add durations to the data or accept the pills without | `pages.json`, `students.json` |
 | K3 | Is 0606 32 hours or 64? The row prints "32 hrs" twice | `packages.json` |
-| K4 | "Since 2018" (snapshot) vs "since Sep 2017" (hero) — `docs/07` §A2 | `settings.json` |
+| K4 | "Since 2018" (snapshot) vs "since Sep 2017" (hero) — `docs/07` §A2. The snapshot is off the page since 2026-09-28, so only the hero's figure prints; `stats.oneToOneSince` still disagrees with it | `settings.json` |
 | K5 | What "65%+" measured. It is gone from the page; the computed 87% is survivorship-biased and was **not** put beside the price | — |
 | K6 | "Supported by a PhD in Pure Mathematics" — owner copy, kept, never on the type ramp | `ia-course.json` |
 | K8 | **Accessibility regression to sign off.** The matrix was the results section's only accessible data path — a real `<table>` that named students per cell. With it gone the stream is `aria-hidden` and the three per-group legend cards are all assistive technology can reach; no named record is exposed. Either accept that, or restore a visually-hidden table of the 45 published records | `results-panel.tsx` |
-| K7 | The "Your plan" panel still wakes over the ribbon and rides through results, voices and FAQ (round-1 A1). Confining it to packages is a behaviour change not made in this pass | `plan-panel.tsx` |
+| K9 | ~~What "60+ lessons" counts.~~ **Decided 2026-09-28:** the panel says "60+ lessons", no qualifier and no derivation. It stays its own settings figure (`programme.ibdpHeadlineLessonCount`, 60), independent of the card's 28 live lessons | `settings.json` |
+| K7 | The featured-course panel (was "Your plan") wakes at the top of Packages and rides through the ribbon (which closes Packages since 2026-09-28), results, voices and FAQ (round-1 A1). Confining it to packages is a behaviour change not made in this pass | `plan-panel.tsx` |

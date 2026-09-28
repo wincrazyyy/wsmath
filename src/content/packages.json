@@ -2,52 +2,17 @@
   {
     "id": "private",
     "kind": "private",
-    "tagline": "Customised coaching",
     "title": "Private coaching (1-to-1)",
     "price": {
       "now": "{{money pricing.privateHourlyRate}}",
       "per": "/ hour · typical rate"
     },
-    "description": "For students who want maximum customisation and fast score improvement.",
-    "bullets": [
-      {
-        "id": "deep-dive-school-tests",
-        "text": "Deep dive into school tests, Math IA preparation, and mock exams."
-      },
-      {
-        "id": "personalised-drills",
-        "text": "Personalised by-topic drills and homework, tracked and corrected weekly."
-      },
-      {
-        "id": "level-7-pacing",
-        "text": "Ideal if you’re pushing for Level 7 and want strict pacing."
-      }
-    ],
-    "includedTitle": "{{programme.intensiveLessonCount}}-lesson intensive · ~{{money pricing.intensiveBlockCost}} ({{programme.intensiveLessonCount}} × {{programme.sessionMinutes}} mins)",
-    "included": [
-      {
-        "id": "priority-correspondence",
-        "text": "Priority online correspondence."
-      },
-      {
-        "id": "unlimited-past-paper-practice",
-        "text": "Unlimited tailor-made past-paper practice with step-by-step solutions."
-      },
-      {
-        "id": "topic-summary-and-mock-prediction",
-        "text": "Detailed summary by topic and school mock exam prediction."
-      },
-      {
-        "id": "ia-setup-and-guidance",
-        "text": "IBDP Math IA topic setup & guidance until completion."
-      }
-    ],
-    "coverage": {
-      "label": "Every board covered",
-      "value": "{{content.courseCount}} courses across {{programme.curriculaLabel}}"
+    "blockPrice": {
+      "label": "{{programme.intensiveLessonCount}}-lesson intensive",
+      "now": "~{{money pricing.intensiveBlockCost}}",
+      "per": "({{programme.intensiveLessonCount}} × {{programme.sessionMinutes}} mins)"
     },
-    "ctaKey": "private",
-    "ctaLabel": "Ask about 1-to-1"
+    "ctaKey": "private"
   },
   {
     "id": "ibdp",
@@ -60,7 +25,6 @@
       "per": "· {{programme.ibdpLessonCount}} live lessons"
     },
     "description": "Sundays on Zoom, replays included. Course notes, past papers {{stats.pastPapersIbdp}}, and GDC technique taught paper by paper.",
-    "included": [],
     "variants": [
       {
         "id": "aasl",
@@ -183,7 +147,6 @@
       "per": "· {{programme.ialLessonCount}} live lessons"
     },
     "description": "Sundays on Zoom, replays included. Course notes, past papers {{stats.pastPapersIal}}, and A* strategy with GDC technique.",
-    "included": [],
     "variants": [
       {
         "id": "ial-math",
@@ -236,7 +199,6 @@
       "per": "· video + live options"
     },
     "description": "0607 and 0606 self-paced on video, 4MA1 live on Sundays. Free upgrade to the IBDP or IAL video course when you move up.",
-    "included": [],
     "variants": [
       {
         "id": "0607",

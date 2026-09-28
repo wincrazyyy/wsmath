@@ -71,8 +71,10 @@ holds the legacy site, with its build output (`out/`) tracked and served in prod
 - `src/app/` (page, layout, `/preview`, robots, sitemap) · `src/components/{layout,sections,ui,seo}`
   · `src/lib/` (content loading, anchors, grades, pricing, results stats, tokens, CTA beacon)
   · `src/content/` (JSON plus Zod schema) · `scripts/` (schema generation, course-outline extraction)
-- Section order: `nav · hero · about · ribbon · packages · results · voices · faq · footer`. The course
-  catalogue lives inside the three board plates as "Also taught 1-to-1" ledgers (docs/12 Part III).
+- Section order: `nav · hero · about · packages · ribbon · ia · results · voices · faq · footer`. The
+  course catalogue lives inside the three board plates as "Also taught 1-to-1" ledgers (docs/12 Part
+  III). Packages is "Group courses" (the three boards only); the carmine ribbon after it is the
+  private-coaching offer, then the 1-to-1 IA course (docs/12 Part J).
   `page-view.tsx` renders the 2px `.mvt-edge` seam between sections; sections never do. Sections
   carry `id="mvt-s-<name>"`; content stores plain ids and `src/lib/anchors.ts` maps between them.
 - Server Components by default. `"use client"` only for genuine interactivity, and every client

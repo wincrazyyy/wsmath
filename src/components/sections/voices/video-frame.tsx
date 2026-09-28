@@ -20,69 +20,74 @@ export interface VideoFrameProps {
  * the board cards' course outlines get, this design's canonical "foreign media
  * in the lacquer" object.
  *
- * CLIENT ISSUE #1. The player is in the initial server-rendered HTML with the
- * autoplaying source, eagerly loaded, with no click-to-load gate: the visitor's
- * arrival is the trigger, exactly as the owner asked. The three ways this is
- * usually got wrong, and why none of them happen here:
+ * CLIENT ISSUE #1, AS REVISED 2026-09-28. The player autoplays (muted) when the
+ * reader SCROLLS TO IT, not when the page opens. The owner first asked for
+ * autoplay on arrival; a player that starts at the foot of a long page, unseen,
+ * and is two minutes in by the time anyone reaches it, is not what they meant.
  *
- * 1. **`loading="lazy"`** — a lazy iframe below the fold does not start until it
- *    scrolls near the viewport, which is precisely "does not autoplay on load".
- *    Absent here, deliberately.
- * 2. **A bare `…/embed/<id>`** — the live site's URL, measured NOT to autoplay.
- *    The parameters live in `embed.ts` and are the actual fix.
- * 3. **`allow` without `autoplay`** — the frame is then denied the capability no
+ * So the iframe is not in the page until it is needed: this component mounts it
+ * — with the autoplaying source — the first time the frame has been at least
+ * {@link START_THRESHOLD} visible for {@link START_DWELL_MS} (a reader flicking
+ * past does not load a third-party player). It is then never unmounted, so
+ * scrolling away and back never restarts it. The mistakes this avoids:
+ *
+ * 1. **`loading="lazy"` as the trigger** — browsers load a lazy frame 1250–2500px
+ *    BEFORE it reaches the viewport, so it would start unseen. The observer
+ *    measures the frame itself.
+ * 2. **Swapping a poster `src` for the autoplaying one** — the frame would load
+ *    Loom twice, and the reader would watch it reload.
+ * 3. **A bare `…/embed/<id>`** — measured NOT to autoplay. The parameters live
+ *    in `embed.ts`.
+ * 4. **`allow` without `autoplay`** — the frame is then denied the capability no
  *    matter what its URL says. `allow="autoplay; …"` is the load-bearing part.
  *
- * `'use client'` buys exactly one thing: `prefers-reduced-motion`. A media query
- * cannot pick a `src` on a statically exported page, so the server renders the
- * autoplaying source — the safe default is the *requested* behaviour, and a
- * reader with JavaScript off still gets it — and this component swaps to the
- * non-autoplay source (Loom's poster + play button) only when the reader has
- * asked for reduced motion. No state changes for anyone else, so the common
- * path renders once and the frame is never reloaded.
+ * Without JavaScript there is nothing to notice the scroll, so a `<noscript>`
+ * frame carries the NON-autoplay source (Loom's poster and play button): the
+ * video is there and plays on a click. With `prefers-reduced-motion: reduce`
+ * the mounted frame gets that source too — a 2½-minute video starting itself
+ * is motion.
  *
  * The frame's classes are static, which matters more than it looks: the band
  * around it carries `.mvt-rev--s` and `MvtRoot` adds `.is-in` to that element
  * from outside React. Any React-owned `className` on the reveal path would be
- * rewritten on the next render and drop `.is-in`. State here rides `src` alone,
- * and the reveal animates opacity/transform on an ancestor — the iframe is
- * never remounted, so playback is never interrupted.
+ * rewritten on the next render and drop `.is-in`. State here rides the mount
+ * and `src` alone, and the reveal animates opacity/transform on an ancestor.
  *
- * ## The focus guard — an autoplaying third-party frame needs one
+ * ## The focus guard — a third-party frame that takes focus needs one
  *
  * Loom's player takes focus for itself twice without being asked:
  *
- * 1. About three seconds after a cold load, with the reader still at `scrollY 0`
- *    and having touched nothing, its script focuses the frame. From then on the
- *    page is broken for a keyboard: ArrowDown and Space no longer scroll (Space
- *    toggles playback) and the first Tab teleports the viewport eleven thousand
- *    pixels down into the player's own controls.
+ * 1. About three seconds after it loads, having been touched by nobody, its
+ *    script focuses the frame. From then on the page is broken for a keyboard:
+ *    ArrowDown and Space no longer scroll (Space toggles playback) and Tab
+ *    walks the player's own controls. Now that the frame loads ON SCREEN this
+ *    steal happens in plain view — and a reader scrolling by keyboard then has
+ *    no keyboard way to scroll past it.
  * 2. When the video ends, its end card focuses the "Reply" textarea. Focusing an
  *    element scrolls it into view through every ancestor frame, so a reader who
  *    let the muted autoplay run and kept reading is yanked back to the player
  *    two and a half minutes later, from anywhere on the page. Reported by the
  *    owner 2026-09-03; no embed parameter suppresses the end card.
  *
- * Dropping autoplay is not available: autoplay on arrival is the client's
- * stated requirement. So focus that lands on the frame **while the reader
- * cannot have put it there** is handed straight back and the scroll offset is
- * restored. "Cannot have put it there" is all three of:
+ * So focus that lands on the frame **without the reader's consent** is handed
+ * straight back and the scroll offset restored. Consent is one of:
  *
- * - the frame was not on screen at the previous paint (the observer's report,
- *   which lags one frame — the steal itself scrolls the frame into view, so the
- *   *current* rectangle is not evidence), and if the page did not move since
- *   that paint, the frame is not on screen now either;
- * - no Tab key was pressed in this document in the last {@link TAB_GRACE_MS}.
- *   Tab is the only key that can carry focus from the page into the frame; a
- *   wheel or a touch cannot, and a pointer needs the frame on screen;
- * - fewer than {@link MAX_CORRECTIONS} hand-backs this off-screen spell, so a
- *   hostile player cannot be fought forever.
+ * - a Tab keypress in this document in the last {@link TAB_GRACE_MS} — Tab is
+ *   the only key that can carry focus from the page into the frame;
+ * - the pointer over the frame (`pointerenter`/`pointerleave` fire on the
+ *   iframe element in THIS document) — the only way a mouse can reach inside;
+ * - on a touch screen, the frame being on screen. A tap inside a cross-origin
+ *   frame reaches this document as nothing at all, and a touch screen has no
+ *   Space or arrow keys to trap, so there the old rule stands. (The observer's
+ *   report lags a paint, and the end card's steal itself scrolls the frame into
+ *   view — so it is the previous paint's visibility that counts, plus "on
+ *   screen now" only if the page did not move since.)
  *
- * A reader who has the player on screen, or who tabbed into it, is never
- * touched: the guard yields for as long as their focus stays inside. When they
- * scroll the player off screen with focus still in it, focus is returned to the
- * page — Space and the arrows scroll again, and the end card's later grab is
- * then a fresh steal the rule above catches.
+ * and the guard gives up after {@link MAX_CORRECTIONS} hand-backs in one spell,
+ * so a hostile player cannot be fought forever. A reader who did consent is
+ * never touched: the guard yields for as long as their focus stays inside. When
+ * they scroll the player off screen with focus still in it, focus is returned
+ * to the page — Space and the arrows scroll again.
  *
  * Two mechanics, both measured rather than assumed:
  *
@@ -91,8 +96,8 @@ export interface VideoFrameProps {
  *    `document.activeElement` simply *is* the iframe at the next tick. So a
  *    `requestAnimationFrame` loop compares `activeElement` once per paint and
  *    remembers the scroll offset of the previous paint, which is by definition
- *    the pre-steal offset. One identity comparison per paint, armed only while
- *    the frame is off screen.
+ *    the pre-steal offset. One identity comparison per paint, from the moment
+ *    the frame mounts (both steals can now happen on screen).
  * 2. **The parent's scroll can arrive late.** Under site isolation the child
  *    frame asks the parent to scroll over IPC, so the jump may land a paint or
  *    two after the focus change. For {@link SETTLE_MS} after a hand-back the
@@ -101,6 +106,8 @@ export interface VideoFrameProps {
  */
 export function VideoFrame({ provider, url, title }: VideoFrameProps) {
   const [reduced, setReduced] = useState(false);
+  const [started, setStarted] = useState(false);
+  const slotRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<HTMLIFrameElement | null>(null);
 
   useEffect(() => {
@@ -111,9 +118,40 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
     return () => query.removeEventListener('change', apply);
   }, []);
 
+  /* the start trigger: the frame itself in view for a beat, then mount — once */
+  useEffect(() => {
+    const slot = slotRef.current;
+    if (slot === null) return;
+    /* no observer, no way to know when it is seen: start after hydration,
+       which is the old on-load behaviour rather than no video at all */
+    if (typeof IntersectionObserver === 'undefined') {
+      const fallback = window.setTimeout(() => setStarted(true), 0);
+      return () => window.clearTimeout(fallback);
+    }
+    let dwell = 0;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const inView = entries.some((entry) => entry.intersectionRatio >= START_THRESHOLD);
+        window.clearTimeout(dwell);
+        if (!inView) return;
+        dwell = window.setTimeout(() => {
+          observer.disconnect();
+          setStarted(true);
+        }, START_DWELL_MS);
+      },
+      { threshold: [0, START_THRESHOLD] },
+    );
+    observer.observe(slot);
+    return () => {
+      window.clearTimeout(dwell);
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     const frame = frameRef.current;
-    if (frame === null || typeof IntersectionObserver === 'undefined') return;
+    if (!started || frame === null || typeof IntersectionObserver === 'undefined') return;
+    const coarse = window.matchMedia('(pointer: coarse)').matches;
 
     /* the observer's last report — one paint behind, which is what makes it
        evidence about the moment *before* a steal */
@@ -130,6 +168,16 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
     let lastY = restY;
     /* focus is inside the frame with the reader's consent — leave it alone */
     let yielded = false;
+    /* a mouse can only reach inside the frame from over it */
+    let pointerOver = false;
+    const onPointerEnter = () => {
+      pointerOver = true;
+    };
+    const onPointerLeave = () => {
+      pointerOver = false;
+    };
+    frame.addEventListener('pointerenter', onPointerEnter);
+    frame.addEventListener('pointerleave', onPointerLeave);
 
     const options = { capture: true, passive: true } as const;
     const onKeydown = (event: KeyboardEvent) => {
@@ -188,8 +236,8 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
       if (yielded) return;
 
       const tabbed = now - lastTabAt < TAB_GRACE_MS;
-      const consented = visible || (!moved && onScreenNow());
-      if (tabbed || consented || corrections >= MAX_CORRECTIONS) {
+      const touched = coarse && (visible || (!moved && onScreenNow()));
+      if (tabbed || pointerOver || touched || corrections >= MAX_CORRECTIONS) {
         yielded = true;
         return;
       }
@@ -218,43 +266,66 @@ export function VideoFrame({ provider, url, title }: VideoFrameProps) {
     const observer = new IntersectionObserver(
       (entries) => {
         visible = entries.some((entry) => entry.isIntersecting);
+        /* each on-screen spell gets a fresh allowance of hand-backs */
         if (visible) {
           corrections = 0;
-          disarm();
           return;
         }
         /* the reader scrolled the player away with focus still inside it:
            give the page its keys back, and make the end card's later grab a
            fresh steal rather than an invisible move within a focused frame */
         if (document.activeElement === frame) handBack();
-        arm();
       },
       { threshold: 0.1 },
     );
     observer.observe(frame);
+    /* armed from the mount: the frame mounts on screen, and its first steal
+       comes about three seconds later, in view */
+    arm();
 
     return () => {
+      frame.removeEventListener('pointerenter', onPointerEnter);
+      frame.removeEventListener('pointerleave', onPointerLeave);
       window.removeEventListener('keydown', onKeydown, options);
       for (const type of GESTURES) window.removeEventListener(type, onGesture, options);
       observer.disconnect();
       disarm();
     };
-  }, []);
+  }, [started]);
+
+  const frameProps = {
+    title,
+    allow: 'autoplay; fullscreen; picture-in-picture; encrypted-media; clipboard-write',
+    allowFullScreen: true,
+    referrerPolicy: 'strict-origin-when-cross-origin',
+  } as const;
 
   return (
-    <div className="mvt-video-frame">
-      <iframe
-        ref={frameRef}
-        src={resolveEmbed(provider, url, { noAutoplay: reduced })}
-        title={title}
-        allow="autoplay; fullscreen; picture-in-picture; encrypted-media; clipboard-write"
-        allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
-        loading="eager"
-      />
+    <div ref={slotRef} className="mvt-video-frame">
+      {started ? (
+        <iframe ref={frameRef} src={resolveEmbed(provider, url, { noAutoplay: reduced })} {...frameProps} />
+      ) : null}
+      {/* no script, no scroll trigger: the player without autoplay, one click away */}
+      <noscript>
+        <iframe src={resolveEmbed(provider, url, { noAutoplay: true })} {...frameProps} />
+      </noscript>
     </div>
   );
 }
+
+/**
+ * How much of the frame must be on screen before it starts. Under half: the
+ * player is 668px tall at the full measure, and a reader who has only its top
+ * edge in view has not reached it yet.
+ */
+const START_THRESHOLD = 0.4;
+
+/**
+ * How long the frame must stay at {@link START_THRESHOLD} before it mounts, so a
+ * reader flicking past does not load a third-party player they never see.
+ * Short enough to be imperceptible to one who stops.
+ */
+const START_DWELL_MS = 300;
 
 /**
  * How long after a Tab keypress focus arriving on the frame counts as the

@@ -204,6 +204,11 @@ export const Settings = z
           "Lessons in an IBDP course",
           "Digits only, e.g. 28. Applies to all four IBDP courses. The per-lesson rate and the value comparison use it.",
         ),
+        ibdpHeadlineLessonCount: integer(
+          "IBDP lessons, headline figure",
+          "Digits only, e.g. 60. The lesson count the floating featured-course panel advertises for the IBDP group " +
+            "course, printed with a plus (60+). The course card still quotes the live lessons above.",
+        ),
         ialLessonCount: integer("Lessons in the International A-Level course", "Digits only, e.g. 32."),
         edexcelIgcseLessonCount: integer(
           "Lessons in the Edexcel International GCSE course",

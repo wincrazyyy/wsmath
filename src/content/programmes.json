@@ -7,7 +7,7 @@
     "sub": "AAHL / AIHL",
     "gradeScaleId": "ibdp",
     "order": 0,
-    "fullLabel": "IBDP · HL / AAHL / AIHL",
+    "fullLabel": "IBDP HL · HL / AAHL / AIHL",
     "totalCount": 36
   },
   {
@@ -18,7 +18,7 @@
     "sub": "AASL / AISL",
     "gradeScaleId": "ibdp",
     "order": 1,
-    "fullLabel": "IBDP · SL / AASL / AISL",
+    "fullLabel": "IBDP SL · SL / AASL / AISL",
     "totalCount": 31
   },
   {
@@ -51,7 +51,7 @@
     "sub": "Cambridge Additional Math 0606 / Edexcel Further Pure Math 4PM1",
     "gradeScaleId": "igcse",
     "order": 4,
-    "fullLabel": "IGCSE · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
+    "fullLabel": "IGCSE Additional Math · Cambridge Additional Math (0606) / Edexcel Further Pure Math (4PM1)",
     "totalCount": 6
   },
   {
@@ -62,7 +62,7 @@
     "sub": "Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
     "gradeScaleId": "igcse",
     "order": 5,
-    "fullLabel": "IGCSE · Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
+    "fullLabel": "IGCSE Math · Cambridge 0607 / Cambridge 0580 / Edexcel 4PM0",
     "totalCount": 22
   }
 ]

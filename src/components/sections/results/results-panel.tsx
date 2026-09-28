@@ -72,7 +72,7 @@ export interface ResultsLegendCard {
 /** Copy for the interactive block, all from `pages.results`. */
 export interface ResultsPanelCopy {
   readonly tabsLabel: string;
-  /** Printed before each tab's record count — `n = `. Carries its own trailing space. */
+  /** Printed before each tab's student count — `students = `. Carries its own trailing space. */
   readonly tabsCountLabel: string;
   readonly stream: {
     readonly fromLabel: string;
@@ -411,7 +411,7 @@ function GroupPanel({ group, copy, active }: GroupPanelProps) {
 
       {/* the stream's caption — counted from students.json for THIS group, never
           typed into copy */}
-      <ul className="mvt-legend">
+      <ul className="mvt-legend" style={cssVar('--leg-n', String(copy.legend.length))}>
         {copy.legend.map((card) => {
           const count = group.legend[card.metric];
           return (

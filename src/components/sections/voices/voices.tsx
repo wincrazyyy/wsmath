@@ -161,10 +161,11 @@ function printing(sheets: readonly Testimonial[]): readonly RowSheet[] {
  * defects; both fixes are structural, not cosmetic.
  *
  * **Issue #1 — the video.** `.mvt-videoband` was a play-glyph banner in the
- * artifact and a click-to-load poster on the live site. It is now a real,
- * eagerly-loaded, autoplaying player in the server-rendered HTML — see
- * `video-frame.tsx` and `embed.ts` for why the URL parameters, not the markup,
- * are the fix. The band itself is gone (owner, 2026-09-17): the player is the
+ * artifact and a click-to-load poster on the live site. It is now a real
+ * player that autoplays, muted, when the reader scrolls to it (2026-09-28; it
+ * started on page load before) — see `video-frame.tsx` for the trigger and
+ * `embed.ts` for why the URL parameters, not the markup, make it autoplay at
+ * all. The band itself is gone (owner, 2026-09-17): the player is the
  * first item of the featured grid, spanning two rows beside two plates with the
  * other two beneath, and its heading is the head's `lede`. The slip around the
  * player is a matte, so the cell it spans is never bare lacquer — see

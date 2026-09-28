@@ -1,15 +1,17 @@
 /* ============================================================
    PACKAGES — "the vault" (#mvt-s-packages)
    Section family: .mvt-pk-*, .mvt-pack*, .mvt-ledger*, .mvt-snap*,
-   .mvt-lineup*, .mvt-price*, .mvt-sub*, .mvt-slip*, .mvt-pick,
-   .mvt-nameplate, .mvt-bullets, .mvt-strike.
+   .mvt-lineup*, .mvt-price*, .mvt-slip*, .mvt-pick,
+   .mvt-nameplate, .mvt-strike.
    Transcribed from the improved artifact, CSS lines 620–892.
 
-   The section is now four blocks: the ledger beside the snapshot,
-   THREE boards across one row with the flagship lifted between
-   them, the private plate full width beneath, then the IA course.
-   The value-comparison row and the coverage trays are gone with
-   their markup, and `.mvt-cmp*` / `.mvt-cov*` with them.
+   The section is now two blocks: THREE boards across one row with
+   the flagship lifted between them, then the IA course. The ledger
+   beside the snapshot is an optional row above the boards, unauthored
+   since 2026-09-28. The private plate became the carmine ribbon after
+   this section (ribbon.css). The value-comparison row and the
+   coverage trays are gone with their markup, and `.mvt-cmp*` /
+   `.mvt-cov*` with them.
 
    Palette colours are NEVER declared here — only var(--…) from
    globals.css. Shared vocabulary (.mvt-well, .mvt-raise, .mvt-knurl,
@@ -19,29 +21,39 @@
    `.mvt-ia*` and `.mvt-themes` belong to ia-course.css.
    ============================================================ */
 
-/* ── the head, with no eyebrow ────────────────────────────────────────────
-   `packagesPage.eyebrow` is optional and unauthored, and the shared pattern
-   places the heading on row 2 because the eyebrow owns row 1. With no eyebrow
-   rendered that row is empty and its 16px row-gap opens above the heading, so
-   the three children are re-seated one row up. Namespaced and at id
-   specificity so it also beats the foundation's ≤1024 re-placement — the only
-   other rule that moves the scale — which is restated below for the same
-   reason. `packagesPage.sub` is optional too and currently unauthored (removed
-   2026-09-28). Above 1024 the rows here already match the foundation's
-   no-sub layout (heading on row 1, scale on row 2); below it the scale must
-   close up to row 2 itself, or the empty sub row opens a second gap. */
-#mvt-s-packages .mvt-head > .mvt-h2      {grid-row:1}
-#mvt-s-packages .mvt-head > .mvt-head-sub{grid-row:1}
-#mvt-s-packages .mvt-head > .mvt-rule    {grid-row:2}
+/* ── the head, when it has no eyebrow ─────────────────────────────────────
+   `packagesPage.eyebrow` and `sub` are both optional. Every head WITH an
+   eyebrow is the foundation's pattern untouched (globals.css) — with a sub the
+   eyebrow owns row 1; without one it sits on the heading's baseline in the
+   second track, as FAQ's does — so nothing here applies to it. (The current
+   copy is that case: an eyebrow, no sub, 2026-09-28.)
+   What the foundation does not cover is a head with NO eyebrow: it still
+   places the heading on row 2, the empty row 1 opens its 16px row-gap above
+   the heading, and at ≤1024 an absent sub leaves another empty row above the
+   scale. These rules re-seat that case one row up, at id specificity so they
+   also beat the foundation's ≤1024 re-placement. Above 1024 without a sub they
+   already match the foundation's no-sub layout (heading row 1, scale row 2). */
+#mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)) > .mvt-h2      {grid-row:1}
+#mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)) > .mvt-head-sub{grid-row:1}
+#mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)) > .mvt-rule    {grid-row:2}
 @media (max-width:1024px){
-  #mvt-s-packages .mvt-head > .mvt-h2      {grid-row:1}
-  #mvt-s-packages .mvt-head > .mvt-head-sub{grid-row:2}
-  #mvt-s-packages .mvt-head > .mvt-rule    {grid-row:3}
-  #mvt-s-packages .mvt-head:not(:has(.mvt-head-sub)) > .mvt-rule{grid-row:2}
+  #mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)) > .mvt-h2      {grid-row:1}
+  #mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)) > .mvt-head-sub{grid-row:2}
+  #mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)) > .mvt-rule    {grid-row:3}
+  #mvt-s-packages .mvt-head:not(:has(> .mvt-eyebrow)):not(:has(> .mvt-head-sub)) > .mvt-rule{grid-row:2}
 }
 
 /* ── row 1 · the valuation ledger + the outcome snapshot ─────────────────── */
+/* Optional, and unauthored since 2026-09-28. Either tile may be authored
+   without the other; alone it takes the full measure rather than 60% of it. */
 .mvt-pk-r1{display:grid;grid-template-columns:60fr 40fr;gap:clamp(20px,2.2vw,44px);align-items:stretch}
+.mvt-pk-r1 > :only-child{grid-column:1/-1}
+/* With no row 1 the boards follow the head directly. The head's own margin is
+   the section's head → content spacing, so the row adds only the flagship's
+   18px overhang (`margin-block:-18px`, THE CENTRE BOARD) — its lifted top edge
+   then sits where any section's first content sits. Below 1280 the flagship
+   gives the overhang back, and so does this (≤1279 block). */
+.mvt-head + .mvt-pk-r3{margin-top:18px}
 
 .mvt-ledger{padding:clamp(22px,2vw,38px) clamp(22px,2.2vw,42px);display:flex;flex-direction:column;gap:14px}
 .mvt-ledger > .mvt-mu{color:var(--brass)}
@@ -89,14 +101,6 @@
 .mvt-pack--hi{background:linear-gradient(163deg,var(--lac-rise) 3%,var(--lac-lit) 44%,var(--lac-face) 96%)}
 .mvt-pack-main{display:flex;flex-direction:column;gap:16px}
 
-/* ── row 4 · the private plate, alone and full width ─────────────────────────
-   It is no longer one of a pair. The three boards are a menu of the same
-   product at three exam boards, and the private plate is the answer for the
-   student none of them fit — so it reads under all three rather than beside
-   one of them, and takes the full measure to seat its pitch next to the
-   intensive block's own ledger (`.mvt-pack--private`, below). */
-.mvt-pk-r4{display:grid;grid-template-columns:1fr;margin-top:clamp(20px,2.2vw,44px)}
-
 /* ── the board plate ─────────────────────────────────────────────────────────
    A column at every width. The pitch-beside-vitrine grid the two-across cut
    used is gone with that cut: in a third of the measure there is no room for
@@ -143,12 +147,6 @@
   box-shadow:inset 0 2px 3px rgba(4,1,16,.7),
     inset 0 -1px 0 color-mix(in oklab,var(--brass) 26%,transparent)}
 
-/* the PDFs' brass starburst bullet, translated into the page's own cast metal */
-/* the coverage claim on the private card — the one card that earns it */
-.mvt-cover{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;
-  padding-top:14px;border-top:1px solid color-mix(in oklab,var(--brass) 34%,transparent);
-  color:var(--ink-2)}
-
 /* a debossed slot with a brass lower lip — the badge is cut in, not stuck on */
 .mvt-nameplate{align-self:flex-start;min-width:132px;padding:11px 20px;text-align:center;
   color:var(--brass-hi);background:var(--lac-well);border-radius:3px 12px 3px 12px;
@@ -158,23 +156,6 @@
 .mvt-price b{font-family:var(--f-display);font-size:clamp(30px,2.9vw,50px);font-weight:600;line-height:1}
 /* the struck list price rides one step below the price paid */
 .mvt-price .mvt-price-was{font-family:var(--f-display);font-size:clamp(24px,2.1vw,34px)}
-/* the intensive block's figure: same step, plain ink — the brass cast stays
-   reserved for the headline price of each plate */
-.mvt-price b.mvt-sub-fig{font-size:clamp(24px,2.1vw,34px);color:var(--ink)}
-
-.mvt-pack ul.mvt-bullets li{position:relative;padding:11px 0 11px 22px;font-size:15.5px;line-height:1.55;
-  text-wrap:pretty;color:var(--ink-2);border-bottom:1px solid color-mix(in oklab,var(--ink) 11%,transparent)}
-.mvt-pack ul.mvt-bullets li:last-child{border-bottom:0}
-/* a cast-brass square, not a bullet glyph */
-.mvt-pack ul.mvt-bullets li::before{content:"";position:absolute;left:0;top:19px;width:7px;height:7px;
-  background:var(--brass-cast);box-shadow:0 0 0 1px rgba(4,1,16,.5)}
-
-.mvt-sub{padding:clamp(16px,1.4vw,24px) clamp(16px,1.6vw,26px);display:flex;flex-direction:column;
-  gap:10px;flex:1 1 auto}
-.mvt-sub ul{display:flex;flex-direction:column;flex:1 1 auto}
-.mvt-sub li{flex:1 1 auto;display:flex;align-items:center;padding:11px 0;font-size:15px;
-  line-height:1.52;color:var(--ink-2);border-bottom:1px solid color-mix(in oklab,var(--ink) 11%,transparent)}
-.mvt-sub li:last-child{border-bottom:0}
 
 /* the outline slip — a <figure> holding a framed page and, if one is authored,
    its caption. Three across it is an ATTACHMENT ROW, not a vitrine: a 92px
@@ -340,6 +321,7 @@
    decides. */
 @media (max-width:1279px){ /* 1499 zoomed: under 1280 the page is 1:1 */
   .mvt-pk-r3{grid-template-columns:minmax(0,1fr) minmax(0,1fr);margin-bottom:0}
+  .mvt-head + .mvt-pk-r3{margin-top:0}
   .mvt-pk-r3 > .mvt-pack--hi{grid-column:1/-1;grid-row:1;margin-block:0;
     padding-top:clamp(24px,2.2vw,42px);padding-bottom:clamp(24px,2.2vw,42px);
     display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto 1fr;
@@ -364,24 +346,11 @@
   .mvt-pk-r3 > .mvt-pack--board:not(.mvt-pack--hi) .mvt-lf-trigger > .mvt-slip-frame{height:auto;aspect-ratio:var(--slip-ar,1500/2123)}
 }
 
-/* ── THE PRIVATE PLATE, FULL WIDTH · pitch beside the intensive ledger ────
-   The pitch takes the wider track and the 8-lesson intensive's ledger the
-   narrower one, with a 320px floor under it — below that the block's own price
-   row (label · figure · unit) wraps to three lines. The coverage claim and the
-   foot span both. */
-.mvt-pack--private{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);
-  column-gap:clamp(28px,2.8vw,56px);row-gap:16px;align-items:stretch}
-.mvt-pack--private > .mvt-pack-main{grid-area:1/1;max-width:none}
-.mvt-pack--private > .mvt-sub{grid-area:1/2}
-.mvt-pack--private > .mvt-cover{grid-column:1/-1}
-.mvt-pack--private > .mvt-pack-foot{grid-column:1/-1;margin-top:0}
-
 /* ── responsive ──────────────────────────────────────────────────────────── */
 @media (max-width:1024px){
-  .mvt-pk-r1,.mvt-pk-r3,.mvt-pk-r4{grid-template-columns:minmax(0,1fr)}
-  /* everything stacks: the private plate becomes a column, and the flagship is
-     a plate like the two around it — no span, no row pin */
-  .mvt-pack--private{display:flex;flex-direction:column}
+  .mvt-pk-r1,.mvt-pk-r3{grid-template-columns:minmax(0,1fr)}
+  /* everything stacks: the flagship is a plate like the two around it — no
+     span, no row pin */
   .mvt-pk-r3 > .mvt-pack--hi{grid-column:auto;grid-row:auto;display:flex;order:-1}
   .mvt-pk-r3 > .mvt-pack--hi > .mvt-pack-main{max-width:none}
   /* the landscape band's start-aligned figure would shrink-wrap here and leave

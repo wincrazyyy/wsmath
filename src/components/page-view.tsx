@@ -12,16 +12,18 @@
  * client bundle on the real route, and a `node:fs` import anywhere below it
  * would break the preview. Content arrives as props — never imported.
  *
- * Document order: nav · main → hero · about · ribbon · packages · results ·
+ * Document order: nav · main → hero · about · packages · ribbon · ia · results ·
  * voices · faq · footer, then the fixed "Your plan" panel and the WhatsApp coin
  * (foundation-owned — no section ever renders a fixed element). A `.mvt-edge`
  * seam separates every adjacent pair.
  *
  * `courses` is no longer a section: the coverage trays were absorbed into
- * Packages, which now sells four paths and closes with the legend for them.
- * Nothing compensates for the vacated band — About ends on its journey pills
- * and the carmine ribbon is a stronger adjacency than About → a neutral
- * coverage list → Ribbon, on a page that is already very long.
+ * Packages. Since 2026-09-28 the page sells group before 1-to-1: Packages
+ * ("Group courses") holds only the three boards; the carmine ribbon, moved
+ * from above Packages to below it, absorbed the private plate and is the
+ * private-coaching offer; the 1-to-1 IA course follows it as a section of its
+ * own. Neither has a nav marker; both carry `data-spy-part` so the scroll-spy
+ * lights "Packages" across them (`mvt-root.tsx`).
  */
 import { SiteFooter } from '@/components/layout/footer';
 import { MvtRoot } from '@/components/layout/mvt-root';
@@ -33,6 +35,7 @@ import { WhatsAppCoin } from '@/components/layout/plan-panel/whatsapp-coin';
 import { About } from '@/components/sections/about/about';
 import { FaqSection } from '@/components/sections/faq/faq';
 import { Hero } from '@/components/sections/hero/hero';
+import { IaCourseSection } from '@/components/sections/ia-course/ia-course';
 import { PackagesSection } from '@/components/sections/packages/packages';
 import { ResultsSection } from '@/components/sections/results/results';
 import { Ribbon } from '@/components/sections/ribbon/ribbon';
@@ -74,7 +77,16 @@ export function PageView({ content }: PageViewProps) {
   const phone = settings.contact.whatsappPhone;
   /* `derivePricing` is not called here: every figure the section shows arrives
      through the token system, which runs it once inside `buildTokenMap`. */
-  const planOptions = planOptionsFromPackages(content.packages, whatsappPrefills);
+  /* The panel features `plan.defaultPackageId` (nothing on the page selects
+     another), and `plan.name` / `plan.unit` dress that one package in the panel
+     only; its price stays the package's own, so panel and card cannot differ. */
+  const plan = pages.packagesPage.plan;
+  const planOptions = planOptionsFromPackages(content.packages, whatsappPrefills).map((option) =>
+    option.key === plan.defaultPackageId
+      ? { ...option, name: plan.name ?? option.name, unit: plan.unit ?? option.unit }
+      : option,
+  );
+  const privateOffer = content.packages.find((pkg) => pkg.kind === 'private');
 
   return (
     <MvtRoot skipLabel={pages.nav.skipLabel}>
@@ -99,16 +111,29 @@ export function PageView({ content }: PageViewProps) {
           <About about={pages.about} />
           <Edge />
 
-          <Ribbon ribbon={pages.ribbon} phone={phone} message={whatsappPrefills[pages.ribbon.ctaKey]} />
-          <Edge />
-
           <PackagesSection
             page={pages.packagesPage}
             packages={content.packages}
             courseGroups={content.courseGroups}
-            iaCourse={content.iaCourse}
             phone={phone}
             prefills={whatsappPrefills}
+          />
+          <Edge />
+
+          <Ribbon
+            ribbon={pages.ribbon}
+            offer={privateOffer}
+            phone={phone}
+            message={whatsappPrefills[pages.ribbon.ctaKey]}
+          />
+          <Edge />
+
+          <IaCourseSection
+            ia={content.iaCourse}
+            ctaLabel={content.iaCourse.ctaLabel ?? pages.packagesPage.ctaLabel}
+            footTag={pages.packagesPage.iaFootTag}
+            phone={phone}
+            message={whatsappPrefills[content.iaCourse.ctaKey]}
           />
           <Edge />
 

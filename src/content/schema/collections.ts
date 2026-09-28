@@ -75,7 +75,7 @@ export const Programme = z
     label: text("Programme name", "Full name used in the matrix, e.g. IBDP · HL."),
     fullLabel: text(
       "Programme name in full",
-      "Name including every detail, e.g. IBDP · HL / AAHL / AIHL. Used where there is room for it.",
+      "The results tab on wide screens, written Heading · detail: before the first · is the large heading, after it the small line, e.g. IBDP HL · HL / AAHL / AIHL.",
     ),
     tabLabel: text("Folder tab label", "Short name on the ledger tab, e.g. A-L Further Math. Keep it short — space is tight."),
     sub: text(
@@ -223,6 +223,29 @@ export const PackagePrice = z
   .meta({ id: "PackagePrice", title: "Price" });
 
 /**
+ * A second, fixed-length price printed beside a package's main one — the
+ * private package's 8-lesson intensive. Three fields, not one
+ * `label · price (unit)` string the renderer has to split apart again.
+ *
+ * The intensive's ~HKD 18,000 is the CORRECT figure (`pricing.ts` docblock:
+ * 8 × 90 min × HKD 1,500 per hour). The artifact's `~HKD 12,000` drops the
+ * 90/60 session factor — never retype it; it is `pricing.intensiveBlockCost`.
+ */
+export const PackageBlockPrice = z
+  .strictObject({
+    label: text("Block name", "The small caps name, e.g. {{programme.intensiveLessonCount}}-lesson intensive.", {
+      tokens: true,
+    }),
+    now: text("Block price", "What the block costs, e.g. ~{{money pricing.intensiveBlockCost}}.", { tokens: true }),
+    per: text(
+      "Block detail",
+      "Optional. Printed small after the price, e.g. ({{programme.intensiveLessonCount}} × {{programme.sessionMinutes}} mins).",
+      { tokens: true },
+    ).optional(),
+  })
+  .meta({ id: "PackageBlockPrice", title: "Block price" });
+
+/**
  * One sellable course inside a board package — AASL, 0607, 4MA1 and so on.
  *
  * The outline viewer's pages come from `variants[].outlinePage`, in order, so a
@@ -280,25 +303,6 @@ export const CourseVariant = z
   })
   .meta({ id: "CourseVariant", title: "Course" });
 
-/**
- * The coverage claim a card is entitled to make — the label / value pair the
- * retired courses strip used to carry as a section of its own.
- *
- * It lives on the card rather than in page copy for the same reason `footTag`
- * does: it is a claim about *this* product. Only the private card genuinely
- * covers every course, which is why it is optional.
- */
-export const PackageCoverage = z
-  .strictObject({
-    label: text("Coverage label", "The brass phrase, e.g. Every board covered."),
-    value: text(
-      "Coverage claim",
-      "The claim beside it, e.g. {{content.courseCount}} courses across {{programme.curriculaLabel}}.",
-      { tokens: true },
-    ),
-  })
-  .meta({ id: "PackageCoverage", title: "Coverage claim" });
-
 export const CourseOutline = z
   .strictObject({
     label: text("Viewer title", "The title inside the viewer, e.g. IBDP course outline."),
@@ -328,23 +332,8 @@ export const Package = z
     tagline: text("Second badge", "Optional. Outlined badge, e.g. Customised coaching.").optional(),
     title: text("Title", "Card title, e.g. IBDP Mathematics."),
     price: PackagePrice.optional(),
+    blockPrice: PackageBlockPrice.optional(),
     description: longText("Description", "Optional. Short paragraph under the title — the leaflet carries a board's detail.", { tokens: true }).optional(),
-    bullets: field(z.array(textItem("Bullet", "One selling point.", { tokens: true })).min(1), {
-      title: "Bullet points",
-      description: "One main benefit per line. Add, remove or reorder freely.",
-      widget: "collection",
-    }).optional(),
-    includedTitle: text(
-      "Included block title",
-      "Optional. Heading of the boxed list, e.g. {{programme.intensiveLessonCount}}-lesson intensive · ~{{money pricing.intensiveBlockCost}}.",
-      { tokens: true },
-    ).optional(),
-    included: field(z.array(textItem("Included item", "One thing included.", { tokens: true })), {
-      title: "What is included",
-      description: "One line per benefit (priority correspondence, IA support, etc.). Leave empty to hide the box.",
-      widget: "collection",
-    }),
-    coverage: PackageCoverage.optional(),
     variants: field(z.array(CourseVariant).min(1), {
       title: "Courses in this package",
       description:
@@ -356,7 +345,6 @@ export const Package = z
       "Leaflet cover",
       "Optional. The leaflet's cover page — the card's face and the first page of the viewer. File: /courses/<board>/cover.webp.",
     ).optional(),
-    footTag: text("Card foot tag", "Optional. The small caps line in the card's foot.").optional(),
     ctaLabel: text("Button label", "Optional. What this card's WhatsApp button says, e.g. Enquire about the IBDP course. Falls back to the page label.").optional(),
     ctaKey: CtaKey,
   })
@@ -472,7 +460,7 @@ export const WhatsappPrefills = z
   .strictObject({
     nav: prefill("top navigation"),
     hero: prefill("Hero"),
-    "about-ribbon": prefill("About ribbon"),
+    "about-ribbon": prefill("Private coaching ribbon"),
     results: prefill("Results"),
     private: prefill("Private coaching card"),
     ibdp: prefill("IBDP course card"),
@@ -503,7 +491,7 @@ export type TestimonialLang = (typeof TESTIMONIAL_LANGS)[number];
 export type TestimonialPlacement = (typeof TESTIMONIAL_PLACEMENTS)[number];
 export type PackagePrice = z.infer<typeof PackagePrice>;
 export type CourseVariant = z.infer<typeof CourseVariant>;
-export type PackageCoverage = z.infer<typeof PackageCoverage>;
+export type PackageBlockPrice = z.infer<typeof PackageBlockPrice>;
 export type CourseDelivery = (typeof COURSE_DELIVERIES)[number];
 export type CourseTier = (typeof COURSE_TIERS)[number];
 export type CourseOutline = z.infer<typeof CourseOutline>;

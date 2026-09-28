@@ -18,7 +18,7 @@ const PARK_SLACK = 12;
 export interface PlanPanelProps {
   /** `settings.contact.whatsappPhone`. */
   phone: string;
-  /** `pages.packagesPage.plan.label` — "Your plan". */
+  /** `pages.packagesPage.plan.label` — "Featured course". */
   label: string;
   /** `pages.packagesPage.plan.ctaLabel` — "Get in touch". */
   ctaLabel: string;
