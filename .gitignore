@@ -40,7 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# static export output — never commit (CLAUDE.md non-negotiable #5)
+# build output (astro.config.mjs outDir, published by Cloudflare Pages) — never commit
 /out/
 
 # the owner's source sales PDFs — input material, used once. The durable
@@ -54,7 +54,7 @@ next-env.d.ts
 /docs/other/
 /CLAUDE.local.md
 
-# astro
+# astro (dist/ is from older local builds; the output is out/)
 /dist/
 /.astro/
 
