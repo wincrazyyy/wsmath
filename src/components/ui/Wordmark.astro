@@ -1,0 +1,37 @@
+---
+/*
+ * The WSMath logo in full: the W-root and integral of the icon (W, S) under one bar that runs on over "Math". Used in
+ * the header, the footer and the privacy page. The art is src/assets/brand/logo.svg, drawn with the icons by
+ * scripts/brand.mjs; the link's label carries the name, so the drawing is hidden from assistive tech.
+ */
+import logoSvg from '../../assets/brand/logo.svg?raw';
+
+interface Props {
+  href?: string;
+}
+
+const { href = '#top' } = Astro.props;
+
+const viewBox = logoSvg.match(/viewBox="([^"]+)"/)?.[1];
+const art = logoSvg.match(/<svg[^>]*>([\s\S]*)<\/svg>/)?.[1];
+if (!viewBox || !art) throw new Error('Wordmark: src/assets/brand/logo.svg is not a single <svg> with a viewBox');
+const [, , vbW, vbH] = viewBox.split(/\s+/).map(Number);
+const HEIGHT = 30;
+---
+
+<a class="wordmark" href={href} aria-label="WSMath home">
+  <svg class="logo" aria-hidden="true" focusable="false" viewBox={viewBox} width={Math.round((HEIGHT * vbW) / vbH)} height={HEIGHT} set:html={art} />
+</a>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    text-decoration: none;
+  }
+  .logo {
+    display: block;
+    overflow: visible;
+  }
+</style>

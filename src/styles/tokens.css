@@ -1,0 +1,83 @@
+/*
+ * WSMath design tokens, taken from the reference (design/reference/app/template.js and styles.css).
+ * Drop into src/styles/tokens.css. Names are suggestions; the values are the design's.
+ */
+:root {
+  /* grounds */
+  --bg: #07050A;                 /* page */
+  --bg-band: #0B0810;            /* packages and students sections */
+  --bg-footer: #050407;
+  --bg-menu: #09060E;            /* section menu panel under 960px */
+  --card-featured: #100B1B;      /* IBDP package card */
+  --card-banner: #0E0916;        /* one-to-one banner */
+  --card-quote-featured: #100A17;
+  --card-quote: #0E0915;
+  --stage: radial-gradient(120% 90% at 65% 30%, #0D0916 0%, #09060E 55%, #07050B 100%); /* results stage */
+
+  /* ink */
+  --ink-head: #F3ECE1;           /* headings */
+  --ink-strong: #F0E9DE;         /* body emphasis, button text on dark */
+  --ink-body: #E2D9CC;
+  --ink-soft: #D6CDBF;
+  --ink-2: #B9AFA3;              /* secondary copy */
+  --ink-3: #9A9085;              /* labels, captions */
+  --ink-4: #8E8579;              /* faint numbers, footer copy */
+  --ink-on-gold: #08060B;
+
+  /* gold (the design exposes this one as a tweak) */
+  --gold: #CDA968;
+  --gold-light: #EAD7A6;         /* links, italic "Math", follow links */
+  --gold-hover: #F6E7BF;
+  --gold-dim: #A88A55;           /* hero Chinese line */
+  --gold-tint: rgba(205, 169, 104, 0.14);  /* selected pill fill */
+
+  /* purple light (glows only, never flat fills) */
+  --violet-glow: rgba(66, 50, 102, 0.3);
+  --violet-deep: rgba(39, 29, 65, 0.12);
+
+  /* lines */
+  --line: rgba(240, 233, 222, 0.09);
+  --line-soft: rgba(240, 233, 222, 0.07);
+  --line-strong: rgba(240, 233, 222, 0.12);
+  --line-pill: rgba(240, 233, 222, 0.2);
+  --line-gold: rgba(205, 169, 104, 0.28);  /* section borders */
+  --line-gold-strong: rgba(205, 169, 104, 0.55);
+
+  /* type */
+  --font-display: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;  /* wdth 62.5–100, wght 300–800, italic */
+  --font-body: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  --font-zh-hant: 'Noto Serif TC', 'Songti TC', serif;
+  --font-zh-hans: 'Noto Serif SC', 'Songti SC', serif;
+  --font-math: 'Noto Sans Math', 'Noto Serif Display', Georgia, serif;   /* canvas labels */
+
+  /* sizes use cqi (1% of the page width), so a page locked to a device width matches that device */
+  --fs-h1: clamp(56px, 8.4cqi, 124px);      /* "Winson Siu": stretch 75%, weight 400, line-height .95, tracking -.015em */
+  --fs-h2: clamp(44px, 5.4cqi, 76px);       /* section titles: stretch 75%, weight 400, line-height 1, tracking -.012em */
+  --fs-h2-cta: clamp(56px, 7.4cqi, 108px);  /* closing heading, line-height 1 */
+  --fs-zh-sub: clamp(22px, 2.2cqi, 30px);   /* gold Chinese line under each title: TC 500, tracking .18em */
+  --fs-body: 18px;  --lh-body: 1.6;
+  --fs-lead: 17px;
+  --fs-small: 15px;
+  --fs-label: 14px;
+
+  /* space */
+  --page-max: 1440px;
+  --gutter: clamp(20px, 4cqi, 48px);
+  --section-y: clamp(88px, 10cqi, 140px);
+
+  /* shapes */
+  --radius-button: 3px;
+  --radius-pill: 999px;
+  --button-h: 54px;   /* primary and secondary buttons; header button 44px */
+  --pill-h: 40px;     /* 44px for the package tabs */
+  --focus: 2px solid var(--gold);  /* outline-offset 4px, radius 3px */
+}
+
+/*
+ * Breakpoints: container queries on the page root, which carries `container: wsm / inline-size`.
+ *   1279  package topic models narrow (108px)          1200  testimonials video goes full width
+ *    960  header folds into the menu; hero 2-up basis   900  one package at a time (tabs), stacked stage,
+ *    620  phone: 2-col IA grid, 1-col CTA, compact       FAQ art hidden, 2-col CTA, iPad card layout (621–900)
+ *         tables, inline schools list                  520  smaller stats and stage, 132px topic models
+ * Reduced motion: every canvas draws one still frame; marquees become scrollable rows.
+ */

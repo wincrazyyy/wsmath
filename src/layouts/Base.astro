@@ -1,0 +1,130 @@
+---
+import { getImage } from 'astro:assets';
+import heroImg from '../assets/winson-hero.webp';
+import ogImg from '../assets/og.jpg';
+import { FONT_STYLESHEETS, inlineFontCss } from '../lib/fonts';
+import { HERO_SIZES, HERO_WIDTHS } from '../lib/site';
+import '../styles/tokens.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  preloadHero?: boolean;
+}
+
+const {
+  title = 'WSMath · Winson Siu · IBDP, A-Level and IGCSE maths',
+  description = 'One-to-one coaching and video class packages for IBDP, A-Level / IAL and IGCSE maths. Hong Kong and online worldwide.',
+  path = '/',
+  preloadHero = false,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://wsmath.com');
+const canonical = new URL(path, site).href;
+// The share image is rendered from the hero by `npm run og:image`; importing it gives the URL a content hash, so link
+// previews (WhatsApp, Facebook, iMessage) fetch the new picture whenever it changes.
+const ogImage = new URL(ogImg.src, site).href;
+const ogAlt = 'Winson Siu, international mathematics exam strategist: 20,000 hours one-to-one since 2017';
+const fontCss = await inlineFontCss();
+const hero = preloadHero ? await getImage({ src: heroImg, widths: HERO_WIDTHS, format: 'avif' }) : null;
+
+// WebSite gives Google the site name it shows above the result; the organisation's logo is the 512px app icon
+// (Google wants a raster image of at least 112px).
+const orgId = new URL('/#org', site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': new URL('/#website', site).href,
+      name: 'WSMath',
+      url: site.href,
+      publisher: { '@id': orgId },
+    },
+    {
+      '@type': 'EducationalOrganization',
+      '@id': orgId,
+      name: 'WSMath',
+      url: site.href,
+      logo: new URL('/icon-512.png', site).href,
+      image: ogImage,
+      description,
+      telephone: '+852 6944 7214',
+      founder: { '@type': 'Person', name: 'Winson Siu' },
+      areaServed: ['Hong Kong', 'Worldwide'],
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Times Square',
+        addressLocality: 'Causeway Bay',
+        addressRegion: 'Hong Kong',
+        addressCountry: 'HK',
+      },
+      sameAs: [
+        'https://www.facebook.com/profile.php?id=61564257721098',
+        'https://www.instagram.com/wsmath_ib_alevel',
+        'https://xhslink.com/m/A3RfIEPO7Wf',
+      ],
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#07050A" />
+    {/* Icons (npm run icons): the .ico is the fallback and says 32x32 so Chrome still prefers the SVG. */}
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="WSMath" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="WSMath" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content={String(ogImg.width)} />
+    <meta property="og:image:height" content={String(ogImg.height)} />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {
+      fontCss ? (
+        <style is:inline set:html={fontCss} />
+      ) : (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          {FONT_STYLESHEETS.map((href) => <link rel="stylesheet" href={href} />)}
+        </>
+      )
+    }
+    {hero && <link rel="preload" as="image" type="image/avif" imagesrcset={hero.srcSet.attribute} imagesizes={HERO_SIZES} fetchpriority="high" />}
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <div class="wsm">
+      <slot />
+    </div>
+    {/* Fixed overlays (section rail, floating WhatsApp button) live outside .wsm: as a query container it applies
+        layout containment, which would make it the containing block for position: fixed. */}
+    <slot name="overlay" />
+  </body>
+</html>

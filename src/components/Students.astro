@@ -1,0 +1,287 @@
+---
+/*
+ * What students say (#students). The video at full width, the four featured quotes under it, then two full-bleed rows
+ * that scroll in opposite directions. Each row holds its cards twice for a seamless loop; the copies carry `tm-dup` and
+ * aria-hidden.
+ *
+ * State: ui/testimonials.ts toggles the Pause/Play button's aria-pressed (which swaps its icons), its label text and
+ * data-paused on the section (which pauses both tracks).
+ *
+ * Video: a 16:9 frame showing the Loom video's own preview (the short animated loop Loom plays on its pages, or its
+ * still thumbnail under reduced motion) behind a play button. ui/video.ts swaps in the Loom player when the reader
+ * scrolls to it or clicks; without JavaScript the preview is a link to the video on Loom. The preview files come from
+ * scripts/loom-preview.mjs, named by video id; if they don't match the linked video the frame keeps its plain gradient.
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import QuoteCard from './ui/QuoteCard.astro';
+import { GOLD } from '../lib/site';
+import data from '../content/testimonials.json';
+import type { TestimonialsFile } from '../content/types';
+
+const { video, featured, rowA, rowB } = data as TestimonialsFile;
+
+/* The frame spans the wrap: the viewport less its gutters, up to 1440. */
+const POSTER_SIZES = '(max-width: 1440px) 100vw, 1440px';
+const previews = import.meta.glob<{ default: ImageMetadata }>('../assets/video/*.{webp,jpg}', { eager: true });
+const loomId = new URL(video.url).pathname.split('/').filter(Boolean).pop();
+const asset = (file: string) => previews[`../assets/video/${file}`]?.default;
+const loops = [asset(`${loomId}-800.webp`), asset(`${loomId}-1024.webp`)];
+const still = asset(`${loomId}.jpg`);
+let poster: { loop: string; src: string; width: number; height: number; still: string } | undefined;
+if (loops[0] && loops[1] && still) {
+  const stillSet = await getImage({ src: still, widths: [800, still.width], format: 'avif' });
+  poster = {
+    loop: loops.map((l) => `${l!.src} ${l!.width}w`).join(', '),
+    src: loops[1].src,
+    width: loops[1].width,
+    height: loops[1].height,
+    still: stillSet.srcSet.attribute,
+  };
+} else {
+  console.warn(`[students] No preview for Loom video ${loomId}; run npm run video:preview`);
+}
+---
+
+<section id="students" class="tm" data-paused="false">
+  <div class="wrap">
+    <div class="tm-head">
+      <h2 class="h2">What students say</h2>
+      <p lang="zh-Hant" class="zh-sub">學生心聲</p>
+    </div>
+    <div class="tm-top">
+      <figure class="tm-video">
+        <div class="tm-frame">
+          <a class="tm-start" href={video.url} target="_blank" rel="noopener" aria-labelledby="tm-video-title tm-video-label">
+            {poster && (
+              <picture class="tm-poster" aria-hidden="true">
+                <source media="(prefers-reduced-motion: reduce)" type="image/avif" srcset={poster.still} sizes={POSTER_SIZES} />
+                <source type="image/webp" srcset={poster.loop} sizes={POSTER_SIZES} />
+                <img src={poster.src} alt="" width={poster.width} height={poster.height} loading="lazy" decoding="async" />
+              </picture>
+            )}
+            <span class="tm-play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M6 3.5L26 15L6 26.5Z" fill={GOLD}></path></svg></span>
+          </a>
+        </div>
+        <figcaption class="tm-video-cap">
+          <span id="tm-video-title" class="tm-video-title">{video.title}</span>
+          <span id="tm-video-label" class="tm-video-label">{video.label}</span>
+        </figcaption>
+      </figure>
+      <div class="tm-feat">
+        {featured.map((v) => <QuoteCard voice={v} featured />)}
+      </div>
+    </div>
+    <div class="tm-more">
+      <p class="tm-more-label">More voices</p>
+      <button type="button" class="rs-nav tm-toggle" aria-pressed="false"><svg class="tm-ic-pause" aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><rect x="1.5" y="1" width="3" height="10" fill="currentColor"></rect><rect x="7.5" y="1" width="3" height="10" fill="currentColor"></rect></svg><svg class="tm-ic-play" aria-hidden="true" width="12" height="12" viewBox="0 0 12 12"><path d="M2 1L11 6L2 11Z" fill="currentColor"></path></svg>Pause</button>
+    </div>
+  </div>
+  <div class="tm-rows">
+    <div class="tm-row">
+      <div class="tm-track tm-track-left">
+        {rowA.map((v) => <QuoteCard voice={v} />)}
+        {rowA.map((v) => <QuoteCard voice={v} dup />)}
+      </div>
+    </div>
+    <div class="tm-row">
+      <div class="tm-track tm-track-right">
+        {rowB.map((v) => <QuoteCard voice={v} />)}
+        {rowB.map((v) => <QuoteCard voice={v} dup />)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initTestimonials } from '../scripts/ui/testimonials';
+  import { initVideo } from '../scripts/ui/video';
+
+  const root = document.getElementById('students');
+  if (root) initTestimonials(root);
+  const video = root?.querySelector<HTMLElement>('.tm-video');
+  if (video) initVideo(video);
+</script>
+
+<style>
+  .tm {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(88px, 10cqi, 140px) 0;
+    background: #0B0810;
+    border-top: 1px solid rgba(205, 169, 104, 0.18);
+  }
+  .tm-head {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .tm-top {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(16px, 1.8cqi, 24px);
+    margin-top: clamp(48px, 6cqi, 72px);
+  }
+
+  /* The video at its own 16:9 at every width: the preview link, then the Loom player in its place. */
+  .tm-video { margin: 0; }
+  .tm-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 1px solid rgba(205, 169, 104, 0.32);
+    background: radial-gradient(90% 70% at 70% 30%, #1F1730 0%, #100B1B 55%, #09060F 100%);
+  }
+  .tm-start,
+  .tm-poster,
+  .tm-frame :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .tm-start { display: block; }
+  .tm-start[hidden] { display: none; }
+  /* The frame clips, so the focus ring sits inside it. */
+  .tm-start:focus-visible { outline-offset: -6px; }
+  .tm-poster img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tm-frame :global(iframe) {
+    display: block;
+    border: 0;
+  }
+  .tm-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    margin: -46px 0 0 -46px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold);
+    /* dark enough for the gold to read on light frames of the preview */
+    background: rgba(9, 6, 15, 0.55);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+  .tm-play svg {
+    display: block;
+    margin-left: 5px;
+  }
+  @media (hover: hover) {
+    .tm-start:hover .tm-play {
+      transform: scale(1.06);
+      background: rgba(9, 6, 15, 0.7);
+    }
+  }
+  .tm-video-cap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 24px;
+    margin-top: 18px;
+  }
+  .tm-video-title {
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: clamp(26px, 2.4cqi, 32px);
+    line-height: 1.15;
+    color: #F3ECE1;
+  }
+  .tm-video-label {
+    font-size: 14px;
+    color: #B9AFA3;
+  }
+
+  .tm-feat {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(16px, 1.8cqi, 24px);
+  }
+
+  .tm-more {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: clamp(56px, 6cqi, 80px);
+  }
+  .tm-more-label {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: #B9AFA3;
+  }
+  .tm-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(240, 233, 222, 0.2);
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: #F0E9DE;
+    cursor: pointer;
+  }
+  @media (hover: hover) {
+    .tm-toggle:hover { border-color: #CDA968; }
+  }
+  .tm-ic-pause { display: block; }
+  .tm-ic-play { display: none; }
+  .tm-toggle[aria-pressed='true'] .tm-ic-pause { display: none; }
+  .tm-toggle[aria-pressed='true'] .tm-ic-play { display: block; }
+
+  .tm-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  }
+  .tm-row { overflow: hidden; }
+  .tm-track {
+    display: flex;
+    width: max-content;
+  }
+  .tm-track-left { animation: tm-left 150s linear infinite; }
+  .tm-track-right { animation: tm-right 165s linear infinite; }
+  .tm[data-paused='true'] .tm-track { animation-play-state: paused; }
+  /* Hovering pauses a row; on touch screens a tap would leave it frozen, so there only focus does (and Pause). */
+  .tm-row:focus-within .tm-track { animation-play-state: paused; }
+  @media (hover: hover) {
+    .tm-row:hover .tm-track { animation-play-state: paused; }
+  }
+
+  @container wsm (max-width: 620px) {
+    .tm-feat { grid-template-columns: minmax(0, 1fr); }
+    .tm-play {
+      width: 68px;
+      height: 68px;
+      margin: -34px 0 0 -34px;
+    }
+    .tm-play svg {
+      width: 24px;
+      height: 24px;
+      margin-left: 4px;
+    }
+  }
+
+  /* Reduced motion: the global rule stops the animation; the rows scroll by hand and the copies are hidden. */
+  @media (prefers-reduced-motion: reduce) {
+    .tm-row { overflow-x: auto; }
+  }
+</style>

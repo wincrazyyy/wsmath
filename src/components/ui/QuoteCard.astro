@@ -1,0 +1,205 @@
+---
+/*
+ * One testimonial card, ported from tmCard() in renderVals() (design/reference/app/home.js).
+ * Featured cards sit in the 2×2 grid beside the video; the others ride the two scrolling rows, where each row
+ * holds its cards twice and the second copy (`dup`) is hidden from assistive technology.
+ *
+ * Avatar: the student's photo from src/assets/avatars/<name>-<year>.webp when there is one (the photos the original
+ * site published), otherwise their initials (PLAN.md §13: "swap in photos if the client supplies them"). The photo
+ * repeats the name beside it, so it is decorative.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Voice } from '../../content/types';
+
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/avatars/*.webp', { eager: true });
+
+interface Props {
+  voice: Voice;
+  featured?: boolean;
+  dup?: boolean;
+}
+
+const { voice: v, featured = false, dup = false } = Astro.props;
+
+const zh = v.lang !== 'en';
+const parts = v.name.split(' ');
+const quote = zh ? '「' + v.quote + '」' : '“' + v.quote + '”';
+const ini = (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+const slug = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + v.year;
+const photo = photos[`../../assets/avatars/${slug}.webp`]?.default;
+/* Width bucket for the scrolling rows: short quotes get the 320px card, the rest 380px. */
+const wide = !featured && !(zh ? v.quote.length < 34 : v.quote.length < 70);
+---
+
+<figure
+  class:list={['tm-card', { 'tm-dup': dup, 'is-featured': featured, 'is-track': !featured, 'is-wide': wide }]}
+  aria-hidden={dup ? 'true' : 'false'}
+>
+  <blockquote class="tm-quote" lang={v.lang}>{quote}</blockquote>
+  <figcaption class="tm-cap">
+    <span class="tm-ini" aria-hidden="true">{photo ? <Image src={photo} alt="" width={44} densities={[1, 2]} format="webp" /> : ini}</span>
+    <span class="tm-who">
+      <span class="tm-name">{v.name} <span class="tm-year">({v.year})</span></span>
+      <span class="tm-meta">{v.course}</span>
+      <span class="tm-meta tm-dest">{v.dest}</span>
+    </span>
+    <span class="tm-gain">
+      <span class="tm-grade">{v.from}<svg aria-hidden="true" width="0.8em" height="0.36em" viewBox="0 0 38 16" fill="none"><path d="M0 8h35M28.5 1.5L35.5 8L28.5 14.5" stroke="currentColor" stroke-width="1.6"></path></svg><span class="sr"> to </span>{v.to}</span>
+      <span class="tm-extra">{v.extra}</span>
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .tm-card {
+    position: relative;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-sizing: border-box;
+  }
+  .is-featured {
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: clamp(24px, 2.4cqi, 32px);
+    border: 1px solid rgba(205, 169, 104, 0.24);
+    background: #100A17;
+  }
+  /* Scrolling-row cards are at least 252px tall and grow to fit their quote; a row's cards share the tallest one's
+     height (the track stretches them), so no quote is ever cut short. */
+  .is-track {
+    width: 320px;
+    min-height: 252px;
+    margin: 0 16px 0 0;
+    padding: 22px 22px 20px;
+    border: 1px solid rgba(240, 233, 222, 0.09);
+    background: #0E0915;
+  }
+  .is-track.is-wide { width: 380px; }
+
+  /* Quote: Schibsted for English, Noto Serif TC for zh-Hant / zh-HK, Noto Serif SC for zh-Hans. */
+  .tm-quote {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: #E2D9CC;
+  }
+  .tm-quote:lang(zh) {
+    font-family: var(--font-zh-hant);
+    font-size: 16px;
+    line-height: 1.85;
+  }
+  .tm-quote:lang(zh-Hans) { font-family: var(--font-zh-hans); }
+  .is-featured .tm-quote { font-size: 18px; }
+
+  .tm-cap {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(240, 233, 222, 0.08);
+  }
+  .tm-ini {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(205, 169, 104, 0.55);
+    background: radial-gradient(circle at 32% 28%, #271D38, #100B1B 70%);
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: #EAD7A6;
+    overflow: hidden;
+  }
+  .tm-ini :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tm-who {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 1px;
+  }
+  .tm-name {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #F3ECE1;
+  }
+  .tm-year {
+    font-weight: 400;
+    color: #9A9085;
+  }
+  .tm-meta {
+    font-size: 13px;
+    line-height: 1.4;
+    color: #9A9085;
+  }
+  .tm-gain {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .tm-grade {
+    font-family: var(--font-display);
+    font-stretch: 75%;
+    font-size: 30px;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--gold);
+  }
+  .tm-grade svg {
+    margin: 0 0.12em;
+    vertical-align: 0.16em;
+  }
+  .tm-extra {
+    font-size: 12px;
+    color: #9A9085;
+    white-space: nowrap;
+  }
+  /* The reference sets display:none on the destination and the extra line when they are empty. */
+  .tm-dest:empty,
+  .tm-extra:empty { display: none; }
+
+  /* Phone: marquee cards 286 wide, at least 300 tall. The grade moves to its own line under the name, so the name,
+     course and destination get the card's width. */
+  @container wsm (max-width: 620px) {
+    .tm-card.is-track {
+      width: 286px;
+      min-height: 300px;
+    }
+    .tm-cap {
+      flex-wrap: wrap;
+      row-gap: 10px;
+    }
+    .tm-gain {
+      flex: 1 0 100%;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 12px;
+      padding-left: 56px;
+      box-sizing: border-box;
+    }
+  }
+
+  /* Reduced motion: the rows scroll by hand (Students.astro), so the loop copies go. */
+  @media (prefers-reduced-motion: reduce) {
+    .tm-dup { display: none; }
+  }
+</style>

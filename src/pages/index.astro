@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Packages from '../components/Packages.astro';
+import MathsIA from '../components/MathsIA.astro';
+import Results from '../components/Results.astro';
+import Students from '../components/Students.astro';
+import FAQ from '../components/FAQ.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import SectionRail from '../components/SectionRail.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+---
+
+<Base preloadHero>
+  <Hero />
+  <main>
+    <About />
+    <Packages />
+    <MathsIA />
+    <Results />
+    <Students />
+    <FAQ />
+    <Contact />
+  </main>
+  <Footer />
+  <SectionRail slot="overlay" />
+  <WhatsAppFloat slot="overlay" />
+</Base>

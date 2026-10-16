@@ -1,0 +1,322 @@
+{
+  "lanes": [
+    {
+      "index": 0,
+      "name": "IBDP",
+      "cols": 5,
+      "ticks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "index": 1,
+      "name": "A-Level",
+      "cols": 3,
+      "ticks": [
+        "F",
+        "E",
+        "D",
+        "C",
+        "B",
+        "A",
+        "A*"
+      ]
+    },
+    {
+      "index": 2,
+      "name": "IGCSE",
+      "cols": 2,
+      "ticks": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ],
+      "ticksR": [
+        "U",
+        "G",
+        "F",
+        "E",
+        "D",
+        "C",
+        "B",
+        "A",
+        "A*"
+      ]
+    }
+  ],
+  "records": [
+    {
+      "lane": 0,
+      "name": "Kitty Lam",
+      "year": 2020,
+      "course": "IBDP Maths SL",
+      "from": "1",
+      "to": "7",
+      "uni": "Loughborough University"
+    },
+    {
+      "lane": 0,
+      "name": "James Chow",
+      "year": 2024,
+      "course": "IBDP Maths AA HL",
+      "from": "1",
+      "to": "7",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Sharon Deng",
+      "year": 2023,
+      "course": "IBDP Maths AA SL",
+      "from": "3",
+      "to": "7",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Cassie Luo",
+      "year": 2023,
+      "course": "IBDP Maths AA SL",
+      "from": "4",
+      "to": "7",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Jason Yeung",
+      "year": 2025,
+      "course": "IBDP Maths AA SL",
+      "from": "4",
+      "to": "7",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Joy Angela Sun",
+      "year": 2022,
+      "course": "IBDP Maths AA HL",
+      "from": "5",
+      "to": "7",
+      "uni": "CUHK"
+    },
+    {
+      "lane": 0,
+      "name": "Alice Gao",
+      "year": 2022,
+      "course": "IBDP Maths AA HL",
+      "from": "6",
+      "to": "7",
+      "uni": "UCL"
+    },
+    {
+      "lane": 0,
+      "name": "Vera Jing",
+      "year": 2021,
+      "course": "IBDP Maths AA HL",
+      "from": "6",
+      "to": "7",
+      "uni": "UCL"
+    },
+    {
+      "lane": 0,
+      "name": "Cissie Ching",
+      "year": 2025,
+      "course": "IBDP Maths AI SL",
+      "from": "1",
+      "to": "6",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Kathy Ye",
+      "year": 2024,
+      "course": "IBDP Maths AA SL",
+      "from": "1",
+      "to": "6",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Jasmine Yang",
+      "year": 2023,
+      "course": "IBDP Maths AA HL",
+      "from": "1",
+      "to": "6",
+      "uni": "University of Edinburgh"
+    },
+    {
+      "lane": 0,
+      "name": "Gordon Lo",
+      "year": 2025,
+      "course": "IBDP Maths AA SL",
+      "from": "1",
+      "to": "6",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Fiona Wan",
+      "year": 2022,
+      "course": "IBDP Maths HL",
+      "from": "3",
+      "to": "6",
+      "uni": ""
+    },
+    {
+      "lane": 0,
+      "name": "Lucia Zhu",
+      "year": 2018,
+      "course": "IBDP Maths HL",
+      "from": "3",
+      "to": "6",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Jasmine Hung",
+      "year": 2023,
+      "course": "IBDP Maths AI SL",
+      "from": "4",
+      "to": "6",
+      "uni": "University of Westminster"
+    },
+    {
+      "lane": 0,
+      "name": "Aidan Cheung",
+      "year": 2019,
+      "course": "IBDP Maths SL",
+      "from": "4",
+      "to": "6",
+      "uni": "University of Warwick"
+    },
+    {
+      "lane": 0,
+      "name": "David Zhang",
+      "year": 2020,
+      "course": "IBDP Maths SL",
+      "from": "4",
+      "to": "6",
+      "uni": "HKU"
+    },
+    {
+      "lane": 0,
+      "name": "Connie Feng",
+      "year": 2021,
+      "course": "IBDP Maths AA SL",
+      "from": "2",
+      "to": "5",
+      "uni": "HKUST"
+    },
+    {
+      "lane": 0,
+      "name": "Judy Wei",
+      "year": 2021,
+      "course": "IBDP Maths AA HL",
+      "from": "2",
+      "to": "5",
+      "uni": "CUHK"
+    },
+    {
+      "lane": 0,
+      "name": "Vivian Chen",
+      "year": 2018,
+      "course": "IBDP Maths HL",
+      "from": "1",
+      "to": "4",
+      "uni": "Istituto Marangoni London"
+    },
+    {
+      "lane": 1,
+      "name": "CY Ting",
+      "year": 2021,
+      "course": "Edexcel IAL Maths and Further Maths",
+      "from": "F",
+      "to": "A*",
+      "uni": "University of Cambridge"
+    },
+    {
+      "lane": 1,
+      "name": "Michelle Chan",
+      "year": 2021,
+      "course": "IAL Maths and Further Maths",
+      "from": "F",
+      "to": "A*",
+      "uni": "University of Melbourne"
+    },
+    {
+      "lane": 1,
+      "name": "Bill Zhang",
+      "year": 2024,
+      "course": "CAIE A-Level Maths and Further Maths",
+      "from": "F",
+      "to": "A*",
+      "uni": "UCL"
+    },
+    {
+      "lane": 1,
+      "name": "Ken Chen",
+      "year": 2024,
+      "course": "GCE A-Level Maths",
+      "from": "F",
+      "to": "A",
+      "uni": "UCL"
+    },
+    {
+      "lane": 1,
+      "name": "Coco Cheng",
+      "year": 2024,
+      "course": "CAIE A-Level Maths",
+      "from": "D",
+      "to": "A",
+      "uni": "UCL"
+    },
+    {
+      "lane": 2,
+      "name": "Kelly Li",
+      "year": 2023,
+      "course": "Cambridge IGCSE International Maths (0607)",
+      "from": "F",
+      "to": "A",
+      "uni": ""
+    },
+    {
+      "lane": 2,
+      "name": "Emily Lau",
+      "year": 2018,
+      "course": "IGCSE Additional Maths",
+      "from": "B",
+      "to": "A*",
+      "uni": ""
+    },
+    {
+      "lane": 2,
+      "name": "Cherish Chiu",
+      "year": 2025,
+      "course": "IGCSE Maths",
+      "from": "7",
+      "to": "9",
+      "uni": ""
+    },
+    {
+      "lane": 2,
+      "name": "Nicole Li",
+      "year": 2024,
+      "course": "IGCSE Maths",
+      "from": "4",
+      "to": "8",
+      "uni": ""
+    }
+  ]
+}

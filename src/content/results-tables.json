@@ -1,0 +1,269 @@
+{
+  "stats": [
+    {
+      "value": "114",
+      "label": "result records"
+    },
+    {
+      "value": "2+",
+      "label": "grades average uplift"
+    },
+    {
+      "value": "36",
+      "label": "schools"
+    }
+  ],
+  "byCourse": [
+    {
+      "course": "IBDP HL",
+      "records": 36,
+      "published": 17,
+      "roseTwoPlus": "76%"
+    },
+    {
+      "course": "IBDP SL",
+      "records": 31,
+      "published": 20,
+      "roseTwoPlus": "90%"
+    },
+    {
+      "course": "A-Level Further Maths",
+      "records": 4,
+      "published": 4,
+      "roseTwoPlus": "100%"
+    },
+    {
+      "course": "A-Level Maths",
+      "records": 15,
+      "published": 9,
+      "roseTwoPlus": "100%"
+    },
+    {
+      "course": "IGCSE Additional Maths",
+      "records": 6,
+      "published": 6,
+      "roseTwoPlus": "83%"
+    },
+    {
+      "course": "IGCSE Maths",
+      "records": 22,
+      "published": 10,
+      "roseTwoPlus": "100%"
+    }
+  ],
+  "footnote": "Results vary by student commitment and starting level.",
+  "named": [
+    {
+      "student": "Kitty Lam (2020)",
+      "course": "IBDP Maths SL",
+      "predictedOrMock": "1",
+      "final": "7"
+    },
+    {
+      "student": "James Chow (2024)",
+      "course": "IBDP Maths AA HL",
+      "predictedOrMock": "1",
+      "final": "7"
+    },
+    {
+      "student": "Sharon Deng (2023)",
+      "course": "IBDP Maths AA SL",
+      "predictedOrMock": "3",
+      "final": "7"
+    },
+    {
+      "student": "Cassie Luo (2023)",
+      "course": "IBDP Maths AA SL",
+      "predictedOrMock": "4",
+      "final": "7"
+    },
+    {
+      "student": "Jason Yeung (2025)",
+      "course": "IBDP Maths AA SL",
+      "predictedOrMock": "4",
+      "final": "7"
+    },
+    {
+      "student": "Joy Angela Sun (2022)",
+      "course": "IBDP Maths AA HL",
+      "predictedOrMock": "5",
+      "final": "7"
+    },
+    {
+      "student": "Alice Gao (2022)",
+      "course": "IBDP Maths AA HL",
+      "predictedOrMock": "6",
+      "final": "7"
+    },
+    {
+      "student": "Vera Jing (2021)",
+      "course": "IBDP Maths AA HL",
+      "predictedOrMock": "6",
+      "final": "7"
+    },
+    {
+      "student": "Cissie Ching (2025)",
+      "course": "IBDP Maths AI SL",
+      "predictedOrMock": "1",
+      "final": "6"
+    },
+    {
+      "student": "Kathy Ye (2024)",
+      "course": "IBDP Maths AA SL",
+      "predictedOrMock": "1",
+      "final": "6"
+    },
+    {
+      "student": "Jasmine Yang (2023)",
+      "course": "IBDP Maths AA HL",
+      "predictedOrMock": "1",
+      "final": "6"
+    },
+    {
+      "student": "Gordon Lo (2025)",
+      "course": "IBDP Maths AA SL",
+      "predictedOrMock": "1",
+      "final": "6"
+    },
+    {
+      "student": "Fiona Wan (2022)",
+      "course": "IBDP Maths HL",
+      "predictedOrMock": "3",
+      "final": "6"
+    },
+    {
+      "student": "Lucia Zhu (2018)",
+      "course": "IBDP Maths HL",
+      "predictedOrMock": "3",
+      "final": "6"
+    },
+    {
+      "student": "Jasmine Hung (2023)",
+      "course": "IBDP Maths AI SL",
+      "predictedOrMock": "4",
+      "final": "6"
+    },
+    {
+      "student": "Aidan Cheung (2019)",
+      "course": "IBDP Maths SL",
+      "predictedOrMock": "4",
+      "final": "6"
+    },
+    {
+      "student": "David Zhang (2020)",
+      "course": "IBDP Maths SL",
+      "predictedOrMock": "4",
+      "final": "6"
+    },
+    {
+      "student": "Connie Feng (2021)",
+      "course": "IBDP Maths AA SL",
+      "predictedOrMock": "2",
+      "final": "5"
+    },
+    {
+      "student": "Judy Wei (2021)",
+      "course": "IBDP Maths AA HL",
+      "predictedOrMock": "2",
+      "final": "5"
+    },
+    {
+      "student": "Vivian Chen (2018)",
+      "course": "IBDP Maths HL",
+      "predictedOrMock": "1",
+      "final": "4"
+    },
+    {
+      "student": "CY Ting (2021)",
+      "course": "Edexcel IAL Maths and Further Maths",
+      "predictedOrMock": "F",
+      "final": "A*"
+    },
+    {
+      "student": "Michelle Chan (2021)",
+      "course": "IAL Maths and Further Maths",
+      "predictedOrMock": "F",
+      "final": "A*"
+    },
+    {
+      "student": "Bill Zhang (2024)",
+      "course": "CAIE A-Level Maths and Further Maths",
+      "predictedOrMock": "F",
+      "final": "A*"
+    },
+    {
+      "student": "Ken Chen (2024)",
+      "course": "GCE A-Level Maths",
+      "predictedOrMock": "F",
+      "final": "A"
+    },
+    {
+      "student": "Coco Cheng (2024)",
+      "course": "CAIE A-Level Maths",
+      "predictedOrMock": "D",
+      "final": "A"
+    },
+    {
+      "student": "Kelly Li (2023)",
+      "course": "Cambridge IGCSE International Maths (0607)",
+      "predictedOrMock": "F",
+      "final": "A"
+    },
+    {
+      "student": "Emily Lau (2018)",
+      "course": "IGCSE Additional Maths",
+      "predictedOrMock": "B",
+      "final": "A*"
+    },
+    {
+      "student": "Cherish Chiu (2025)",
+      "course": "IGCSE Maths",
+      "predictedOrMock": "7",
+      "final": "9"
+    },
+    {
+      "student": "Nicole Li (2024)",
+      "course": "IGCSE Maths",
+      "predictedOrMock": "4",
+      "final": "8"
+    }
+  ],
+  "schools": [
+    "American School",
+    "Australian International School",
+    "Canadian International School",
+    "Chinese International School",
+    "Creative Secondary School",
+    "Diocesan Boys' School",
+    "Diocesan Girls' School",
+    "ESF Discovery College",
+    "ESF Island School",
+    "ESF King George V School",
+    "ESF Renaissance College",
+    "ESF Sha Tin College",
+    "ESF South Island School",
+    "ESF West Island School",
+    "French International School",
+    "G.T. (Ellen Yeung) College",
+    "German Swiss International School",
+    "Han Academy",
+    "Harrow International School",
+    "HKCCCU Logos Academy",
+    "International College",
+    "Kiangsu-Chekiang College",
+    "Korean International School",
+    "Li Po Chun United World College",
+    "Malvern College",
+    "Po Leung Kuk Choi Kai Yau School",
+    "Po Leung Kuk Ngan Po Ling College",
+    "Singapore International School",
+    "St. Paul's Co-educational College",
+    "St. Paul's Convent School",
+    "St. Stephen's College",
+    "The ISF Academy",
+    "Tsung Tsin Christian Academy",
+    "Victoria Shanghai Academy",
+    "Wong Kam Fai Secondary School",
+    "Yew Chung International School"
+  ]
+}

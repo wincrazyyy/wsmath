@@ -1,0 +1,553 @@
+---
+/*
+ * Results (template L216–356): title and stats, lane tabs and legend, the stage (reading panel + rs-canvas), the
+ * "Results by course" table, "All named results", and the schools. Data: content/results.json (lanes, records)
+ * and content/results-tables.json (stats, tables, schools).
+ *
+ * Server-rendered default state (renderVals): lane 0 (IBDP), selection = record 0, reading panel filled from it,
+ * no panel animation.
+ *
+ * Hooks for ui/results.ts and canvases/results.ts:
+ *   #rs-data                    JSON: lane, sel (defaults), lanes[] (index, name, cols, ticks, ticksR?), records[]
+ *                               (the content record plus label = "course · year", gain = grades gained, gainText)
+ *   [data-rs="tabs"] [data-lane]  lane tabs (aria-pressed)
+ *   [data-rs="panel"]           reading panel; add .is-in-a / .is-in-b (alternate per change) for rs-in-a/b
+ *   [data-rs="course"], [data-rs="name"], [data-rs="gain"]   text
+ *   [data-rs="grade"]           <p>: firstChild text node = from, lastChild text node = to (arrow svg and .sr " to "
+ *                               between them)
+ *   [data-rs="dest"]            destination; hidden by CSS while empty (set textContent to '')
+ *   [data-rs="prev"], [data-rs="next"]   buttons; [data-rs="pos"] "n / total"
+ *   .rs-stage, .rs-view, #rs-canvas      pointer target and canvas
+ */
+import Pill from './ui/Pill.astro';
+import results from '../content/results.json';
+import tables from '../content/results-tables.json';
+import type { ResultsFile, ResultsTablesFile } from '../content/types';
+
+const { lanes, records } = results as ResultsFile;
+const T = tables as ResultsTablesFile;
+
+const level = (laneIndex: number, g: string) => {
+  const L = lanes[laneIndex];
+  const a = L.ticks.indexOf(g);
+  return a >= 0 ? a : L.ticksR ? L.ticksR.indexOf(g) : 0;
+};
+const rows = records.map((r) => {
+  const gain = level(r.lane, r.to) - level(r.lane, r.from);
+  return { ...r, label: `${r.course} · ${r.year}`, gain, gainText: `+${gain}${gain === 1 ? ' grade' : ' grades'}` };
+});
+
+/* renderVals: rsLane 0, rsSel 0, clamped into the lane's pool. */
+const lane = 0;
+const pool = rows.map((_, i) => i).filter((i) => rows[i].lane === lane);
+const sel = pool.includes(0) ? 0 : pool[0];
+const cur = rows[sel];
+
+const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g, '\\u003c');
+---
+
+<section id="results" class="rs">
+  <div class="wrap">
+    <div class="rs-top">
+      <div class="rs-title">
+        <h2 class="h2">Results</h2>
+        <p lang="zh-HK" class="zh-sub">成績有目共睹</p>
+      </div>
+      <dl class="rs-stats">
+        {T.stats.map((s) => <div class="rs-stat"><dt>{s.label}</dt><dd>{s.value}</dd></div>)}
+      </dl>
+    </div>
+    <div class="rs-controls">
+      <div role="group" aria-label="Show results for" class="rs-tabs" data-rs="tabs">
+        {lanes.map((L) => <Pill size="lane" pressed={L.index === lane} data-lane={L.index}>{L.name}</Pill>)}
+      </div>
+      <p aria-hidden="true" class="rs-legend">
+        <span class="rs-key"><svg class="rs-cube" width="15" height="15" viewBox="0 0 14 14"><path d="M7 1L13 4.2L7 7.4L1 4.2Z" fill="#2A223B"></path><path d="M1 4.2L7 7.4L7 13.2L1 10Z" fill="#1D1729"></path><path d="M13 4.2L7 7.4L7 13.2L13 10Z" fill="#15101F"></path><path d="M7 1L13 4.2V10L7 13.2L1 10V4.2ZM1 4.2L7 7.4L13 4.2M7 7.4V13.2" fill="none" stroke="rgba(205,169,104,0.6)" stroke-width="0.8"></path></svg>Predicted or mock grade</span>
+        <span class="rs-key"><svg class="rs-cube" width="15" height="15" viewBox="0 0 14 14"><path d="M7 1L13 4.2L7 7.4L1 4.2Z" fill="#F4E2B0"></path><path d="M1 4.2L7 7.4L7 13.2L1 10Z" fill="#D4B06E"></path><path d="M13 4.2L7 7.4L7 13.2L13 10Z" fill="#A8854D"></path><path d="M7 1L13 4.2V10L7 13.2L1 10V4.2ZM1 4.2L7 7.4L13 4.2M7 7.4V13.2" fill="none" stroke="rgba(255,244,214,0.7)" stroke-width="0.8"></path></svg>Grades gained</span>
+      </p>
+    </div>
+    <div class="rs-stage">
+      <div class="rs-read">
+        <div class="rs-panel" data-rs="panel">
+          <p class="rs-course" data-rs="course">{cur.label}</p>
+          <p class="rs-name" data-rs="name">{cur.name}</p>
+          <p class="rs-grade" data-rs="grade">{cur.from}<svg class="rs-arrow" aria-hidden="true" width="0.95em" height="0.4em" viewBox="0 0 38 16" fill="none"><path d="M0 8h35M28.5 1.5L35.5 8L28.5 14.5" stroke="currentColor" stroke-width="1.4"></path></svg><span class="sr"> to </span>{cur.to}</p>
+          <p class="rs-gain-row"><span class="rs-gain" data-rs="gain">{cur.gainText}</span></p>
+          <p class="rs-dest" data-rs="dest">{cur.uni}</p>
+        </div>
+        <div class="rs-navs">
+          <button type="button" class="rs-nav" aria-label="Previous result" data-rs="prev"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M9 2L4 7l5 5" stroke="currentColor" stroke-width="1.5"></path></svg></button>
+          <span class="rs-pos" data-rs="pos">{pool.indexOf(sel) + 1} / {pool.length}</span>
+          <button type="button" class="rs-nav" aria-label="Next result" data-rs="next"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5"></path></svg></button>
+        </div>
+      </div>
+      <div class="rs-view">
+        <canvas id="rs-canvas" class="rs-canvas" aria-hidden="true"></canvas>
+      </div>
+    </div>
+    <div class="rs-lower">
+      <div>
+        <h3 class="rs-h3">Results by course</h3>
+        <table class="rs-table">
+          <thead>
+            <tr class="rs-head-row"><th scope="col" class="rs-th rs-th-course">Course</th><th scope="col" class="rs-th rs-th-records">Records</th><th scope="col" class="rs-th rs-th-published">Published</th><th scope="col" class="rs-th rs-th-rose">Rose 2+ grades</th></tr>
+          </thead>
+          <tbody>
+            {T.byCourse.map((r) => (
+              <tr class="rs-row"><th scope="row" class="rs-course-name">{r.course}</th><td class="rs-td-records">{r.records}</td><td class="rs-td-published">{r.published}</td><td class="rs-td-rose"><span class="rs-rose"><span class="rs-pct">{r.roseTwoPlus}</span><span class="rs-meter" aria-hidden="true"><span class="rs-fill" style={`--rs-pct: ${r.roseTwoPlus}`}></span></span></span></td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="rs-foot">{T.footnote}</p>
+        <details class="rs-all">
+          <summary class="rs-summary">All named results<svg class="rs-plus" aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#CDA968" stroke-width="1.5"></path></svg></summary>
+          <div class="rs-scroll">
+            <table class="rs-named">
+              <thead>
+                <tr><th scope="col" class="rs-nth">Student</th><th scope="col" class="rs-nth">Course</th><th scope="col" class="rs-nth rs-nth-r">Predicted or mock</th><th scope="col" class="rs-nth rs-nth-final">Final</th></tr>
+              </thead>
+              <tbody>
+                {T.named.map((r) => (
+                  <tr class="rs-nrow"><td class="rs-nd-student">{r.student}</td><td class="rs-nd">{r.course}</td><td class="rs-nd rs-nd-num">{r.predictedOrMock}</td><td class="rs-nd-final">{r.final}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+      <div>
+        <h3 class="rs-h3">Schools</h3>
+        <ul class="rs-schools">
+          {T.schools.map((s) => <li class="rs-school">{s}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script is:inline type="application/json" id="rs-data" set:html={rsJson} />
+</section>
+
+<script>
+  import { initResults } from '../scripts/ui/results';
+
+  const root = document.getElementById('results');
+  if (root) initResults(root);
+</script>
+
+<style>
+  .rs {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(88px, 10cqi, 140px) 0;
+    background: #07050A;
+    border-top: 1px solid rgba(205, 169, 104, 0.18);
+  }
+
+  .rs-top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 40px clamp(40px, 6cqi, 96px);
+    align-items: end;
+  }
+  .rs-title {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .rs-stats {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+  .rs-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rs-stat dt {
+    order: 2;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #B9AFA3;
+  }
+  .rs-stat dd {
+    order: 1;
+    margin: 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(44px, 4cqi, 60px);
+    line-height: 0.9;
+    color: #CDA968;
+  }
+
+  .rs-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 32px;
+    margin-top: clamp(48px, 6cqi, 80px);
+  }
+  .rs-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .rs-legend {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-size: 14px;
+    color: #B9AFA3;
+  }
+  .rs-key {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rs-cube { display: block; }
+
+  .rs-stage {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    margin-top: 20px;
+    border: 1px solid rgba(240, 233, 222, 0.09);
+    background: radial-gradient(120% 90% at 65% 30%, #0D0916 0%, #09060E 55%, #07050B 100%);
+  }
+  .rs-read {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    padding: clamp(28px, 3cqi, 40px);
+    box-sizing: border-box;
+    border-right: 1px solid rgba(240, 233, 222, 0.07);
+  }
+  /* {{rsPanelAnim}}: none on first render; the controller alternates .is-in-a / .is-in-b per change. */
+  .rs-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: none;
+  }
+  .rs-panel.is-in-a { animation: rs-in-a 0.5s ease both; }
+  .rs-panel.is-in-b { animation: rs-in-b 0.5s ease both; }
+  .rs-course {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    color: #9A9085;
+  }
+  .rs-name {
+    margin: 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: clamp(28px, 2.4cqi, 34px);
+    line-height: 1.1;
+    color: #F3ECE1;
+  }
+  .rs-grade {
+    margin: 6px 0 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(56px, 5.4cqi, 80px);
+    line-height: 1;
+    color: #CDA968;
+  }
+  .rs-arrow {
+    margin: 0 0.16em;
+    vertical-align: 0.14em;
+  }
+  .rs-gain-row {
+    margin: 2px 0 0;
+    display: flex;
+  }
+  .rs-gain {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(205, 169, 104, 0.45);
+    font-size: 14px;
+    font-weight: 600;
+    color: #CDA968;
+  }
+  /* {{rsDestShow}}: records without a destination leave it empty. */
+  .rs-dest {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.45;
+    color: #B9AFA3;
+  }
+  .rs-dest:empty { display: none; }
+
+  .rs-navs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 18px;
+  }
+  .rs-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid rgba(240, 233, 222, 0.2);
+    background: transparent;
+    color: #F0E9DE;
+    cursor: pointer;
+  }
+  /* styles.css: .rs-nav:hover */
+  @media (hover: hover) {
+    .rs-nav:hover { border-color: #CDA968; }
+  }
+  .rs-pos {
+    min-width: 4.6em;
+    text-align: center;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    color: #9A9085;
+  }
+
+  .rs-view {
+    position: relative;
+    min-width: 0;
+    height: clamp(480px, 38cqi, 560px);
+    touch-action: pan-y;
+  }
+  /* The pointer is on a tower (_rsPointer sets the cursor on the canvas's parent). */
+  .rs-view.is-hot { cursor: pointer; }
+  .rs-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .rs-lower {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+    gap: 64px clamp(48px, 6cqi, 96px);
+    margin-top: clamp(64px, 7cqi, 96px);
+    align-items: start;
+  }
+  .rs-h3 {
+    margin: 0 0 18px;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: clamp(26px, 2.2cqi, 30px);
+    line-height: 1.15;
+    color: #F3ECE1;
+  }
+
+  /* Results by course */
+  .rs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #B9AFA3;
+  }
+  .rs-head-row { border-bottom: 1px solid rgba(205, 169, 104, 0.3); }
+  .rs-th {
+    padding: 8px 12px 10px 0;
+    text-align: left;
+    font-weight: 500;
+    color: #9A9085;
+  }
+  .rs-th-records { text-align: right; }
+  .rs-th-published {
+    padding: 8px 16px 10px 0;
+    text-align: right;
+  }
+  .rs-th-rose { padding: 8px 0 10px; }
+  .rs-row { border-top: 1px solid rgba(240, 233, 222, 0.08); }
+  .rs-course-name {
+    padding: 12px 12px 12px 0;
+    text-align: left;
+    font-weight: 400;
+    color: #F0E9DE;
+  }
+  .rs-td-records {
+    padding: 12px 12px 12px 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .rs-td-published {
+    padding: 12px 16px 12px 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .rs-td-rose { padding: 12px 0; }
+  .rs-rose {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .rs-pct {
+    flex: 0 0 3em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: #F0E9DE;
+  }
+  .rs-meter {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 60px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(205, 169, 104, 0.16);
+  }
+  /* --rs-pct: the row's percentage (a per-row constant). */
+  .rs-fill {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: var(--rs-pct);
+    border-radius: 2px;
+    background: #CDA968;
+  }
+  .rs-foot {
+    margin: 16px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #9A9085;
+  }
+
+  /* All named results */
+  .rs-all {
+    margin-top: 24px;
+    border-top: 1px solid rgba(240, 233, 222, 0.1);
+  }
+  .rs-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 48px;
+    padding: 12px 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: 15px;
+    color: #F0E9DE;
+  }
+  .rs-plus {
+    flex: 0 0 auto;
+    transition: transform 0.2s;
+  }
+  /* When the table is wider than the screen it scrolls sideways: the student column stays put, and a gold shadow
+     on the right edge shows there is more until the end is reached (the "local" cover scrolls over it). */
+  .rs-scroll {
+    overflow-x: auto;
+    background:
+      linear-gradient(to left, #07050A 30%, rgba(7, 5, 10, 0)) right center / 40px 100% no-repeat local,
+      radial-gradient(farthest-side at 100% 50%, rgba(205, 169, 104, 0.2), rgba(205, 169, 104, 0)) right center / 14px 100% no-repeat scroll;
+  }
+  .rs-named th:first-child,
+  .rs-named td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: #07050A;
+  }
+  .rs-named {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #B9AFA3;
+  }
+  .rs-nth {
+    padding: 8px 12px 8px 0;
+    text-align: left;
+    font-weight: 500;
+    color: #F0E9DE;
+  }
+  .rs-nth-r { text-align: right; }
+  .rs-nth-final {
+    padding: 8px 0;
+    text-align: right;
+  }
+  .rs-nrow { border-top: 1px solid rgba(240, 233, 222, 0.07); }
+  .rs-nd-student {
+    padding: 7px 12px 7px 0;
+    color: #E2D9CC;
+  }
+  .rs-nd { padding: 7px 12px 7px 0; }
+  .rs-nd-num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .rs-nd-final {
+    padding: 7px 0;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: #F0E9DE;
+  }
+
+  /* Schools */
+  .rs-schools {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 2 220px;
+    column-gap: 40px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #B9AFA3;
+  }
+  .rs-school {
+    break-inside: avoid;
+    padding: 5px 0;
+  }
+
+  /* styles.css container queries, in source order. */
+  @container wsm (max-width: 900px) {
+    .rs-stage { grid-template-columns: minmax(0, 1fr); }
+    .rs-read {
+      order: 2;
+      border-right: 0;
+      border-top: 1px solid rgba(240, 233, 222, 0.07);
+    }
+    .rs-view { height: 500px; }
+  }
+
+  @container wsm (max-width: 620px) {
+    .rs-meter { display: none; }
+    .rs-schools { columns: auto; }
+    /* Each name stays whole (lines break between schools, never inside one); the dot rides with the name before. */
+    .rs-school {
+      display: inline-block;
+      padding: 0;
+      white-space: nowrap;
+    }
+    .rs-school:not(:last-child)::after {
+      content: '\00B7';
+      margin: 0 0.55em;
+      color: #6B6770;
+    }
+  }
+
+  @container wsm (max-width: 520px) {
+    .rs-stat dd { font-size: 40px; }
+    .rs-view { height: 470px; }
+  }
+</style>

@@ -1,0 +1,632 @@
+---
+/*
+ * Video class packages (template L108–186): title block, the ≤900 package tabs, three cards (A-Level, IBDP featured,
+ * IGCSE) over the pk-canvas overlay, and the one-to-one banner. Data: content/packages.json.
+ *
+ * Server-rendered default state (renderVals): every card on course 0, topic 0; tab = IBDP (its card is .pk-shown).
+ *
+ * Hooks for ui/packages.ts and canvases/packages.ts (card index i is the display index: 0 A-Level, 1 IBDP, 2 IGCSE):
+ *   #pk-data                       JSON, per card: key, shape, pdf, courses[] (name, topicsLabel, pdfPage, when, perks,
+ *                                  price, was, whatsapp, topics[] {num,label,title,text}); `tab` = default tab card
+ *   .pk-tabs [data-card]           tab pills (aria-pressed), in mobile order
+ *   article.pk-col[data-card]      card; .pk-shown = visible ≤900; .is-featured = IBDP colours
+ *   [data-pk="pdf"]                cover link and outline link: href = pdf + '#page=' + pdfPage
+ *   [data-pk="courses"] [data-course]  course pills (aria-pressed)
+ *   [data-pk="name"]               course name
+ *   [data-pk="topics"]             topic group (aria-label = topicsLabel); .pk-topic[data-topic] buttons
+ *                                  (aria-pressed), label span id pk-tl-<i>-<j>
+ *   [data-pk="cap"]                caption <p>: firstElementChild = "<title>." span, then one text node " <text>"
+ *   [data-pk="when1"], [data-pk="when2"], [data-pk="perks"] (<ul>), [data-pk="price"]
+ *   [data-pk="was"]                <s>: .sr "Was " span, then one text node with the price
+ *   [data-pk="enrol"]              WhatsApp link (href)
+ *   #pk-topic-tpl, #pk-perk-tpl    <template>s for one topic button / one perk <li> (scoped attributes included)
+ */
+import { Picture } from 'astro:assets';
+import Pill from './ui/Pill.astro';
+import data from '../content/packages.json';
+import type { Package, PackagesFile } from '../content/types';
+import coverALevel from '../assets/cover-a-level.webp';
+import coverIbdp from '../assets/cover-ibdp.webp';
+import coverIgcse from '../assets/cover-igcse.webp';
+
+const file = data as PackagesFile;
+const byKey = new Map(file.packages.map((p) => [p.key, p] as const));
+const pick = (k: Package['key']): Package => {
+  const p = byKey.get(k);
+  if (!p) throw new Error(`packages.json: no package "${k}"`);
+  return p;
+};
+const packs = file.order.map(pick);
+const covers = { ial: coverALevel, ibdp: coverIbdp, igcse: coverIgcse };
+const pdfHref = (p: Package) => '/pdf/' + p.pdf.split('/').pop();
+
+/* Tabs follow mobileOrder; the first tab is the default (IBDP, display index 1). */
+const tabs = file.mobileOrder.map((k) => ({ card: file.order.indexOf(k), label: pick(k).title }));
+const tabCard = tabs[0].card;
+
+const cards = packs.map((P, i) => {
+  const C = P.courses[0];
+  const T = C.topics[0];
+  return { P, C, T, i, pdf: `${pdfHref(P)}#page=${C.pdfPage}` };
+});
+
+const pkData = {
+  tab: tabCard,
+  cards: packs.map((P) => ({
+    key: P.key,
+    shape: P.shape,
+    pdf: pdfHref(P),
+    courses: P.courses.map((C) => ({
+      name: C.name,
+      topicsLabel: `${C.bandTitle} topics`,
+      pdfPage: C.pdfPage,
+      when: C.when,
+      perks: C.perks,
+      price: C.price,
+      was: C.was,
+      whatsapp: C.whatsapp,
+      topics: C.topics,
+    })),
+  })),
+};
+const pkJson = JSON.stringify(pkData).replace(/</g, '\\u003c');
+---
+
+<section id="packages" class="pk">
+  <div class="wrap">
+    <div class="pk-title">
+      <h2 class="h2">Video class packages</h2>
+      <p lang="zh-HK" class="zh-sub">隨時隨地　無限重溫</p>
+    </div>
+    <p class="pk-lead">Every package comes with unlimited replays, course notes and past papers with answers.</p>
+    <div class="pk-tabs" role="group" aria-label="Packages">
+      {tabs.map((t) => <Pill size="tab" pressed={t.card === tabCard} data-card={t.card}>{t.label}</Pill>)}
+    </div>
+    <div class="pk-wrap">
+      <canvas id="pk-canvas" class="pk-canvas" aria-hidden="true"></canvas>
+      <div class="pk-cols">
+        {cards.map(({ P, C, T, i, pdf }) => (
+          <article class:list={['pk-col', `pk-${P.key}`, { 'pk-shown': i === tabCard, 'is-featured': P.featured }]} data-card={i}>
+            <div class="pk-head">
+              <p class="pk-kicker">{P.kicker}</p>
+              <div class="pk-name-row">
+                <h3 class="pk-h3">{P.title}</h3>
+                <span lang="zh-HK" class="pk-tag">招牌課程</span>
+              </div>
+            </div>
+            <div class="pk-media">
+              <a class="pk-cover" href={pdf} target="_blank" rel="noopener" aria-label={`${P.title} course outline, PDF`} data-pk="pdf">
+                <Picture
+                  src={covers[P.key]}
+                  id={`pk-cover-${i}`}
+                  class="pk-cover-img"
+                  alt=""
+                  formats={['avif', 'webp']}
+                  fallbackFormat="webp"
+                  widths={[200, 400, 600]}
+                  sizes="200px"
+                  loading="lazy"
+                  pictureAttributes={{ class: 'contents' }}
+                />
+              </a>
+              <a class="pk-outline" href={pdf} target="_blank" rel="noopener" data-pk="pdf"><svg aria-hidden="true" width="12" height="15" viewBox="0 0 14 17" fill="none"><path d="M1.5 1.5h7l4 4v10h-11z" stroke="#CDA968" stroke-width="1.2" stroke-linejoin="round"></path><path d="M8.5 1.5v4h4" stroke="#CDA968" stroke-width="1.2" stroke-linejoin="round"></path></svg><span class="pk-outline-label">Course outline</span><span class="pk-outline-pages">{P.pdfPages}</span></a>
+            </div>
+            <div class="pk-course">
+              <div role="group" aria-label={`${P.title} courses`} class="pk-chips" data-pk="courses">
+                {P.courses.map((c, k) => <Pill size="course" pressed={k === 0} data-course={k}>{c.chip}</Pill>)}
+              </div>
+              <p class="pk-cname" data-pk="name">{C.name}</p>
+            </div>
+            <div class="pk-topics">
+              <div role="group" aria-label={`${C.bandTitle} topics`} class="pk-tlist" data-pk="topics">
+                {C.topics.map((t, j) => (
+                  <button type="button" class="pk-topic" aria-pressed={j === 0 ? 'true' : 'false'} data-topic={j}><span class="pk-num">{t.num}</span><span id={`pk-tl-${i}-${j}`}>{t.label}</span></button>
+                ))}
+              </div>
+              <span id={`pk-solid-${i}`} class="pk-solid" aria-hidden="true"></span>
+            </div>
+            <p class="pk-cap" data-pk="cap"><span class="pk-cap-title">{T.title}.</span> {T.text}</p>
+            <div class="pk-when">
+              <p class="pk-when1" data-pk="when1">{C.when[0]}</p>
+              <p class="pk-when2" data-pk="when2">{C.when[1]}</p>
+            </div>
+            <ul class="pk-perks" data-pk="perks">
+              {C.perks.map((text) => <li class="pk-perk"><span class="pk-dia" aria-hidden="true"></span><span>{text}</span></li>)}
+            </ul>
+            <div class="pk-foot">
+              <div class="pk-buy">
+                <p class="pk-prices"><span class="pk-price" data-pk="price">{C.price}</span><s class="pk-was" data-pk="was"><span class="sr">Was </span>{C.was}</s></p>
+                <a class="btn pk-enrol" href={C.whatsapp} target="_blank" rel="noopener" data-pk="enrol">Enrol on WhatsApp</a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+      <div class="pk-banner">
+        <span id="pk-rings" class="pk-rings" aria-hidden="true"></span>
+        <div class="pk-b-copy">
+          <div class="pk-name-row">
+            <h3 class="pk-b-h3">One-to-one coaching</h3>
+            <span lang="zh-HK" class="pk-b-zh">度身訂造</span>
+          </div>
+          <p class="pk-b-text">Limited places. Enquire for placement and a recommended plan, with a trial session on request.</p>
+        </div>
+        <p class="pk-b-price"><span class="pk-b-amount">HK$1,500</span><span class="pk-b-unit">per hour, typical rate</span></p>
+        <a class="btn btn-line pk-b-cta" href="https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20ask%20about%20one-to-one%20coaching." target="_blank" rel="noopener">Ask about placement</a>
+      </div>
+    </div>
+  </div>
+  <template id="pk-topic-tpl"><button type="button" class="pk-topic" aria-pressed="false"><span class="pk-num"></span><span></span></button></template>
+  <template id="pk-perk-tpl"><li class="pk-perk"><span class="pk-dia" aria-hidden="true"></span><span></span></li></template>
+  <script is:inline type="application/json" id="pk-data" set:html={pkJson} />
+</section>
+
+<script>
+  import { initPackages } from '../scripts/ui/packages';
+  import { initPackagesCanvas } from '../scripts/canvases/packages';
+
+  const root = document.getElementById('packages');
+  const pk = root ? initPackages(root) : null;
+  if (root && pk) initPackagesCanvas(root, pk);
+</script>
+
+<style>
+  .pk {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(88px, 10cqi, 140px) 0;
+    background: #0B0810;
+  }
+
+  .pk-title {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .pk-lead {
+    margin: 0 0 clamp(48px, 6cqi, 80px);
+    max-width: 36em;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #B9AFA3;
+  }
+
+  .pk-tabs {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 20px;
+  }
+
+  .pk-wrap { position: relative; }
+
+  .pk-canvas {
+    position: absolute;
+    top: -80px;
+    left: -80px;
+    width: calc(100% + 160px);
+    height: calc(100% + 160px);
+    display: block;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .pk-cols {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(16px, 2cqi, 28px);
+    align-items: stretch;
+  }
+
+  /* Card. Featured colours ({{col.bg}}, {{col.line}}, {{col.top}}) on .is-featured. */
+  .pk-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: clamp(28px, 2.8cqi, 40px);
+    box-sizing: border-box;
+    background: transparent;
+    border: 1px solid rgba(240, 233, 222, 0.1);
+    border-top: 2px solid rgba(240, 233, 222, 0.1);
+    /* Cover lean ({{col.ry}}) and lift ({{col.lift}}): per position and featured. */
+    --pk-ry0: 0deg;
+    --pk-lift: 1;
+  }
+  .pk-col:nth-child(1) { --pk-ry0: 12deg; }
+  .pk-col:nth-child(3) { --pk-ry0: -12deg; }
+  .pk-col.is-featured {
+    background: #100B1B;
+    border-color: rgba(205, 169, 104, 0.3);
+    border-top-color: #CDA968;
+    --pk-lift: 1.06;
+  }
+
+  .pk-head {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .pk-kicker {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #9A9085;
+  }
+  .pk-name-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+  }
+  .pk-h3 {
+    margin: 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: clamp(32px, 2.8cqi, 40px);
+    line-height: 1.05;
+    color: #F3ECE1;
+  }
+  /* {{col.tag}}: shown on the featured card only. */
+  .pk-tag {
+    display: none;
+    font-family: 'Noto Serif TC', 'Songti TC', serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.14em;
+    color: #CDA968;
+  }
+  .is-featured .pk-tag { display: inline; }
+
+  .pk-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .pk-cover {
+    display: block;
+    width: 184px;
+    max-width: 62%;
+    perspective: 1100px;
+  }
+  /* --ry / --rx / --tz are set inline by the cover tilt (phase 3) and removed on leave. */
+  .pk-cover-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transform: scale(var(--pk-lift)) rotateY(var(--ry, var(--pk-ry0))) rotateX(var(--rx, 4deg)) translateZ(var(--tz, 0px));
+    transform-origin: 50% 55%;
+    box-shadow: 0 34px 60px -26px rgba(0, 0, 0, 0.75), 0 12px 22px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.07);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .pk-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    color: #F0E9DE;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .pk-outline-label {
+    text-decoration: underline;
+    text-decoration-color: rgba(205, 169, 104, 0.7);
+    text-underline-offset: 5px;
+  }
+  .pk-outline-pages { color: #9A9085; }
+
+  .pk-course {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 98px;
+    margin-top: 22px;
+  }
+  .pk-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .pk-cname {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.45;
+    color: #D6CDBF;
+  }
+
+  .pk-topics {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 150px;
+    align-items: center;
+    gap: 0 10px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(240, 233, 222, 0.09);
+  }
+  .pk-tlist {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 186px;
+  }
+  .pk-topic {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    width: 100%;
+    min-height: 31px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    text-align: left;
+    font-family: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.3;
+    color: #9A9085;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  .pk-num {
+    flex: 0 0 1.9em;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 15px;
+    color: #8E8579;
+    transition: color 0.3s ease;
+  }
+  /* Selected topic ({{tq.color}}, {{tq.numColor}}). */
+  .pk-topic[aria-pressed='true'] { color: #F3ECE1; }
+  .pk-topic[aria-pressed='true'] .pk-num { color: #CDA968; }
+  /* styles.css: .pk-topic:hover */
+  @media (hover: hover) {
+    .pk-topic:hover { color: #F3ECE1; }
+  }
+
+  .pk-solid {
+    display: block;
+    width: 150px;
+    height: 186px;
+    pointer-events: none;
+  }
+
+  /* styles.css: .pk-cap (3-line clamp) */
+  .pk-cap {
+    margin: 12px 0 0;
+    min-height: 4.65em;
+    font-size: 15px;
+    line-height: 1.55;
+    color: #B9AFA3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .pk-cap-title { color: #F0E9DE; }
+
+  .pk-when {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 24px;
+  }
+  .pk-when1 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: #F0E9DE;
+  }
+  .pk-when2 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.45;
+    color: #B9AFA3;
+  }
+
+  .pk-perks {
+    list-style: none;
+    margin: 16px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pk-perk {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #B9AFA3;
+  }
+  .pk-dia {
+    flex: 0 0 6px;
+    width: 6px;
+    height: 6px;
+    background: #CDA968;
+    transform: translateY(-3px) rotate(45deg);
+  }
+
+  .pk-foot {
+    margin-top: auto;
+    padding-top: 28px;
+  }
+  .pk-buy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(240, 233, 222, 0.09);
+  }
+  .pk-prices {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 14px;
+  }
+  .pk-price {
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(40px, 3.6cqi, 52px);
+    line-height: 1;
+    color: #CDA968;
+  }
+  .pk-was {
+    font-size: 16px;
+    color: #8E8579;
+    text-decoration-color: rgba(205, 169, 104, 0.6);
+  }
+  /* "Enrol on WhatsApp": outline, gold fill on the featured card ({{col.ctaBg}}, {{col.ctaInk}}). */
+  .pk-enrol {
+    border: 1px solid #CDA968;
+    background: transparent;
+    color: #F0E9DE;
+  }
+  .is-featured .pk-enrol {
+    background: #CDA968;
+    color: #08060B;
+  }
+
+  .pk-banner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 20px clamp(28px, 3cqi, 48px);
+    margin-top: clamp(16px, 2cqi, 28px);
+    padding: clamp(24px, 2.4cqi, 32px) clamp(28px, 2.8cqi, 40px);
+    box-sizing: border-box;
+    border: 1px solid rgba(205, 169, 104, 0.28);
+    background: #0E0916;
+  }
+  .pk-rings {
+    display: block;
+    width: 96px;
+    height: 96px;
+  }
+  .pk-b-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .pk-b-h3 {
+    margin: 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: clamp(28px, 2.4cqi, 34px);
+    line-height: 1.1;
+    color: #F3ECE1;
+  }
+  .pk-b-zh {
+    font-family: 'Noto Serif TC', 'Songti TC', serif;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 0.14em;
+    color: #CDA968;
+  }
+  .pk-b-text {
+    margin: 0;
+    max-width: 34em;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #B9AFA3;
+  }
+  .pk-b-price {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .pk-b-amount {
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(40px, 3.4cqi, 48px);
+    line-height: 1;
+    color: #CDA968;
+  }
+  .pk-b-unit {
+    font-size: 15px;
+    color: #9A9085;
+  }
+  .pk-b-cta { white-space: nowrap; }
+
+  /* styles.css container queries, in source order. */
+  @container wsm (max-width: 1279px) {
+    .pk-topics { grid-template-columns: minmax(0, 1fr) 108px; }
+    .pk-solid { width: 108px; }
+  }
+
+  @container wsm (max-width: 900px) {
+    .pk-tabs { display: flex; }
+    .pk-cols { grid-template-columns: minmax(0, 1fr); }
+    .pk-col:not(.pk-shown) { display: none; }
+    .pk-topics { grid-template-columns: minmax(0, 1fr) 150px; }
+    .pk-solid { width: 150px; }
+    .pk-topic { min-height: 40px; }
+    /* One package shows at a time here, so the topic's caption is shown in full (it only changes on a tap, and
+       only what sits below the tapped list moves). */
+    .pk-cap {
+      display: block;
+      overflow: visible;
+    }
+    .pk-banner { grid-template-columns: 72px minmax(0, 1fr); }
+    .pk-rings { width: 72px; height: 72px; }
+    .pk-b-price,
+    .pk-b-cta { grid-column: 1 / -1; }
+  }
+
+  /* Small phones: the rings sit above the copy, which gets the banner's full width. */
+  @container wsm (max-width: 400px) {
+    .pk-banner { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* iPad portrait: cover on the left (200px), details on the right. */
+  @container wsm (min-width: 621px) and (max-width: 900px) {
+    .pk-col {
+      display: grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      column-gap: 40px;
+      align-content: start;
+    }
+    .pk-col > * { grid-column: 2; }
+    .pk-col > :first-child { grid-column: 1 / -1; }
+    .pk-col > :nth-child(2) {
+      grid-column: 1;
+      grid-row: 2 / span 6;
+      align-self: start;
+      margin-top: 30px;
+    }
+    .pk-col > .pk-course { margin-top: 30px; }
+    .pk-cover {
+      width: 100%;
+      max-width: 200px;
+    }
+    .pk-outline {
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 8px;
+      row-gap: 0;
+    }
+    .pk-outline > span { white-space: nowrap; }
+  }
+
+  @container wsm (max-width: 520px) {
+    .pk-topics { grid-template-columns: minmax(0, 1fr) 132px; }
+    .pk-solid { width: 132px; }
+  }
+</style>

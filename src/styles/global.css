@@ -1,0 +1,126 @@
+/*
+ * Page-level rules from design/reference/app/styles.css and the base styles the template repeats inline.
+ *
+ * Specificity: in the reference every element carries its own inline style, which beats every rule in styles.css
+ * except the !important ones. The element rules below are wrapped in :where() so that any class (global or scoped)
+ * wins over them, the way the inline styles did.
+ */
+
+/* iOS Safari would otherwise enlarge text when the phone turns sideways, overriding the sized type (the hero's). */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body { margin: 0; background: var(--bg); }
+
+/* The page root. Its width is the container every cqi size and @container wsm query resolves against.
+   The page draws edge to edge (viewport-fit=cover, for the fixed buttons' safe-area offsets), so the root keeps
+   its content clear of the notch or Dynamic Island on a phone held sideways; elsewhere the insets are 0. */
+.wsm {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  background: var(--bg);
+  color: var(--ink-strong);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  container: wsm / inline-size;
+}
+
+:where(a) { color: var(--gold-light); }
+/* Hover only where a pointer can hover: on touch screens :hover sticks after a tap. */
+@media (hover: hover) {
+  :where(a:hover) { color: var(--gold-hover); }
+}
+:where(a:focus-visible, summary:focus-visible, button:focus-visible) {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+summary::-webkit-details-marker { display: none; }
+details[open] > summary svg { transform: rotate(45deg); }
+
+/* Visually hidden, verbatim from the reference's inline style. */
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Lets an <img> inside <picture> lay out as if the <picture> were not there. */
+.contents { display: contents; }
+
+/* Shared layout: the 1440 container and the section title block. */
+.wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+  box-sizing: border-box;
+}
+
+.h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-stretch: 75%;
+  font-weight: 400;
+  font-size: var(--fs-h2);
+  line-height: 1;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+  color: var(--ink-head);
+}
+
+.zh-sub {
+  margin: 0;
+  font-family: var(--font-zh-hant);
+  font-weight: 500;
+  font-size: var(--fs-zh-sub);
+  letter-spacing: 0.18em;
+  color: var(--gold);
+}
+
+/* Buttons: 54px, 3px radius, 16px semibold. Gold fill or gold outline. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--button-h);
+  padding: 0 28px;
+  box-sizing: border-box;
+  border-radius: var(--radius-button);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.btn-gold { background: var(--gold); color: var(--ink-on-gold); }
+.btn-line { border: 1px solid var(--gold); color: var(--ink-strong); }
+
+/* Keyframes (global so every component can use them by name). */
+@keyframes tm-left { to { transform: translateX(-50%); } }
+@keyframes tm-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes rs-in-a { from { opacity: 0; transform: translateY(8px); } }
+@keyframes rs-in-b { from { opacity: 0; transform: translateY(8px); } }
+@keyframes nav-in { from { opacity: 0; transform: translateY(-8px); } }
+@keyframes ws-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/*
+ * Sections below the fold skip layout and paint until they near the viewport, so the first render only lays out the
+ * hero and About, and the faces used further down (the testimonials' Chinese, for one) aren't fetched before first
+ * paint. Every section already clips its overflow, so the paint containment this implies cuts nothing off. `auto`
+ * makes the browser remember each section's real height once it has rendered.
+ */
+main > section:not(#about) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1600px;
+}

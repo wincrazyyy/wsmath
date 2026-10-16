@@ -1,294 +1,456 @@
-[
-  {
-    "id": "private",
-    "kind": "private",
-    "title": "Private coaching (1-to-1)",
-    "price": {
-      "now": "{{money pricing.privateHourlyRate}}",
-      "per": "/ hour · typical rate"
-    },
-    "ctaKey": "private"
-  },
-  {
-    "id": "ibdp",
-    "kind": "board",
-    "tagline": "IB Diploma Programme",
-    "title": "IBDP",
-    "price": {
-      "now": "from {{money pricing.coursePrice}}",
-      "was": "was {{money pricing.courseListPrice}}",
-      "per": "· {{programme.ibdpLessonCount}} live lessons"
-    },
-    "description": "Sundays on Zoom, replays included. Course notes, past papers {{stats.pastPapersIbdp}}, and GDC technique taught paper by paper.",
-    "variants": [
-      {
-        "id": "aasl",
-        "code": "AASL",
-        "courseId": "math-analysis-and-approaches-sl",
-        "title": "Math Analysis and Approaches SL",
-        "delivery": "live",
-        "meta": "Sundays 10:00–10:50",
-        "price": "{{money pricing.coursePrice}}",
-        "tier": "standard",
-        "badges": [
-          {
-            "id": "video",
-            "text": "{{programme.ibdpBonusVideoHoursStandard}} hrs bonus video"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/ibdp/aasl.webp",
-          "alt": "AASL course outline — Sunday schedule, five core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
+{
+  "order": [
+    "ial",
+    "ibdp",
+    "igcse"
+  ],
+  "mobileOrder": [
+    "ibdp",
+    "ial",
+    "igcse"
+  ],
+  "packages": [
+    {
+      "key": "ial",
+      "title": "A-Level",
+      "kicker": "Pearson Edexcel",
+      "featured": false,
+      "shape": "octa",
+      "cover": "assets/img/cover-a-level.webp",
+      "pdf": "assets/pdf/WSMath-A-Level-course-outline.pdf",
+      "pdfPages": "PDF, 2 pages",
+      "courses": [
+        {
+          "chip": "Edexcel IAL",
+          "name": "International A-Level Mathematics",
+          "bandTitle": "International A-Level Mathematics",
+          "pdfPage": 2,
+          "when": [
+            "36 live lessons on Zoom",
+            "Sundays, 15:00 to 15:50"
+          ],
+          "perks": [
+            "Past papers from 2014 to 2026",
+            "A* exam strategy",
+            "GDC technique"
+          ],
+          "price": "HK$16,800",
+          "was": "HK$54,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20Edexcel%20IAL%20Mathematics%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "P1",
+              "label": "Pure Math 1",
+              "title": "Pure Mathematics 1",
+              "text": "Algebraic expressions, quadratics, equations and inequalities, graph transformations, straight-line graphs, trigonometric ratios and radians, differentiation and integration"
+            },
+            {
+              "num": "P2",
+              "label": "Pure Math 2",
+              "title": "Pure Mathematics 2",
+              "text": "Algebraic methods, coordinate geometry, exponentials and logarithms, binomial expansion, sequences and series, trigonometric identities and equations, differentiation, integration"
+            },
+            {
+              "num": "P3",
+              "label": "Pure Math 3",
+              "title": "Pure Mathematics 3",
+              "text": "Algebraic methods, functions and graphs, trigonometric functions and identities, exponentials and logarithms, differentiation, integration, numerical methods"
+            },
+            {
+              "num": "P4",
+              "label": "Pure Math 4",
+              "title": "Pure Mathematics 4",
+              "text": "Proof, partial fractions, coordinate geometry, binomial expansion, differentiation, integration, vectors"
+            },
+            {
+              "num": "S1",
+              "label": "Statistics 1",
+              "title": "Statistics 1",
+              "text": "Measures of location and spread, representation of data, probability, correlation and regression, discrete random variables, the normal distribution"
+            },
+            {
+              "num": "M1",
+              "label": "Mechanics 1",
+              "title": "Mechanics 1",
+              "text": "Constant acceleration, vectors in mechanics, dynamics of a particle, forces and friction, statics of a particle, momentum and impulse, moments"
+            }
+          ]
         }
-      },
-      {
-        "id": "aahl",
-        "code": "AAHL",
-        "courseId": "math-analysis-and-approaches-hl",
-        "title": "Math Analysis and Approaches HL",
-        "delivery": "live",
-        "meta": "Sundays 11:00–11:50",
-        "price": "{{money pricing.coursePriceHigher}}",
-        "tier": "higher",
-        "badges": [
-          {
-            "id": "video",
-            "text": "{{programme.ibdpBonusVideoHoursAdvanced}} hrs bonus video"
-          },
-          {
-            "id": "p3",
-            "text": "Market-exclusive Paper 3 teaching"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/ibdp/aahl.webp",
-          "alt": "AAHL course outline — Sunday schedule, five core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
-        }
-      },
-      {
-        "id": "aisl",
-        "code": "AISL",
-        "courseId": "math-applications-and-interpretation-sl",
-        "title": "Math Applications and Interpretation SL",
-        "delivery": "live",
-        "meta": "Sundays 12:00–12:50",
-        "price": "{{money pricing.coursePrice}}",
-        "tier": "standard",
-        "badges": [
-          {
-            "id": "video",
-            "text": "{{programme.ibdpBonusVideoHoursStandard}} hrs bonus video"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/ibdp/aisl.webp",
-          "alt": "AISL course outline — Sunday schedule, five core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
-        }
-      },
-      {
-        "id": "aihl",
-        "code": "AIHL",
-        "courseId": "math-applications-and-interpretation-hl",
-        "title": "Math Applications and Interpretation HL",
-        "delivery": "live",
-        "meta": "Sundays 13:00–13:50",
-        "price": "{{money pricing.coursePriceHigher}}",
-        "tier": "higher",
-        "badges": [
-          {
-            "id": "video",
-            "text": "{{programme.ibdpBonusVideoHoursAdvanced}} hrs bonus video"
-          },
-          {
-            "id": "p3",
-            "text": "Market-exclusive Paper 3 teaching"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/ibdp/aihl.webp",
-          "alt": "AIHL course outline — Sunday schedule, five core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
-        }
-      }
-    ],
-    "outline": {
-      "label": "IBDP course outline",
-      "autoAdvanceSeconds": 6
+      ]
     },
-    "outlineCover": {
-      "src": "/courses/ibdp/cover.webp",
-      "alt": "IBDP Math leaflet cover — Winson Siu, with his credentials and a note on the Math IA.",
-      "width": 1500,
-      "height": 2121
-    },
-    "ctaKey": "ibdp",
-    "ctaLabel": "Enquire about the IBDP course"
-  },
-  {
-    "id": "ial",
-    "kind": "board",
-    "tagline": "Pearson Edexcel",
-    "title": "A-Level",
-    "price": {
-      "now": "{{money pricing.coursePrice}}",
-      "was": "was {{money pricing.ialListPrice}}",
-      "per": "· {{programme.ialLessonCount}} live lessons"
-    },
-    "description": "Sundays on Zoom, replays included. Course notes, past papers {{stats.pastPapersIal}}, and A* strategy with GDC technique.",
-    "variants": [
-      {
-        "id": "ial-math",
-        "code": "YMA01",
-        "courseId": "edexcel-ial-math-yma01",
-        "title": "Edexcel IAL Mathematics",
-        "delivery": "live",
-        "meta": "Sundays 15:00–15:50",
-        "price": "{{money pricing.coursePrice}}",
-        "tier": "standard",
-        "badges": [
-          {
-            "id": "papers",
-            "text": "{{stats.pastPapersIal}} past papers"
-          },
-          {
-            "id": "units",
-            "text": "P1 · P2 · P3 · P4 · S1 · M1"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/ial/ial-math.webp",
-          "alt": "Edexcel International A-Level Mathematics course outline — Sunday schedule, six units, package contents and price.",
-          "width": 1500,
-          "height": 2123
+    {
+      "key": "ibdp",
+      "title": "IBDP",
+      "kicker": "IB Diploma Programme",
+      "featured": true,
+      "shape": "simplex",
+      "cover": "assets/img/cover-ibdp.webp",
+      "pdf": "assets/pdf/WSMath-IBDP-course-outline.pdf",
+      "pdfPages": "PDF, 5 pages",
+      "courses": [
+        {
+          "chip": "AA SL",
+          "name": "Analysis and Approaches, Standard Level",
+          "bandTitle": "Analysis and Approaches SL",
+          "pdfPage": 2,
+          "when": [
+            "28 live lessons on Zoom",
+            "Sundays, 10:00 to 10:50"
+          ],
+          "perks": [
+            "32 more hours of video on past-paper technique",
+            "Past papers from 2008 to 2026",
+            "GDC technique, and questions answered live"
+          ],
+          "price": "HK$16,800",
+          "was": "HK$90,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IBDP%20AA%20SL%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Algebra",
+              "title": "Number and algebra",
+              "text": "Arithmetic and geometric sequences, compound interest, the binomial theorem, direct proof, laws of logarithms"
+            },
+            {
+              "num": "2",
+              "label": "Functions",
+              "title": "Functions",
+              "text": "Composite and inverse functions; linear, quadratic, exponential, logarithmic and rational functions; transformations"
+            },
+            {
+              "num": "3",
+              "label": "Trigonometry",
+              "title": "Geometry and trigonometry",
+              "text": "Triangles and sectors, trigonometric identities and equations, trigonometric functions and modelling"
+            },
+            {
+              "num": "4",
+              "label": "Statistics",
+              "title": "Statistics and probability",
+              "text": "Sampling methods, statistical measures, linear regression, Venn and tree diagrams, discrete distributions, fair games, binomial and normal distributions"
+            },
+            {
+              "num": "5",
+              "label": "Calculus",
+              "title": "Calculus",
+              "text": "Rules of differentiation, tangents and normals, curve properties, rates of change, optimisation, rules of integration, areas under and between curves, kinematics"
+            }
+          ]
+        },
+        {
+          "chip": "AA HL",
+          "name": "Analysis and Approaches, Higher Level",
+          "bandTitle": "Analysis and Approaches HL",
+          "pdfPage": 3,
+          "when": [
+            "56 live lessons on Zoom",
+            "Sundays, 10:00 to 11:50"
+          ],
+          "perks": [
+            "64 more hours of video on past-paper technique",
+            "Past papers from 2008 to 2026",
+            "GDC technique, and Paper 3 teaching"
+          ],
+          "price": "HK$19,800",
+          "was": "HK$180,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IBDP%20AA%20HL%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Algebra",
+              "title": "Number and algebra",
+              "text": "Sequences, compound interest, counting principles, the binomial theorem, laws of logarithms, proof by contradiction and by induction, complex numbers"
+            },
+            {
+              "num": "2",
+              "label": "Functions",
+              "title": "Functions",
+              "text": "Composite and inverse, one-one and many-one, odd and even, and modulus functions; linear, quadratic, exponential, logarithmic and rational functions; transformations; the factor and remainder theorem; sums and products of roots"
+            },
+            {
+              "num": "3",
+              "label": "Trigonometry",
+              "title": "Geometry and trigonometry",
+              "text": "Triangles and sectors, trigonometric identities and equations, trigonometric functions, vectors"
+            },
+            {
+              "num": "4",
+              "label": "Statistics",
+              "title": "Statistics and probability",
+              "text": "Sampling methods, statistical measures, variance, linear regression, Venn and tree diagrams, Bayes’ theorem, fair games, discrete, binomial, normal and continuous distributions"
+            },
+            {
+              "num": "5",
+              "label": "Calculus",
+              "title": "Calculus",
+              "text": "First principles, rules of differentiation, implicit differentiation, tangents and normals, curve properties, optimisation, Maclaurin series, L’Hôpital’s rule, integration, areas, volumes of revolution, kinematics, differential equations, Euler’s method"
+            }
+          ]
+        },
+        {
+          "chip": "AI SL",
+          "name": "Applications and Interpretation, Standard Level",
+          "bandTitle": "Applications and Interpretation SL",
+          "pdfPage": 4,
+          "when": [
+            "28 live lessons on Zoom",
+            "Sundays, 12:00 to 12:50"
+          ],
+          "perks": [
+            "32 more hours of video on past-paper technique",
+            "Past papers from 2008 to 2026",
+            "GDC technique, and questions answered live"
+          ],
+          "price": "HK$16,800",
+          "was": "HK$90,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IBDP%20AI%20SL%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Algebra",
+              "title": "Number and algebra",
+              "text": "Approximation, laws of logarithms, arithmetic and geometric sequences, amortisation and annuities"
+            },
+            {
+              "num": "2",
+              "label": "Functions",
+              "title": "Functions",
+              "text": "Domain and range, direct and inverse variation; linear, quadratic, cubic, exponential and trigonometric models"
+            },
+            {
+              "num": "3",
+              "label": "Geometry",
+              "title": "Geometry and trigonometry",
+              "text": "Triangles and sectors, surface area and volume, equations of straight lines, Voronoi diagrams"
+            },
+            {
+              "num": "4",
+              "label": "Statistics",
+              "title": "Statistics and probability",
+              "text": "Sampling methods, statistical measures, linear regression, Spearman’s rank correlation, Venn and tree diagrams, fair games, discrete, binomial and normal distributions, hypothesis testing"
+            },
+            {
+              "num": "5",
+              "label": "Calculus",
+              "title": "Calculus",
+              "text": "Rules of differentiation, tangents and normals, curve properties, optimisation, rules of integration, areas under curves, the trapezoidal rule, equations of curves"
+            }
+          ]
+        },
+        {
+          "chip": "AI HL",
+          "name": "Applications and Interpretation, Higher Level",
+          "bandTitle": "Applications and Interpretation HL",
+          "pdfPage": 5,
+          "when": [
+            "56 live lessons on Zoom",
+            "Sundays, 12:00 to 13:50"
+          ],
+          "perks": [
+            "64 more hours of video on past-paper technique",
+            "Past papers from 2008 to 2026",
+            "GDC technique, and Paper 3 teaching"
+          ],
+          "price": "HK$19,800",
+          "was": "HK$180,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IBDP%20AI%20HL%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Algebra",
+              "title": "Number and algebra",
+              "text": "Approximation, sequences and sums to infinity, amortisation and annuities, radian measure, complex numbers, phase shift, laws of logarithms"
+            },
+            {
+              "num": "2",
+              "label": "Functions",
+              "title": "Functions",
+              "text": "Domain and range, variation, composite and inverse functions, transformations; linear, quadratic, cubic, exponential, logarithmic, power, logistic and trigonometric models; the sum of square residuals"
+            },
+            {
+              "num": "3",
+              "label": "Geometry",
+              "title": "Geometry and trigonometry",
+              "text": "Triangles and sectors, surface area and volume, straight lines, Voronoi diagrams, matrices, eigenvalues and eigenvectors, vectors, graph theory"
+            },
+            {
+              "num": "4",
+              "label": "Statistics",
+              "title": "Statistics and probability",
+              "text": "Sampling, statistical measures, regression, Spearman’s rank, Venn and tree diagrams; discrete, binomial, normal and Poisson distributions; linear combinations, hypothesis testing, unbiased estimators, confidence intervals, type I and II errors, the central limit theorem"
+            },
+            {
+              "num": "5",
+              "label": "Calculus",
+              "title": "Calculus",
+              "text": "Differentiation and integration, tangents and normals, curve properties, optimisation, areas, volumes of revolution, kinematics, differential equations, Euler’s method, slope fields, phase portraits, coupled and second-order systems"
+            }
+          ]
         }
-      }
-    ],
-    "ctaKey": "ial",
-    "ctaLabel": "Enquire about IAL",
-    "outline": {
-      "label": "International A-Level course outline",
-      "autoAdvanceSeconds": 6
+      ]
     },
-    "outlineCover": {
-      "src": "/courses/ial/cover.webp",
-      "alt": "International A-Level Mathematics leaflet cover — Winson Siu, with his credentials.",
-      "width": 1500,
-      "height": 2121
+    {
+      "key": "igcse",
+      "title": "IGCSE",
+      "kicker": "International GCSE and IB MYP",
+      "featured": false,
+      "shape": "pyramid",
+      "cover": "assets/img/cover-igcse.webp",
+      "pdf": "assets/pdf/WSMath-IGCSE-course-outline.pdf",
+      "pdfPages": "PDF, 4 pages",
+      "courses": [
+        {
+          "chip": "0607",
+          "name": "Cambridge International Mathematics",
+          "bandTitle": "International Mathematics",
+          "pdfPage": 2,
+          "when": [
+            "32 hours of video",
+            "At your own pace, as preparation for IBDP SL"
+          ],
+          "perks": [
+            "Past papers from 2014 to 2026",
+            "GDC technique, and Paper 6 teaching",
+            "Free upgrade to the IBDP or IAL videos later"
+          ],
+          "price": "HK$16,800",
+          "was": "HK$90,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IGCSE%200607%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Number",
+              "title": "Number",
+              "text": "Primes, square, cube and triangle numbers, roots, HCF and LCM, fractions, decimals, percentages, simple and compound interest, indices, standard form, surds, estimation, ratio, rates, time and currency"
+            },
+            {
+              "num": "2",
+              "label": "Algebra",
+              "title": "Algebra",
+              "text": "Expansion, factorisation, algebraic fractions, changing the subject, linear equations in one and two unknowns, quadratic equations, linear inequalities, sequences, direct and inverse proportion"
+            },
+            {
+              "num": "3",
+              "label": "Coordinates",
+              "title": "Coordinate geometry",
+              "text": "Gradient, midpoint, distance, parallel and perpendicular lines, equations of straight lines, vectors, transformations, graphical inequalities"
+            },
+            {
+              "num": "4",
+              "label": "Geometry",
+              "title": "Geometry and trigonometry",
+              "text": "Angles, polygons, circle theorems, Pythagoras’ theorem, trigonometry in two and three dimensions, bearings, exact values, trigonometric equations and functions, symmetry, area, arcs and sectors, congruence, similarity, surface area and volume"
+            },
+            {
+              "num": "5",
+              "label": "Statistics",
+              "title": "Statistics and probability",
+              "text": "Statistical measures, stem-and-leaf diagrams, cumulative frequency, scatter diagrams and linear regression, sets and Venn diagrams, relative and expected frequency, tree diagrams, probability"
+            }
+          ]
+        },
+        {
+          "chip": "0606",
+          "name": "Cambridge Additional Mathematics",
+          "bandTitle": "Additional Mathematics",
+          "pdfPage": 3,
+          "when": [
+            "32 hours of video",
+            "At your own pace, as preparation for IBDP HL"
+          ],
+          "perks": [
+            "Past papers from 2014 to 2026",
+            "Calculator technique, and a direct path into IBDP AA HL",
+            "Free upgrade to the IBDP or IAL videos later"
+          ],
+          "price": "HK$19,800",
+          "was": "HK$180,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IGCSE%200606%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Functions",
+              "title": "Functions, quadratics and cubics",
+              "text": "One-one and many-one functions, domain and range, composite and inverse functions, modulus functions, quadratic and cubic equations and inequalities, the discriminant, the factor and remainder theorem"
+            },
+            {
+              "num": "2",
+              "label": "Logarithms",
+              "title": "Logarithms and straight lines",
+              "text": "Laws of logarithms, change of base, exponential and logarithmic functions, perpendicular bisectors, linear transformation"
+            },
+            {
+              "num": "3",
+              "label": "Trigonometry",
+              "title": "Circles, sectors and trigonometry",
+              "text": "Equations of circles, arc length and sector area in radians, trigonometric identities, equations and functions"
+            },
+            {
+              "num": "4",
+              "label": "Series",
+              "title": "Counting, series and vectors",
+              "text": "Counting principles, the binomial theorem, arithmetic and geometric sequences, vectors, resolving velocities"
+            },
+            {
+              "num": "5",
+              "label": "Calculus",
+              "title": "Calculus",
+              "text": "Rules of differentiation, approximate changes, tangents and normals, stationary points, optimisation, rules of integration, areas under and between curves, kinematics"
+            }
+          ]
+        },
+        {
+          "chip": "4MA1",
+          "name": "Edexcel Mathematics A",
+          "bandTitle": "Mathematics A",
+          "pdfPage": 4,
+          "when": [
+            "24 live lessons on Zoom",
+            "Sundays, 14:00 to 14:50"
+          ],
+          "perks": [
+            "Past papers from 2018 to 2025",
+            "Calculator technique, and questions answered live",
+            "Free upgrade to the IBDP or IAL videos later"
+          ],
+          "price": "HK$16,800",
+          "was": "HK$90,000",
+          "whatsapp": "https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20enrol%20in%20the%20IGCSE%204MA1%20video%20class%20package.",
+          "topics": [
+            {
+              "num": "1",
+              "label": "Number",
+              "title": "Number",
+              "text": "Fractions, standard form, percentages, prime factors, HCF and LCM, ratio, compound interest, bounds, proportion, recurring decimals, units, speed, pressure and density, comparative costs, surds"
+            },
+            {
+              "num": "2",
+              "label": "Algebra",
+              "title": "Algebra",
+              "text": "Linear equations and inequalities, indices, factorisation, simultaneous equations, changing the subject, expansion, quadratic equations and inequalities, functions, proof, algebraic fractions, sequences"
+            },
+            {
+              "num": "3",
+              "label": "Graphs",
+              "title": "Graphs",
+              "text": "Gradient, midpoint and distance, straight lines, speed–time graphs, graphical inequalities; quadratic, cubic, reciprocal and trigonometric graphs; graphical solutions, transformations, differentiation"
+            },
+            {
+              "num": "4",
+              "label": "Shape",
+              "title": "Shape and space",
+              "text": "Angles, polygons, bearings, similar triangles and shapes, Pythagoras’ theorem, circle theorems, circles and sectors, cylinders, cones and spheres, 3D trigonometry, sine and cosine rules, transformations, vectors"
+            },
+            {
+              "num": "5",
+              "label": "Statistics",
+              "title": "Statistics and probability",
+              "text": "Mean, median and mode, range and IQR, cumulative frequency, histograms, sets and Venn diagrams, probability, tree diagrams"
+            }
+          ]
+        }
+      ]
     }
-  },
-  {
-    "id": "igcse",
-    "kind": "board",
-    "tagline": "Cambridge & Edexcel",
-    "title": "IGCSE",
-    "price": {
-      "now": "from {{money pricing.coursePrice}}",
-      "was": "was {{money pricing.igcseListPrice}}",
-      "per": "· video + live options"
-    },
-    "description": "0607 and 0606 self-paced on video, 4MA1 live on Sundays. Free upgrade to the IBDP or IAL video course when you move up.",
-    "variants": [
-      {
-        "id": "0607",
-        "code": "0607",
-        "courseId": "cambridge-international-math-0607",
-        "title": "Cambridge International Math",
-        "delivery": "video",
-        "meta": "Self-paced · {{programme.videoHours0607}} hrs of teaching video",
-        "price": "{{money pricing.coursePrice}}",
-        "tier": "standard",
-        "badges": [
-          {
-            "id": "papers",
-            "text": "{{stats.pastPapersCambridgeIgcse}} past papers"
-          },
-          {
-            "id": "p6",
-            "text": "Paper 6 teaching"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/igcse/0607.webp",
-          "alt": "Cambridge IGCSE International Mathematics 0607 course outline — core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
-        }
-      },
-      {
-        "id": "0606",
-        "code": "0606",
-        "courseId": "cambridge-additional-math-0606",
-        "title": "Cambridge Additional Math",
-        "delivery": "video",
-        "meta": "Self-paced · {{programme.videoHours0606}} hrs of teaching video",
-        "price": "{{money pricing.coursePriceHigher}}",
-        "tier": "higher",
-        "badges": [
-          {
-            "id": "papers",
-            "text": "{{stats.pastPapersCambridgeIgcse}} past papers"
-          },
-          {
-            "id": "bundle",
-            "text": "Includes all {{programme.videoHours0607}} hrs of the 0607 videos"
-          },
-          {
-            "id": "bridge",
-            "text": "Bridges straight into IBDP AAHL"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/igcse/0606.webp",
-          "alt": "Cambridge IGCSE Additional Mathematics 0606 course outline — core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
-        }
-      },
-      {
-        "id": "4ma1",
-        "code": "4MA1",
-        "courseId": "edexcel-igcse-math-a-4ma1",
-        "title": "Edexcel Math A",
-        "delivery": "live",
-        "meta": "Sundays 14:00–14:50 · {{programme.edexcelIgcseLessonCount}} live {{setup.platform}} lessons",
-        "price": "{{money pricing.coursePrice}}",
-        "tier": "standard",
-        "badges": [
-          {
-            "id": "papers",
-            "text": "{{stats.pastPapersEdexcelIgcse}} past papers"
-          },
-          {
-            "id": "replays",
-            "text": "{{setup.platform}} replays included"
-          }
-        ],
-        "outlinePage": {
-          "src": "/courses/igcse/4ma1.webp",
-          "alt": "Edexcel International GCSE Mathematics A 4MA1 course outline — Sunday schedule, core topics, package contents and price.",
-          "width": 1500,
-          "height": 2123
-        }
-      }
-    ],
-    "ctaKey": "igcse",
-    "ctaLabel": "Enquire about IGCSE",
-    "outline": {
-      "label": "International GCSE course outline",
-      "autoAdvanceSeconds": 6
-    },
-    "outlineCover": {
-      "src": "/courses/igcse/cover.webp",
-      "alt": "International GCSE and IBMYP Math leaflet cover — Winson Siu, with his credentials.",
-      "width": 1500,
-      "height": 2121
-    }
-  }
-]
+  ]
+}

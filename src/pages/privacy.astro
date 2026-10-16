@@ -1,0 +1,71 @@
+---
+/* The privacy policy, ported verbatim from the policy published on the previous wsmath.com (see PLAN.md §13). */
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+import Wordmark from '../components/ui/Wordmark.astro';
+import privacyData from '../content/privacy.json';
+import type { PrivacyFile } from '../content/types';
+
+const privacy = privacyData as PrivacyFile;
+const updated = new Date(`${privacy.lastUpdated}T00:00:00Z`).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<Base title={`${privacy.title} · WSMath`} description={privacy.intro} path="/privacy/">
+  <header class="bar">
+    <div class="wrap bar-row">
+      <Wordmark href="/" />
+    </div>
+  </header>
+  <main class="wrap policy">
+    <h1>{privacy.title}</h1>
+    <p class="updated">{privacy.lastUpdatedLabel} <time datetime={privacy.lastUpdated}>{updated}</time></p>
+    <p class="intro">{privacy.intro}</p>
+    {
+      privacy.sections.map((s) => (
+        <section id={s.id}>
+          <h2>{s.heading}</h2>
+          <p>{s.body}</p>
+        </section>
+      ))
+    }
+  </main>
+  <Footer base="/" />
+</Base>
+
+<style>
+  .bar { border-bottom: 1px solid var(--line-gold); }
+  .bar-row { padding-top: 22px; padding-bottom: 22px; }
+  .policy {
+    max-width: calc(760px + 2 * var(--gutter));
+    padding-top: clamp(56px, 7cqi, 96px);
+    padding-bottom: var(--section-y);
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: var(--fs-h2);
+    line-height: 1;
+    letter-spacing: -0.012em;
+    color: var(--ink-head);
+  }
+  .updated { margin: 18px 0 0; font-size: var(--fs-label); color: var(--ink-3); }
+  .intro { margin: 36px 0 0; font-size: var(--fs-lead); color: var(--ink-body); }
+  section { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--line); }
+  h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.15;
+    color: var(--ink-head);
+  }
+  section p { margin: 12px 0 0; font-size: var(--fs-lead); color: var(--ink-2); }
+</style>

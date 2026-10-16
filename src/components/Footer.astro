@@ -1,0 +1,97 @@
+---
+/*
+ * Page footer: wordmark, footer nav, copyright, privacy link and credit.
+ * `base` is prefixed to every in-page hash link (wordmark included), so a page other than the home page can render
+ * <Footer base="/" /> and link to /#about, /#top and so on.
+ */
+import Wordmark from './ui/Wordmark.astro';
+
+interface Props {
+  base?: string;
+}
+
+const { base = '' } = Astro.props;
+
+const links = [
+  ['#about', 'About'],
+  ['#packages', 'Packages'],
+  ['#ia', 'Maths IA'],
+  ['#results', 'Results'],
+  ['#students', 'Students'],
+  ['#faq', 'FAQ'],
+] as const;
+---
+
+<footer class="ft">
+  <div class="ft-row ft-top">
+    <Wordmark href={`${base}#top`} />
+    <nav aria-label="Footer" class="ft-nav">
+      {links.map(([hash, label]) => <a href={`${base}${hash}`}>{label}</a>)}
+    </nav>
+  </div>
+  <div class="ft-row ft-bottom">
+    <p class="ft-copy">© 2026 Winson Siu. Results vary by student commitment and starting level.</p>
+    <div class="ft-links">
+      <a class="ft-privacy" href="/privacy/">Privacy policy</a>
+      <span class="ft-credit">Built by XiniDev</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    background: #050407;
+    border-top: 1px solid rgba(205, 169, 104, 0.18);
+  }
+  .ft-row {
+    max-width: 1440px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ft-top {
+    padding: 34px clamp(20px, 4cqi, 48px) 12px;
+    gap: 16px 40px;
+  }
+  .ft-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 28px;
+    font-size: 15px;
+  }
+  .ft-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: #D6CDBF;
+    text-decoration: none;
+  }
+  .ft-bottom {
+    padding: 14px clamp(20px, 4cqi, 48px) 40px;
+    gap: 6px 40px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #8E8579;
+  }
+  .ft-copy { margin: 0; }
+  .ft-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 26px;
+  }
+  .ft-privacy {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: #B9AFA3;
+  }
+  .ft-credit {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+</style>

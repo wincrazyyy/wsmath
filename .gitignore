@@ -53,3 +53,13 @@ next-env.d.ts
 # local working notes
 /docs/other/
 /CLAUDE.local.md
+
+# astro
+/dist/
+/.astro/
+
+# design/tools/compare.mjs output
+/compare/
+
+# the design handoff archive (unpacked into design/)
+/wsmath-redesign-handoff.zip

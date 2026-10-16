@@ -1,0 +1,51 @@
+---
+/*
+ * The gold-outlined pill button (class `pk-chip`, as in the reference): package tabs (≤900), course pills on each
+ * package card, and the results lane tabs. Selection is `aria-pressed`; the selected look lives in CSS, so a
+ * controller only flips the attribute. Extra attributes (data-* hooks) pass through to the <button>.
+ *
+ *   size="tab"     package tabs: 44px tall, 22px padding, 15px text
+ *   size="course"  course pills: 40px tall, 16px padding, 14px text
+ *   size="lane"    results tabs: 40px tall, 18px padding, 14px text
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'button'>, 'type' | 'aria-pressed'> {
+  pressed: boolean;
+  size: 'tab' | 'course' | 'lane';
+}
+
+const { pressed, size, class: className, ...rest } = Astro.props;
+---
+
+<button type="button" class:list={['pk-chip', `pill-${size}`, className]} aria-pressed={pressed ? 'true' : 'false'} {...rest}><slot /></button>
+
+<style>
+  .pk-chip {
+    margin: 0;
+    border-radius: 999px;
+    border: 1px solid rgba(240, 233, 222, 0.2);
+    background: transparent;
+    font-family: 'Schibsted Grotesk', 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: #B9AFA3;
+    cursor: pointer;
+    transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+  }
+  .pill-tab { min-height: 44px; padding: 0 22px; font-size: 15px; }
+  .pill-course { min-height: 40px; padding: 0 16px; font-size: 14px; }
+  .pill-lane { min-height: 40px; padding: 0 18px; font-size: 14px; }
+
+  /* Selected: gold border, gold tint, light text ({{pt.*}}, {{cp.*}}, {{tb.*}} in the reference). */
+  .pk-chip[aria-pressed='true'] {
+    border-color: #CDA968;
+    background: rgba(205, 169, 104, 0.14);
+    color: #F3ECE1;
+  }
+
+  /* styles.css: .pk-chip:hover */
+  @media (hover: hover) {
+    .pk-chip:hover { color: #F3ECE1; }
+  }
+</style>

@@ -1,0 +1,194 @@
+---
+/*
+ * Closing call to action (#contact): heading, the pre-filled WhatsApp button and "See the packages", the globe
+ * (cta-canvas) on the right, then the contact details row.
+ */
+import { WHATSAPP } from '../lib/site';
+---
+
+<section id="contact" class="cta">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <div class="cta-grid">
+    <div class="cta-copy">
+      <div class="cta-head">
+        <h2 class="cta-h2">Get your first lesson now</h2>
+        <p lang="zh-Hant" class="zh-sub">立即報名</p>
+      </div>
+      <p class="cta-lead">Send your curriculum, year level and target grade to get started. Get your lesson as soon as possible.</p>
+      <div class="cta-btns">
+        <a class="btn btn-gold" href="https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20book%20my%20first%20lesson.%0ACurriculum%3A%20%0AYear%20level%3A%20%0ATarget%20grade%3A%20" target="_blank" rel="noopener">Message Winson on WhatsApp</a>
+        <a class="btn btn-line" href="#packages">See the packages</a>
+      </div>
+    </div>
+    <div class="cta-art" aria-hidden="true">
+      <canvas id="cta-canvas" class="cta-canvas" aria-hidden="true"></canvas>
+    </div>
+  </div>
+  <div class="cta-foot">
+    <dl class="cta-info">
+      <div><dt>WhatsApp</dt><dd class="cta-dd"><a class="cta-tel" href={WHATSAPP} target="_blank" rel="noopener">+852 6944 7214</a></dd></div>
+      <div><dt>Where</dt><dd class="cta-dd">Hong Kong and online worldwide. Face-to-face lessons at the centre in Times Square, Causeway Bay.</dd></div>
+      <div><dt>Best set-up</dt><dd class="cta-dd">An iPad, Apple Pencil and GoodNotes, with a stable internet connection.</dd></div>
+      <div><dt>Follow</dt><dd class="cta-follow">
+        <a href="https://www.facebook.com/profile.php?id=61564257721098" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.instagram.com/wsmath_ib_alevel" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://xhslink.com/m/A3RfIEPO7Wf" target="_blank" rel="noopener" lang="zh-Hant">小紅書</a>
+      </dd></div>
+    </dl>
+  </div>
+</section>
+
+<script>
+  import { initGlobe } from '../scripts/canvases/globe';
+
+  const root = document.getElementById('contact');
+  if (root) initGlobe(root);
+</script>
+
+<style>
+  .cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(96px, 11cqi, 160px) 0 clamp(64px, 7cqi, 96px);
+    background: #07050A;
+    border-top: 1px solid rgba(205, 169, 104, 0.28);
+  }
+  .cta-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    background: radial-gradient(55% 75% at 80% 38%, rgba(44, 32, 70, 0.42) 0%, rgba(19, 12, 30, 0.22) 45%, rgba(7, 5, 10, 0) 75%);
+  }
+  .cta-grid {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4cqi, 48px);
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 40px clamp(40px, 5cqi, 80px);
+    align-items: center;
+  }
+  .cta-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .cta-head {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .cta-h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(56px, 7.4cqi, 108px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    color: #F3ECE1;
+  }
+  .cta-lead {
+    margin: 0;
+    max-width: 30em;
+    font-size: 19px;
+    line-height: 1.6;
+    color: #D6CDBF;
+  }
+  .cta-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .cta-art {
+    position: relative;
+    height: clamp(340px, 34cqi, 500px);
+  }
+  .cta-canvas {
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    width: calc(100% + 80px);
+    height: calc(100% + 80px);
+    display: block;
+    pointer-events: none;
+  }
+  .cta-foot {
+    max-width: 1440px;
+    margin: clamp(56px, 6cqi, 88px) auto 0;
+    padding: 0 clamp(20px, 4cqi, 48px);
+    box-sizing: border-box;
+  }
+  .cta-info {
+    margin: 0;
+    padding-top: 30px;
+    border-top: 1px solid rgba(240, 233, 222, 0.1);
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.5fr) minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 28px clamp(28px, 3cqi, 48px);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .cta-info dt {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #9A9085;
+  }
+  .cta-dd {
+    margin: 6px 0 0;
+    color: #E2D9CC;
+  }
+  .cta-tel {
+    color: #EAD7A6;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+  }
+  .cta-follow {
+    margin: 2px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 22px;
+  }
+  .cta-follow a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    color: #EAD7A6;
+    text-decoration: none;
+  }
+
+  @container wsm (max-width: 900px) {
+    .cta-grid { grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); }
+    .cta-art { height: 340px; }
+    .cta-info { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @container wsm (max-width: 620px) {
+    .cta-grid { grid-template-columns: minmax(0, 1fr); }
+    .cta-info { grid-template-columns: minmax(0, 1fr); }
+    .cta-art { height: 300px; }
+  }
+  /* Small phones: full-width buttons with slimmer sides, so the long WhatsApp label stays on one line. */
+  @container wsm (max-width: 400px) {
+    .cta-btns .btn {
+      width: 100%;
+      padding-left: 16px;
+      padding-right: 16px;
+      text-align: center;
+    }
+  }
+  /* Touch screens: the phone number gets a full-height tap target. */
+  @media (pointer: coarse) {
+    .cta-tel {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
+</style>

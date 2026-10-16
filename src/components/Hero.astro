@@ -1,0 +1,294 @@
+---
+/*
+ * Hero (template L5–54): the page's banner landmark. Two canvases cover it (ring-back behind the photo,
+ * ring-front in front of it, blurred), with the header row on top, then the copy and the photo.
+ * canvases/hero.ts draws both canvases and reads #hero-photo for the lamp position.
+ */
+import { Picture } from 'astro:assets';
+import Header from './Header.astro';
+import heroImg from '../assets/winson-hero.webp';
+import { HERO_SIZES, HERO_WIDTHS, WHATSAPP } from '../lib/site';
+---
+
+<header id="top" class="hero">
+  <canvas id="ring-back" class="ring ring-back" aria-hidden="true"></canvas>
+  <canvas id="ring-front" class="ring ring-front" aria-hidden="true"></canvas>
+  <Header />
+  <div class="body">
+    <div id="hero-copy" class="copy">
+      <div class="intro">
+        <h1 class="name">Winson Siu</h1>
+        <p class="role"><span class="role-en">International mathematics exam strategist</span><span lang="zh-Hant" class="role-zh">國際數學科考試軍師</span></p>
+        <p class="where"><span>IBDP, A-Level / IAL and IGCSE</span><span class="where-2">Hong Kong and worldwide</span></p>
+      </div>
+      <div class="hours">
+        <p class="hours-num">20,000</p>
+        <p class="hours-label"><span>hours one-to-one</span><span class="hours-since">since 2017</span></p>
+      </div>
+      <div><a class="cta" href={WHATSAPP} target="_blank" rel="noopener">Message on WhatsApp</a></div>
+    </div>
+    <div class="hero-pic">
+      <Picture
+        src={heroImg}
+        id="hero-photo"
+        class="photo"
+        alt="Winson Siu at his desk, pen in hand, reviewing work on a laptop beside a stack of maths books"
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        widths={HERO_WIDTHS}
+        sizes={HERO_SIZES}
+        loading="eager"
+        fetchpriority="high"
+        pictureAttributes={{ class: 'contents' }}
+      />
+    </div>
+  </div>
+</header>
+
+<script>
+  import { initHero } from '../scripts/canvases/hero';
+
+  const root = document.getElementById('top');
+  if (root) initHero(root);
+</script>
+
+<style>
+  /*
+   * The hero is exactly the first screen on every device: the header row on top, and under it a stage of
+   * --w × --h where the copy and the photo are sized from both dimensions, so nothing is cut off at the fold and
+   * nothing floats in empty space. Everything below derives from these measurements:
+   *
+   *   --w       content width: the viewport up to --hero-max, less the left gutter (the photo runs to the right edge)
+   *   --hdr-h   the header row's height (88px: 22px padding either side of its 44px controls; 68px on short screens)
+   *   --h       height under the header row
+   *   --copy-w  the copy column in the side-by-side layout
+   *
+   * Type sizes are the smaller of a share of --w and a share of --h, clamped, so a short window shrinks them as a
+   * narrow one does. --hero-max grows with the screen height on very large displays (1440px up to 1080px tall), so a
+   * 2K screen gets a bigger composition rather than wider margins; the header row shares it to keep the logo over
+   * the name. Below 320px tall the hero stops shrinking and scrolls; a phone on its side still fits, including
+   * Safari's 340px or so with its toolbar showing.
+   */
+  .hero {
+    --hero-max: max(1440px, 150svh);
+    --pad: clamp(20px, 4vw, 48px);
+    /* the viewport less the side safe areas the page root keeps clear (a phone held sideways; 0 elsewhere) */
+    --vw: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+    --w: calc(min(var(--vw), var(--hero-max)) - var(--pad));
+    --hdr-h: 88px;
+    --h: max(calc(100svh - var(--hdr-h)), 232px);
+    /* The copy takes 46% of the width, or more when the photo is held back by the height (a short wide window):
+       then it has everything left of the photo, less the photo's transparent edge and a 24px gap. */
+    --photo-max: min(calc(var(--h) * 0.96 * 1080 / 1022), 1080px);
+    --copy-w: min(600px, max(calc(var(--w) * 0.46), calc(var(--w) - var(--photo-max) * 0.87 - 24px)));
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    height: 100svh;
+    min-height: 320px;
+    box-sizing: border-box; /* the gold bottom line is part of the screen, not 1px past it */
+    background: #07050A;
+    border-bottom: 1px solid rgba(205, 169, 104, 0.28);
+  }
+
+  /* Short screens (a phone held sideways): a slimmer header row leaves the copy and photo 20px more. */
+  @media (max-height: 420px) {
+    .hero { --hdr-h: 68px; }
+  }
+
+  .ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+  }
+  .ring-back { z-index: 1; }
+  .ring-front { z-index: 3; filter: blur(2px); }
+
+  /* Side by side: copy and photo share one grid cell, the copy centred on the left, the photo standing on the
+     bottom edge at the right. */
+  .body {
+    position: relative;
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    max-width: var(--hero-max);
+    margin: 0 auto;
+    padding-left: var(--pad);
+    box-sizing: border-box;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+  }
+
+  .copy {
+    position: relative;
+    z-index: 4;
+    grid-area: 1 / 1;
+    align-self: center;
+    justify-self: start;
+    max-width: var(--copy-w);
+    padding: clamp(6px, calc(var(--h) * 0.03), 40px) 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, calc(var(--h) * 0.04), 48px);
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, calc(var(--h) * 0.015), 18px);
+  }
+
+  .name {
+    margin: 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(40px, min(calc(var(--w) * 0.098), calc(var(--h) * 0.135)), 152px);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+    color: #F3ECE1;
+  }
+
+  .role {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 18px;
+  }
+  .role-en {
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-style: italic;
+    font-stretch: 87.5%;
+    font-weight: 400;
+    font-size: clamp(16px, min(calc(var(--w) * 0.021), calc(var(--h) * 0.029)), 32px);
+    line-height: 1.25;
+    color: #EAD7A6;
+  }
+  .role-zh {
+    font-family: 'Noto Serif TC', 'Songti TC', serif;
+    font-weight: 500;
+    font-size: clamp(14px, min(calc(var(--w) * 0.0115), calc(var(--h) * 0.018)), 20px);
+    letter-spacing: 0.3em;
+    color: #A88A55;
+  }
+
+  .where {
+    margin: clamp(2px, calc(var(--h) * 0.006), 8px) 0 0;
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(14px, min(calc(var(--w) * 0.013), calc(var(--h) * 0.02)), 20px);
+    line-height: 1.5;
+    color: #B9AFA3;
+  }
+  .where-2 { color: #8E8579; }
+
+  .hours {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 6px 16px;
+  }
+  .hours-num {
+    margin: 0;
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(34px, min(calc(var(--w) * 0.062), calc(var(--h) * 0.086)), 96px);
+    line-height: 0.9;
+    color: var(--gold);
+  }
+  .hours-label {
+    margin: 0 0 0.3em;
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(14px, min(calc(var(--w) * 0.0115), calc(var(--h) * 0.019)), 19px);
+    line-height: 1.4;
+    color: #F0E9DE;
+  }
+  .hours-since { color: #9A9085; }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: clamp(42px, calc(var(--h) * 0.064), 60px);
+    padding: 0 clamp(22px, calc(var(--w) * 0.02), 32px);
+    box-sizing: border-box;
+    border-radius: 3px;
+    background: var(--gold);
+    color: #08060B;
+    font-size: clamp(15px, calc(var(--h) * 0.018), 17px);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* The photo stands on the bottom edge at the right. Its width is the least of: what keeps his head clear of the
+     copy (only the transparent left 13% of the cut-out may tuck under it), what fills 96% of the height, and the
+     source's 1080px. */
+  .hero-pic {
+    position: relative;
+    z-index: 2;
+    grid-area: 1 / 1;
+    align-self: end;
+    justify-self: end;
+    display: flex;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .photo {
+    display: block;
+    width: min(calc((var(--w) - var(--copy-w) - 24px) / 0.87), var(--photo-max));
+    height: auto;
+    object-fit: contain;
+    object-position: right bottom;
+    animation: ws-rise 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  /*
+   * Tall screens (phones, tablets upright, a narrow window): side by side the photo would be a sliver, so the copy
+   * takes the top at full width and the photo fills the rest of the height, right-aligned on the bottom edge. The
+   * photo's box is the whole second row and the image is fitted inside it (object-fit), which hero.ts accounts for.
+   * The switch is on the viewport's shape: under 0.85 wide per unit of height.
+   */
+  @media (max-aspect-ratio: 17 / 20) {
+    .body {
+      grid-template: auto minmax(0, 1fr) / minmax(0, 1fr);
+    }
+    .copy {
+      grid-area: 1 / 1;
+      align-self: start;
+      max-width: none;
+      padding: clamp(4px, calc(var(--h) * 0.024), 32px) var(--pad) clamp(10px, calc(var(--h) * 0.024), 28px) 0;
+      gap: clamp(12px, calc(var(--h) * 0.034), 40px);
+    }
+    .intro { gap: clamp(6px, calc(var(--h) * 0.012), 14px); }
+    .name { font-size: clamp(42px, min(calc(var(--w) * 0.14), calc(var(--h) * 0.074)), 110px); }
+    .role-en { font-size: clamp(16px, min(calc(var(--w) * 0.044), calc(var(--h) * 0.026)), 28px); }
+    .role-zh { font-size: clamp(13px, min(calc(var(--w) * 0.034), calc(var(--h) * 0.019)), 20px); }
+    .where { font-size: clamp(14px, min(calc(var(--w) * 0.04), calc(var(--h) * 0.021)), 19px); }
+    .hours-num { font-size: clamp(36px, min(calc(var(--w) * 0.12), calc(var(--h) * 0.064)), 80px); }
+    .hours-label { font-size: clamp(14px, min(calc(var(--w) * 0.038), calc(var(--h) * 0.02)), 18px); }
+    .cta { min-height: clamp(44px, calc(var(--h) * 0.06), 56px); }
+    .hero-pic {
+      grid-area: 2 / 1;
+      align-self: stretch;
+      justify-self: stretch;
+    }
+    .photo {
+      width: 100%;
+      height: 100%;
+      max-width: 1080px;
+      margin-left: auto;
+    }
+  }
+</style>

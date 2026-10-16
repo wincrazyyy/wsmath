@@ -1,0 +1,193 @@
+---
+/*
+ * The section rail: a fixed column of dots on the right edge, one per section, standing in for the browser's
+ * scrollbar (which this page hides). The dot of the section being read glows gold, and a gold line fills down the
+ * rail as the page scrolls, reaching each dot as its section arrives. Hover or focus shows a dot's label; a click
+ * scrolls to the section (smoothly, unless reduced motion is on).
+ *
+ * State: ui/rail.ts sets aria-current on the current link (CSS styles it), data-flash on it for a moment when it
+ * changes (shows its label), and --p on the rail (how far the gold line runs, 0–1).
+ */
+const sections = [
+  { id: 'top', label: 'Home' },
+  { id: 'about', label: 'About' },
+  { id: 'packages', label: 'Packages' },
+  { id: 'ia', label: 'Maths IA' },
+  { id: 'results', label: 'Results' },
+  { id: 'students', label: 'Students' },
+  { id: 'faq', label: 'FAQ' },
+  { id: 'contact', label: 'Contact' },
+];
+---
+
+<nav class="rail" aria-label="Page sections">
+  <span class="rail-track" aria-hidden="true"><span class="rail-fill"></span></span>
+  <ol class="rail-list">
+    {sections.map((s, i) => (
+      <li>
+        <a class="rail-link" href={`#${s.id}`} aria-current={i === 0 ? 'location' : undefined}>
+          <span class="rail-label">{s.label}</span>
+          <span class="rail-dot" aria-hidden="true"></span>
+        </a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<script>
+  import { initRail } from '../scripts/ui/rail';
+
+  const rail = document.querySelector<HTMLElement>('.rail');
+  if (rail) initRail(rail);
+</script>
+
+<style>
+  /* The rail replaces the scrollbar on this page. Scrolling itself is untouched (wheel, keys, touch, the rail). */
+  :global(html) { scrollbar-width: none; }
+  :global(html::-webkit-scrollbar) { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(html) { scroll-behavior: smooth; }
+  }
+
+  .rail {
+    --dot: 7px;
+    --hit: 28px;
+    --pad: 8px;
+    position: fixed;
+    top: 50%;
+    right: calc(clamp(8px, 1.2vw, 24px) + env(safe-area-inset-right, 0px));
+    z-index: 40;
+    transform: translateY(-50%);
+    font-family: var(--font-body);
+    transition: opacity 0.3s ease;
+  }
+  /* Out of the way while the section menu is open under the header. */
+  :global(body:has(.nav-panel[data-open='true'])) .rail {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .rail-list {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2px, 0.8vh, 10px);
+  }
+
+  /* The line runs between the first and last dot centres. */
+  .rail-track {
+    position: absolute;
+    top: calc(var(--hit) / 2);
+    bottom: calc(var(--hit) / 2);
+    right: calc(var(--pad) + var(--dot) / 2 - 0.5px);
+    width: 1px;
+    background: rgba(240, 233, 222, 0.1);
+  }
+  .rail-fill {
+    position: absolute;
+    inset: 0;
+    transform-origin: top;
+    transform: scaleY(var(--p, 0));
+    background: linear-gradient(to bottom, rgba(205, 169, 104, 0.15), #CDA968);
+    box-shadow: 0 0 6px rgba(205, 169, 104, 0.55);
+  }
+
+  .rail-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    height: var(--hit);
+    padding: 0 var(--pad);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .rail-link:focus-visible {
+    outline-offset: 0;
+    border-radius: 999px;
+  }
+
+  .rail-dot {
+    flex: 0 0 auto;
+    width: var(--dot);
+    height: var(--dot);
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 1px solid rgba(240, 233, 222, 0.38);
+    background: #07050A;
+    transition: transform 0.35s ease, background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  @media (hover: hover) {
+    .rail-link:hover .rail-dot { border-color: #CDA968; transform: scale(1.25); }
+    .rail-link:hover .rail-label {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .rail-link[aria-current] .rail-dot {
+    border-color: #EAD7A6;
+    background: #CDA968;
+    transform: scale(1.5);
+    box-shadow: 0 0 0 3px rgba(205, 169, 104, 0.12), 0 0 12px 2px rgba(205, 169, 104, 0.5);
+    animation: rail-glow 2.8s ease-in-out infinite;
+  }
+  @keyframes rail-glow {
+    50% { box-shadow: 0 0 0 5px rgba(205, 169, 104, 0.06), 0 0 18px 4px rgba(205, 169, 104, 0.32); }
+  }
+
+  .rail-label {
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(205, 169, 104, 0.22);
+    background: rgba(7, 5, 10, 0.86);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #B9AFA3;
+    opacity: 0;
+    transform: translateX(6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+  }
+  .rail-link[aria-current] .rail-label { color: #EAD7A6; }
+  .rail-link:focus-visible .rail-label,
+  .rail-link[data-flash] .rail-label {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Touch screens: like the scroll indicator it stands in for, the rail shows while the page moves and fades out
+     a moment after (ui/rail.ts sets data-awake), so at rest it never sits over the content or under a thumb. */
+  @media (hover: none) {
+    .rail:not([data-awake]):not(:focus-within) {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  /* Phones: a slimmer rail tight to the edge; labels only on focus (no hover, and no flash over the text). */
+  @media (max-width: 620px) {
+    .rail {
+      --dot: 6px;
+      --hit: 26px;
+      --pad: 6px;
+      right: calc(2px + env(safe-area-inset-right, 0px));
+    }
+    .rail-link[data-flash]:not(:focus-visible) .rail-label {
+      opacity: 0;
+      transform: translateX(6px);
+    }
+  }
+
+  /* Short screens (a phone held sideways): tighter rows, so the rail clears the header's buttons. */
+  @media (max-height: 480px) {
+    .rail { --hit: 22px; }
+    .rail-list { gap: 2px; }
+  }
+</style>

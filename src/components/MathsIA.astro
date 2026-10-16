@@ -1,0 +1,218 @@
+---
+/*
+ * IBDP Maths IA (template L187–215): title block, intro, "80+ students supported", the WhatsApp link, and the
+ * eight-theme grid over the ia-canvas overlay. Data: content/ia-themes.json.
+ *
+ * Hooks for canvases/ia.ts: #ia-canvas, #ia-obj-0..7 (one model slot per cell), cells .ia-grid > li[data-theme].
+ * Hover highlight ({{th.bg}}, {{th.color}}, {{th.numColor}}) is CSS on `li:hover` and on `li.is-hot`; the controller
+ * sets .is-hot on the hovered cell (state iaHover) so the cell and the canvas agree, and removes it on leave.
+ */
+import themes from '../content/ia-themes.json';
+import type { IaTheme } from '../content/types';
+
+const list = themes as IaTheme[];
+---
+
+<section id="ia" class="ia">
+  <div class="wrap">
+    <div class="ia-top">
+      <div class="ia-title">
+        <h2 class="h2">IBDP Maths IA</h2>
+        <p lang="zh-HK" class="zh-sub">IA 高分攻略</p>
+      </div>
+      <div class="ia-intro">
+        <p class="ia-lead">One-to-one IA coaching, from choosing a topic to the final draft. Supported by a PhD in Pure Mathematics.</p>
+        <div class="ia-row">
+          <p class="ia-count"><span class="ia-big">80+</span><span class="ia-count-text"><span>students supported</span><span class="ia-years">2020 to 2025</span></span></p>
+          <a class="btn btn-line" href="https://wa.me/85269447214?text=Hi%20Winson%2C%20I%20would%20like%20to%20ask%20about%20the%20Maths%20IA%20course." target="_blank" rel="noopener">Ask about the Maths IA course</a>
+        </div>
+      </div>
+    </div>
+    <div class="ia-wrap">
+      <canvas id="ia-canvas" class="ia-canvas" aria-hidden="true"></canvas>
+      <ul class="ia-grid" aria-label="IA themes">
+        {list.map((th, i) => (
+          <li class="ia-cell" data-theme={i}>
+            <span id={`ia-obj-${i}`} class="ia-obj" aria-hidden="true"></span>
+            <p class="ia-name"><span class="ia-num">{th.num}</span><span class="ia-label">{th.name}</span></p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initIa } from '../scripts/ui/ia';
+  import { initIaCanvas } from '../scripts/canvases/ia';
+
+  const root = document.getElementById('ia');
+  const ia = root ? initIa(root) : null;
+  if (root && ia) initIaCanvas(root, ia);
+</script>
+
+<style>
+  .ia {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(88px, 10cqi, 140px) 0;
+    background: #07050A;
+    border-top: 1px solid rgba(205, 169, 104, 0.18);
+  }
+
+  .ia-top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 32px clamp(40px, 6cqi, 96px);
+    align-items: end;
+  }
+  .ia-title {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ia-intro {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .ia-lead {
+    margin: 0;
+    max-width: 32em;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #B9AFA3;
+  }
+  .ia-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 40px;
+  }
+  .ia-count {
+    margin: 0;
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+  }
+  .ia-big {
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-stretch: 75%;
+    font-weight: 400;
+    font-size: clamp(44px, 4cqi, 56px);
+    line-height: 0.9;
+    color: #CDA968;
+  }
+  .ia-count-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #F0E9DE;
+  }
+  .ia-years { color: #9A9085; }
+
+  .ia-wrap {
+    position: relative;
+    margin-top: clamp(48px, 6cqi, 80px);
+  }
+  .ia-canvas {
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    width: calc(100% + 80px);
+    height: calc(100% + 80px);
+    display: block;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .ia-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid rgba(240, 233, 222, 0.09);
+    border-left: 1px solid rgba(240, 233, 222, 0.09);
+  }
+  .ia-cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 268px;
+    padding: 22px 24px;
+    box-sizing: border-box;
+    border-right: 1px solid rgba(240, 233, 222, 0.09);
+    border-bottom: 1px solid rgba(240, 233, 222, 0.09);
+    background: transparent;
+    transition: background 0.4s ease;
+  }
+  .ia-obj {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 18px;
+    height: 178px;
+    pointer-events: none;
+  }
+  .ia-name {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .ia-num {
+    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: #8E8579;
+    transition: color 0.4s ease;
+  }
+  .ia-label {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #D6CDBF;
+    transition: color 0.4s ease;
+  }
+
+  /* Hovered theme (state iaHover). */
+  .ia-cell.is-hot { background: rgba(16, 11, 27, 0.6); }
+  .ia-cell.is-hot .ia-num { color: #CDA968; }
+  .ia-cell.is-hot .ia-label { color: #F3ECE1; }
+  @media (hover: hover) {
+    .ia-cell:hover { background: rgba(16, 11, 27, 0.6); }
+    .ia-cell:hover .ia-num { color: #CDA968; }
+    .ia-cell:hover .ia-label { color: #F3ECE1; }
+  }
+
+  /* styles.css container queries. */
+  @container wsm (min-width: 621px) and (max-width: 900px) {
+    .ia-cell {
+      min-height: 224px;
+      padding: 16px 16px 18px;
+    }
+    .ia-obj {
+      top: 8px;
+      height: 140px;
+    }
+  }
+
+  @container wsm (max-width: 620px) {
+    .ia-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ia-cell {
+      min-height: 228px;
+      padding: 16px 16px 18px;
+    }
+    .ia-obj {
+      top: 10px;
+      height: 150px;
+    }
+  }
+</style>

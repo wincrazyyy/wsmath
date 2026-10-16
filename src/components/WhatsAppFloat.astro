@@ -1,0 +1,146 @@
+---
+/*
+ * The floating WhatsApp button, bottom right: a turning glass-and-gold icosahedron in a chat-bubble medallion,
+ * with the label beside it from tablet width up (phones show the medallion alone; the label stays as its name).
+ * It appears once the hero's own WhatsApp button has scrolled away and steps aside over the contact section and
+ * the footer, which carry their own.
+ *
+ * State: the script sets data-shown (CSS slides it in or out). Hidden, it sits below the viewport, so its canvas is
+ * off screen and motion.ts stops drawing it. canvases/whatsapp.ts draws the solid.
+ */
+import { WHATSAPP } from '../lib/site';
+---
+
+<a class="wa" href={WHATSAPP} target="_blank" rel="noopener" data-shown="false">
+  <span class="wa-label">Message on WhatsApp</span>
+  <span class="wa-gem"><canvas class="wa-solid" aria-hidden="true"></canvas></span>
+</a>
+
+<script>
+  import { initWhatsAppSolid } from '../scripts/canvases/whatsapp';
+
+  const link = document.querySelector<HTMLAnchorElement>('.wa');
+  const canvas = link?.querySelector<HTMLCanvasElement>('.wa-solid');
+  if (link && canvas) {
+    initWhatsAppSolid(link, canvas);
+    // Shown when none of these is on screen: the hero's button, the contact section, the footer.
+    const watched = [document.querySelector('#top .cta'), document.getElementById('contact'), document.querySelector('footer')].filter(
+      (el): el is Element => !!el,
+    );
+    const onScreen = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const en of entries) {
+        if (en.isIntersecting) onScreen.add(en.target);
+        else onScreen.delete(en.target);
+      }
+      link.dataset.shown = String(onScreen.size === 0);
+    });
+    watched.forEach((el) => io.observe(el));
+  }
+</script>
+
+<style>
+  .wa {
+    position: fixed;
+    /* clear of the home indicator and, held sideways, the notch side (the page draws edge to edge; 0 elsewhere) */
+    right: calc(clamp(16px, 2vw, 32px) + env(safe-area-inset-right, 0px));
+    bottom: calc(clamp(16px, 2vw, 32px) + env(safe-area-inset-bottom, 0px));
+    z-index: 45;
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body);
+    text-decoration: none;
+    transition: opacity 0.4s ease, transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0s;
+  }
+  .wa[data-shown='false'] {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(calc(100% + 64px));
+    transition: opacity 0.3s ease, transform 0.4s ease, visibility 0s linear 0.4s;
+  }
+  .wa:focus-visible {
+    outline-offset: 4px;
+    border-radius: 999px;
+  }
+
+  .wa-label {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    margin-right: -16px;
+    padding: 0 30px 0 20px;
+    box-sizing: border-box;
+    border: 1px solid rgba(205, 169, 104, 0.35);
+    border-right: 0;
+    border-radius: 999px 0 0 999px;
+    background: rgba(11, 8, 16, 0.9);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    color: #F0E9DE;
+    transition: border-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* A chat bubble: round but for the corner its tail would leave from. */
+  .wa-gem {
+    position: relative;
+    flex: 0 0 auto;
+    width: 64px;
+    height: 64px;
+    border-radius: 50% 50% 12px 50%;
+    border: 1px solid rgba(205, 169, 104, 0.6);
+    background: radial-gradient(circle at 38% 32%, #15101F 0%, #07050A 72%);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 22px rgba(205, 169, 104, 0.16);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    animation: wa-breathe 3.6s ease-in-out infinite;
+  }
+  @keyframes wa-breathe {
+    50% { box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 30px rgba(205, 169, 104, 0.26); }
+  }
+  .wa-solid {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .wa:focus-visible .wa-gem {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 34px rgba(205, 169, 104, 0.34);
+  }
+  .wa:focus-visible .wa-label {
+    border-color: rgba(205, 169, 104, 0.65);
+    color: #F6E7BF;
+  }
+  @media (hover: hover) {
+    .wa:hover .wa-gem {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 34px rgba(205, 169, 104, 0.34);
+    }
+    .wa:hover .wa-label {
+      border-color: rgba(205, 169, 104, 0.65);
+      color: #F6E7BF;
+    }
+  }
+
+  /* Phones: the medallion alone; the label is still its accessible name. */
+  @media (max-width: 620px) {
+    .wa-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      clip-path: inset(50%);
+      border: 0;
+    }
+    .wa-gem {
+      width: 58px;
+      height: 58px;
+    }
+  }
+</style>
