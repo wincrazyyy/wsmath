@@ -54,8 +54,13 @@ export interface Lane {
   ticksR?: string[];
 }
 
+/** A course row of the "Results by course" table; each record names one. */
+export type Programme = 'hl' | 'sl' | 'alfm' | 'alm' | 'igadd' | 'igm';
+
+/** One result published by name. */
 export interface ResultRecord {
   lane: number;
+  programme: Programme;
   name: string;
   year: number;
   course: string;
@@ -69,11 +74,11 @@ export interface ResultsFile {
   records: ResultRecord[];
 }
 
+/** Labels only: the figures are counted from results.json and the school list. */
 export interface ResultsTablesFile {
-  stats: { value: string; label: string }[];
-  byCourse: { course: string; records: number; published: number; roseTwoPlus: string }[];
+  stats: { stat: 'records' | 'uplift' | 'schools'; label: string }[];
+  byCourse: { programme: Programme; course: string }[];
   footnote: string;
-  named: { student: string; course: string; predictedOrMock: string; final: string }[];
   schools: string[];
 }
 
@@ -88,7 +93,10 @@ export interface Voice {
   extra: string;
   dest: string;
   lang: VoiceLang;
+  /** The card's pull quote: verbatim from `full`, any cut marked with "…". */
   quote: string;
+  /** The testimonial as the student gave it. */
+  full: string;
 }
 
 export interface TestimonialsFile {

@@ -1,8 +1,9 @@
 ---
 /*
  * Results (template L216–356): title and stats, lane tabs and legend, the stage (reading panel + rs-canvas), the
- * "Results by course" table, "All named results", and the schools. Data: content/results.json (lanes, records)
- * and content/results-tables.json (stats, tables, schools).
+ * "Results by course" table, "All named results", and the schools. Data: content/results.json (lanes, and every
+ * result on record) and content/results-tables.json (labels for the stats and courses, schools). Every figure, the
+ * course table and the named table are counted from the records.
  *
  * Server-rendered default state (renderVals): lane 0 (IBDP), selection = record 0, reading panel filled from it,
  * no panel animation.
@@ -27,15 +28,31 @@ import type { ResultsFile, ResultsTablesFile } from '../content/types';
 const { lanes, records } = results as ResultsFile;
 const T = tables as ResultsTablesFile;
 
+// A grade's block on its lane's scale (0 = lowest), on ticks or else ticksR. An unknown grade fails the build
+// instead of drawing as the bottom block.
 const level = (laneIndex: number, g: string) => {
   const L = lanes[laneIndex];
   const a = L.ticks.indexOf(g);
-  return a >= 0 ? a : L.ticksR ? L.ticksR.indexOf(g) : 0;
+  const b = a >= 0 ? a : L.ticksR ? L.ticksR.indexOf(g) : -1;
+  if (b < 0) throw new Error(`results.json: grade "${g}" is not on the ${L.name} scale`);
+  return b;
 };
 const rows = records.map((r) => {
   const gain = level(r.lane, r.to) - level(r.lane, r.from);
   return { ...r, label: `${r.course} · ${r.year}`, gain, gainText: `+${gain}${gain === 1 ? ' grade' : ' grades'}` };
 });
+
+// The headline figures and "Results by course" are counted from the records, so they always agree with the towers
+// and "All named results".
+const uncounted = rows.filter((r) => !T.byCourse.some((c) => c.programme === r.programme));
+if (uncounted.length) throw new Error(`results.json: no "Results by course" row for ${uncounted.map((r) => r.name).join(', ')}`);
+const byCourse = T.byCourse.map((c) => {
+  const mine = rows.filter((r) => r.programme === c.programme);
+  const rose = mine.length ? Math.round((100 * mine.filter((r) => r.gain >= 2).length) / mine.length) : 0;
+  return { ...c, records: mine.length, roseTwoPlus: `${rose}%` };
+});
+const meanGain = rows.reduce((s, r) => s + r.gain, 0) / rows.length;
+const stat = { records: String(rows.length), uplift: `${Math.floor(meanGain)}+`, schools: String(T.schools.length) };
 
 /* renderVals: rsLane 0, rsSel 0, clamped into the lane's pool. */
 const lane = 0;
@@ -54,7 +71,7 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
         <p lang="zh-HK" class="zh-sub">成績有目共睹</p>
       </div>
       <dl class="rs-stats">
-        {T.stats.map((s) => <div class="rs-stat"><dt>{s.label}</dt><dd>{s.value}</dd></div>)}
+        {T.stats.map((s) => <div class="rs-stat"><dt>{s.label}</dt><dd>{stat[s.stat]}</dd></div>)}
       </dl>
     </div>
     <div class="rs-controls">
@@ -90,25 +107,25 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
         <h3 class="rs-h3">Results by course</h3>
         <table class="rs-table">
           <thead>
-            <tr class="rs-head-row"><th scope="col" class="rs-th rs-th-course">Course</th><th scope="col" class="rs-th rs-th-records">Records</th><th scope="col" class="rs-th rs-th-published">Published</th><th scope="col" class="rs-th rs-th-rose">Rose 2+ grades</th></tr>
+            <tr class="rs-head-row"><th scope="col" class="rs-th rs-th-course">Course</th><th scope="col" class="rs-th rs-th-records">Records</th><th scope="col" class="rs-th rs-th-rose">Rose 2+ grades</th></tr>
           </thead>
           <tbody>
-            {T.byCourse.map((r) => (
-              <tr class="rs-row"><th scope="row" class="rs-course-name">{r.course}</th><td class="rs-td-records">{r.records}</td><td class="rs-td-published">{r.published}</td><td class="rs-td-rose"><span class="rs-rose"><span class="rs-pct">{r.roseTwoPlus}</span><span class="rs-meter" aria-hidden="true"><span class="rs-fill" style={`--rs-pct: ${r.roseTwoPlus}`}></span></span></span></td></tr>
+            {byCourse.map((r) => (
+              <tr class="rs-row"><th scope="row" class="rs-course-name">{r.course}</th><td class="rs-td-records">{r.records}</td><td class="rs-td-rose"><span class="rs-rose"><span class="rs-pct">{r.roseTwoPlus}</span><span class="rs-meter" aria-hidden="true"><span class="rs-fill" style={`--rs-pct: ${r.roseTwoPlus}`}></span></span></span></td></tr>
             ))}
           </tbody>
         </table>
         <p class="rs-foot">{T.footnote}</p>
         <details class="rs-all">
           <summary class="rs-summary">All named results<svg class="rs-plus" aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="#CDA968" stroke-width="1.5"></path></svg></summary>
-          <div class="rs-scroll">
+          <div class="rs-scroll" tabindex="0" role="region" aria-label="All named results">
             <table class="rs-named">
               <thead>
                 <tr><th scope="col" class="rs-nth">Student</th><th scope="col" class="rs-nth">Course</th><th scope="col" class="rs-nth rs-nth-r">Predicted or mock</th><th scope="col" class="rs-nth rs-nth-final">Final</th></tr>
               </thead>
               <tbody>
-                {T.named.map((r) => (
-                  <tr class="rs-nrow"><td class="rs-nd-student">{r.student}</td><td class="rs-nd">{r.course}</td><td class="rs-nd rs-nd-num">{r.predictedOrMock}</td><td class="rs-nd-final">{r.final}</td></tr>
+                {rows.map((r) => (
+                  <tr class="rs-nrow"><td class="rs-nd-student">{r.name} ({r.year})</td><td class="rs-nd">{r.course}</td><td class="rs-nd rs-nd-num">{r.from}</td><td class="rs-nd-final">{r.to}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -371,8 +388,7 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
     font-weight: 500;
     color: #9A9085;
   }
-  .rs-th-records { text-align: right; }
-  .rs-th-published {
+  .rs-th-records {
     padding: 8px 16px 10px 0;
     text-align: right;
   }
@@ -385,11 +401,6 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
     color: #F0E9DE;
   }
   .rs-td-records {
-    padding: 12px 12px 12px 0;
-    text-align: right;
-    font-variant-numeric: tabular-nums;
-  }
-  .rs-td-published {
     padding: 12px 16px 12px 0;
     text-align: right;
     font-variant-numeric: tabular-nums;
@@ -452,13 +463,39 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
     flex: 0 0 auto;
     transition: transform 0.2s;
   }
-  /* When the table is wider than the screen it scrolls sideways: the student column stays put, and a gold shadow
-     on the right edge shows there is more until the end is reached (the "local" cover scrolls over it). */
+  /* The open list stays in a box of its own height and scrolls inside it, so opening it never pushes the page down
+     by a hundred rows. The header row stays put while it scrolls; when the table is wider than the screen it also
+     scrolls sideways with the student column held, and a gold shadow on the right edge shows there is more until the
+     end is reached (the "local" cover scrolls over it). The scrollbar is thin and gold on no track, with a gap so the
+     Final column doesn't run into it. */
   .rs-scroll {
-    overflow-x: auto;
+    max-height: min(480px, 60svh);
+    padding-right: 12px;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(205, 169, 104, 0.45) transparent;
     background:
       linear-gradient(to left, #07050A 30%, rgba(7, 5, 10, 0)) right center / 40px 100% no-repeat local,
       radial-gradient(farthest-side at 100% 50%, rgba(205, 169, 104, 0.2), rgba(205, 169, 104, 0)) right center / 14px 100% no-repeat scroll;
+  }
+  /* While there are rows below, they fade out at the box's bottom edge: the fade is pinned there above the held
+     student column, and at the end of the list it comes to rest under the last row. */
+  .rs-scroll::after {
+    content: '';
+    position: sticky;
+    left: 0;
+    bottom: 0;
+    z-index: 4;
+    display: block;
+    height: 36px;
+    background: linear-gradient(rgba(7, 5, 10, 0), #07050A);
+    pointer-events: none;
+  }
+  .rs-scroll:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 4px;
+    border-radius: 3px;
   }
   .rs-named th:first-child,
   .rs-named td:first-child {
@@ -467,6 +504,13 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
     z-index: 1;
     background: #07050A;
   }
+  .rs-named thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #07050A;
+  }
+  .rs-named thead th:first-child { z-index: 3; }
   .rs-named {
     width: 100%;
     min-width: 520px;
@@ -475,6 +519,12 @@ const rsJson = JSON.stringify({ lane, sel, lanes, records: rows }).replace(/</g,
     line-height: 1.5;
     color: #B9AFA3;
   }
+  /* Only Course may wrap (it is free text, up to "Cambridge IGCSE International Maths (0607)"): a header, a name
+     with its year or a grade broken over two lines reads as a glitch. */
+  .rs-nth,
+  .rs-nd-student,
+  .rs-nd-num,
+  .rs-nd-final { white-space: nowrap; }
   .rs-nth {
     padding: 8px 12px 8px 0;
     text-align: left;

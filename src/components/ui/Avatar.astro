@@ -1,0 +1,61 @@
+---
+/*
+ * A student's avatar, on their testimonial card (QuoteCard) and at the head of their full testimonial (QuoteDialog):
+ * their photo from src/assets/avatars/<name>-<year>.webp when there is one (the photos the original site published),
+ * otherwise their initials (PLAN.md §13: "swap in photos if the client supplies them"). It always sits beside the
+ * name, so it is decorative.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Voice } from '../../content/types';
+import { voiceSlug } from '../../lib/voices';
+
+const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/avatars/*.webp', { eager: true });
+
+interface Props {
+  voice: Voice;
+  /** 56px in the dialog; 44px on the cards. */
+  large?: boolean;
+}
+
+const { voice: v, large = false } = Astro.props;
+
+const parts = v.name.split(' ');
+const ini = (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+const photo = photos[`../../assets/avatars/${voiceSlug(v)}.webp`]?.default;
+---
+
+<span class:list={['av', { 'av-lg': large }]} aria-hidden="true">
+  {photo ? <Image src={photo} alt="" width={large ? 56 : 44} densities={[1, 2]} format="webp" /> : ini}
+</span>
+
+<style>
+  .av {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(205, 169, 104, 0.55);
+    background: radial-gradient(circle at 32% 28%, #271D38, #100B1B 70%);
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: #EAD7A6;
+    overflow: hidden;
+  }
+  .av-lg {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+  .av :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

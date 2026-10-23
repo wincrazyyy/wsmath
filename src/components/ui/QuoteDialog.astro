@@ -1,0 +1,125 @@
+---
+/*
+ * One student's whole testimonial in a modal dialog, under their avatar, name and result, opened by "Read full" (or a
+ * click anywhere) on their card (QuoteCard). The button
+ * opens it by itself (commandfor + command="show-modal"); ui/testimonials.ts does the same where invoker commands are
+ * missing, and closes it on a click outside where closedby="any" is. Esc closes it in every browser. Long text
+ * scrolls inside the dialog; while one is open the rows stand still and the page doesn't scroll (Students.astro).
+ *
+ * The dialog asks for focus itself on opening (autofocus), not for its first button: it is there to be read, and
+ * Safari would otherwise ring the Close button even after a mouse click. Safari and Firefox honour it and Tab reaches
+ * Close; Chrome (154) ignores autofocus on a dialog and focuses Close, ringed only when the dialog was opened by key.
+ */
+import type { Voice } from '../../content/types';
+import { quoted, voiceSlug } from '../../lib/voices';
+import Avatar from './Avatar.astro';
+
+interface Props {
+  voice: Voice;
+}
+
+const { voice: v } = Astro.props;
+const id = `tm-full-${voiceSlug(v)}`;
+const meta = [v.extra, v.dest].filter(Boolean);
+---
+
+<dialog id={id} class="tm-full" aria-labelledby={`${id}-name`} closedby="any" autofocus>
+  <div class="tm-full-head">
+    <Avatar voice={v} large />
+    <div class="tm-full-who">
+      <p id={`${id}-name`} class="tm-full-name">{v.name} <span class="tm-full-year">({v.year})</span></p>
+      <p class="tm-full-meta">
+        {v.course}<span aria-hidden="true"> · </span><span class="tm-full-grade">{v.from}<span aria-hidden="true"> → </span><span class="sr"> to </span>{v.to}</span>
+        {meta.map((m) => <><span aria-hidden="true"> · </span>{m}</>)}
+      </p>
+    </div>
+    <button type="button" class="tm-full-close" commandfor={id} command="close" aria-label="Close">
+      <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5"></path></svg>
+    </button>
+  </div>
+  <blockquote class="tm-full-quote" lang={v.lang}>{quoted(v, v.full)}</blockquote>
+</dialog>
+
+<style>
+  .tm-full {
+    box-sizing: border-box;
+    width: min(640px, calc(100% - 32px));
+    max-width: none;
+    max-height: min(80svh, 760px);
+    margin: auto;
+    padding: clamp(24px, 5vw, 40px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    border: 1px solid rgba(205, 169, 104, 0.32);
+    background: #100A17;
+    color: #E2D9CC;
+  }
+  .tm-full:focus-visible { outline: none; }
+  .tm-full::backdrop { background: rgba(7, 5, 10, 0.82); }
+  /* Avatar, name and result, Close. On a phone the name and result take the full width under the avatar. */
+  .tm-full-head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px 16px;
+  }
+  @container wsm (max-width: 520px) {
+    .tm-full-head { grid-template-columns: minmax(0, 1fr) auto; }
+    .tm-full-who {
+      grid-row: 2;
+      grid-column: 1 / -1;
+    }
+  }
+  .tm-full-name {
+    margin: 0;
+    font-family: var(--font-display);
+    font-stretch: 87.5%;
+    font-size: 28px;
+    line-height: 1.2;
+    color: #F3ECE1;
+  }
+  .tm-full-year {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: #9A9085;
+  }
+  .tm-full-close {
+    align-self: start;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin: -6px -6px 0 0;
+    padding: 0;
+    border: 1px solid rgba(240, 233, 222, 0.14);
+    border-radius: 50%;
+    background: none;
+    color: #E2D9CC;
+    cursor: pointer;
+  }
+  @media (hover: hover) {
+    .tm-full-close:hover { border-color: #CDA968; }
+  }
+  .tm-full-meta {
+    margin: 4px 0 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #9A9085;
+  }
+  .tm-full-grade { color: var(--gold); }
+  /* Quote: Schibsted for English, Noto Serif TC for zh-Hant / zh-HK, Noto Serif SC for zh-Hans (as on the cards). */
+  .tm-full-quote {
+    margin: 22px 0 0;
+    padding-top: 22px;
+    border-top: 1px solid rgba(240, 233, 222, 0.08);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    color: #E2D9CC;
+  }
+  .tm-full-quote:lang(zh) {
+    font-family: var(--font-zh-hant);
+    line-height: 1.9;
+  }
+  .tm-full-quote:lang(zh-Hans) { font-family: var(--font-zh-hans); }
+</style>

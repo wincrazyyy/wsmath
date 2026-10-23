@@ -7,7 +7,7 @@
  * grades gained. The blocks drop in once the stage is a third in view (model.seen), the gold blocks regrow when a
  * tower is picked, a band of light climbs the gold, and the chosen tower lifts with a glow, its name and a
  * "▲ +N" tag. A measuring rod on the left carries the lane's grade scale. Below 640px the camera frames five towers
- * around the selection and slides along the row.
+ * around the selection, wider as many as stay legible, and slides along the row.
  */
 import { clamp, ease, apply, mul, rx, ry } from '../lib/math3d';
 import { register, type Frame, type Handle, type Surface } from '../lib/motion';
@@ -96,29 +96,37 @@ function frameRs(s: Surface, f: Frame, M: RsModel): void {
   if (lastSel !== undefined && lastSel !== sel && since > 0.5 && !still) M.grow[sel] = now;
   lastSel = sel;
 
-  // Layout: one row of towers, one block per grade. A narrow screen frames five towers around the chosen
-  // student and slides along the row as the panel steps.
+  // Layout: one row of towers, one block per grade.
   const N = pool.length, slot = 1.34;
   const T = pool.map((ri, k) => {
     const r = recs[ri];
     return { ri, k, r, x: (k - (N - 1) / 2) * slot, z: 0, a: lvl(r.from), b: lvl(r.to), letters: !!Ln.ticksR && Ln.ticks.indexOf(r.to) < 0 };
   });
-  const win = w < 640 ? Math.min(N, 5) : N, selK = Math.max(0, pool.indexOf(sel));
-  const c0 = Math.max(0, Math.min(N - win, selK - Math.floor(win / 2)));
-  const xMin = T[c0].x - 0.5, xMax = T[c0 + win - 1].x + 0.5, zMin = -0.5, zMax = 0.5;
 
-  // Camera: a fixed three-quarter view from the front right, fitted to the towers and eased between courses.
+  // Camera: a fixed three-quarter view from the front right, fitted to the framed towers and eased between courses.
   const cam: Cam = O || (O = { s: 0, ox: 0, oy: 0, px: 0, lift: {}, win: {} });
-  const yaw0 = -0.22, pit = 0.3, Dz = 60, top = 58, bot = 42, rulerX = xMin - 0.75;
+  const yaw0 = -0.22, pit = 0.3, Dz = 60, top = 58, bot = 42, zMin = -0.5, zMax = 0.5, mx = Math.min(44, w * 0.05);
   const m0 = mul(rx(pit), ry(yaw0));
-  let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
-  for (const x of [rulerX - 0.9, xMax]) for (const y of [0, n]) for (const z of [zMin, zMax + 0.35]) {
-    const q = apply(m0, [x, y - n / 2, z]), k = Dz / (Dz - q[2]);
-    a0 = Math.min(a0, q[0] * k); a1 = Math.max(a1, q[0] * k); b0 = Math.min(b0, q[1] * k); b1 = Math.max(b1, q[1] * k);
-  }
-  const mx = Math.min(44, w * 0.05);
-  const ts = Math.min((w - mx * 2) / (a1 - a0), (h - top - bot) / (b1 - b0), 66);
-  const tox = -((a0 + a1) / 2) * ts, toy = top + (h - top - bot) / 2 - h / 2 + ((b0 + b1) / 2) * ts;
+  // The projected box of the towers from x0 to x1 with the rod on the left: its scale fitted to the width (sw) and
+  // to the width and height (s), and the offsets that centre it.
+  const fit = (x0: number, x1: number) => {
+    let a0 = 1e9, a1 = -1e9, b0 = 1e9, b1 = -1e9;
+    for (const x of [x0 - 1.65, x1]) for (const y of [0, n]) for (const z of [zMin, zMax + 0.35]) {
+      const q = apply(m0, [x, y - n / 2, z]), k = Dz / (Dz - q[2]);
+      a0 = Math.min(a0, q[0] * k); a1 = Math.max(a1, q[0] * k); b0 = Math.min(b0, q[1] * k); b1 = Math.max(b1, q[1] * k);
+    }
+    const sw = (w - mx * 2) / (a1 - a0), s = Math.min(sw, (h - top - bot) / (b1 - b0), 66);
+    return { sw, s, ox: -((a0 + a1) / 2) * s, oy: top + (h - top - bot) / 2 - h / 2 + ((b0 + b1) / 2) * s };
+  };
+  // Below 640px the camera frames five towers around the chosen student. Wider, it frames as many as fit at 23px a
+  // unit or more, the reference's densest view (all 20 of its IBDP towers in the 744px stage at 1180). A lane with
+  // more towers than that slides along the row as the panel steps.
+  let win = Math.min(N, 5);
+  if (w >= 640) for (win = N; win > 5 && fit(-(win - 1) / 2 * slot - 0.5, (win - 1) / 2 * slot + 0.5).sw < 23; win--);
+  const selK = Math.max(0, pool.indexOf(sel));
+  const c0 = Math.max(0, Math.min(N - win, selK - Math.floor(win / 2)));
+  const xMin = T[c0].x - 0.5, xMax = T[c0 + win - 1].x + 0.5, rulerX = xMin - 0.75;
+  const { s: ts, ox: tox, oy: toy } = fit(xMin, xMax);
   if (!cam.s || cam.lane !== lane) Object.assign(cam, { s: ts, ox: tox, oy: toy, lane, win: {} });
   cam.s += (ts - cam.s) * kk;
   cam.ox += (tox - cam.ox) * kk;

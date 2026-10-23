@@ -4,11 +4,14 @@
  * The Chinese families are requested with `text=` so that only the glyphs the page uses download. Google's
  * unicode-range slicing alone pulls ~3 MB for the testimonials, because their characters land in dozens of slices.
  * The character sets are collected from the sources at build time, so new content can't fall outside the subset:
- *   Noto Serif TC (zh-Hant, zh-HK): the full text of every zh-Hant/zh-HK string (testimonial quotes and lang="zh-…"
+ *   Noto Serif TC (zh-Hant, zh-HK): the full text of every zh-Hant/zh-HK string (testimonials and lang="zh-…"
  *     elements in the markup, Latin and digits included, since those render in the Chinese face too), plus every other
  *     CJK character in the component markup and the content JSON outside the zh-Hans quotes.
  *     Weights 500 and 600 only ever set markup, so they get the markup's characters alone.
  *   Noto Serif SC (zh-Hans): the full text of the zh-Hans strings, and the 「」 the quotes are wrapped in.
+ *
+ * The hero name's face (Archivo) is not requested here: it is a static instance served from the site (Hero.astro,
+ * scripts/name-font.mjs).
  *
  * Noto Sans Math is only a per-glyph fallback for canvas labels (after Noto Serif Display), so it gets a text=
  * subset of every non-ASCII character in the canvas sources (191 KB → a few KB).
@@ -41,8 +44,10 @@ const sorted = (chars: Iterable<string>): string => [...new Set(chars)].sort().j
 const components = filesUnder(path.join(src, 'components'), '.astro').map(read);
 const t = testimonials as TestimonialsFile;
 const voices: Voice[] = [...t.featured, ...t.rowA, ...t.rowB];
-const simplified = voices.filter((v) => v.lang === 'zh-Hans').map((v) => v.quote);
-const traditional = voices.filter((v) => v.lang !== 'zh-Hans' && v.lang !== 'en').map((v) => v.quote);
+// A testimonial shows as its card's pull quote and in full behind "Read full".
+const said = (v: Voice): string[] => [v.quote, v.full];
+const simplified = voices.filter((v) => v.lang === 'zh-Hans').flatMap(said);
+const traditional = voices.filter((v) => v.lang !== 'zh-Hans' && v.lang !== 'en').flatMap(said);
 
 // Text written directly inside a lang="zh-…" element in the markup, e.g. <p lang="zh-HK">IA 高分攻略</p>. Latin
 // letters, digits and spaces in these strings render in the Chinese face too, so the subset needs them.

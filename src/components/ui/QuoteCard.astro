@@ -4,15 +4,15 @@
  * Featured cards sit in the 2×2 grid beside the video; the others ride the two scrolling rows, where each row
  * holds its cards twice and the second copy (`dup`) is hidden from assistive technology.
  *
- * Avatar: the student's photo from src/assets/avatars/<name>-<year>.webp when there is one (the photos the original
- * site published), otherwise their initials (PLAN.md §13: "swap in photos if the client supplies them"). The photo
- * repeats the name beside it, so it is decorative.
+ * "Read full" opens the student's whole testimonial (ui/QuoteDialog.astro, one per student, rendered by
+ * Students.astro), and so does a click anywhere on the card: the button's ::after covers the card, so the card's
+ * click is the button's own (no script, and the card holds nothing else to click). The button stays the one control
+ * for keyboards and screen readers; its focus ring is drawn around the card. In a loop copy the button is out of the
+ * tab order; a pointer can still use it.
  */
-import { Image } from 'astro:assets';
-import type { ImageMetadata } from 'astro';
 import type { Voice } from '../../content/types';
-
-const photos = import.meta.glob<{ default: ImageMetadata }>('../../assets/avatars/*.webp', { eager: true });
+import { quoted, voiceSlug } from '../../lib/voices';
+import Avatar from './Avatar.astro';
 
 interface Props {
   voice: Voice;
@@ -23,11 +23,8 @@ interface Props {
 const { voice: v, featured = false, dup = false } = Astro.props;
 
 const zh = v.lang !== 'en';
-const parts = v.name.split(' ');
-const quote = zh ? '「' + v.quote + '」' : '“' + v.quote + '”';
-const ini = (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
-const slug = v.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + v.year;
-const photo = photos[`../../assets/avatars/${slug}.webp`]?.default;
+const quote = quoted(v, v.quote);
+const slug = voiceSlug(v);
 /* Width bucket for the scrolling rows: short quotes get the 320px card, the rest 380px. */
 const wide = !featured && !(zh ? v.quote.length < 34 : v.quote.length < 70);
 ---
@@ -37,8 +34,13 @@ const wide = !featured && !(zh ? v.quote.length < 34 : v.quote.length < 70);
   aria-hidden={dup ? 'true' : 'false'}
 >
   <blockquote class="tm-quote" lang={v.lang}>{quote}</blockquote>
+  {v.full !== v.quote && (
+    <button type="button" class="tm-read" commandfor={`tm-full-${slug}`} command="show-modal" tabindex={dup ? -1 : undefined}>
+      Read full<span class="sr"> testimonial from {v.name}</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M5 2l5 5-5 5" stroke="currentColor" stroke-width="1.5"></path></svg>
+    </button>
+  )}
   <figcaption class="tm-cap">
-    <span class="tm-ini" aria-hidden="true">{photo ? <Image src={photo} alt="" width={44} densities={[1, 2]} format="webp" /> : ini}</span>
+    <Avatar voice={v} />
     <span class="tm-who">
       <span class="tm-name">{v.name} <span class="tm-year">({v.year})</span></span>
       <span class="tm-meta">{v.course}</span>
@@ -96,6 +98,40 @@ const wide = !featured && !(zh ? v.quote.length < 34 : v.quote.length < 70);
   .tm-quote:lang(zh-Hans) { font-family: var(--font-zh-hans); }
   .is-featured .tm-quote { font-size: 18px; }
 
+  /* "Read full": a quiet gold link-button under the quote; its padding gives a 32px tall target. */
+  .tm-read {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: -10px 0 -6px -8px;
+    padding: 8px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 13.5px;
+    line-height: 16px;
+    color: var(--gold-light);
+    cursor: pointer;
+  }
+  /* The whole card is the button's hit area. The card is the containing block (position: relative). */
+  .tm-read::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  /* The ring goes round the card, inset: the scrolling rows clip anything outside their cards. */
+  .tm-read:focus-visible { outline: none; }
+  .tm-card:has(.tm-read:focus-visible) {
+    outline: 2px solid var(--gold);
+    outline-offset: -2px;
+  }
+  @media (hover: hover) {
+    .tm-card:has(.tm-read) { transition: border-color 0.2s; }
+    .tm-card:has(.tm-read):hover { border-color: rgba(205, 169, 104, 0.55); }
+    .tm-card:hover .tm-read { color: var(--gold-hover); }
+  }
+
   .tm-cap {
     margin-top: auto;
     display: flex;
@@ -103,29 +139,6 @@ const wide = !featured && !(zh ? v.quote.length < 34 : v.quote.length < 70);
     gap: 12px;
     padding-top: 16px;
     border-top: 1px solid rgba(240, 233, 222, 0.08);
-  }
-  .tm-ini {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid rgba(205, 169, 104, 0.55);
-    background: radial-gradient(circle at 32% 28%, #271D38, #100B1B 70%);
-    font-family: var(--font-display);
-    font-stretch: 87.5%;
-    font-size: 16px;
-    letter-spacing: 0.02em;
-    color: #EAD7A6;
-    overflow: hidden;
-  }
-  .tm-ini :global(img) {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
   .tm-who {
     display: flex;

@@ -2,7 +2,8 @@
 /*
  * What students say (#students). The video at full width, the four featured quotes under it, then two full-bleed rows
  * that scroll in opposite directions. Each row holds its cards twice for a seamless loop; the copies carry `tm-dup` and
- * aria-hidden.
+ * aria-hidden. Each card shows a pull quote; "Read full" opens the student's whole testimonial in a dialog, one per
+ * student after the rows.
  *
  * State: ui/testimonials.ts toggles the Pause/Play button's aria-pressed (which swaps its icons), its label text and
  * data-paused on the section (which pauses both tracks).
@@ -15,11 +16,20 @@
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import QuoteCard from './ui/QuoteCard.astro';
+import QuoteDialog from './ui/QuoteDialog.astro';
 import { GOLD } from '../lib/site';
 import data from '../content/testimonials.json';
 import type { TestimonialsFile } from '../content/types';
 
 const { video, featured, rowA, rowB } = data as TestimonialsFile;
+const voices = [...featured, ...rowA, ...rowB];
+
+// A card's pull quote must be the student's own words: every piece between "…" cuts is in their full testimonial.
+for (const v of voices) {
+  if (!v.full) throw new Error(`testimonials.json: ${v.name} has no full testimonial`);
+  const off = v.quote.split('…').map((s) => s.trim()).find((s) => s && !v.full.includes(s));
+  if (off) throw new Error(`testimonials.json: ${v.name}'s pull quote is not in their testimonial: "${off}"`);
+}
 
 /* The frame spans the wrap: the viewport less its gutters, up to 1440. */
 const POSTER_SIZES = '(max-width: 1440px) 100vw, 1440px';
@@ -91,14 +101,18 @@ if (loops[0] && loops[1] && still) {
       </div>
     </div>
   </div>
+  {voices.map((v) => <QuoteDialog voice={v} />)}
 </section>
 
 <script>
-  import { initTestimonials } from '../scripts/ui/testimonials';
+  import { initQuoteDialogs, initTestimonials } from '../scripts/ui/testimonials';
   import { initVideo } from '../scripts/ui/video';
 
   const root = document.getElementById('students');
-  if (root) initTestimonials(root);
+  if (root) {
+    initTestimonials(root);
+    initQuoteDialogs(root);
+  }
   const video = root?.querySelector<HTMLElement>('.tm-video');
   if (video) initVideo(video);
 </script>
@@ -260,6 +274,9 @@ if (loops[0] && loops[1] && still) {
   .tm-track-left { animation: tm-left 150s linear infinite; }
   .tm-track-right { animation: tm-right 165s linear infinite; }
   .tm[data-paused='true'] .tm-track { animation-play-state: paused; }
+  /* While a full testimonial is open (ui/QuoteDialog.astro) the rows stand still behind it and the page can't scroll. */
+  .tm:has(:global(.tm-full[open])) .tm-track { animation-play-state: paused; }
+  :global(html:has(.tm-full[open])) { overflow: hidden; }
   /* Hovering pauses a row; on touch screens a tap would leave it frozen, so there only focus does (and Pause). */
   .tm-row:focus-within .tm-track { animation-play-state: paused; }
   @media (hover: hover) {
