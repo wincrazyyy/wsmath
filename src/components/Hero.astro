@@ -7,7 +7,12 @@
 import { Picture } from 'astro:assets';
 import Header from './Header.astro';
 import heroImg from '../assets/winson-hero.webp';
-import { HERO_SIZES, HERO_WIDTHS, WHATSAPP } from '../lib/site';
+import { HERO_NAME, HERO_SIZES, HERO_WIDTHS, WHATSAPP } from '../lib/site';
+import nameFace from '../assets/fonts/archivo-name.json';
+
+// The name's face holds only the name's letters (scripts/name-font.mjs): stop the build if the name has outgrown it.
+const missing = [...new Set(HERO_NAME + HERO_NAME.toUpperCase())].filter((c) => !nameFace.text.includes(c));
+if (missing.length) throw new Error(`Hero.astro: the name's font lacks "${missing.join('')}"; run npm run font:name`);
 ---
 
 <header id="top" class="hero">
@@ -17,7 +22,7 @@ import { HERO_SIZES, HERO_WIDTHS, WHATSAPP } from '../lib/site';
   <div class="body">
     <div id="hero-copy" class="copy">
       <div class="intro">
-        <h1 class="name">Winson Siu</h1>
+        <h1 class="name" aria-label={HERO_NAME}>{HERO_NAME}</h1>
         <p class="role"><span class="role-en">International mathematics exam strategist</span><span lang="zh-Hant" class="role-zh">國際數學科考試軍師</span></p>
         <p class="where"><span>IBDP, A-Level / IAL and IGCSE</span><span class="where-2">Hong Kong and worldwide</span></p>
       </div>
@@ -146,14 +151,31 @@ import { HERO_SIZES, HERO_WIDTHS, WHATSAPP } from '../lib/site';
     gap: clamp(6px, calc(var(--h) * 0.015), 18px);
   }
 
+  /* Winson asked for a stronger, more rigid, cooler name than the reference's Noto Serif Display (2026-10-22):
+     Archivo Condensed ExtraBold in capitals. The capitals are CSS, so the text stays "Winson Siu"; Chrome passes the
+     capitalised text to screen readers, which may spell "SIU" out, so the h1 also carries the name as its aria-label.
+     Its sizes are the reference's ×1.03, which sets it at the width the serif name took: the copy column and its
+     clearances (copy off his head, nothing past the fold) are unchanged.
+
+     The face is a static instance at width 62, holding the name's letters only (1.5 KB, scripts/name-font.mjs), not
+     Google's variable Archivo: WebKit's Windows build spaced the variable face for width 62 but drew it at 100, so
+     the letters overlapped. Under Vite's 4 KB limit, the build inlines it into the CSS: no request, no fallback flash. */
+  @font-face {
+    font-family: 'Archivo';
+    src: url('../assets/fonts/archivo-name.woff2') format('woff2');
+    font-weight: 800;
+    font-stretch: 62%;
+    font-display: swap;
+  }
   .name {
     margin: 0;
-    font-family: 'Noto Serif Display', Didot, 'Bodoni 72', Georgia, serif;
-    font-stretch: 75%;
-    font-weight: 400;
-    font-size: clamp(40px, min(calc(var(--w) * 0.098), calc(var(--h) * 0.135)), 152px);
+    font-family: 'Archivo', 'Helvetica Neue', 'Arial Narrow', Arial, sans-serif;
+    font-stretch: 62%;
+    font-weight: 800;
+    font-size: clamp(41px, min(calc(var(--w) * 0.101), calc(var(--h) * 0.139)), 157px);
     line-height: 0.95;
-    letter-spacing: -0.015em;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
     white-space: nowrap;
     color: #F3ECE1;
   }
@@ -272,7 +294,7 @@ import { HERO_SIZES, HERO_WIDTHS, WHATSAPP } from '../lib/site';
       gap: clamp(12px, calc(var(--h) * 0.034), 40px);
     }
     .intro { gap: clamp(6px, calc(var(--h) * 0.012), 14px); }
-    .name { font-size: clamp(42px, min(calc(var(--w) * 0.14), calc(var(--h) * 0.074)), 110px); }
+    .name { font-size: clamp(43px, min(calc(var(--w) * 0.144), calc(var(--h) * 0.0762)), 113px); }
     .role-en { font-size: clamp(16px, min(calc(var(--w) * 0.044), calc(var(--h) * 0.026)), 28px); }
     .role-zh { font-size: clamp(13px, min(calc(var(--w) * 0.034), calc(var(--h) * 0.019)), 20px); }
     .where { font-size: clamp(14px, min(calc(var(--w) * 0.04), calc(var(--h) * 0.021)), 19px); }

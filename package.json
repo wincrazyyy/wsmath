@@ -11,7 +11,8 @@
     "compare": "node design/tools/compare.mjs --build http://localhost:4321/",
     "video:preview": "node scripts/loom-preview.mjs",
     "icons": "node scripts/icons.mjs",
-    "og:image": "node scripts/og-image.mjs"
+    "og:image": "node scripts/og-image.mjs",
+    "font:name": "node scripts/name-font.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -22,6 +23,7 @@
     "opentype.js": "^1.3.4",
     "playwright": "^1.64.0",
     "sharp": "^0.35.5",
+    "subset-font": "2.9.0",
     "typescript": "^5.9.3"
   }
 }
